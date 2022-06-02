@@ -5,6 +5,9 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php") {
     header("Location:../index.php?view=login");
     die("");
 }
+if(isset($_SESSION["connecte"])){
+    echo("<script type=\"text/javascript\">window.location.href=\"index.php\"</script>");
+}
 ?>
 
 <h1 class="title">Better Twitch Predictions</h1>
