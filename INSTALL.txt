@@ -1,0 +1,2 @@
+pour que le site fonctionne sur localhost faut modifier le fichier libs/config.php
+en entrant les paramètres corrects de phpmyadmin.
