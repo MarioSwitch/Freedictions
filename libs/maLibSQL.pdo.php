@@ -1,6 +1,6 @@
 <?php
 
-include_once "config.php";
+include_once "/home1/yoshiwe1/php/config.php";
 
 /**
  * @file maLibSQL.php

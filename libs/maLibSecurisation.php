@@ -42,7 +42,7 @@ function verifUser($login,$password)
 /**
  * Fonction à placer au début de chaque page privée
  * Cette fonction redirige vers la page $urlBad en envoyant un message d'erreur 
-	et arrête l'interprétation si l'utilisateur n'est pas connecté
+ *	et arrête l'interprétation si l'utilisateur n'est pas connecté
  * Elle ne fait rien si l'utilisateur est connecté, et si $urlGood est faux
  * Elle redirige vers urlGood sinon
  */
