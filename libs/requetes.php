@@ -3,7 +3,8 @@
 include_once "maLibSQL.pdo.php";
 
 function creerCompte($username,$displayname,$hash){
-    $SQL = "INSERT INTO users VALUES ('$username','$displayname','$hash',NULL,100,false,NOW())";
+    $now = date('Y-m-d')." ".date('H:i:s');
+    $SQL = "INSERT INTO users VALUES ('$username','$displayname','$hash',NULL,100,false,'$now')";
     SQLInsert($SQL);
     $_SESSION["user"] = $username;
     $_SESSION["nickname"] = SQLGetChamp("SELECT nickname FROM users WHERE username='$username';");
@@ -12,6 +13,7 @@ function creerCompte($username,$displayname,$hash){
 }
 
 function seConnecter($username,$password){
+    $now = date('Y-m-d')." ".date('H:i:s');
     $SQL="SELECT hash_pwd FROM users WHERE username='$username';";
     $hash_saved=SQLGetChamp($SQL);
     if(password_verify($password,$hash_saved)){
@@ -19,7 +21,7 @@ function seConnecter($username,$password){
         $_SESSION["nickname"] = SQLGetChamp("SELECT nickname FROM users WHERE username='$username';");
 	    $_SESSION["connecte"] = true;
 	    $_SESSION["heureConnexion"] = date("H:i:s");
-        $SQL="UPDATE users SET lastConnection = NOW() WHERE username = '$username';";
+        $SQL="UPDATE users SET lastConnection = '$now' WHERE username = '$username';";
         SQLUpdate($SQL);
     }
 }
@@ -34,12 +36,52 @@ function supprimerCompte($username, $password){
         //Ne pas oublier de supprimer les données de session (le déconnecter)
     }
 }
+// petite fonction pour autoriser les caractères spéciaux à être dans une string
+// en les rendant normalisés en rajoutant des backslashes devant (marche pas pour < et >, il faut les remplacer par &lt et &gt
+function html_special_chars($str) {
+    $invalid_characters = array("'", '"', '/', '&', '\\'); // "$", "%", "#", "|", '\'', "\"", "\\");
+    $str2 = "";
+    for ($i = 0; $i < strlen($str); $i++)
+    {
+        $done = false;
+        for($j = 0; $j < count($invalid_characters); $j++)
+        {
+            if($str[$i] == "<")
+            {
+                $done = true;
+                $str2 .= "&lt";
+                break;
+            }
+            if($str[$i] == ">")
+            {
+                $done = true;
+                $str2 .= "&gt";
+                break;
+            }
+
+            if($str[$i] == $invalid_characters[$j])
+            {
+                $done = true;
+                $str2 .= "\\$str[$i]";
+                break;
+            }
+        }
+        if(!$done)
+        {
+            $str2 .= $str[$i];
+        }
+    }
+    return $str2;
+}
 
 function creerPrediction($name,$user,$endDate,$choix){//La variable choix sera un tableau créé pour l'occasion (format : "choix1", "choix2", "choix3", etc.)
-    $SQL = "INSERT INTO predictions VALUES (DEFAULT,'$name','$user',DEFAULT,'$endDate',NULL);";
+    $name = html_special_chars($name);
+    $now = date('Y-m-d')." ".date('H:i:s');
+    $SQL = "INSERT INTO predictions VALUES (DEFAULT,'$name','$user','$now','$endDate',NULL);";
     SQLInsert($SQL);
     $predictionID = SQLGetChamp("SELECT id FROM predictions WHERE title = '$name' AND author = '$user' AND endDate = '$endDate';");
     foreach($choix as $unChoix){
+        $unChoix = html_special_chars($unChoix);
         $SQL = "INSERT INTO predictionsChoices VALUES (DEFAULT, $predictionID, '$unChoix');";
         SQLInsert($SQL);
     }

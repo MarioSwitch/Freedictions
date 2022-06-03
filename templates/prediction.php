@@ -8,8 +8,10 @@ include_once "libs/maLibSQL.pdo.php";
 $prediExists = SQLGetChamp("SELECT COUNT(*) FROM predictions WHERE id=$_REQUEST[id];");
 if ($prediExists)
 {
+    $now = date('Y-m-d')." ".date('H:i:s');
     $prediTitle = SQLGetChamp("SELECT title FROM predictions WHERE id=$_REQUEST[id];");
     $prediCreator = SQLGetChamp("SELECT author FROM predictions WHERE id=$_REQUEST[id];");
+    $prediPseudo = SQLGetChamp("SELECT nickname FROM users JOIN predictions ON users.username = predictions.author WHERE predictions.id = $_REQUEST[id];");
     $prediCreated = SQLGetChamp("SELECT created FROM predictions WHERE id=$_REQUEST[id];");
     $prediEnd = SQLGetChamp("SELECT endDate FROM predictions WHERE id=$_REQUEST[id];");
     $prediAnswer = SQLGetChamp("SELECT correctAnswer FROM predictions WHERE id=$_REQUEST[id];");
@@ -35,17 +37,17 @@ if ($prediExists)
                     $pourcentage = round(SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;") / SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id];") * 100, 1);
                 } else
                 {
-                    $pourcentage = "N/A";
+                    $pourcentage = "-";
                 }
                 $nombreVotants = SQLGetChamp("SELECT COUNT(*) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;");
                 $pointsDepenses = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;");
                 $pointsTotal = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id];");
-                if ($pourcentage != 0 && $pourcentage != "N/A")
+                if ($pourcentage != 0 && $pourcentage != "-")
                 {
                     $tauxVictoire = round($pointsTotal / $pointsDepenses, 2);
                 } else
                 {
-                    $tauxVictoire = "N/A";
+                    $tauxVictoire = "";
                 }
                 $recordMise = SQLGetChamp("SELECT MAX(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;");
             }
@@ -70,7 +72,7 @@ if ($prediExists)
     } elseif (SQLGetChamp("SELECT COUNT(*) FROM usersChoices WHERE username='$_SESSION[user]' AND prediction=$_REQUEST[id];") == 1)
     {
         $mode = "alreadyVoted";
-    } elseif ($prediEnd < SQLGetChamp("SELECT NOW();"))
+    } elseif ($prediEnd < $now)
     {
         $mode = "waitingAnswer";
     } else
@@ -100,7 +102,7 @@ if ($prediExists)
     echo("
     <h1 class='title'>" . $prediTitle . " </h1>
     <p class=\"text2\">
-        Créé par " . $prediCreator . " le " . $prediCreated . "
+        Créé par " . $prediPseudo . " le " . $prediCreated . "
     </p>
     <p class=\"text2\">
     Se termine le " . $prediEnd . "
@@ -110,7 +112,9 @@ if ($prediExists)
 	<hr class=\"line\">
 	<h3 class='title-h3'>Parier</h3>
 	");
-    if ($mode == "admin")
+    if($mode == "disconnected"){
+        echo("<p class='text2'>Vous devez être connecté pour pouvoir parier !</p>");
+    }elseif ($mode == "admin")
     {
         echo("<p class='text2'>Vous ne pouvez parier sur aucune prédiction car vous êtes un administrateur du site.</p>");
     } elseif ($mode == "creator")
@@ -131,13 +135,15 @@ if ($prediExists)
         if ($prediAnswer == NULL)
         {
             echo("<hr class=\"line\"><h3 class='title-h3'>Gérer la prédiction</h3>");
-            if ($prediEnd < SQLGetChamp("SELECT NOW();"))
+            if ($prediEnd < $now) 
+			{
                 echo("<form class='row' role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><p class='text2'>Définir " . $menuDeroulant . " comme étant la bonne réponse </p><button class='button' type=\"submit\" name=\"action\" value=\"ValiderPrediction\">Terminer la prédiction et redistribuer les points</button></form>");
-        } else {
-            echo("<p class='text2'>Vous devez attendre la fin des votes pour donner la bonne réponse !</p>");
-        }
+			} else {
+				echo("<p class='text2'>Vous devez attendre la fin des votes pour donner la bonne réponse !</p>");
+			}
         echo("<form role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><button class='button' type=\"submit\" name=\"action\" value=\"SupprimerPrediction\">Supprimer la prédiction et rendre les points</button></form>");
-    }
+		}
+	}
     if ($prediAnswer != NULL)
     {
         echo("<h3 class='title-h3'><b>" . $prediAnswerTitle . "</b> était la bonne réponse. Les points ont été redistribués !</h3>");

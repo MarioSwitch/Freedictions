@@ -13,7 +13,7 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 	header("Location:../index.php?view=accueil");
 	die("");
 }
-
+include_once("templates/search.php");
 ?>
 <footer id="footer-protocol">
     <p class="https-available-text">ce site est disponible en https!</p>
@@ -66,10 +66,14 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
         }
     }
 </script>
-
-    <div class="page-header">
-      <h1>Ce site est en cours de création (75%)</h1>
-    </div>
-
-    <p class="lead">Ce site n'est pas encore prêt et peut contenir des bugs ! N'hésitez pas à les signaler en envoyant un mail à <a href="mailto:marioswitch@marioswitch.fr">marioswitch@marioswitch.fr</a><br>Cependant, la majorité des fonctionnalités sont présentes et le site peut donc quand même être utilisé.</p>
+<h1 class='title'>Better Twitch Predictions</h1>
+<h2 class='category-h2'>Le Principe du Site</h2>
+<p class="text">Site web permettant de miser des points virtuels sur des questions à choix multiple posées par les utilisateurs.</p>
+<p class="text2">Les questions ont une date limite pour miser et un nombre variables de réponses</p>
+<p class="text2">Les utilisateurs ayant misés sur l'unique réponse gagnante se partagent tous les points en fonction de leur mise initiale</p>
+<hr class="line">
+<h2 class="category-h2">Les Prédictions populaires</h2>
+<?php
+Rechercher("");
+?>
 

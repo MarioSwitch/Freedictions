@@ -30,7 +30,7 @@ body {
 }
 
 .navbar {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     right: 0;
@@ -140,7 +140,7 @@ footer {
     display: inline-block;
 }
 
-@media only screen and (min-height: 100vw) {
+@media only screen and (min-height: 100vw), (max-width: 1280px) {
     /* Smartphones */
     footer {
         top: auto;
@@ -195,7 +195,7 @@ footer {
         margin: auto;
     }
 
-    .form-control:not(#prediChoicesBox), .signup-input:not(#prediChoicesBox) {
+    .form-control, .signup-input {
         height: 5vh;
         font-family: Roobert;
         width: 50vw;
@@ -206,7 +206,7 @@ footer {
         font-size: 3vh;
     }
 
-    input#prediChoicesBox {
+    .prediChoicesBox {
         height: 5vh;
         width: 46vw;
         font-family: Roobert;
@@ -232,7 +232,7 @@ footer {
         text-align: center;
     }
 
-    .title-h2 {
+    .title-h2, .category-h2 {
         margin-top: 2vh;
         font: 3vh Roobert;
         color: white;
@@ -350,7 +350,7 @@ footer {
     }
 }
 
-@media only screen and (max-height: 100vw) {
+@media only screen and (max-height: 100vw) and (min-width: 1280px) {
     /* Computers */
     footer {
         top: auto;
@@ -386,6 +386,17 @@ footer {
     }
 
     .form-control:not(#prediNameBox, #prediEndBox) {
+        width: 30vw;
+        height: 3.5vh;
+        border: 0;
+        font: 2vh Roobert;
+        padding: 0.5vh 1vw 0.5vh 1vw;
+        border-radius: 5vh;
+        position: relative;
+        margin: 1vh 0 1vh 1vw;
+    }
+
+    .prediChoicesBox {
         width: 30vw;
         height: 3.5vh;
         border: 0;
@@ -512,7 +523,13 @@ footer {
         color: white;
         text-align: center;
     }
-
+    .category-h2 {
+        margin-top: 5vh;
+        margin-bottom: 2vh;
+        font: 3vh Roobert;
+        color: white;
+        text-align: center;
+    }
     .title-h2 {
         margin-top: 5vh;
         margin-bottom: 10vh;
