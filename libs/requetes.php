@@ -36,8 +36,7 @@ function supprimerCompte($username, $password){
         //Ne pas oublier de supprimer les données de session (le déconnecter)
     }
 }
-// petite fonction pour autoriser les caractères spéciaux à être dans une string
-// en les rendant normalisés en rajoutant des backslashes devant (marche pas pour < et >, il faut les remplacer par &lt et &gt
+// petite fonction pour autoriser les caractères spéciaux à être dans une string en les rendant normalisés en rajoutant des backslashes devant (marche pas pour < et >, il faut les remplacer par &lt et &gt)
 function html_special_chars($str) {
     $invalid_characters = array("'", '"', '/', '&', '\\'); // "$", "%", "#", "|", '\'', "\"", "\\");
     $str2 = "";
@@ -89,10 +88,14 @@ function creerPrediction($name,$user,$endDate,$choix){//La variable choix sera u
 }
 
 function parier($user,$prediction,$choice,$points){
-    $SQL = "UPDATE users SET points = points - $points WHERE username = '$user';";
-    SQLUpdate($SQL);
-    $SQL = "INSERT INTO usersChoices VALUES ('$user',$prediction,$choice,$points);";
-    SQLInsert($SQL);
+    $now = date('Y-m-d')." ".date('H:i:s');
+    $end = SQLGetChamp("SELECT endDate FROM predictions WHERE id='$prediction';");
+    if($now < $end){
+        $SQL = "UPDATE users SET points = points - $points WHERE username = '$user';";
+        SQLUpdate($SQL);
+        $SQL = "INSERT INTO usersChoices VALUES ('$user',$prediction,$choice,$points);";
+        SQLInsert($SQL);
+    }
     return $prediction;
 }
 

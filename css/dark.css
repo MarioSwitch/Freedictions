@@ -29,6 +29,10 @@ body {
     margin: 0;
 }
 
+abbr{
+    cursor: help;
+}
+
 .navbar {
     position: fixed;
     left: 0;
@@ -94,7 +98,6 @@ body {
     margin: auto;
     font-size: 3vh;
 }
-
 
 p {
     overflow: hidden;

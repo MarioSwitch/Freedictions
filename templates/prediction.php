@@ -21,7 +21,11 @@ if ($prediExists)
     }
     $prediNumberOfAnswers = SQLGetChamp("SELECT COUNT(*) FROM predictionsChoices WHERE prediction=$_REQUEST[id];");
     $prediChoices = parcoursRs(SQLSelect("SELECT id,choice FROM predictionsChoices WHERE prediction=$_REQUEST[id];"));
-    $prediChoicesText = "<table class='table'><tr><th>Choix</th><th>% de vote</th><th>Votants</th><th>Points</th><th>Rendement</th><th>Record de mise</th></tr>";
+    $svgVotants = "<abbr title=\"Nombre de votes\"><img width=\"32px\" height=\"32px\" src=\"../ressources/svg/persons.svg\" style=\"filter: invert(1);\"></abbr>";
+    $svgPoints = "<abbr title=\"Points dépensés\"><img width=\"32px\" style=\"filter: invert(1);\" height=\"32px\" src=\"../ressources/svg/points.svg\"></abbr>";
+    $svgWin = "<abbr title=\"Rendement (si vous gagnez, vous gagnerez votre mise multipliée par ce nombre)\"><img width=\"32px\" style=\"filter: invert(1);\" height=\"32px\" src=\"../ressources/svg/win.svg\">";
+    $svgRecord = "<abbr title=\"Record de mise\"><img width=\"32px\" style=\"filter: invert(1);\" height=\"32px\" src=\"../ressources/svg/podium.svg\"></abbr>";
+    $prediChoicesText = "<table class='table'><tr><th>Choix</th><th>Répartition</th><th>" . $svgVotants . "</th><th>" . $svgPoints . "</th><th>" . $svgWin . "</th><th>" . $svgRecord . "</th></tr>";
     $count = 0;
     foreach ($prediChoices as $uneReponsePossible)
     {

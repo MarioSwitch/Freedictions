@@ -68,11 +68,13 @@ include_once("templates/search.php");
 </script>
 <h1 class='title'>Better Twitch Predictions</h1>
 <h2 class='category-h2'>Le Principe du Site</h2>
-<p class="text">Site web permettant de miser des points virtuels sur des questions à choix multiple posées par les utilisateurs.</p>
-<p class="text2">Les questions ont une date limite pour miser et un nombre variables de réponses</p>
-<p class="text2">Les utilisateurs ayant misés sur l'unique réponse gagnante se partagent tous les points en fonction de leur mise initiale</p>
+<p class="text">Ce site web permet de miser des points virtuels sur des prédictions posées par les utilisateurs.</p>
+<p class="text2">Tous les utilisateurs peuvent créer des prédictions, du moment qu'ils sont connectés.</p>
+<p class="text2">Les prédictions possèdent une date limite de mise (à partir de laquelle les paris sont bloqués) et un nombre variable de réponses.</p>
+<p class="text2">Les prédictions peuvent posséder autant de choix que le créateur le souhaite. Cependant, 2 choix sont nécessaires pour créer une prédiction.</p>
+<p class="text2">Une fois la date limite dépassée, le créateur peut alors valider la bonne réponse. Une fois fait, les utilisateurs ayant misés sur cette réponse se partagent tous les points (suivant leur mise initiale).</p>
 <hr class="line">
-<h2 class="category-h2">Les Prédictions populaires</h2>
+<h2 class="category-h2">Toutes les prédictions</h2>
 <?php
 Rechercher("");
 ?>

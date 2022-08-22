@@ -30,13 +30,13 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php") {
         <?php
         // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion et/ou d'inscription
         if (!valider("connecte", "SESSION")) {
-            echo "<a class=\"header-signin\" href=\"index.php?view=signin\">Connexion</a>";
-            echo "<a class=\"header-signup\" href=\"index.php?view=signup\">Inscription</a>";
+            echo "<a class=\"header-signin\" href=\"index.php?view=signin\"><img src=\"../ressources/svg/login.svg\" width=\"25px\" height=\"25px\"></a>";
+            echo "<a class=\"header-signup\" href=\"index.php?view=signup\"><img src=\"../ressources/svg/createProfile.svg\" width=\"25px\" height=\"25px\"></a>";
         } //Si il est connecté, on affiche un lien "profil", "créer un prédiction"
         else {
-            echo "<a class=\"header-profile\" href=\"index.php?view=profile\">Mon Profil</a>";
-            echo "<a class=\"header-createPrediction\" href=\"index.php?view=createPrediction\">Créer une prédiction</a>";
-            echo "<a class=\"header-logout\" href=\"controleur.php?action=Logout\">Déconnexion</a>";
+            echo "<a class=\"header-profile\" href=\"index.php?view=profile\"><img src=\"../ressources/svg/profile.svg\" width=\"25px\" height=\"25px\"></a>";
+            echo "<a class=\"header-createPrediction\" href=\"index.php?view=createPrediction\"><img src=\"../ressources/svg/createPrediction.svg\" width=\"25px\" height=\"25px\"></a>";
+            echo "<a class=\"header-logout\" href=\"controleur.php?action=Logout\"><img src=\"../ressources/svg/logout.svg\" width=\"25px\" height=\"25px\"></a>";
         }
         ?>
     </div>

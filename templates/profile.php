@@ -53,7 +53,7 @@ foreach ($predictionsCreated as $uneLigne) {
             $lien = "index.php?view=prediction&id=" . $uneColonne;
         }
         if ($count % 2 == 0) {
-            $predictionsCreatedText = $predictionsCreatedText . "<a class='title-h3' href=\"$lien\">" . $uneColonne . "</a><br>";
+            $predictionsCreatedText = $predictionsCreatedText . "<a class='a-text' href=\"$lien\">" . $uneColonne . "</a><br>";
         }
     }
 }
@@ -71,10 +71,10 @@ foreach ($predictionsParticipated as $uneLigne) {
             $predictionsParticipatedText = $predictionsParticipatedText . "<a class='a-text' href=\"$lien\">" . $uneColonne . "</a>";
         }
         if ($count % 4 == 3) {
-            $predictionsParticipatedText = $predictionsParticipatedText . " : Parié sur <b>" . $uneColonne;
+            $predictionsParticipatedText = $predictionsParticipatedText . "<p class='text2'>Parié sur <b>" . $uneColonne;
         }
         if ($count % 4 == 0) {
-            $predictionsParticipatedText = $predictionsParticipatedText . "</b> avec <b>" . $uneColonne . "</b> points<br>";
+            $predictionsParticipatedText = $predictionsParticipatedText . "</b> avec <b>" . $uneColonne . "</b> points</p><br>";
         }
 
     }
@@ -92,10 +92,10 @@ foreach ($predictionsParticipated as $uneLigne) {
             $predictionsParticipatedText = $predictionsParticipatedText . "<a class='a-text' href=\"$lien\">" . $uneColonne . "</a>";
         }
         if ($count % 4 == 3) {
-            $predictionsParticipatedText = $predictionsParticipatedText . " : Parié sur <b>" . $uneColonne;
+            $predictionsParticipatedText = $predictionsParticipatedText . "<p class='text2'>Parié sur <b>" . $uneColonne;
         }
         if ($count % 4 == 0) {
-            $predictionsParticipatedText = $predictionsParticipatedText . "</b> avec <b>" . $uneColonne . "</b> points<br>";
+            $predictionsParticipatedText = $predictionsParticipatedText . "</b> avec <b>" . $uneColonne . "</b> points</p><br>";
         }
     }
 }
@@ -112,10 +112,10 @@ foreach ($predictionsParticipated as $uneLigne) {
             $predictionsParticipatedText = $predictionsParticipatedText . "<a class='a-text' href=\"$lien\">" . $uneColonne . "</a>";
         }
         if ($count % 4 == 3) {
-            $predictionsParticipatedText = $predictionsParticipatedText . " : Parié sur <b>" . $uneColonne;
+            $predictionsParticipatedText = $predictionsParticipatedText . "<p class='text2'>Parié sur <b>" . $uneColonne;
         }
         if ($count % 4 == 0) {
-            $predictionsParticipatedText = $predictionsParticipatedText . "</b> avec <b>" . $uneColonne . "</b> points<br>";
+            $predictionsParticipatedText = $predictionsParticipatedText . "</b> avec <b>" . $uneColonne . "</b> points</p><br>";
         }
     }
 }
