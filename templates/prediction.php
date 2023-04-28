@@ -32,7 +32,7 @@ if ($prediExists)
     $svgPoints = "<abbr title=\"Points dépensés\"><img width=\"32px\" style=\"filter: invert(1);\" height=\"32px\" src=\"./ressources/svg/points.svg\"></abbr>";
     $svgWin = "<abbr title=\"Rendement (si vous gagnez, vous gagnerez votre mise multipliée par ce nombre)\"><img width=\"32px\" style=\"filter: invert(1);\" height=\"32px\" src=\"./ressources/svg/win.svg\">";
     $svgRecord = "<abbr title=\"Record de mise\"><img width=\"32px\" style=\"filter: invert(1);\" height=\"32px\" src=\"./ressources/svg/podium.svg\"></abbr>";
-    $prediChoicesText = "<table class='table'><tr><th>Choix</th><th>Répartition</th><th>" . $svgVotants . "</th><th>" . $svgPoints . "</th><th>" . $svgWin . "</th><th>" . $svgRecord . "</th></tr>";
+    $prediChoicesText = "<table class='table'><tr><th>Choix</th><th>" . $svgVotants . "</th><th>" . $svgPoints . "</th><th>" . $svgWin . "</th><th>" . $svgRecord . "</th></tr>";
     $count = 0;
     foreach ($prediChoices as $uneReponsePossible)
     {
@@ -43,19 +43,26 @@ if ($prediExists)
             if ($count % 2 == 1)
             {
                 $numeroChoix = $uneColonne;
-                if (SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id];") != 0)
+                $votantsChoix = SQLGetChamp("SELECT COUNT(*) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;");
+                $votantsTotal = SQLGetChamp("SELECT COUNT(*) FROM usersChoices WHERE prediction=$_REQUEST[id];");
+		$pointsChoix = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;");
+                $pointsTotal = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id];");
+                if ($pointsTotal != 0 && $pointsChoix != 0)
                 {
-                    $pourcentage = round(SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;") / SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id];") * 100, 1);
+                    $pourcentagePoints = " (" . round(($pointsChoix / $pointsTotal) * 100, 1) . " %)";
                 } else
                 {
-                    $pourcentage = "-";
+                    $pourcentagePoints = "";
                 }
-                $nombreVotants = SQLGetChamp("SELECT COUNT(*) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;");
-                $pointsDepenses = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;");
-                $pointsTotal = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id];");
-                if ($pourcentage != 0 && $pourcentage != "-")
+                if ($votantsTotal != 0 && $votantsChoix != 0)
                 {
-                    $tauxVictoire = round($pointsTotal / $pointsDepenses, 2);
+                    $pourcentageVotants = " (" . round(($votantsChoix / $votantsTotal) * 100, 1) . " %)";
+                } else {
+                    $pourcentageVotants = "";
+                }
+                if ($pourcentagePoints != "")
+                {
+                    $tauxVictoire = round($pointsTotal / $pointsChoix, 2);
                 } else
                 {
                     $tauxVictoire = "";
@@ -65,12 +72,12 @@ if ($prediExists)
             if ($count % 2 == 0)
             {
                 $intituleChoix = $uneColonne;
-                $prediChoicesText = $prediChoicesText . "<td>" . $intituleChoix . "</td><td>" . $pourcentage . " %</td><td>" . $nombreVotants . "</td><td>" . $pointsDepenses . "</td><td>" . $tauxVictoire . "</td><td>" . $recordMise . "</td>";
+                $prediChoicesText = $prediChoicesText . "<td>" . $intituleChoix . "</td><td>" . $votantsChoix . "<br>" . $pourcentageVotants . "</td><td>" . $pointsChoix . "<br>" . $pourcentagePoints .  "</td><td>" . $tauxVictoire . "</td><td>" . $recordMise . "</td>";
             }
         }
         $prediChoicesText = $prediChoicesText . "</tr>";
     }
-    $prediChoicesText = $prediChoicesText . "</table><p class='text2'>Au total, <b>" . SQLGetChamp("SELECT COUNT(*) FROM usersChoices WHERE prediction=$_REQUEST[id];") . "</b> personnes ont parié sur cette prédiction pour un total de <b>" . $pointsTotal . "</b> points.</p>";
+    $prediChoicesText = $prediChoicesText . "</table><p class='text2'>Au total, <b>" . $votantsTotal . "</b> personnes ont parié sur cette prédiction pour un total de <b>" . $pointsTotal . "</b> points.</p>";
     if (!isset($_SESSION["connecte"]))
     {
         $mode = "disconnected";
@@ -144,21 +151,21 @@ if ($prediExists)
         if ($prediAnswer == NULL)
         {
             echo("<hr class=\"line\"><h3 class='title-h3'>Gérer la prédiction</h3>");
-            if ($prediEnd < $now) 
-			{
+            if ($prediEnd < $now)
+            {
                 echo("<form class='row' role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><p class='text2'>Définir " . $menuDeroulant . " comme étant la bonne réponse </p><button class='button' type=\"submit\" name=\"action\" value=\"ValiderPrediction\">Terminer la prédiction et redistribuer les points</button></form>");
-			} else {
-				echo("<p class='text2'>Vous devez attendre la fin des votes pour donner la bonne réponse !</p>");
-			}
+            } else {
+                echo("<p class='text2'>Vous devez attendre la fin des votes pour donner la bonne réponse !</p>");
+            }
         echo("<form role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><button class='button' type=\"submit\" name=\"action\" value=\"SupprimerPrediction\">Supprimer la prédiction et rendre les points</button></form>");
-		}
-	}
+        }
+    }
     if ($prediAnswer != NULL)
     {
         echo("<h3 class='title-h3'><b>" . $prediAnswerTitle . "</b> était la bonne réponse. Les points ont été redistribués !</h3>");
     }
 } else
 {
-    echo("<h1 class='title'>Cette prédiction n'existe pas !</h1><p class=\"text\">Si vous avez parié sur cette prédiction auparavant, elle a été supprimée par son créateur (ou par un administrateur) et vous avez récupéré les points misés !</p>");
+    echo("<h1 class='title'>Cette prédiction n'existe pas ou a été supprimée !</h1><p class=\"text\">Si vous avez parié sur cette prédiction, vous avez récupéré les points misés !</p>");
 }
 ?>
