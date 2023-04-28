@@ -1,8 +1,7 @@
 <?php
-
-$BDD_host="localhost";
-$BDD_user="root";
-$BDD_password=""; // vide sous windows
-$BDD_base="yoshiwe1_twitchpredi";
-
+//À compléter pour connecter la BDD
+$BDD_host="127.0.0.1"; //localhost par défaut, à modifier si nécessaire
+$BDD_user="";
+$BDD_password="";
+$BDD_base="";
 ?>
