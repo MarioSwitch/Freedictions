@@ -17,7 +17,9 @@ include_once "libs/maLibSQL.pdo.php";
     <link rel="shortcut icon" href="ressources/icon.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="./css/dark.css">
     <script src="./js/custom.js"></script>
-
+    <script src="https://raw.githubusercontent.com/MarioSwitch/Programmes/main/JavaScript/countdown.js"></script>
+    <script>countdownTo("2023-04-28T14:30:00Z", "dans %countdown", "il y a %countup", "createdCountdown");</script>
+    <script>countdownTo("2023-04-28T18:00:00Z", "Se termine dans %countdown", "Terminé depuis %countup", "endCountdown");</script>
 </head>
 <body>
 <div class="navbar">

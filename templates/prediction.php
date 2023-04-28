@@ -13,7 +13,14 @@ if ($prediExists)
     $prediCreator = SQLGetChamp("SELECT author FROM predictions WHERE id=$_REQUEST[id];");
     $prediPseudo = SQLGetChamp("SELECT nickname FROM users JOIN predictions ON users.username = predictions.author WHERE predictions.id = $_REQUEST[id];");
     $prediCreated = SQLGetChamp("SELECT created FROM predictions WHERE id=$_REQUEST[id];");
+    $prediCreatedDate = substr($prediCreated,0,10);
+    $prediCreatedTime = substr($prediCreated,11,8);
     $prediEnd = SQLGetChamp("SELECT endDate FROM predictions WHERE id=$_REQUEST[id];");
+    $prediEndDate = substr($prediEnd,0,10);
+    $prediEndTime = substr($prediEnd,11,8);
+    echo "<script src=\"./js/countdown.js\"></script>";
+    echo "<script>countdownTo(\"" . $prediCreatedDate . "T" . $prediCreatedTime . "+02:00\", \"dans %countdown\", \"il y a %countup\", \"createdCountdown\");</script>";
+    echo "<script>countdownTo(\"" . $prediEndDate . "T" . $prediEndTime . "+02:00\", \"Se termine dans %countdown\", \"Terminé depuis %countup\", \"endCountdown\");</script>";
     $prediAnswer = SQLGetChamp("SELECT correctAnswer FROM predictions WHERE id=$_REQUEST[id];");
     if ($prediAnswer != NULL)
     {
@@ -106,11 +113,9 @@ if ($prediExists)
     echo("
     <h1 class='title'>" . $prediTitle . " </h1>
     <p class=\"text2\">
-        Créé par " . $prediPseudo . " le " . $prediCreated . "
+        Créé par " . $prediPseudo . " <span id=\"createdCountdown\"></span>
     </p>
-    <p class=\"text2\">
-    Se termine le " . $prediEnd . "
-    </p>
+    <p class=\"text2\" id=\"endCountdown\"></p>
 	<h2 class='title-h2'>" . $prediNumberOfAnswers . " réponses possibles</h2>
 	" . $prediChoicesText . "
 	<hr class=\"line\">
