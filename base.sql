@@ -31,8 +31,8 @@ CREATE TABLE `predictions` (
   `id` int(11) NOT NULL,
   `title` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
   `author` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `endDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `endDate` timestamp DEFAULT NULL,
   `correctAnswer` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

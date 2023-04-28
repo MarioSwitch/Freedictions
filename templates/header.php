@@ -29,14 +29,16 @@ include_once "libs/maLibSQL.pdo.php";
     <div class="header-right">
         <?php
         // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion et/ou d'inscription
-        if (!valider("connecte", "SESSION")) {
+        echo "<a class=\"header-leaderboard\" href=\"index.php?view=leaderboard\"><img src=\"./ressources/svg/leaderboard.svg\" width=\"25px\" height=\"25px\"></a>";
+	if (!valider("connecte", "SESSION")) {
             echo "<a class=\"header-signup\" href=\"index.php?view=signup\"><img src=\"./ressources/svg/createProfile.svg\" width=\"25px\" height=\"25px\"></a>";
 	    echo "<a class=\"header-signin\" href=\"index.php?view=signin\"><img src=\"./ressources/svg/login.svg\" width=\"25px\" height=\"25px\"></a>";
-        } //Si il est connecté, on affiche un lien "profil", "créer un prédiction"
+	} //Si il est connecté, on affiche un lien "profil", "créer un prédiction"
         else {
 	    $displayname = SQLGetChamp("SELECT nickname FROM users WHERE username='$_SESSION[user]';");
 	    $points = SQLGetChamp("SELECT points FROM users WHERE username='$_SESSION[user]';");
-	    echo "<p class=\"text\">Connecté en tant que $displayname ($points points)</p>";
+            $rank = SQLGetChamp("SELECT COUNT(*) FROM users WHERE points > " . $points) + 1;
+	    echo "<p class=\"header-text\">Connecté en tant que $displayname ($points points, $rank<sup>e</sup>)</p>";
             echo "<a class=\"header-profile\" href=\"index.php?view=profile\"><img src=\"./ressources/svg/profile.svg\" width=\"25px\" height=\"25px\"></a>";
             echo "<a class=\"header-createPrediction\" href=\"index.php?view=createPrediction\"><img src=\"./ressources/svg/createPrediction.svg\" width=\"25px\" height=\"25px\"></a>";
             echo "<a class=\"header-logout\" href=\"controleur.php?action=Logout\"><img src=\"./ressources/svg/logout.svg\" width=\"25px\" height=\"25px\"></a>";

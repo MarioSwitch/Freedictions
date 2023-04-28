@@ -11,6 +11,7 @@ if (!isset($_SESSION["connecte"])) {
 $now = date('Y-m-d')." ".date('H:i:s');
 $displayname = SQLGetChamp("SELECT nickname FROM users WHERE username='$_SESSION[user]';");
 $points = SQLGetChamp("SELECT points FROM users WHERE username='$_SESSION[user]';");
+$rank = SQLGetChamp("SELECT COUNT(*) FROM users WHERE points > " . $points) + 1;
 $statsPointsSpent = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE username='$_SESSION[user]';");
 $statsTotalBets = SQLGetChamp("SELECT COUNT(*) FROM usersChoices WHERE username='$_SESSION[user]';");
 $statsTotalCreated = SQLGetChamp("SELECT COUNT(*) FROM predictions WHERE author='$_SESSION[user]';");
@@ -123,6 +124,7 @@ foreach ($predictionsParticipated as $uneLigne) {
 echo("
     <h1 class=\"title\">Mon profil (" . $displayname . ")</h1>
     <p class='text'>" . $points . " points</p>
+    <p class='text'>Classé " . $rank . "<sup>e</sup> en nombre de points</p>
     <hr class='line'>
 	<h2 class='category-h2'>Statistiques</h2>
 	<p class='text'>Vous avez misé <b>" . $statsTotalBets . " </b> fois pour un total de <b>" . $statsPointsSpent . "</b> points.</p>
