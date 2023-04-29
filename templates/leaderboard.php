@@ -5,11 +5,20 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 	die("");
 }
 include_once "libs/maLibSQL.pdo.php";
-echo "<p class=\"title\">Classement</p>";
-echo "<p class=\"text2\">Ci-dessous, le classement des utilisateurs ayant le plus de points.</p>";
-echo "<hr class=\"line\">";
 $classement = parcoursRs(SQLSelect("SELECT nickname, points FROM users ORDER BY points DESC;"));
 $classementHeader = "<table class='table'><tr><th>Rang</th><th>Utilisateur</th><th>Points</th></tr>";
+$accounts = SQLGetChamp("SELECT COUNT(*) FROM users");
+echo "<p class='title'>Classement</p>";
+echo "<p class='text2'>Ci-dessous, le classement des utilisateurs ayant le plus de points.</p>";
+if(valider("connecte","SESSION")){
+	$myPoints = SQLGetChamp("SELECT points FROM users WHERE username='$_SESSION[user]';");
+	$myRank = SQLGetChamp("SELECT COUNT(*) FROM users WHERE points > " . $myPoints . ";")+1;
+	$myTop = round(($myRank / $accounts)*100,2);
+	echo "<p class='text2'>Vous êtes " . $myRank . "<sup>e</sup> sur " . $accounts . " (top " . $myTop . " %)</p>";
+}else{
+	echo "<p class='text2'>Total : " . $accounts . " utilisateurs</p>";
+}
+echo "<hr class='line'>";
 echo $classementHeader;
 foreach($classement as $uneLigne){
 	$typeDonnee = 1;

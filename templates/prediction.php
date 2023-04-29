@@ -49,14 +49,14 @@ if ($prediExists)
                 $pointsTotal = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id];");
                 if ($pointsTotal != 0 && $pointsChoix != 0)
                 {
-                    $pourcentagePoints = "<br>(" . round(($pointsChoix / $pointsTotal) * 100, 1) . " %)";
+                    $pourcentagePoints = "<br>(" . round(($pointsChoix / $pointsTotal) * 100, 2) . " %)";
                 } else
                 {
                     $pourcentagePoints = "";
                 }
                 if ($votantsTotal != 0 && $votantsChoix != 0)
                 {
-                    $pourcentageVotants = "<br>(" . round(($votantsChoix / $votantsTotal) * 100, 1) . " %)";
+                    $pourcentageVotants = "<br>(" . round(($votantsChoix / $votantsTotal) * 100, 2) . " %)";
                 } else {
                     $pourcentageVotants = "";
                 }
@@ -162,7 +162,7 @@ if ($prediExists)
     }
     if ($prediAnswer != NULL)
     {
-        echo("<h3 class='title-h3'><b>" . $prediAnswerTitle . "</b> était la bonne réponse. Les points ont été redistribués !</h3>");
+        echo("<hr class=\"line\"><h3 class='title-h3'><b>\"" . $prediAnswerTitle . "\"</b> était la bonne réponse. Les points ont été redistribués !</h3>");
     }
 } else
 {
