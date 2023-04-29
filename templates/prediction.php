@@ -49,14 +49,14 @@ if ($prediExists)
                 $pointsTotal = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id];");
                 if ($pointsTotal != 0 && $pointsChoix != 0)
                 {
-                    $pourcentagePoints = " (" . round(($pointsChoix / $pointsTotal) * 100, 1) . " %)";
+                    $pourcentagePoints = "<br>(" . round(($pointsChoix / $pointsTotal) * 100, 1) . " %)";
                 } else
                 {
                     $pourcentagePoints = "";
                 }
                 if ($votantsTotal != 0 && $votantsChoix != 0)
                 {
-                    $pourcentageVotants = " (" . round(($votantsChoix / $votantsTotal) * 100, 1) . " %)";
+                    $pourcentageVotants = "<br>(" . round(($votantsChoix / $votantsTotal) * 100, 1) . " %)";
                 } else {
                     $pourcentageVotants = "";
                 }
@@ -72,7 +72,7 @@ if ($prediExists)
             if ($count % 2 == 0)
             {
                 $intituleChoix = $uneColonne;
-                $prediChoicesText = $prediChoicesText . "<td>" . $intituleChoix . "</td><td>" . $votantsChoix . "<br>" . $pourcentageVotants . "</td><td>" . $pointsChoix . "<br>" . $pourcentagePoints .  "</td><td>" . $tauxVictoire . "</td><td>" . $recordMise . "</td>";
+                $prediChoicesText = $prediChoicesText . "<td>" . $intituleChoix . "</td><td>" . $votantsChoix . $pourcentageVotants . "</td><td>" . $pointsChoix . $pourcentagePoints .  "</td><td>" . $tauxVictoire . "</td><td>" . $recordMise . "</td>";
             }
         }
         $prediChoicesText = $prediChoicesText . "</tr>";
