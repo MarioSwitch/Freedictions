@@ -19,8 +19,8 @@ if ($prediExists)
     $prediEndDate = substr($prediEnd,0,10);
     $prediEndTime = substr($prediEnd,11,8);
     echo "<script src=\"./js/countdown.js\"></script>";
-    echo "<script>countdownTo(\"" . $prediCreatedDate . "T" . $prediCreatedTime . "+02:00\", \"dans %countdown\", \"il y a %countup\", \"createdCountdown\");</script>";
-    echo "<script>countdownTo(\"" . $prediEndDate . "T" . $prediEndTime . "+02:00\", \"Se termine dans %countdown\", \"Terminé depuis %countup\", \"endCountdown\");</script>";
+    echo "<script>countdownTo(\"" . $prediCreatedDate . "T" . $prediCreatedTime . "Z\", \"dans %countdown\", \"il y a %countup\", \"createdCountdown\");</script>";
+    echo "<script>countdownTo(\"" . $prediEndDate . "T" . $prediEndTime . "Z\", \"Se termine dans %countdown\", \"Terminé depuis %countup\", \"endCountdown\");</script>";
     $prediAnswer = SQLGetChamp("SELECT correctAnswer FROM predictions WHERE id=$_REQUEST[id];");
     if ($prediAnswer != NULL)
     {
@@ -120,9 +120,11 @@ if ($prediExists)
     echo("
     <h1 class='title'>" . $prediTitle . " </h1>
     <p class=\"text2\">
-        Créé par " . $prediPseudo . " <span id=\"createdCountdown\"></span>
+        Créé par " . $prediPseudo . " <abbr id=\"createdCountdown\" title=\"" . $prediCreated . " UTC\"></abbr>
     </p>
-    <p class=\"text2\" id=\"endCountdown\"></p>
+    <p class=\"text2\">
+        <abbr id=\"endCountdown\" title=\"" . $prediEnd . " UTC\"></abbr>
+    </p>
 	<h2 class='title-h2'>" . $prediNumberOfAnswers . " réponses possibles</h2>
 	" . $prediChoicesText . "
 	<hr class=\"line\">

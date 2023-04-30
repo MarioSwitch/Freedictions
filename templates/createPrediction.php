@@ -17,10 +17,8 @@ if (!isset($_SESSION["connecte"])) {
             <label for="prediNameBox">Question</label>
             <input type="text" class="form-control" id="prediNameBox" name="name" required="required">
         </div>
-        <div class="form-group">
-            <label for="prediEndBox">Fin des votes</label>
-            <input type="datetime-local" class="form-control" id="prediEndBox" name="end" required="required"
-                   min=<?= date('Y-m-d') . "T" . date('H:i') ?> max="2038-01-18T20:14">
+        <div id="end" class="form-group">
+            <label for="prediEndBox">Fin des votes (heure locale)</label>
         </div>
     </div>
     <hr class="line">
@@ -39,3 +37,14 @@ if (!isset($_SESSION["connecte"])) {
     </div>
     <button type="submit" name="action" value="Publier" class="btn btn-default">Publier</button>
 </form>
+<script>
+	var date = new Date();
+	var year = date.getYear()+1900;
+	var month = ("0" + (date.getMonth()+1)).slice(-2);
+	var day = ("0" + date.getDate()).slice(-2);
+	var hours = ("0" + date.getHours()).slice(-2);
+	var minutes = ("0" + date.getMinutes()).slice(-2);
+	var local = year + "-" + month + "-" + day + "T" + hours + ":" + minutes;
+	document.getElementById("end").innerHTML += "<input type='datetime-local' class='form-control' id='prediEndBox' name='end' required='required' min='" + local + "' max='2037-12-31T23:59'>";
+	document.getElementById("end").innerHTML += "<input type='hidden' name='offset' value=" + -(date.getTimezoneOffset()) + ">";
+</script>

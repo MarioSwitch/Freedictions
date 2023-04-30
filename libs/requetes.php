@@ -1,9 +1,10 @@
 <?php
 
 include_once "maLibSQL.pdo.php";
+$now = SQLGetChamp("SELECT NOW();");
 
 function creerCompte($username,$displayname,$hash){
-    $now = date('Y-m-d')." ".date('H:i:s');
+    global $now;
     $SQL = "INSERT INTO users VALUES ('$username','$displayname','$hash',NULL,100,false,'$now')";
     SQLInsert($SQL);
     $_SESSION["user"] = $username;
@@ -13,7 +14,7 @@ function creerCompte($username,$displayname,$hash){
 }
 
 function seConnecter($username,$password){
-    $now = date('Y-m-d')." ".date('H:i:s');
+    global $now;
     $SQL="SELECT hash_pwd FROM users WHERE username='$username';";
     $hash_saved=SQLGetChamp($SQL);
     if(password_verify($password,$hash_saved)){
@@ -27,6 +28,7 @@ function seConnecter($username,$password){
 }
 
 function supprimerCompte($username, $password){
+    global $now;
     $SQL="SELECT hash_pwd FROM users WHERE username='$username';";
     $hash_saved=SQLGetChamp($SQL);
     if(password_verify($password,$hash_saved)){
@@ -73,12 +75,14 @@ function html_special_chars($str) {
     return $str2;
 }
 
-function creerPrediction($name,$user,$endDate,$choix){//La variable choix sera un tableau créé pour l'occasion (format : "choix1", "choix2", "choix3", etc.)
+function creerPrediction($name,$user,$endDate,$offset,$choix){//La variable choix sera un tableau créé pour l'occasion (format : "choix1", "choix2", "choix3", etc.)
+    global $now;
     $name = html_special_chars($name);
-    $now = date('Y-m-d')." ".date('H:i:s');
-    $SQL = "INSERT INTO predictions VALUES (DEFAULT,'$name','$user','$now','$endDate',NULL);";
+    date_default_timezone_set('UTC');
+    $endDateUTC = date('Y-m-d\TH:i',strtotime($endDate)-($offset*60));
+    $SQL = "INSERT INTO predictions VALUES (DEFAULT,'$name','$user','$now','$endDateUTC',NULL);";
     SQLInsert($SQL);
-    $predictionID = SQLGetChamp("SELECT id FROM predictions WHERE title = '$name' AND author = '$user' AND endDate = '$endDate';");
+    $predictionID = SQLGetChamp("SELECT id FROM predictions WHERE title = '$name' AND author = '$user' AND endDate = '$endDateUTC';");
     foreach($choix as $unChoix){
         $unChoix = html_special_chars($unChoix);
         $SQL = "INSERT INTO predictionsChoices VALUES (DEFAULT, $predictionID, '$unChoix');";
@@ -88,7 +92,7 @@ function creerPrediction($name,$user,$endDate,$choix){//La variable choix sera u
 }
 
 function parier($user,$prediction,$choice,$points){
-    $now = date('Y-m-d')." ".date('H:i:s');
+    global $now;
     $end = SQLGetChamp("SELECT endDate FROM predictions WHERE id='$prediction';");
     if($now < $end){
         $SQL = "UPDATE users SET points = points - $points WHERE username = '$user';";
@@ -100,6 +104,7 @@ function parier($user,$prediction,$choice,$points){
 }
 
 function donnerReponsePrediction($prediction,$answer){
+    global $now;
     $author = SQLGetChamp("SELECT author FROM predictions WHERE id='$prediction';");
     $userConnected = $_SESSION["user"];
     $admin = SQLGetChamp("SELECT isAdmin FROM users WHERE username='$userConnected';");
@@ -130,6 +135,7 @@ function donnerReponsePrediction($prediction,$answer){
 }
 
 function supprimerPrediction($prediction){
+    global $now;
     $author = SQLGetChamp("SELECT author FROM predictions WHERE id='$prediction';");
     $userConnected = $_SESSION["user"];
     $admin = SQLGetChamp("SELECT isAdmin FROM users WHERE username='$userConnected';");

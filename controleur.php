@@ -28,8 +28,8 @@ session_start();
 			break;
 
 			case 'Publier' :
-				if(isset($_SESSION["connecte"]) && $_REQUEST["name"] && $_REQUEST["end"]){
-					$addArgs = "?view=prediction&id=" . creerPrediction($_REQUEST["name"],$_SESSION["user"],$_REQUEST["end"],$_REQUEST["choices"]);
+				if(isset($_SESSION["connecte"]) && $_REQUEST["name"] && $_REQUEST["end"] && $_REQUEST["offset"]){
+					$addArgs = "?view=prediction&id=" . creerPrediction($_REQUEST["name"],$_SESSION["user"],$_REQUEST["end"],$_REQUEST["offset"],$_REQUEST["choices"]);
 				}
 			break;
 

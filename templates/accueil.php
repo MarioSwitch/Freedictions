@@ -19,7 +19,7 @@ include_once("lis/maLibSQL.pdo.php");
 <hr class="line">
 <h2 class="category-h2">Prédictions ouvertes</h2>
 <?php
-$now = date("Y-m-d H:i:s");
+$now = SQLGetChamp("SELECT NOW();");
 $predictions = parcoursRs(SQLSelect("SELECT id, title FROM predictions WHERE endDate > '$now' ORDER BY endDate ASC;"));
 if(!$predictions){
 	echo "<p class='text2'>Aucune prédiction ouverte</p>";
