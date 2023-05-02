@@ -10,8 +10,7 @@ if(isset($_SESSION["connecte"])){
 }
 ?>
 
-<h1 class="title">Better Twitch Predictions</h1>
-<h2 class="title-h2">Inscription</h2>
+<h1 class="title">Création de compte</h1>
 <form role="form" action="controleur.php">
     <div class="top-row">
         <div class="form-group">
@@ -33,7 +32,7 @@ if(isset($_SESSION["connecte"])){
             <input type="password" class="signup-input" id="passwordconfirmationBox" name="passwordconfirmation" required="required">
         </div>
     </div>
-    <button type="submit" name="action" value="Inscription" class="btn btn-default">Inscription</button>
+    <button type="submit" name="action" value="Inscription" class="btn btn-default">Créer</button>
 </form>
 
 

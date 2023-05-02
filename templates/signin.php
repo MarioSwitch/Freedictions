@@ -11,8 +11,7 @@ if(isset($_SESSION["connecte"])){
 }
 ?>
 
-<h1 class="title">Better Twitch Predictions</h1>
-<h2 class="title-h2">Connexion</h2>
+<h1 class="title">Connexion</h1>
 <form role="form" action="controleur.php">
     <div class="signin-form-group">
         <label for="usernameBox">Nom d'utilisateur</label>
@@ -22,7 +21,7 @@ if(isset($_SESSION["connecte"])){
         <label for="passwordBox">Mot de passe</label>
         <input type="password" class="signin-input" id="passwordBox" name="password" required="required">
     </div>
-    <button type="submit" name="action" value="Connexion" class="btn btn-default">Connexion</button>
+    <button type="submit" name="action" value="Connexion" class="btn btn-default">Se connecter</button>
 </form>
 
 
