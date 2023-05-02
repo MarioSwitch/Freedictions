@@ -140,20 +140,24 @@ function supprimerPrediction($prediction){
     $userConnected = $_SESSION["user"];
     $admin = SQLGetChamp("SELECT isAdmin FROM users WHERE username='$userConnected';");
     if($author == $userConnected || $admin){
-        $lesChoixDesUtilisateurs = parcoursRs(SQLSelect("SELECT username,pointsSpent FROM usersChoices WHERE prediction='$prediction';"));
-        $count=0;
-        foreach($lesChoixDesUtilisateurs as $uneLigne){
-            foreach($uneLigne as $uneColonne){
-                $count++;
-                if($count%2==1){
-                    $utilisateurARembourser = $uneColonne;
-                }
-                if($count%2==0){
-                    $pointsARembourser = $uneColonne;
-                    SQLUpdate("UPDATE users SET points = points + $pointsARembourser WHERE username='$utilisateurARembourser'");
+        $correctAnswer = SQLGetChamp("SELECT correctAnswer FROM predictions WHERE id = '$prediction';");
+        if(!$correctAnswer){
+            $lesChoixDesUtilisateurs = parcoursRs(SQLSelect("SELECT username,pointsSpent FROM usersChoices WHERE prediction='$prediction';"));
+            $count=0;
+            foreach($lesChoixDesUtilisateurs as $uneLigne){
+                foreach($uneLigne as $uneColonne){
+                    $count++;
+                    if($count%2==1){
+                        $utilisateurARembourser = $uneColonne;
+                    }
+                    if($count%2==0){
+                        $pointsARembourser = $uneColonne;
+                        SQLUpdate("UPDATE users SET points = points + $pointsARembourser WHERE username='$utilisateurARembourser'");
+                    }
                 }
             }
         }
+        SQLDelete("DELETE FROM usersChoices WHERE prediction='$prediction';");
         SQLDelete("DELETE FROM predictionsChoices WHERE prediction='$prediction';");
         SQLDelete("DELETE FROM predictions WHERE id='$prediction';");
     }

@@ -8,7 +8,7 @@ include_once "libs/maLibSQL.pdo.php";
 $prediExists = SQLGetChamp("SELECT COUNT(*) FROM predictions WHERE id=$_REQUEST[id];");
 if ($prediExists)
 {
-    $now = date('Y-m-d')." ".date('H:i:s');
+    $now = SQLGetChamp("SELECT NOW();");
     $prediTitle = SQLGetChamp("SELECT title FROM predictions WHERE id=$_REQUEST[id];");
     $prediCreator = SQLGetChamp("SELECT author FROM predictions WHERE id=$_REQUEST[id];");
     $prediPseudo = SQLGetChamp("SELECT nickname FROM users JOIN predictions ON users.username = predictions.author WHERE predictions.id = $_REQUEST[id];");
@@ -150,16 +150,18 @@ if ($prediExists)
     }
     if ($mode == "admin" || $mode == "creator")
     {
+        echo("<hr class=\"line\"><h3 class='title-h3'>Gérer la prédiction</h3>");
         if ($prediAnswer == NULL)
         {
-            echo("<hr class=\"line\"><h3 class='title-h3'>Gérer la prédiction</h3>");
             if ($prediEnd < $now)
             {
                 echo("<form class='row' role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><p class='text2'>Définir " . $menuDeroulant . " comme étant la bonne réponse </p><button class='button' type=\"submit\" name=\"action\" value=\"ValiderPrediction\">Terminer la prédiction et redistribuer les points</button></form>");
             } else {
                 echo("<p class='text2'>Vous devez attendre la fin des votes pour donner la bonne réponse !</p>");
             }
-        echo("<form role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><button class='button' type=\"submit\" name=\"action\" value=\"SupprimerPrediction\">Supprimer la prédiction et rendre les points</button></form>");
+            echo("<form role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><button class='button' type=\"submit\" name=\"action\" value=\"SupprimerPrediction\">Supprimer la prédiction et rendre les points</button></form>");
+        }else{
+            echo("<form role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><button class='button' type=\"submit\" name=\"action\" value=\"SupprimerPrediction\">Supprimer la prédiction</button></form>");
         }
     }
     if ($prediAnswer != NULL)

@@ -61,7 +61,7 @@ CREATE TABLE `users` (
   `bio` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
   `points` bigint(20) NOT NULL,
   `isAdmin` tinyint(1) NOT NULL,
-  `lastConnection` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `lastConnection` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
