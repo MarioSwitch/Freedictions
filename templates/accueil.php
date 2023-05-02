@@ -31,7 +31,7 @@ if(!$predictions){
 			if($typeDonnee == 2){$title = $uneDonnee;}
 			$typeDonnee++;
 		}
-		echo "<p class='text2'><a class='a-text' href='?view=prediction&id=" . $id . "'>" . $title . "</a></p>";
+		echo "<a class='a-text' href='?view=prediction&id=" . $id . "'>" . $title . "</a>";
 	}
 }
 ?>

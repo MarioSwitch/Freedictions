@@ -5,39 +5,25 @@ $now = SQLGetChamp("SELECT NOW();");
 
 function creerCompte($username,$displayname,$hash){
     global $now;
-    $SQL = "INSERT INTO users VALUES ('$username','$displayname','$hash',NULL,100,false,'$now')";
-    SQLInsert($SQL);
+    SQLInsert("INSERT INTO users VALUES ('$username','$displayname','$hash',NULL,100,false,'$now')");
     $_SESSION["user"] = $username;
     $_SESSION["nickname"] = SQLGetChamp("SELECT nickname FROM users WHERE username='$username';");
-	$_SESSION["connecte"] = true;
-	$_SESSION["heureConnexion"] = date("H:i:s");
+    $_SESSION["connecte"] = true;
+    $_SESSION["heureConnexion"] = date("H:i:s");
 }
 
 function seConnecter($username,$password){
     global $now;
-    $SQL="SELECT hash_pwd FROM users WHERE username='$username';";
-    $hash_saved=SQLGetChamp($SQL);
+    $hash_saved=SQLGetChamp("SELECT hash_pwd FROM users WHERE username='$username';");
     if(password_verify($password,$hash_saved)){
         $_SESSION["user"] = $username;
         $_SESSION["nickname"] = SQLGetChamp("SELECT nickname FROM users WHERE username='$username';");
-	    $_SESSION["connecte"] = true;
-	    $_SESSION["heureConnexion"] = date("H:i:s");
-        $SQL="UPDATE users SET lastConnection = '$now' WHERE username = '$username';";
-        SQLUpdate($SQL);
+        $_SESSION["connecte"] = true;
+        $_SESSION["heureConnexion"] = date("H:i:s");
+        SQLUpdate("UPDATE users SET lastConnection = '$now' WHERE username = '$username';");
     }
 }
 
-function supprimerCompte($username, $password){
-    global $now;
-    $SQL="SELECT hash_pwd FROM users WHERE username='$username';";
-    $hash_saved=SQLGetChamp($SQL);
-    if(password_verify($password,$hash_saved)){
-        $SQL="DELETE FROM users WHERE username='$username';";
-        SQLDelete($SQL);
-        //Ne pas oublier de supprimer toutes les prédictions créées par cet utilisateur ainsi que ses paris
-        //Ne pas oublier de supprimer les données de session (le déconnecter)
-    }
-}
 // petite fonction pour autoriser les caractères spéciaux à être dans une string en les rendant normalisés en rajoutant des backslashes devant (marche pas pour < et >, il faut les remplacer par &lt et &gt)
 function html_special_chars($str) {
     $invalid_characters = array("'", '"', '/', '&', '\\'); // "$", "%", "#", "|", '\'', "\"", "\\");
@@ -163,4 +149,18 @@ function supprimerPrediction($prediction){
     }
 }
 
+function supprimerCompte($username, $password){
+    $hash_saved=SQLGetChamp("SELECT hash_pwd FROM users WHERE username='$username';");
+    if(password_verify($password,$hash_saved)){
+        SQLDelete("DELETE FROM usersChoices WHERE username='$username';");
+        $createdPredictions = SQLSelect("SELECT id FROM predictions WHERE author='$username';");
+        foreach($createdPredictions as $unePrediction){
+            foreach($unePrediction as $unID){
+                supprimerPrediction($unID);
+            }
+        }
+        SQLDelete("DELETE FROM users WHERE username='$username';");
+        session_destroy();
+    }
+}
 ?>

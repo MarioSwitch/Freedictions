@@ -8,7 +8,7 @@ include_once "libs/maLibSQL.pdo.php";
 if (!isset($_SESSION["connecte"])) {
     echo("<script type=\"text/javascript\">window.location.href=\"index.php?view=signin\"</script>");
 }
-$now = date('Y-m-d')." ".date('H:i:s');
+$now = SQLGetChamp("SELECT NOW();");
 $displayname = SQLGetChamp("SELECT nickname FROM users WHERE username='$_SESSION[user]';");
 $points = SQLGetChamp("SELECT points FROM users WHERE username='$_SESSION[user]';");
 $rank = SQLGetChamp("SELECT COUNT(*) FROM users WHERE points > " . $points) + 1;
@@ -124,7 +124,7 @@ foreach ($predictionsParticipated as $uneLigne) {
 }
 
 echo("
-    <h1 class=\"title\">Mon profil (" . $displayname . ")</h1>
+    <h1 class='title'>Mon profil (" . $displayname . ")</h1>
     <p class='text'>" . $points . " points</p>
     <p class='text'>Classé " . $rank . "<sup>e</sup> sur " . $accounts . " (dans le top " . $top . " %)</p>
     <hr class='line'>
@@ -133,9 +133,16 @@ echo("
 	<p class='text'>Vous avez créé <b>" . $statsTotalCreated . "</b> prédictions.</p>
     <hr class='line'>
 	<h2 class='category-h2'>Prédictions créées</h2>
-	<p class=\"text\">" . $predictionsCreatedText . "</p>
+	<p class='text'>" . $predictionsCreatedText . "</p>
     <hr class='line'>
 	<h2 class='category-h2'>Prédictions auxquelles j'ai participé</h2>
-	<p class=\"text\">" . $predictionsParticipatedText . "</p>
+	<p class='text'>" . $predictionsParticipatedText . "</p>
+    <hr class='line'>
+	<h2 class='category-h2'>Gérer le compte</h2>
+	<form class='row' role='form' action='controleur.php'>
+		<input type='hidden' name='username' value='" . $_SESSION["user"] . "'>
+		<input type='password' name='password' class='signup-input' placeholder='Confirmez votre mot de passe'>
+		<button class='button' type='submit' name='action' value='SupprimerCompte'>Confirmer la suppression du compte</button>
+	</form>
 ");
 ?>

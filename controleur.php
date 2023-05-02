@@ -18,14 +18,18 @@ session_start();
 			case 'Connexion' : //Obligé d'utiliser password_verification : on met dans le modèle
 				seConnecter($_REQUEST["username"],$_REQUEST["password"]);
 			break;
-			
+
 			case 'Inscription' :
 				if((!isset($_SESSION["connecte"])) && $_REQUEST["username"] && $_REQUEST["displayname"] && $_REQUEST["password"] && $_REQUEST["passwordconfirmation"] && ($_REQUEST["password"] == $_REQUEST["passwordconfirmation"])){
 					$hash = password_hash($_REQUEST["password"],PASSWORD_DEFAULT);
 					creerCompte($_REQUEST["username"],$_REQUEST["displayname"],$hash);
 				}
-			
 			break;
+
+			case 'SupprimerCompte' :
+				if(isset($_SESSION["connecte"]) && $_REQUEST["username"] && $_REQUEST["password"]){
+					supprimerCompte($_REQUEST["username"],$_REQUEST["password"]);
+				}
 
 			case 'Publier' :
 				if(isset($_SESSION["connecte"]) && $_REQUEST["name"] && $_REQUEST["end"] && $_REQUEST["offset"]){
