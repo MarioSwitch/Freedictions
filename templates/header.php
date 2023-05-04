@@ -35,7 +35,7 @@ include_once "libs/maLibSQL.pdo.php";
 	} //Si il est connecté, on affiche un lien "profil", "créer un prédiction"
         else {
 	    $displayname = SQLGetChamp("SELECT nickname FROM users WHERE username='$_SESSION[user]';");
-	    $points = SQLGetChamp("SELECT points FROM users WHERE username='$_SESSION[user]';");
+	    $points = number_format(SQLGetChamp("SELECT points FROM users WHERE username='$_SESSION[user]';"), 0, '', ' ');
 	    echo "<p class=\"header-text\">Connecté en tant que $displayname ($points points)</p>";
             echo "<a class=\"header-profile\" href=\"index.php?view=profile\"><img src=\"./ressources/svg/profile.svg\" width=\"25px\" height=\"25px\"></a>";
             echo "<a class=\"header-createPrediction\" href=\"index.php?view=createPrediction\"><img src=\"./ressources/svg/createPrediction.svg\" width=\"25px\" height=\"25px\"></a>";

@@ -13,7 +13,7 @@ echo "<p class='text2'>Ci-dessous, le classement des utilisateurs ayant le plus 
 if(valider("connecte","SESSION")){
 	$myPoints = SQLGetChamp("SELECT points FROM users WHERE username='$_SESSION[user]';");
 	$myRank = SQLGetChamp("SELECT COUNT(*) FROM users WHERE points > " . $myPoints . ";")+1;
-	$myTop = round(($myRank / $accounts)*100,2);
+	$myTop = number_format(($myRank / $accounts)*100, 2, ',', '');
 	echo "<p class='text2'>Vous êtes " . $myRank . "<sup>e</sup> sur " . $accounts . " (top " . $myTop . " %)</p>";
 }else{
 	echo "<p class='text2'>Total : " . $accounts . " utilisateurs</p>";
@@ -28,7 +28,7 @@ foreach($classement as $uneLigne){
 		$typeDonnee++;
 	}
 	$rank = SQLGetChamp("SELECT COUNT(*) FROM users WHERE points > " . $points . ";")+1;
-	echo "<tr><td>" . $rank . "</td><td>" . $user . "</td><td>" . $points . "</td></tr>";
+	echo "<tr><td>" . $rank . "</td><td>" . $user . "</td><td>" . number_format($points, 0, '', ' ') . "</td></tr>";
 }
 echo "</table>";
 ?>

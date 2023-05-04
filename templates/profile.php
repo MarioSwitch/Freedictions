@@ -13,7 +13,7 @@ $displayname = SQLGetChamp("SELECT nickname FROM users WHERE username='$_SESSION
 $points = SQLGetChamp("SELECT points FROM users WHERE username='$_SESSION[user]';");
 $rank = SQLGetChamp("SELECT COUNT(*) FROM users WHERE points > " . $points) + 1;
 $accounts = SQLGetChamp("SELECT COUNT(*) FROM users");
-$top = round(($rank / $accounts)*100,2);
+$top = number_format(($rank / $accounts)*100, 2, ',', '');
 $statsPointsSpent = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE username='$_SESSION[user]';");
 $statsTotalBets = SQLGetChamp("SELECT COUNT(*) FROM usersChoices WHERE username='$_SESSION[user]';");
 $statsTotalCreated = SQLGetChamp("SELECT COUNT(*) FROM predictions WHERE author='$_SESSION[user]';");
@@ -125,11 +125,11 @@ foreach ($predictionsParticipated as $uneLigne) {
 
 echo("
     <h1 class='title'>Mon profil (" . $displayname . ")</h1>
-    <p class='text'>" . $points . " points</p>
+    <p class='text'>" . number_format($points, 0, '', ' ') . " points</p>
     <p class='text'>Classé " . $rank . "<sup>e</sup> sur " . $accounts . " (dans le top " . $top . " %)</p>
     <hr class='line'>
 	<h2 class='category-h2'>Statistiques</h2>
-	<p class='text'>Vous avez misé <b>" . $statsTotalBets . " </b> fois pour un total de <b>" . $statsPointsSpent . "</b> points.</p>
+	<p class='text'>Vous avez misé <b>" . $statsTotalBets . " </b> fois pour un total de <b>" . number_format($statsPointsSpent, 0, '', ' ') . "</b> points.</p>
 	<p class='text'>Vous avez créé <b>" . $statsTotalCreated . "</b> prédictions.</p>
     <hr class='line'>
 	<h2 class='category-h2'>Prédictions créées</h2>

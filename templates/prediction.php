@@ -49,35 +49,35 @@ if ($prediExists)
                 $pointsTotal = SQLGetChamp("SELECT SUM(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id];");
                 if ($pointsTotal != 0 && $pointsChoix != 0)
                 {
-                    $pourcentagePoints = "<br>(" . round(($pointsChoix / $pointsTotal) * 100, 2) . " %)";
+                    $pourcentagePoints = "<br>(" . number_format(($pointsChoix / $pointsTotal) * 100, 2, ',', '') . " %)";
                 } else
                 {
                     $pourcentagePoints = "";
                 }
                 if ($votantsTotal != 0 && $votantsChoix != 0)
                 {
-                    $pourcentageVotants = "<br>(" . round(($votantsChoix / $votantsTotal) * 100, 2) . " %)";
+                    $pourcentageVotants = "<br>(" . number_format(($votantsChoix / $votantsTotal) * 100, 2, ',', '') . " %)";
                 } else {
                     $pourcentageVotants = "";
                 }
                 if ($pourcentagePoints != "")
                 {
-                    $tauxVictoire = round($pointsTotal / $pointsChoix, 2);
+                    $tauxVictoire = number_format($pointsTotal / $pointsChoix, 2, ',', ' ');
                 } else
                 {
-                    $tauxVictoire = "";
+                    $tauxVictoire = "∞";
                 }
                 $recordMise = SQLGetChamp("SELECT MAX(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;");
             }
             if ($count % 2 == 0)
             {
                 $intituleChoix = $uneColonne;
-                $prediChoicesText = $prediChoicesText . "<td>" . $intituleChoix . "</td><td>" . $votantsChoix . $pourcentageVotants . "</td><td>" . $pointsChoix . $pourcentagePoints .  "</td><td>" . $tauxVictoire . "</td><td>" . $recordMise . "</td>";
+                $prediChoicesText = $prediChoicesText . "<td>" . $intituleChoix . "</td><td>" . $votantsChoix . $pourcentageVotants . "</td><td>" . number_format($pointsChoix, 0, '', ' ') . $pourcentagePoints .  "</td><td>" . $tauxVictoire . "</td><td>" . number_format($recordMise, 0, '', ' ') . "</td>";
             }
         }
         $prediChoicesText = $prediChoicesText . "</tr>";
     }
-    $prediChoicesText = $prediChoicesText . "</table><p class='text2'>Au total, <b>" . $votantsTotal . "</b> personnes ont parié sur cette prédiction pour un total de <b>" . $pointsTotal . "</b> points.</p>";
+    $prediChoicesText = $prediChoicesText . "</table><p class='text2'>Au total, <b>" . $votantsTotal . "</b> personnes ont parié sur cette prédiction pour un total de <b>" . number_format($pointsTotal, 0, '', ' ') . "</b> points.</p>";
     if (!isset($_SESSION["connecte"]))
     {
         $mode = "disconnected";
