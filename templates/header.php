@@ -20,8 +20,8 @@ include_once "libs/maLibSQL.pdo.php";
 </head>
 <body>
 <div class="navbar">
-    <a class="icon" href="index.php?view=accueil"><img src="ressources/icon.png" alt="Icône du site" height="40px"
-                                                       width="40px"></a>
+    <a class="icon" href="index.php?view=accueil"><img src="ressources/icon.png" alt="Icône du site" height="40px" width="40px"></a>
+    <a class="header-leaderboard" href="index.php?view=leaderboard"><img src="./ressources/svg/leaderboard.svg" width="25px" height="25px"></a>
     <form method="GET" action="controleur.php" class="search-form">
         <input class="header-search" type="text" placeholder="Rechercher" name="recherche">
         <button type="submit" name="action" class="header-button" value="Rechercher"></button>
@@ -29,8 +29,7 @@ include_once "libs/maLibSQL.pdo.php";
     <div class="header-right">
         <?php
         // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion et/ou d'inscription
-        echo "<a class=\"header-leaderboard\" href=\"index.php?view=leaderboard\"><img src=\"./ressources/svg/leaderboard.svg\" width=\"25px\" height=\"25px\"></a>";
-	if (!valider("connecte", "SESSION")) {
+        if (!valider("connecte", "SESSION")) {
             echo "<a class=\"header-signup\" href=\"index.php?view=signup\"><img src=\"./ressources/svg/createProfile.svg\" width=\"25px\" height=\"25px\"></a>";
 	    echo "<a class=\"header-signin\" href=\"index.php?view=signin\"><img src=\"./ressources/svg/login.svg\" width=\"25px\" height=\"25px\"></a>";
 	} //Si il est connecté, on affiche un lien "profil", "créer un prédiction"
