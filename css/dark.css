@@ -29,6 +29,10 @@ body {
     margin: 0;
 }
 
+a{
+    color:#FFF;
+}
+
 abbr{
     cursor: help;
 }
@@ -69,10 +73,10 @@ abbr{
 
 }
 
-.header-accueil, .header-signin, .header-signup, .header-leaderboard, .header-profile, .header-createPrediction, .header-logout {
+.header-svg {
     font-size: 2vh;
     font-family: Roobert;
-    padding: 0.8vh 3vh 0.8vh 3vh;
+    padding: 0.8vh 2vh;
     text-decoration: none;
     color: whitesmoke;
 }
@@ -587,6 +591,11 @@ footer {
         width: 50vw;
         margin-top: 5vh
     }
+}
+
+.left{
+    text-align:left;
+    margin-left:10px;
 }
 
 label {
