@@ -3,11 +3,11 @@
 // Pas de soucis de bufferisation, puisque c'est dans le cas où on appelle directement la page sans son contexte
 if (basename($_SERVER["PHP_SELF"]) != "index.php")
 {
-	header("Location:../index.php?view=accueil");
+	header("Location:?view=accueil");
 	die("");
 }
 include_once("templates/search.php");
-include_once("lis/maLibSQL.pdo.php");
+include_once("libs/maLibSQL.pdo.php");
 ?>
 <h1 class='title'><del>Better Twitch Predictions</del><br>[insérer nom du site]</h1>
 <h2 class='category-h2'>Le principe du site</h2>

@@ -1,13 +1,10 @@
 <?php
 
 // Si la page est appelée directement par son adresse, on redirige en passant par la page index
-if (basename($_SERVER["PHP_SELF"]) != "index.php")
+if (basename($_SERVER["PHP_SELF"]) != "index.php" || isset($_SESSION["connecte"]))
 {
-    header("Location:../index.php?view=login");
+    header("Location:?view=accueil");
     die("");
-}
-if(isset($_SESSION["connecte"])){
-    echo("<script type=\"text/javascript\">window.location.href=\"index.php\"</script>");
 }
 ?>
 

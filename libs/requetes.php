@@ -5,22 +5,30 @@ $now = SQLGetChamp("SELECT NOW();");
 
 function creerCompte($username,$displayname,$hash){
     global $now;
-    SQLInsert("INSERT INTO users VALUES ('$username','$displayname','$hash',NULL,100,false,'$now')");
-    $_SESSION["user"] = $username;
-    $_SESSION["nickname"] = SQLGetChamp("SELECT nickname FROM users WHERE username='$username';");
-    $_SESSION["connecte"] = true;
-    $_SESSION["heureConnexion"] = date("H:i:s");
+    if(SQLGetChamp("SELECT COUNT(*) FROM users WHERE username='$username';") == 0){
+        SQLInsert("INSERT INTO users VALUES ('$username','$displayname','$hash',NULL,100,false,'$now')");
+        $_SESSION["user"] = $username;
+        $_SESSION["nickname"] = SQLGetChamp("SELECT nickname FROM users WHERE username='$username';");
+        $_SESSION["connecte"] = true;
+        $_SESSION["heureConnexion"] = date("H:i:s");
+    }
 }
 
 function seConnecter($username,$password){
-    global $now;
     $hash_saved=SQLGetChamp("SELECT hash_pwd FROM users WHERE username='$username';");
     if(password_verify($password,$hash_saved)){
         $_SESSION["user"] = $username;
         $_SESSION["nickname"] = SQLGetChamp("SELECT nickname FROM users WHERE username='$username';");
         $_SESSION["connecte"] = true;
-        $_SESSION["heureConnexion"] = date("H:i:s");
-        SQLUpdate("UPDATE users SET lastConnection = '$now' WHERE username = '$username';");
+    }
+}
+
+function changerMotDePasse($username,$oldpassword,$newpassword){
+    $hash_saved=SQLGetChamp("SELECT hash_pwd FROM users WHERE username='$username';");
+    if(password_verify($oldpassword,$hash_saved)){
+        $newhash = password_hash($newpassword,PASSWORD_DEFAULT);
+        SQLUpdate("UPDATE users SET hash_pwd='$newhash' WHERE username='$username';");
+        session_destroy();
     }
 }
 

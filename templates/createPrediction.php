@@ -1,10 +1,7 @@
 <?php
-if (basename($_SERVER["PHP_SELF"]) != "index.php") {
-    header("Location:../index.php?view=accueil");
+if (basename($_SERVER["PHP_SELF"]) != "index.php" || !isset($_SESSION["connecte"])) {
+    header("Location:?view=accueil");
     die("");
-}
-if (!isset($_SESSION["connecte"])) {
-    echo("<script type=\"text/javascript\">window.location.href=\"index.php?view=signin\"</script>");
 }
 ?>
 <div class="page-header">

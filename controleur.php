@@ -25,10 +25,17 @@ session_start();
 				}
 			break;
 
+			case 'ChangePassword' :
+				if(isset($_SESSION["connecte"]) && $_REQUEST["username"] && $_REQUEST["password"] && $_REQUEST["newpassword"] && $_REQUEST["newpasswordconfirmation"] && $_REQUEST["newpassword"] === $_REQUEST["newpasswordconfirmation"]){
+					changerMotDePasse($_REQUEST["username"], $_REQUEST["password"], $_REQUEST["newpassword"]);
+				}
+			break;
+
 			case 'SupprimerCompte' :
 				if(isset($_SESSION["connecte"]) && $_REQUEST["username"] && $_REQUEST["password"]){
 					supprimerCompte($_REQUEST["username"],$_REQUEST["password"]);
 				}
+			break;
 
 			case 'Publier' :
 				if(isset($_SESSION["connecte"]) && $_REQUEST["name"] && $_REQUEST["end"] && $_REQUEST["offset"]){
@@ -41,9 +48,10 @@ session_start();
 					$addArgs = "?view=prediction&id=" . parier($_SESSION["user"],$_REQUEST["prediction"],$_REQUEST["choice"],$_REQUEST["points"]);
 				}
 			break;
+
 			case 'Rechercher':
 				$addArgs = "?view=search&q=" . $_REQUEST['recherche'];
-				break;
+			break;
 
 			case 'ValiderPrediction' :
 				if(isset($_SESSION["connecte"]) && $_REQUEST["prediction"] && $_REQUEST["choice"]){

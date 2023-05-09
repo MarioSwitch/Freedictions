@@ -1,6 +1,6 @@
 <?php
 if (basename($_SERVER["PHP_SELF"]) != "index.php") {
-    header("Location:../index.php?view=accueil");
+    header("Location:?view=accueil");
     die("");
 }
 include_once "libs/maLibSQL.pdo.php";
@@ -145,11 +145,7 @@ if($user == $_SESSION["user"]){
     echo("
         <hr class='line'>
         <h2 class='category-h2'>Gérer le compte</h2>
-	<form class='row' role='form' action='controleur.php'>
-            <input type='hidden' name='username' value='" . $_SESSION["user"] . "'>
-            <input type='password' name='password' class='signup-input' placeholder='Confirmez votre mot de passe'>
-            <button class='button' type='submit' name='action' value='SupprimerCompte'>Confirmer la suppression du compte</button>
-        </form>
+        <p class='text'>Vous pouvez <a href='?view=changePassword'>changer votre mot de passe</a> ou <a href='?view=deleteAccount'>supprimer votre compte</a>.</p>
     ");
 }
 ?>

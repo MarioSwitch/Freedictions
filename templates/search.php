@@ -1,14 +1,14 @@
 <?php
 if (basename($_SERVER["PHP_SELF"]) != "index.php")
 {
-    header("Location:../index.php?view=accueil");
+    header("Location:?view=accueil");
     die("");
 }
 include_once "libs/maLibSQL.pdo.php";
 include_once "libs/requetes.php";
 $now = SQLGetChamp("SELECT NOW();");
 $search = $_REQUEST["q"];
-if($search){
+if($search != ""){
 	$predictionsOuvertes = parcoursRs(SQLSelect("SELECT id, title FROM predictions WHERE endDate > '$now' AND INSTR(title, '{$search}') > 0 ORDER BY endDate ASC;"));
 	$predictionsFermees = parcoursRs(SQLSelect("SELECT id, title FROM predictions WHERE endDate <= '$now' AND INSTR(title, '{$search}') > 0;"));
 	echo "<h1 class='title'>Résultats de recherche pour \"" . $search . "\"</h1>";

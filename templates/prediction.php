@@ -1,7 +1,7 @@
 <?php
 if (basename($_SERVER["PHP_SELF"]) != "index.php")
 {
-    header("Location:../index.php?view=accueil");
+    header("Location:?view=accueil");
     die("");
 }
 include_once "libs/maLibSQL.pdo.php";
