@@ -8,6 +8,11 @@ include_once "libs/maLibSQL.pdo.php";
 $now = SQLGetChamp("SELECT NOW();");
 $user = $_REQUEST["user"];
 $displayname = SQLGetChamp("SELECT nickname FROM users WHERE username='$user';");
+$online = SQLGetChamp("SELECT lastConnection FROM users WHERE username='$user';");
+$onlineDate = substr($online,0,10);
+$onlineTime = substr($online,11,8);
+echo "<script src=\"./js/countdown.js\"></script>";
+echo "<script>countdownTo(\"" . $onlineDate . "T" . $onlineTime . "Z\", \"à l'instant\", \"il y a %countup\", \"onlineCountdown\");</script>";
 $points = SQLGetChamp("SELECT points FROM users WHERE username='$user';");
 $rank = SQLGetChamp("SELECT COUNT(*) FROM users WHERE points > " . $points) + 1;
 $accounts = SQLGetChamp("SELECT COUNT(*) FROM users");
@@ -123,12 +128,12 @@ foreach ($predictionsParticipated as $uneLigne) {
 
 echo("
     <h1 class='title'>" . $displayname . "</h1>
-    <p class='text'>" . number_format($points, 0, '', ' ') . " points</p>
-    <p class='text'>Classé " . $rank . "<sup>e</sup> sur " . $accounts . " (dans le top " . $top . " %)</p>
+    <p class='text'>Dernière connexion <abbr title='" . $online . " UTC' id='onlineCountdown'></abbr></p>
     <hr class='line'>
 	<h2 class='category-h2'>Statistiques</h2>
-	<p class='text'>Misé <b>" . $statsTotalBets . " </b> fois pour un total de <b>" . number_format($statsPointsSpent, 0, '', ' ') . "</b> points.</p>
-	<p class='text'><b>" . $statsTotalCreated . "</b> prédictions créées</p>
+	<p class='text'>" . number_format($points, 0, '', ' ') . " points (" . $rank . "<sup>e</sup> sur " . $accounts . ", top " . $top . " %)</p>
+	<p class='text'>A misé <b>" . $statsTotalBets . " </b> fois pour un total de <b>" . number_format($statsPointsSpent, 0, '', ' ') . "</b> points</p>
+	<p class='text'>A créé <b>" . $statsTotalCreated . "</b> prédictions</p>
     <hr class='line'>
 	<h2 class='category-h2'>Prédictions créées</h2>
 	<p class='text'>" . $predictionsCreatedText . "</p>

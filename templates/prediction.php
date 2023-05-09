@@ -138,7 +138,7 @@ if ($prediExists)
     } elseif ($mode == "waitingAnswer") {
         echo("<p class='text2'>Les votes sont terminés.</p>");
     } elseif ($mode == "normal") {
-        echo("<form role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><p class='text2'>Parier sur " . $menuDeroulant . " avec <input class='points-input' type=\"number\" name=\"points\" min=\"1\" max=\"" . $pointsMax . "\"> points </p><button class='button' type=\"submit\" name=\"action\" value=\"Parier\">Parier</button></form>");
+        echo("<form role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><p class='text2'>Parier sur " . $menuDeroulant . " avec <input class='points-input' type=\"number\" name=\"points\" min=\"1\" max=\"" . $pointsMax . "\" required=\"required\"> points </p><button class='button' type=\"submit\" name=\"action\" value=\"Parier\">Parier</button></form>");
     }
     if ($mode == "creator" || SQLGetChamp("SELECT isAdmin FROM users WHERE username='$_SESSION[user]';") == 1)
     {

@@ -8,6 +8,10 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php") {
 
 include_once "libs/maLibSQL.pdo.php";
 
+if(valider("connecte", "SESSION")){
+    $connectedUser = $_SESSION["user"];
+    SQLUpdate("UPDATE users SET lastConnection = NOW() WHERE username = '$connectedUser';");
+}
 ?>
 <!DOCTYPE html>
 <html>
