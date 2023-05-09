@@ -3,6 +3,18 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php" || !isset($_SESSION["connecte"
     header("Location:?view=accueil");
     die("");
 }
+if(array_key_exists("error",$_REQUEST)){
+    echo "<p class='text error'>";
+    switch($_REQUEST["error"]){
+        case "data":
+            echo "La requête contient une erreur. Assurez-vous d'avoir correctement rempli tous les champs et réessayez.";
+            break;
+        default:
+            echo "Une erreur inconnue s'est produite, veuillez réessayer.";
+            break;
+    }
+    echo "</p>";
+}
 ?>
 <div class="page-header">
     <h1 class="title">Créer une nouvelle prédiction</h1>

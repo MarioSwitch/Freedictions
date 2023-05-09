@@ -11,6 +11,9 @@ function creerCompte($username,$displayname,$hash){
         $_SESSION["nickname"] = SQLGetChamp("SELECT nickname FROM users WHERE username='$username';");
         $_SESSION["connecte"] = true;
         $_SESSION["heureConnexion"] = date("H:i:s");
+    }else{
+        header("Location:index.php?view=signup&error=username");
+        die("");
     }
 }
 
@@ -20,6 +23,9 @@ function seConnecter($username,$password){
         $_SESSION["user"] = $username;
         $_SESSION["nickname"] = SQLGetChamp("SELECT nickname FROM users WHERE username='$username';");
         $_SESSION["connecte"] = true;
+    }else{
+        header("Location:index.php?view=signin&error=password");
+        die("");
     }
 }
 
@@ -29,6 +35,9 @@ function changerMotDePasse($username,$oldpassword,$newpassword){
         $newhash = password_hash($newpassword,PASSWORD_DEFAULT);
         SQLUpdate("UPDATE users SET hash_pwd='$newhash' WHERE username='$username';");
         session_destroy();
+    }else{
+        header("Location:index.php?view=changePassword&error=password");
+        die("");
     }
 }
 
@@ -89,6 +98,9 @@ function parier($user,$prediction,$choice,$points){
     if($now < $end){
         SQLUpdate("UPDATE users SET points = points - $points WHERE username = '$user';");
         SQLInsert("INSERT INTO usersChoices VALUES ('$user',$prediction,$choice,$points);");
+    }else{
+        header("Location:index.php?view=prediction&id=" . $prediction . "&error=closed");
+        die("");
     }
     return $prediction;
 }
@@ -120,6 +132,9 @@ function donnerReponsePrediction($prediction,$answer){
                 }
             }
         }
+    }else{
+        header("Location:index.php?view=prediction&id=" . $prediction . "&error=unauthorized");
+        die("");
     }
     return $prediction;
 }
@@ -150,6 +165,9 @@ function supprimerPrediction($prediction){
         SQLDelete("DELETE FROM usersChoices WHERE prediction='$prediction';");
         SQLDelete("DELETE FROM predictionsChoices WHERE prediction='$prediction';");
         SQLDelete("DELETE FROM predictions WHERE id='$prediction';");
+    }else{
+        header("Location:index.php?view=prediction&id=" . $prediction . "&error=unauthorized");
+        die("");
     }
 }
 
@@ -165,6 +183,9 @@ function supprimerCompte($username, $password){
         }
         SQLDelete("DELETE FROM users WHERE username='$username';");
         session_destroy();
+    }else{
+        header("Location:index.php?view=deleteAccount&error=password");
+        die("");
     }
 }
 ?>

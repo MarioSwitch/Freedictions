@@ -4,6 +4,26 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
     header("Location:?view=accueil");
     die("");
 }
+if(array_key_exists("error",$_REQUEST)){
+    echo "<p class='text error'>";
+    switch($_REQUEST["error"]){
+        case "parier":
+        case "valider":
+        case "supprimer":
+            echo "La requête contient une erreur. Assurez-vous d'avoir correctement rempli tous les champs et réessayez.";
+            break;
+        case "closed":
+            echo "La prédiction est terminée, vous ne pouvez plus parier !";
+            break;
+        case "unauthorized":
+            echo "Vous n'avez pas la permission de gérer cette prédiction.";
+            break;
+        default:
+            echo "Une erreur inconnue s'est produite, veuillez réessayer.";
+            break;
+    }
+    echo "</p>";
+}
 include_once "libs/maLibSQL.pdo.php";
 $prediExists = SQLGetChamp("SELECT COUNT(*) FROM predictions WHERE id=$_REQUEST[id];");
 if ($prediExists)

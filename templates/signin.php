@@ -6,6 +6,18 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php" || isset($_SESSION["connecte"]
     header("Location:?view=accueil");
     die("");
 }
+if(array_key_exists("error",$_REQUEST)){
+    echo "<p class='text error'>";
+    switch($_REQUEST["error"]){
+        case "password":
+            echo "Le nom d'utilisateur ou le mot de passe est incorrect ! Vérifiez les informations saisies et réessayez.";
+            break;
+        default:
+            echo "Une erreur inconnue s'est produite, veuillez réessayer.";
+            break;
+    }
+    echo "</p>";
+}
 ?>
 
 <h1 class="title">Connexion</h1>

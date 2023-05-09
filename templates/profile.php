@@ -4,9 +4,13 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php") {
     die("");
 }
 include_once "libs/maLibSQL.pdo.php";
-
-$now = SQLGetChamp("SELECT NOW();");
 $user = $_REQUEST["user"];
+$userExists = SQLGetChamp("SELECT COUNT(*) FROM users WHERE username='$user';");
+if(!$userExists){
+    echo("<h1 class='title'>Le compte \"$user\" n'existe pas ou a été supprimé !</h1>");
+    die("");
+}
+$now = SQLGetChamp("SELECT NOW();");
 $displayname = SQLGetChamp("SELECT nickname FROM users WHERE username='$user';");
 $online = SQLGetChamp("SELECT lastConnection FROM users WHERE username='$user';");
 $onlineDate = substr($online,0,10);

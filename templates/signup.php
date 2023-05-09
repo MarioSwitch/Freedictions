@@ -5,6 +5,21 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php" || isset($_SESSION["connecte"]
     header("Location:?view=accueil");
     die("");
 }
+if(array_key_exists("error",$_REQUEST)){
+    echo "<p class='text error'>";
+    switch($_REQUEST["error"]){
+        case "data":
+            echo "La requête contient une erreur. Assurez-vous d'avoir correctement rempli tous les champs et réessayez.";
+            break;
+        case "username":
+            echo "Le nom d'utilisateur est déjà utilisé ! Veuillez réessayer.";
+            break;
+        default:
+            echo "Une erreur inconnue s'est produite, veuillez réessayer.";
+            break;
+    }
+    echo "</p>";
+}
 ?>
 
 <h1 class="title">Création de compte</h1>
