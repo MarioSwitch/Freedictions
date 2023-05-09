@@ -28,7 +28,7 @@ foreach($classement as $uneLigne){
 		$typeDonnee++;
 	}
 	$rank = SQLGetChamp("SELECT COUNT(*) FROM users WHERE points > " . $points . ";")+1;
-	echo "<tr><td>" . $rank . "</td><td>" . $user . "</td><td>" . number_format($points, 0, '', ' ') . "</td></tr>";
+	echo "<tr><td>" . $rank . "</td><td><a href='?view=profile&user=" . $user . "'>" . $user . "</a></td><td>" . number_format($points, 0, '', ' ') . "</td></tr>";
 }
 echo "</table>";
 ?>

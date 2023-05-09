@@ -66,13 +66,11 @@ function creerPrediction($name,$user,$endDate,$offset,$choix){//La variable choi
     $name = html_special_chars($name);
     date_default_timezone_set('UTC');
     $endDateUTC = date('Y-m-d\TH:i',strtotime($endDate)-($offset*60));
-    $SQL = "INSERT INTO predictions VALUES (DEFAULT,'$name','$user','$now','$endDateUTC',NULL);";
-    SQLInsert($SQL);
+    SQLInsert("INSERT INTO predictions VALUES (DEFAULT,'$name','$user','$now','$endDateUTC',NULL);");
     $predictionID = SQLGetChamp("SELECT id FROM predictions WHERE title = '$name' AND author = '$user' AND endDate = '$endDateUTC';");
     foreach($choix as $unChoix){
         $unChoix = html_special_chars($unChoix);
-        $SQL = "INSERT INTO predictionsChoices VALUES (DEFAULT, $predictionID, '$unChoix');";
-        SQLInsert($SQL);
+        SQLInsert("INSERT INTO predictionsChoices VALUES (DEFAULT, $predictionID, '$unChoix');");
     }
     return $predictionID;
 }
@@ -81,10 +79,8 @@ function parier($user,$prediction,$choice,$points){
     global $now;
     $end = SQLGetChamp("SELECT endDate FROM predictions WHERE id='$prediction';");
     if($now < $end){
-        $SQL = "UPDATE users SET points = points - $points WHERE username = '$user';";
-        SQLUpdate($SQL);
-        $SQL = "INSERT INTO usersChoices VALUES ('$user',$prediction,$choice,$points);";
-        SQLInsert($SQL);
+        SQLUpdate("UPDATE users SET points = points - $points WHERE username = '$user';");
+        SQLInsert("INSERT INTO usersChoices VALUES ('$user',$prediction,$choice,$points);");
     }
     return $prediction;
 }

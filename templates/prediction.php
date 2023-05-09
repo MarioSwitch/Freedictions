@@ -65,7 +65,7 @@ if ($prediExists)
                     $tauxVictoire = number_format($pointsTotal / $pointsChoix, 2, ',', ' ');
                 } else
                 {
-                    $tauxVictoire = "∞";
+                    $tauxVictoire = "-";
                 }
                 $recordMise = SQLGetChamp("SELECT MAX(pointsSpent) FROM usersChoices WHERE prediction=$_REQUEST[id] AND choice=$numeroChoix;");
             }
@@ -81,10 +81,7 @@ if ($prediExists)
     if (!isset($_SESSION["connecte"]))
     {
         $mode = "disconnected";
-    } elseif (SQLGetChamp("SELECT isAdmin FROM users WHERE username='$_SESSION[user]';") == 1)
-    {
-        $mode = "admin";
-    } elseif ($prediCreator == $_SESSION["user"])
+    } elseif ($prediCreator == $_SESSION["user"] && SQLGetChamp("SELECT isAdmin FROM users WHERE username='$_SESSION[user]';") == 0)
     {
         $mode = "creator";
     } elseif (SQLGetChamp("SELECT COUNT(*) FROM usersChoices WHERE username='$_SESSION[user]' AND prediction=$_REQUEST[id];") == 1)
@@ -120,7 +117,7 @@ if ($prediExists)
     echo("
     <h1 class='title'>" . $prediTitle . " </h1>
     <p class=\"text2\">
-        Créé par " . $prediPseudo . " <abbr id=\"createdCountdown\" title=\"" . $prediCreated . " UTC\"></abbr>
+        Créé par <a href='?view=profile&user=" . $prediCreator . "'>" . $prediPseudo . "</a> <abbr id=\"createdCountdown\" title=\"" . $prediCreated . " UTC\"></abbr>
     </p>
     <p class=\"text2\">
         <abbr id=\"endCountdown\" title=\"" . $prediEnd . " UTC\"></abbr>
@@ -130,25 +127,20 @@ if ($prediExists)
 	<hr class=\"line\">
 	<h3 class='title-h3'>Parier</h3>
 	");
-    if($mode == "disconnected"){
+    if($mode == "disconnected") {
         echo("<p class='text2'>Vous devez être connecté pour pouvoir parier !</p>");
-    }elseif ($mode == "admin")
-    {
-        echo("<p class='text2'>Vous ne pouvez parier sur aucune prédiction car vous êtes un administrateur du site.</p>");
-    } elseif ($mode == "creator")
-    {
+    } elseif ($mode == "creator") {
         echo("<p class='text2'>Vous ne pouvez pas parier sur cette prédiction car vous en êtes le créateur.</p>");
-    } elseif ($mode == "alreadyVoted")
-    {
+    } elseif ($mode == "alreadyVoted") {
         $choice = SQLGetChamp("SELECT predictionsChoices.choice FROM predictionsChoices JOIN usersChoices ON predictionsChoices.id = usersChoices.choice WHERE usersChoices.username='$_SESSION[user]' AND usersChoices.prediction=$_REQUEST[id];");
         $pointsSpent = SQLGetChamp("SELECT pointsSpent FROM usersChoices WHERE username='$_SESSION[user]' AND prediction=$_REQUEST[id];");
-        echo("<p class='text2'>Vous avez parié sur <b>" . $choice . "</b> avec <b>" . $pointsSpent . "</b> points.</p>");
+        echo("<p class='text2'>Vous avez parié sur <b>" . $choice . "</b> avec <b>" . number_format($pointsSpent, 0, '', ' ') . "</b> points.</p>");
     } elseif ($mode == "waitingAnswer") {
         echo("<p class='text2'>Les votes sont terminés.</p>");
     } elseif ($mode == "normal") {
         echo("<form role=\"form\" action=\"controleur.php\"><input type=\"hidden\" name=\"prediction\" value=\"" . $_REQUEST["id"] . "\"><p class='text2'>Parier sur " . $menuDeroulant . " avec <input class='points-input' type=\"number\" name=\"points\" min=\"1\" max=\"" . $pointsMax . "\"> points </p><button class='button' type=\"submit\" name=\"action\" value=\"Parier\">Parier</button></form>");
     }
-    if ($mode == "admin" || $mode == "creator")
+    if ($mode == "creator" || SQLGetChamp("SELECT isAdmin FROM users WHERE username='$_SESSION[user]';") == 1)
     {
         echo("<hr class=\"line\"><h3 class='title-h3'>Gérer la prédiction</h3>");
         if ($prediAnswer == NULL)
@@ -166,7 +158,7 @@ if ($prediExists)
     }
     if ($prediAnswer != NULL)
     {
-        echo("<hr class=\"line\"><h3 class='title-h3'><b>\"" . $prediAnswerTitle . "\"</b> était la bonne réponse. Les points ont été redistribués !</h3>");
+        echo("<hr class=\"line\"><h3 class='title-h3'><b>" . $prediAnswerTitle . "</b> était la bonne réponse. Les points ont été redistribués !</h3>");
     }
 } else
 {
