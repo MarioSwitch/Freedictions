@@ -3,8 +3,7 @@ session_start();
 
 include_once "sql.php";
 
-$view = $_GET["view"];
-if (!$view) $view = "home";
+$view = array_key_exists("view",$_REQUEST)?$_REQUEST["view"]:"home";
 
 include("views/header.php");
 

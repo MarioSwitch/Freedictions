@@ -45,6 +45,7 @@ function endSQL(){
  * @return array|boolean an array containing all found results or false if there is no result
  */
 function arraySQL(string $sql, array $param_array = null){
+    startSQL();
     global $dbh;
     if ($dbh == null) echo "<p style='color:red;'>Pas de connexion à la base de données !</p>";
     try {
@@ -72,6 +73,7 @@ function arraySQL(string $sql, array $param_array = null){
         echo "</div>";
         echo 'Caught exception: ', $e->getMessage(), "<br>";
     }
+    endSQL();
     if ($res === []) return false;
     else if (count($res) == 0) return false;
     return $res;
