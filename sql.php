@@ -119,4 +119,34 @@ function rawPrint(mixed $a){
     print_r($a);
     echo "</pre>\n";
 }
+
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ GENERAL FUNCTIONS ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+// ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ SPECIFIC FUNCTIONS ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+
+$now = stringSQL("SELECT NOW();");
+
+/**
+ * Creates a new account
+ * @param string $username the username
+ * @param string $password1 the password
+ * @param string $password2 the password confirmation
+ * @return void
+ */
+function createAccount($username, $password1, $password2){
+    if(!preg_match("/^[A-Za-z0-9]{4,20}$/", $username)){
+        header("Location: index.php?view=signup&error=username_invalid");
+        die("");
+    }
+    if($password1 != $password2){
+        header("Location: index.php?view=signup&error=password");
+        die("");
+    }
+    if(intSQL("SELECT COUNT(*) FROM users WHERE username = ?;", [$username]) > 0){
+        header("Location: index.php?view=signup&error=username_taken");
+        die("");
+    }
+    $hash = password_hash($password1, PASSWORD_DEFAULT);
+    rawSQL("INSERT INTO users (`username`, `password`, `created`, `updated`, `streak`, `points`, `mod`) VALUES (?, ?, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);", [$username, $hash]);
+}
 ?>

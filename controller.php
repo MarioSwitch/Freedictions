@@ -1,0 +1,28 @@
+<?php
+session_start();
+
+include_once("sql.php");
+
+$addArgs = "";
+
+if ($_REQUEST["action"]){
+    ob_start ();
+    switch($action){
+        case 'createAccount' :
+            if(!($_REQUEST["username"] && $_REQUEST["password"] && $_REQUEST["passwordconfirmation"])){
+                header("Location:index.php?view=signup&error=data");
+                die("");
+            }
+            createAccount($_REQUEST["username"],$_REQUEST["password"],$_REQUEST["passwordconfirmation"]);
+        break;
+
+        case 'logout' :
+            session_destroy();
+        break;
+    }
+}
+
+header("Location:index.php" . $addArgs);
+
+ob_end_flush();
+?>
