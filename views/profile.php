@@ -91,7 +91,7 @@ if(!$predictionsParticipated){
 
 //Display
 echo("
-    <h1>" . $user . "</h1>
+    <h1>" . displayUsername($user) . "</h1>
     <p>Dernière connexion <abbr title='" . $online . " UTC' id='onlineCountdown'></abbr></p>
     <hr>
 	<h2>Statistiques</h2>
@@ -105,7 +105,7 @@ echo("
 	<h2>Participations à des prédictions</h2>
 	<p>" . $predictionsParticipatedText . "</p>
 ");
-if($user == $_SESSION["user"]){
+if(userConnected() && ($user == $_SESSION["user"] || userMod())){
     echo("
         <hr>
         <h2>Gérer le compte</h2>

@@ -247,7 +247,7 @@ form:not(.search-form) > button{
     border: 0;
 }
 
-.table {
+table {
     border-spacing: 0;
     color: white;
     background-color: #404;

@@ -27,16 +27,16 @@ if(userConnected()){
         <?php
         // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion et/ou d'inscription
         if (!userConnected()){
-            echo "<a class=\"header-svg\" href=\"index.php?view=signup\"><img src=\"svg/signup.svg\" width=\"25px\" height=\"25px\"></a>";
-            echo "<a class=\"header-svg\" href=\"index.php?view=signin\"><img src=\"svg/login.svg\" width=\"25px\" height=\"25px\"></a>";
+            echo "<a class='header-svg' href='index.php?view=signup'><img src='svg/signup.svg' width='25px' height='25px'></a>";
+            echo "<a class='header-svg' href='index.php?view=signin'><img src='svg/login.svg' width='25px' height='25px'></a>";
         } //Si il est connecté, on affiche un lien "profil", "créer un prédiction"
         else {
-            $username = stringSQL("SELECT `username` FROM `users` WHERE `username`='$_SESSION[user]';");
-            $points = number_format(intSQL("SELECT `points` FROM `users` WHERE `username`='$_SESSION[user]';"), 0, '', ' ');
-            echo "<p class=\"header-text\">$username ($points points)</p>";
-            echo "<a class=\"header-svg\" href=\"index.php?view=profile&user=$username\"><img src=\"svg/profile.svg\" width=\"25px\" height=\"25px\"></a>";
-            echo "<a class=\"header-svg\" href=\"index.php?view=createPrediction\"><img src=\"svg/new.svg\" width=\"25px\" height=\"25px\"></a>";
-            echo "<a class=\"header-svg\" href=\"controller.php?action=logout\"><img src=\"svg/logout.svg\" width=\"25px\" height=\"25px\"></a>";
+            $username = stringSQL("SELECT `username` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
+            $points = number_format(intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]), 0, '', ' ');
+            echo "<p class='header-text'>" . displayUsername($username) . " ($points points)</p>";
+            echo "<a class='header-svg' href='index.php?view=profile&user=$username'><img src='svg/profile.svg' width='25px' height='25px'></a>";
+            echo "<a class='header-svg' href='index.php?view=createPrediction'><img src='svg/new.svg' width='25px' height='25px'></a>";
+            echo "<a class='header-svg' href='controller.php?action=logout'><img src='svg/logout.svg' width='25px' height='25px'></a>";
         }
         ?>
     </div>

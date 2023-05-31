@@ -15,6 +15,10 @@ switch($_REQUEST["action"]){
         createAccount($_REQUEST["username"],$_REQUEST["password"],$_REQUEST["passwordconfirmation"]);
     break;
 
+    case 'search':
+        $addArgs = "?view=search&query=" . $_REQUEST["search"];
+    break;
+
     case 'login' :
         login($_REQUEST["username"],$_REQUEST["password"]);
     break;

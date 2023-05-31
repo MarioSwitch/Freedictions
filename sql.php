@@ -128,8 +128,31 @@ function rawPrint(mixed $a){
 
 $now = stringSQL("SELECT NOW();");
 
+/**
+ * Checks if the user is connected
+ * @return bool true if the user is connected, false otherwise
+ */
 function userConnected(){
     return array_key_exists("user", $_SESSION);
+}
+
+/**
+ * Checks if the user is a moderator
+ * @return bool true if the user is a moderator, false otherwise
+ */
+function userMod(){
+    return intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]) == 1;
+}
+
+/**
+ * Displays the username with an emoji if necessary
+ * @param string $username the username
+ * @return string the modified username
+ */
+function displayUsername($username){
+    $string = "";
+    if(intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]) == 1){$string .= "👑 ";}
+    return ($string .= $username);
 }
 
 /**
