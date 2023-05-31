@@ -5,11 +5,17 @@ if(!$userExists){
     echo("<h1>Le compte \"$user\" n'existe pas !</h1>");
     die("");
 }
-$now = stringSQL("SELECT NOW();");
+
+//Timestamps
+$created = stringSQL("SELECT `created` FROM `users` WHERE `username` = ?;", [$user]);
+$createdDate = substr($created,0,10);
+$createdTime = substr($created,11,8);
+echo "<script src=\"countdown.js\"></script>";
+echo "<script>countdownTo(\"" . $createdDate . "T" . $createdTime . "Z\", \"à l'instant\", \"il y a %countup\", \"createdCountdown\");</script>";
+
 $online = stringSQL("SELECT `updated` FROM `users` WHERE `username` = ?;", [$user]);
 $onlineDate = substr($online,0,10);
 $onlineTime = substr($online,11,8);
-echo "<script src=\"countdown.js\"></script>";
 echo "<script>countdownTo(\"" . $onlineDate . "T" . $onlineTime . "Z\", \"à l'instant\", \"il y a %countup\", \"onlineCountdown\");</script>";
 
 //Stats
@@ -92,6 +98,7 @@ if(!$predictionsParticipated){
 //Display
 echo("
     <h1>" . displayUsername($user) . "</h1>
+    <p>Compte créé <abbr title='" . $created . " UTC' id='createdCountdown'></abbr></p>
     <p>Dernière connexion <abbr title='" . $online . " UTC' id='onlineCountdown'></abbr></p>
     <hr>
 	<h2>Statistiques</h2>
