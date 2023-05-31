@@ -128,6 +128,10 @@ function rawPrint(mixed $a){
 
 $now = stringSQL("SELECT NOW();");
 
+function userConnected(){
+    return array_key_exists("user", $_SESSION);
+}
+
 /**
  * Creates a new account
  * @param string $username the username
@@ -150,5 +154,6 @@ function createAccount($username, $password1, $password2){
     }
     $hash = password_hash($password1, PASSWORD_DEFAULT);
     rawSQL("INSERT INTO users (`username`, `password`, `created`, `updated`, `streak`, `points`, `mod`) VALUES (?, ?, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);", [$username, $hash]);
+    $_SESSION["user"] = $username;
 }
 ?>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <filter id="DX" x="28" y="-8" width="40" height="38" filterUnits="userSpaceOnUse">
+      <feOffset dx="1" dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <clipPath id="clip-SPRK_default_preset_name_custom_1">
+      <rect width="64" height="64"/>
+    </clipPath>
+  </defs>
+  <g id="SPRK_default_preset_name_custom_1" data-name="SPRK_default_preset_name_custom – 1" clip-path="url(#clip-SPRK_default_preset_name_custom_1)">
+    <rect width="64" height="64" fill="#fff0"/>
+    <g id="e" transform="translate(6 -1)">
+      <path id="Path_1" data-name="Path 1" d="M18,8,8,18V54H20V64L30,54h8L56,36V8Z" transform="translate(-8 -3)" fill="#6441a5"/>
+      <path id="Path_2" data-name="Path 2" d="M38,38.421l8-7.579V10H14V38.421h8V46l8-7.579Z" transform="translate(-4)" fill="#fff"/>
+      <g id="Group_1" data-name="Group 1" transform="translate(21.941 17.636)">
+        <path id="Path_3" data-name="Path 3" d="M20,14h4V26H20Zm14,0V26H30V14Z" transform="translate(-20 -14)" fill="#6441a5"/>
+      </g>
+      <rect id="Rectangle_1" data-name="Rectangle 1" width="24" height="16" transform="translate(29 2)" fill="none"/>
+      <g transform="matrix(1, 0, 0, 1, -6, 1)" filter="url(#DX)">
+        <text id="DX-2" data-name="DX" transform="translate(37 14)" fill="none" stroke="#915af7" stroke-width="1" font-size="15" font-family="RoobertTWHINT-SemiBold, Roobert TWHINT" font-weight="600"><tspan x="0" y="0">DX</tspan></text>
+      </g>
+    </g>
+    <rect id="Rectangle_2" data-name="Rectangle 2" width="11" height="8" transform="translate(16 29.5)" fill="#5085ff"/>
+    <path id="Path_4" data-name="Path 4" d="M16,29.789a11.034,11.034,0,0,1,2.636-2.548A5.022,5.022,0,0,1,22,26.321c1.176.056,2.882.95,4.589,3.468,5.293,7.809,10.275,0,10.275,0a8.329,8.329,0,0,1,4.868-3.232c1.378-.263,3.538-.221,5.414,3.232" transform="translate(0.418)" fill="none" stroke="#5085ff" stroke-width="1"/>
+    <path id="Polygon_1" data-name="Polygon 1" d="M7.6,0l7.6,8H0Z" transform="translate(32 29.83) rotate(90)" fill="#5085ff"/>
+    <path id="Path_5" data-name="Path 5" d="M16.019,29.358s5.475-6.368,10.348-.417,5.054,8.392,5.054,8.392" transform="translate(0.044 0.15)" fill="#5085ff"/>
+    <path id="Path_6" data-name="Path 6" d="M28.525,31.408" fill="none" stroke="#707070" stroke-width="1"/>
+    <path id="Path_8" data-name="Path 8" d="M29.62,33.024c6.07,2.321,9.847-4.933,9.847-4.933l3.313-1.37L45.8,28.479l-14.31,8.681Z" fill="#5085ff" stroke="#5085ff" stroke-width="1"/>
+    <path id="Path_9" data-name="Path 9" d="M32,37.43h7.969L48,30v-.45l-1.937-1.6Z" fill="#5085ff"/>
+    <circle id="Ellipse_1" data-name="Ellipse 1" cx="1" cy="1" r="1" transform="translate(19 28)" fill="#3674ff"/>
+    <circle id="Ellipse_2" data-name="Ellipse 2" cx="1" cy="1" r="1" transform="translate(21 33)" fill="#3674ff"/>
+    <circle id="Ellipse_3" data-name="Ellipse 3" cx="1" cy="1" r="1" transform="translate(24 30)" fill="#3674ff"/>
+    <circle id="Ellipse_4" data-name="Ellipse 4" cx="1" cy="1" r="1" transform="translate(26 36)" fill="#3674ff"/>
+    <circle id="Ellipse_5" data-name="Ellipse 5" cx="1" cy="1" r="1" transform="translate(28 33)" fill="#3674ff"/>
+    <circle id="Ellipse_6" data-name="Ellipse 6" cx="1" cy="1" r="1" transform="translate(32 34)" fill="#3674ff"/>
+    <circle id="Ellipse_7" data-name="Ellipse 7" cx="1" cy="1" r="1" transform="translate(36 32)" fill="#3674ff"/>
+    <circle id="Ellipse_8" data-name="Ellipse 8" cx="1" cy="1" r="1" transform="translate(39 34)" fill="#3674ff"/>
+    <circle id="Ellipse_9" data-name="Ellipse 9" cx="1" cy="1" r="1" transform="translate(39 30)" fill="#3674ff"/>
+    <circle id="Ellipse_10" data-name="Ellipse 10" cx="1" cy="1" r="1" transform="translate(42 31)" fill="#3674ff"/>
+    <circle id="Ellipse_11" data-name="Ellipse 11" cx="1" cy="1" r="1" transform="translate(43 28)" fill="#3674ff"/>
+  </g>
+</svg>
