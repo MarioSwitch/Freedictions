@@ -3,22 +3,22 @@ if(array_key_exists("error",$_REQUEST)){
     echo "<p class='error'>";
     switch($_REQUEST["error"]){
         case "data":
-            echo "La requête contient une erreur. Assurez-vous d'avoir correctement rempli tous les champs et réessayez.";
+            echo "La requête contient une erreur.";
             break;
         case "username_invalid":
-            echo "Le nom d'utilisateur ne correspond pas au format requis. Veuillez réessayer.";
+            echo "Le nom d'utilisateur ne correspond pas au format requis.";
             break;
         case "username_taken":
-            echo "Le nom d'utilisateur est déjà utilisé ! Veuillez réessayer en changeant de nom d'utilisateur.";
+            echo "Le nom d'utilisateur est déjà utilisé !";
             break;
         case "password":
-            echo "Les mots de passe ne correspondent pas ! Veuillez réessayer.";
+            echo "Les mots de passe ne correspondent pas !";
             break;
         default:
-            echo "Une erreur inconnue s'est produite, veuillez réessayer.";
+            echo "Une erreur inconnue s'est produite.";
             break;
     }
-    echo "</p>";
+    echo "<br>Veuillez réessayer</p>";
 }
 ?>
 
@@ -35,6 +35,3 @@ if(array_key_exists("error",$_REQUEST)){
     <br/>
     <button type="submit" name="action" value="createAccount">Créer</button>
 </form>
-
-
-

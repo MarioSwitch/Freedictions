@@ -156,4 +156,19 @@ function createAccount($username, $password1, $password2){
     rawSQL("INSERT INTO users (`username`, `password`, `created`, `updated`, `streak`, `points`, `mod`) VALUES (?, ?, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);", [$username, $hash]);
     $_SESSION["user"] = $username;
 }
+
+/**
+ * Logs in the user
+ * @param string $username the username
+ * @param string $password the password
+ * @return void
+ */
+function login($username,$password){
+    $hash_saved=stringSQL("SELECT `password` FROM `users` WHERE `username` = ?;", [$username]);
+    if(!password_verify($password,$hash_saved)){
+        header("Location:index.php?view=signin&error=credentials");
+        die("");
+    }
+    $_SESSION["user"] = $username;
+}
 ?>

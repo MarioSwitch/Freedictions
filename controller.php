@@ -15,6 +15,10 @@ switch($_REQUEST["action"]){
         createAccount($_REQUEST["username"],$_REQUEST["password"],$_REQUEST["passwordconfirmation"]);
     break;
 
+    case 'login' :
+        login($_REQUEST["username"],$_REQUEST["password"]);
+    break;
+
     case 'logout' :
         session_destroy();
     break;
