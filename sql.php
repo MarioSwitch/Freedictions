@@ -237,8 +237,8 @@ function deleteAccount($username, $password){
     }
     rawSQL("DELETE FROM `votes` WHERE `user` = ?;", [$username]);
     $createdPredictions = arraySQL("SELECT `id` FROM `predictions` WHERE `user` = ?;", [$username]);
-    foreach($createdPredictions as $prediction){
-        //delete predictions
+    for($i = 0; $i < count($createdPredictions); $i++){
+        deletePrediction($createdPredictions[$i]["id"]);
     }
     rawSQL("DELETE FROM `users` WHERE `username` = ?;", [$username]);
     if(!userMod()){

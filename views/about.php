@@ -11,33 +11,32 @@ Une fois la date limite dépassée, le créateur peut alors valider la bonne ré
 <h2>Règles</h2>
 <h3>Chapitre 1 : Généralités</h3>
 <p class="left">
-1a. Tout non-respect des règles pourra être sanctionné par un administrateur.<br>
-1b. Les sanctions données par les administateurs ne sont pas contestables, du moment qu'ils sont justifiés par une preuve du non-respect de ces règles.<br>
-1c. Si l'administrateur responsable de la sanction ne fournit aucune preuve de non-respect des règles ou une preuve non reçevable, vous pouvez exiger une annulation de la sanction ainsi qu'une compensation en points.<br>
-1d. Les règles peuvent évoluer à tout moment. Consultez-les régulièrement pour être sûr de connaître toutes les règles applicables.<br>
+1a. Tout non-respect des règles pourra être sanctionné par un modérateur.<br>
+1b. Les sanctions données par les modérateurs ne sont pas contestables, du moment qu'ils sont justifiés par une preuve du non-respect de ces règles.<br>
+1c. Les règles peuvent évoluer à tout moment. Consultez-les régulièrement pour être sûr de connaître toutes les règles applicables.<br>
 </p>
 <h3>Chapitre 2 : Utilisateurs</h3>
 <p class="left">
-2a. Tous les noms d'utilisateurs doivent respecter les règles. Un administrateur pourra, sans préavis, renommer et/ou supprimer un compte, si une ou plusieurs règles ne sont pas respectées.<br>
+2a. Tous les noms d'utilisateurs doivent respecter les règles. Un modérateur pourra, sans préavis, renommer et/ou supprimer un compte, si une ou plusieurs règles ne sont pas respectées.<br>
 2b. Les noms d'utilisateurs ne doivent pas contenir d'insultes, ni de contenu NSFW.<br>
 2c. Merci de ne pas utiliser un pseudo connu, notamment pour faire croire qu'une personnalité crée des prédictions inappropriées.
 </p>
 <h3>Chapitre 3 : Prédictions</h3>
 <p class="left">
-3a. Toutes les prédictions doivent respecter les règles. Un administrateur pourra, sans préavis, modifier et/ou supprimer la prédiction, voire le compte, si une ou plusieurs des règles ne sont pas respectées. Notez que la suppression d'une prédiction rendra les points misés aux utilisateurs concernés.<br>
+3a. Toutes les prédictions doivent respecter les règles. Un modérateur pourra, sans préavis, modifier et/ou supprimer la prédiction, voire le compte, si une ou plusieurs des règles ne sont pas respectées. Notez que la suppression d'une prédiction rendra les points misés aux utilisateurs concernés.<br>
 3b. Seul l'auteur de la prédiction est responsable des prédictions qu'il crée. Si nous constatons des abus, nous pourrons être amenés à restreindre la création de prédictions à certaines personnes uniquement !<br>
 3c. Les prédictions ne doivent concerner uniquement des faits publics attendus.<br>
-3d. Les prédictions doivent se terminer avant que la réponse à la question ne soit actée.<br>
-3e. Les prédictions doivent respecter une certaine éthique. Ainsi, il est strictement interdit de prédire, directement ou indirectement, sur la mort de personne(s) ou la violence envers une personne et/ou un groupe. Le non-respect de cette règle entraînera la suppression immédiate et irréversible du compte ainsi que de toutes les prédictions créées. Nous rappelons que nous pouvons restreindre la création de prédictions !<br>
+3d. Les prédictions doivent se terminer avant que la réponse à la question ne soit actée. De plus, évitez que l'on puisse éliminer certaines réponses avant la fin de la prédiction.<br>
+3e. Les prédictions doivent respecter une certaine éthique. Seuls les modérateurs sont aptes à décider si une prédiction doit être supprimée ou non. Nous rappelons que nous pouvons restreindre la création de prédictions !<br>
 3f. Les prédictions ne doivent pas contenir d'insultes, ni de contenu NSFW.
 </p>
 <hr>
 <h2>Bon à savoir</h2>
 <p>
-    Les modérateurs ont une icône de couronne à côté de leur nom.<br>
-    Ils peuvent, entre autres, supprimer n'importe quelle prédiction et n'importe quel compte. Ils peuvent également participer à toutes les prédictions.<br><br>
+    Les modérateurs ont une icône de couronne à côté de leur pseudo.<br>
+    Ils peuvent, entre autres, supprimer n'importe quelle prédiction et n'importe quel compte. Ils peuvent également participer à leurs propres prédictions.<br><br>
 
-    Vous pouvez passer votre curseur sur le temps restant pour voir l'heure exacte (UTC).<br><br>
+    Vous pouvez passer votre curseur sur les temps restants pour voir l'heure exacte (UTC).<br><br>
 
     Les bonus quotidiens sont distribués à 00:00 UTC et donnent 10 points plus le nombre de jours consécutifs de connexion.<br>
     Par exemple, si vous êtes connecté depuis 24 jours consécutifs, votre bonus quotidien s'élève à 10 + 24 = 34 points.<br>
@@ -109,7 +108,7 @@ Notez aussi que ce sont les mises perdues qui font votre victoire. Gagner alors 
 <h2>Crédits</h2>
 <p>
 Les icônes proviennent de <a href="https://www.streamlinehq.com/icons/streamline-mini-line">Stream Line HQ</a> et des prédictions <a href="https://www.twitch.tv/">Twitch</a>.<br><br>
-Le code source est disponible sur <a href="https://github.com/MarioSwitch">GitHub</a>.<br><br>
+Le code source est disponible sur <a href="https://github.com/MarioSwitch/BetterTwitchPredictions">GitHub</a>.<br><br>
 v1.0 (juin 2022) par <a href="https://www.marioswitch.fr/">MarioSwitch</a> et <a href="https://github.com/yoshi2999">Yosh</a><br>
 v1.1 (mai 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.0 (actuelle, juin 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a>

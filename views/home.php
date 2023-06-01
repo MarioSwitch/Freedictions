@@ -12,6 +12,7 @@ if(array_key_exists("error",$_REQUEST)){
     echo "</p>";
 }
 ?>
+<p class="error">Ce site n'est pas terminé et peut contenir des bugs.</p>
 <h1>[insérer nom du site]</h1>
 <h2>[insérer slogan/description]</h2>
 <hr>
