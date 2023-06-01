@@ -237,8 +237,10 @@ function deleteAccount($username, $password){
     }
     rawSQL("DELETE FROM `votes` WHERE `user` = ?;", [$username]);
     $createdPredictions = arraySQL("SELECT `id` FROM `predictions` WHERE `user` = ?;", [$username]);
-    for($i = 0; $i < count($createdPredictions); $i++){
-        deletePrediction($createdPredictions[$i]["id"]);
+    if($createdPredictions){
+        for($i = 0; $i < count($createdPredictions); $i++){
+            deletePrediction($createdPredictions[$i]["id"]);
+        }
     }
     rawSQL("DELETE FROM `users` WHERE `username` = ?;", [$username]);
     if(!userMod()){
@@ -349,13 +351,16 @@ function deletePrediction($prediction){
     $correctAnswer = intSQL("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$prediction]);
     if(!$correctAnswer){
         $usersVotes = arraySQL("SELECT `user`, `points` FROM `votes` WHERE `prediction` = ?;", [$prediction]);
-        for($i = 0; $i < count($usersVotes); $i++){
-            $user = $usersVotes[$i]["user"];
-            $points = $usersVotes[$i]["points"];
-            rawSQL("UPDATE `users` SET `points` = points + ? WHERE `username` = ?;", [$points, $user]);
+        if($usersVotes){
+            for($i = 0; $i < count($usersVotes); $i++){
+                $user = $usersVotes[$i]["user"];
+                $points = $usersVotes[$i]["points"];
+                rawSQL("UPDATE `users` SET `points` = points + ? WHERE `username` = ?;", [$points, $user]);
+            }
         }
     }
     rawSQL("DELETE FROM `votes` WHERE `prediction` = ?;", [$prediction]);
+    rawSQL("UPDATE `predictions` SET `answer` = NULL WHERE `id` = ?;", [$prediction]);
     rawSQL("DELETE FROM `choices` WHERE `prediction` = ?;", [$prediction]);
     rawSQL("DELETE FROM `predictions` WHERE `id` = ?;", [$prediction]);
 }
