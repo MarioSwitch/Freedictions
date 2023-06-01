@@ -24,6 +24,7 @@ p > a{
 
 abbr{
     cursor: help;
+    text-decoration: none;
 }
 
 h1 {
@@ -149,8 +150,9 @@ hr {
     left: 10vw;
 }
 
-form:not(.search-form){
+input, select{
     font: 2vh Roobert;
+    border-radius: 10px;
 }
 
 form:not(.search-form) > label{
@@ -169,7 +171,6 @@ form:not(.search-form) > input{
     padding: 0.5vh 1vw;
     border-radius: 5vh;
     position: relative;
-    font: 2vh Roobert;
 }
 
 form:not(.search-form) > button{

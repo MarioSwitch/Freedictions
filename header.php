@@ -1,7 +1,4 @@
 <?php
-
-include_once "sql.php";
-
 if(userConnected()){
     rawSQL("UPDATE `users` SET `updated` = NOW() WHERE username = ?;", [$_SESSION["user"]]);
 }
@@ -17,7 +14,7 @@ if(userConnected()){
 <body>
 <div class="navbar">
     <a class="icon" href="index.php?view=home"><img src="svg/website.svg" alt="Icône du site" height="40px" width="40px"></a>
-    <a class="header-svg" href="index.php?view=info"><img src="svg/info.svg" width="25px" height="25px"></a>
+    <a class="header-svg" href="index.php?view=about"><img src="svg/info.svg" width="25px" height="25px"></a>
     <a class="header-svg" href="index.php?view=leaderboard"><img src="svg/leaderboard.svg" width="25px" height="25px"></a>
     <form method="GET" action="controller.php" class="search-form">
         <input class="header-search" type="text" placeholder="Rechercher" name="search">

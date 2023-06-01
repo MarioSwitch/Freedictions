@@ -39,6 +39,14 @@ switch($_REQUEST["action"]){
         deleteAccount($_REQUEST["username"], $_REQUEST["password"]);
     break;
 
+    case 'createPrediction' :
+        if(!(userConnected() && $_REQUEST["name"] && $_REQUEST["end"] && $_REQUEST["offset"] && $_REQUEST["choices"])){
+            header("Location:index.php?view=createPrediction&error=data");
+            die("");
+        }
+        $addArgs = "?view=prediction&id=" . createPrediction($_REQUEST["name"],$_SESSION["user"],$_REQUEST["end"],$_REQUEST["offset"],$_REQUEST["choices"]);
+    break;
+
     case 'search':
         $addArgs = "?view=search&query=" . $_REQUEST["search"];
     break;

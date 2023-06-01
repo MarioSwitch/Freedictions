@@ -12,3 +12,19 @@ if(array_key_exists("error",$_REQUEST)){
     echo "</p>";
 }
 ?>
+<h1>[insérer nom du site]</h1>
+<h2>[insérer slogan/description]</h2>
+<hr>
+<h2>Prédictions ouvertes</h2>
+<?php
+$predictions = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `ended` > NOW() ORDER BY `ended` ASC;");
+if(!$predictions){
+    echo "<p>Aucune prédiction ouverte</p>";
+    die("");
+}
+for($i = 0; $i < count($predictions); $i++){
+    $id = $predictions[$i]["id"];
+    $title = $predictions[$i]["title"];
+    echo "<a href='?view=prediction&id=" . $id . "'>" . $title . "</a>";
+}
+?>

@@ -1,6 +1,6 @@
 var ChoiceNumber = 3;
 
-function ajouterChoix(){
+function addChoice(){
     let placeholder = "Choix " + ChoiceNumber;
     let newChoice = document.createElement("input");
     newChoice.setAttribute("type","text");
@@ -12,7 +12,7 @@ function ajouterChoix(){
     ChoiceNumber++;
 };
 
-function supprimerChoix(){
+function removeChoice(){
     let input_choice = document.getElementsByClassName("prediChoicesBox");
     if (input_choice.length > 2){
         input_choice.item(input_choice.length-1).remove();

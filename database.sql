@@ -12,7 +12,7 @@ CREATE TABLE `users` (
 CREATE TABLE `predictions` (
     `id` int NOT NULL AUTO_INCREMENT,
     `title` varchar(255) NOT NULL,
-    `description` varchar(1000) NOT NULL,
+    `description` varchar(1000) NULL,
     `user` varchar(20) NOT NULL,
     `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `ended` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -31,10 +31,12 @@ CREATE TABLE `choices` (
 
 CREATE TABLE `votes` (
     `user` varchar(20) NOT NULL,
+    `prediction` int NOT NULL,
     `choice` int NOT NULL,
     `points` bigint NOT NULL,
-    PRIMARY KEY (`user`, `choice`),
+    PRIMARY KEY (`user`, `prediction`),
     CONSTRAINT `vote_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`),
+    CONSTRAINT `vote_prediction` FOREIGN KEY (`prediction`) REFERENCES `predictions` (`id`),
     CONSTRAINT `choice` FOREIGN KEY (`choice`) REFERENCES `choices` (`id`)
 );
 

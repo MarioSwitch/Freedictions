@@ -245,4 +245,24 @@ function deleteAccount($username, $password){
         session_destroy();
     }
 }
+
+/**
+ * Creates a new prediction
+ * @param string $name the name of the prediction
+ * @param string $user the username of the creator
+ * @param string $end the end timestamp of the prediction
+ * @param int $offset the offset of the timezone in minutes
+ * @param array $choices the choices of the prediction
+ * @return int the id of the prediction
+ */
+function createPrediction($name,$user,$end,$offset,$choices){//Variable $choices is an array of strings containing titles of choices
+    date_default_timezone_set('UTC');
+    $endUTC = date('Y-m-d\TH:i',strtotime($end)-($offset*60));
+    rawSQL("INSERT INTO `predictions` VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT, ?, DEFAULT);", [$name, $user, $endUTC]);
+    $predictionID = intSQL("SELECT `id` FROM `predictions` ORDER BY `created` DESC LIMIT 1;");
+    foreach($choices as $choice){
+        rawSQL("INSERT INTO `choices` VALUES (DEFAULT, ?, ?);", [$predictionID, $choice]);
+    }
+    return $predictionID;
+}
 ?>
