@@ -2,9 +2,9 @@
 if(array_key_exists("error",$_REQUEST)){
     echo "<p class='error'>";
     switch($_REQUEST["error"]){
-        case "parier":
-        case "valider":
-        case "supprimer":
+        case "vote":
+        case "answer":
+        case "delete":
             echo "La requête contient une erreur. Assurez-vous d'avoir correctement rempli tous les champs et réessayez.";
             break;
         case "closed":
@@ -12,6 +12,9 @@ if(array_key_exists("error",$_REQUEST)){
             break;
         case "unauthorized":
             echo "Vous n'avez pas la permission de gérer cette prédiction.";
+            break;
+        case "too_early":
+            echo "Vous ne pouvez pas donner la bonne réponse avant la fin des votes !";
             break;
         default:
             echo "Une erreur inconnue s'est produite, veuillez réessayer.";
@@ -54,17 +57,17 @@ for($i = 0; $i < count($prediChoices); $i++){
     $pointsChoice = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
     $pointsTotal = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
     if($pointsTotal != 0 && $pointsChoice != 0){
-        $pointsPercentage = "<br>(" . number_format(($pointsChoix / $pointsTotal) * 100, 2, ',', '') . " %)";
+        $pointsPercentage = "<br>(" . number_format(($pointsChoice / $pointsTotal) * 100, 2, ',', '') . " %)";
     }else{
         $pointsPercentage = "";
     }
     if($votesTotal != 0 && $votesChoice != 0){
-        $votesPercentage = "<br>(" . number_format(($votantsChoix / $votantsTotal) * 100, 2, ',', '') . " %)";
+        $votesPercentage = "<br>(" . number_format(($votesChoice / $votesTotal) * 100, 2, ',', '') . " %)";
     }else{
         $votesPercentage = "";
     }
     if($pointsPercentage != ""){
-        $winRate = number_format($pointsTotal / $pointsChoix, 2, ',', ' ');
+        $winRate = number_format($pointsTotal / $pointsChoice, 2, ',', ' ');
     }else{
         $winRate = "-";
     }
@@ -81,7 +84,7 @@ if (!userConnected()){
     $mode = "creator";
 } elseif (intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]) == 1){
     $mode = "alreadyVoted";
-} elseif ($prediEnd < rawSQL("SELECT NOW();")){
+} elseif ($prediEnd < stringSQL("SELECT NOW();")){
     $mode = "waitingAnswer";
 } else{
     $mode = "normal";
@@ -113,8 +116,8 @@ switch($mode){
     break;
 
     case "alreadyVoted" :
-        $choice = stringSQL("SELECT `choices`.`name` FROM `choices` JOIN `votes` ON `choices`.`id` = `votes`.`choice` WHERE `votes`.`username` = ? AND `votes`.`prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
-        $pointsSpent = intSQL("SELECT `points` FROM `votes` WHERE `username` = ? AND `prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
+        $choice = stringSQL("SELECT `choices`.`name` FROM `choices` JOIN `votes` ON `choices`.`id` = `votes`.`choice` WHERE `votes`.`user` = ? AND `votes`.`prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
+        $pointsSpent = intSQL("SELECT `points` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
         echo("<p>Vous avez parié sur " . $choice . " avec " . number_format($pointsSpent, 0, '', ' ') . " points.</p>");
     break;
 
@@ -131,7 +134,7 @@ if ($mode == "creator" || userMod())
 {
     echo("<hr><h3>Gérer la prédiction</h3>");
     if ($prediAnswer == NULL){
-        if ($prediEnd < rawSQL("SELECT NOW();")){
+        if ($prediEnd < stringSQL("SELECT NOW();")){
             echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Définir " . $dropdownMenu . " comme étant la bonne réponse</p><button type='submit' name='action' value='answer'>Terminer la prédiction et redistribuer les points</button></form>");
         } else {
             echo("<p>Vous devez attendre la fin des votes pour donner la bonne réponse !</p>");

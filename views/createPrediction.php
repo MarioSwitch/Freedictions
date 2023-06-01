@@ -21,7 +21,7 @@ if(array_key_exists("error",$_REQUEST)){
             <input type="text" class="form-control" id="prediNameBox" name="name" required="required">
         </div>
         <div id="end" class="form-group">
-            <label for="prediEndBox">Fin des votes<abbr title="Le champ est à remplir suivant l'heure locale (c'est-à-dire l'heure qu'il est actuellement chez vous). Toutes les conversions sont automatiquement effectuées pour que le temps restant soit correct peu importe le fuseau horaire.">*</abbr></label>
+            <label for="prediEndBox"><abbr title="Le champ est à remplir suivant l'heure locale (c'est-à-dire l'heure qu'il est actuellement chez vous). Toutes les conversions sont automatiquement effectuées pour que le temps restant soit correct peu importe le fuseau horaire.">Fin des votes*</abbr></label>
         </div>
     </div>
     <hr>

@@ -247,6 +247,14 @@ function deleteAccount($username, $password){
 }
 
 /**
+ * Checks if the user is eligible to create a prediction
+ * @return bool true if the user is eligible, false otherwise
+ */
+function eligible(){
+    return userConnected();
+}
+
+/**
  * Creates a new prediction
  * @param string $name the name of the prediction
  * @param string $user the username of the creator
@@ -256,6 +264,10 @@ function deleteAccount($username, $password){
  * @return int the id of the prediction
  */
 function createPrediction($name,$user,$end,$offset,$choices){//Variable $choices is an array of strings containing titles of choices
+    if(!eligible()){
+        header("Location:index.php?view=home&error=forbidden");
+        die("");
+    }
     date_default_timezone_set('UTC');
     $endUTC = date('Y-m-d\TH:i',strtotime($end)-($offset*60));
     rawSQL("INSERT INTO `predictions` VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT, ?, DEFAULT);", [$name, $user, $endUTC]);
@@ -264,5 +276,87 @@ function createPrediction($name,$user,$end,$offset,$choices){//Variable $choices
         rawSQL("INSERT INTO `choices` VALUES (DEFAULT, ?, ?);", [$predictionID, $choice]);
     }
     return $predictionID;
+}
+
+/**
+ * Votes for a prediction
+ * @param string $user the username of the voter
+ * @param int $prediction the id of the prediction
+ * @param int $choice the id of the choice
+ * @param int $points the number of points spent
+ * @return int the id of the prediction
+ */
+function vote($user,$prediction,$choice,$points){
+    global $now;
+    $end = stringSQL("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$prediction]);
+    if($now > $end){
+        header("Location:index.php?view=prediction&id=" . $prediction . "&error=closed");
+        die("");
+    }
+    rawSQL("UPDATE `users` SET `points` = points - ? WHERE `username` = ?;", [$points, $user]);
+    rawSQL("INSERT INTO `votes` VALUES (?, ?, ?, ?);", [$user, $prediction, $choice, $points]);
+    return $prediction;
+}
+
+/**
+ * Answers a prediction
+ * @param int $prediction the id of the prediction
+ * @param int $answer the id of the answer
+ * @return int the id of the prediction
+ */
+function answer($prediction,$answer){
+    global $now;
+    $author = stringSQL("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction]);
+    $userConnected = $_SESSION["user"];
+    if(!($author == $userConnected || userMod())){
+        header("Location:index.php?view=prediction&id=" . $prediction . "&error=unauthorized");
+        die("");
+    }
+    $end = stringSQL("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$prediction]);
+    if($now < $end){
+        header("Location:index.php?view=prediction&id=" . $prediction . "&error=too_early");
+        die("");
+    }
+    rawSQL("UPDATE `predictions` SET `answer` = ? WHERE id = ?;", [$answer, $prediction]);
+    $totalPoints = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ?;", [$prediction]);
+    $winPoints = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$prediction, $answer]);
+    if($winPoints!=0){
+        $winRate = $totalPoints / $winPoints;
+        $winTable = arraySQL("SELECT `user`, `points` FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$prediction, $answer]);
+        for($i = 0; $i < count($winTable); $i++){
+            $winUser = $winTable[$i]["user"];
+            $votePoints = $winTable[$i]["points"];
+            $earnedPoints = floor($votePoints * $winRate);
+            rawSQL("UPDATE `users` SET `points` = points + ? WHERE `username` = ?;", [$earnedPoints, $winUser]);
+        }
+    }
+    return $prediction;
+}
+
+/**
+ * Deletes a prediction
+ * @param int $prediction the id of the prediction
+ * @return void
+ */
+function deletePrediction($prediction){
+    global $now;
+    $author = stringSQL("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction]);
+    $userConnected = $_SESSION["user"];
+    if(!($author == $userConnected || userMod())){
+        header("Location:index.php?view=prediction&id=" . $prediction . "&error=unauthorized");
+        die("");
+    }
+    $correctAnswer = intSQL("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$prediction]);
+    if(!$correctAnswer){
+        $usersVotes = arraySQL("SELECT `user`, `points` FROM `votes` WHERE `prediction` = ?;", [$prediction]);
+        for($i = 0; $i < count($usersVotes); $i++){
+            $user = $usersVotes[$i]["user"];
+            $points = $usersVotes[$i]["points"];
+            rawSQL("UPDATE `users` SET `points` = points + ? WHERE `username` = ?;", [$points, $user]);
+        }
+    }
+    rawSQL("DELETE FROM `votes` WHERE `prediction` = ?;", [$prediction]);
+    rawSQL("DELETE FROM `choices` WHERE `prediction` = ?;", [$prediction]);
+    rawSQL("DELETE FROM `predictions` WHERE `id` = ?;", [$prediction]);
 }
 ?>
