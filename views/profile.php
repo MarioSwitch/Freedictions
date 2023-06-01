@@ -112,11 +112,17 @@ echo("
 	<h2>Participations à des prédictions</h2>
 	<p>" . $predictionsParticipatedText . "</p>
 ");
-if(userConnected() && ($user == $_SESSION["user"] || userMod())){
+if(userConnected() && $user == $_SESSION["user"]){
     echo("
         <hr>
         <h2>Gérer le compte</h2>
-        <p>Vous pouvez <a href='?view=changePassword'>changer votre mot de passe</a> ou <a href='?view=deleteAccount'>supprimer votre compte</a>.</p>
+        <p>Vous pouvez <a href='?view=changePassword'>changer votre mot de passe</a> ou <a href='?view=deleteAccount&user=$user'>supprimer votre compte</a>.</p>
+    ");
+} else if (userMod()){
+    echo("
+        <hr>
+        <h2>Modération</h2>
+        <p>Vous pouvez <a href='?view=deleteAccount&user=$user'>supprimer le compte</a>.</p>
     ");
 }
 ?>

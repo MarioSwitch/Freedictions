@@ -15,16 +15,32 @@ switch($_REQUEST["action"]){
         createAccount($_REQUEST["username"],$_REQUEST["password"],$_REQUEST["passwordconfirmation"]);
     break;
 
-    case 'search':
-        $addArgs = "?view=search&query=" . $_REQUEST["search"];
-    break;
-
     case 'login' :
         login($_REQUEST["username"],$_REQUEST["password"]);
     break;
 
     case 'logout' :
         session_destroy();
+    break;
+
+    case 'changePassword' :
+        if(!(userConnected() && $_REQUEST["username"] && $_REQUEST["password"] && $_REQUEST["newpassword"] && $_REQUEST["newpasswordconfirmation"])){
+            header("Location:index.php?view=changePassword&error=data");
+            die("");
+        }
+        changePassword($_REQUEST["username"], $_REQUEST["password"], $_REQUEST["newpassword"], $_REQUEST["newpasswordconfirmation"]);
+    break;
+
+    case 'deleteAccount' :
+        if(!(userConnected() && $_REQUEST["username"] && $_REQUEST["password"])){
+            header("Location:index.php?view=deleteAccount&error=data");
+            die("");
+        }
+        deleteAccount($_REQUEST["username"], $_REQUEST["password"]);
+    break;
+
+    case 'search':
+        $addArgs = "?view=search&query=" . $_REQUEST["search"];
     break;
 }
 

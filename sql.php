@@ -141,6 +141,7 @@ function userConnected(){
  * @return bool true if the user is a moderator, false otherwise
  */
 function userMod(){
+    if(!userConnected()) return false;
     return intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]) == 1;
 }
 
@@ -193,5 +194,55 @@ function login($username,$password){
         die("");
     }
     $_SESSION["user"] = $username;
+}
+
+/**
+ * Changes the password of the user
+ * @param string $username the username
+ * @param string $oldpassword the old password
+ * @param string $newpassword the new password
+ * @param string $newpasswordconfirmation the new password confirmation
+ * @return void
+ */
+function changePassword($username,$oldpassword,$newpassword, $newpasswordconfirmation){
+    if($newpassword != $newpasswordconfirmation){
+        header("Location:index.php?view=changePassword&error=password");
+        die("");
+    }
+    $hash_saved = stringSQL("SELECT `password` FROM `users` WHERE `username` = ?;", [$username]);
+    if(!password_verify($oldpassword,$hash_saved)){
+        header("Location:index.php?view=changePassword&error=old_password");
+        die("");
+    }
+    $newhash = password_hash($newpassword,PASSWORD_DEFAULT);
+    rawSQL("UPDATE `users` SET `password` = '$newhash' WHERE `username` = ?;", [$username]);
+    session_destroy();
+}
+
+/**
+ * Deletes an account
+ * @param string $username the username of the account to delete
+ * @param string $password the password of the logged in user
+ * @return void
+ */
+function deleteAccount($username, $password){
+    if(!(userMod() || $username == $_SESSION["user"])){
+        header("Location:index.php?view=home&error=forbidden");
+        die("");
+    }
+    $hash_saved = stringSQL("SELECT `password` FROM `users` WHERE `username`= ?;", [$_SESSION["user"]]);
+    if(!password_verify($password,$hash_saved)){
+        header("Location:index.php?view=deleteAccount&user=$username&error=password");
+        die("");
+    }
+    rawSQL("DELETE FROM `votes` WHERE `user` = ?;", [$username]);
+    $createdPredictions = arraySQL("SELECT `id` FROM `predictions` WHERE `user` = ?;", [$username]);
+    foreach($createdPredictions as $prediction){
+        //delete predictions
+    }
+    rawSQL("DELETE FROM `users` WHERE `username` = ?;", [$username]);
+    if(!userMod()){
+        session_destroy();
+    }
 }
 ?>

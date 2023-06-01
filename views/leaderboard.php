@@ -13,11 +13,15 @@ if(userConnected()){
 }
 echo "<hr>";
 echo "<table><tr><th>Rang</th><th>Utilisateur</th><th>Points</th></tr>";
-for($i = 0; $i < count($classement); $i++){
-    $user = $classement[$i]["username"];
-    $points = $classement[$i]["points"];
-    $rank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points . ";") + 1;
-	echo "<tr><td>" . $rank . "</td><td><p><a href='?view=profile&user=" . $user . "'>" . displayUsername($user) . "</a></p></td><td>" . number_format($points, 0, '', ' ') . "</td></tr>";
+if(!$classement){
+	echo "<tr><td colspan='3'>Aucun utilisateur</td></tr>";
+}else{
+	for($i = 0; $i < count($classement); $i++){
+		$user = $classement[$i]["username"];
+		$points = $classement[$i]["points"];
+		$rank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points . ";") + 1;
+		echo "<tr><td>" . $rank . "</td><td><p><a href='?view=profile&user=" . $user . "'>" . displayUsername($user) . "</a></p></td><td>" . number_format($points, 0, '', ' ') . "</td></tr>";
+	}
 }
 echo "</table>";
 ?>
