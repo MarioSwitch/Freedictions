@@ -20,6 +20,7 @@ echo "<script>countdownTo(\"" . $onlineDate . "T" . $onlineTime . "Z\", \"à l'i
 
 //Stats
 $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$user]);
+$streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$user]);
 $rank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points) + 1;
 $statsPointsSpent = intSQL("SELECT SUM(points) FROM `votes` WHERE `user` = ?;", [$user]);
 $statsTotalBets = intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ?;", [$user]);
@@ -103,6 +104,7 @@ echo("
     <hr>
 	<h2>Statistiques</h2>
 	<p>" . number_format($points, 0, '', ' ') . " points (" . $rank . "<sup>e</sup>)</p>
+    <p>Connecté consécutivement depuis " . $streak . " jours</p>
 	<p>A misé <b>" . $statsTotalBets . " </b> fois pour un total de <b>" . number_format($statsPointsSpent, 0, '', ' ') . "</b> points</p>
 	<p>A créé <b>" . $statsTotalCreated . "</b> prédictions</p>
     <hr>

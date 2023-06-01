@@ -8,12 +8,6 @@ Les prédictions peuvent posséder autant de choix que le créateur le souhaite.
 Une fois la date limite dépassée, le créateur peut alors valider la bonne réponse. Une fois fait, les utilisateurs ayant misés sur cette réponse se partagent tous les points (suivant leur mise initiale).
 </p>
 <hr>
-<h2>Informations</h2>
-<p>
-    Les modérateurs ont une icône de courronne à côté de leur nom.<br>Ils peuvent, entre autres, supprimer n'importe quelle prédiction et n'importe quel compte. Ils peuvent également participer à toutes les prédictions.<br><br>
-    Vous pouvez passer votre curseur sur le temps restant pour voir l'heure exacte (UTC).<br><br>
-</p>
-<hr>
 <h2>Règles</h2>
 <h3>Chapitre 1 : Généralités</h3>
 <p class="left">
@@ -36,6 +30,18 @@ Une fois la date limite dépassée, le créateur peut alors valider la bonne ré
 3d. Les prédictions doivent se terminer avant que la réponse à la question ne soit actée.<br>
 3e. Les prédictions doivent respecter une certaine éthique. Ainsi, il est strictement interdit de prédire, directement ou indirectement, sur la mort de personne(s) ou la violence envers une personne et/ou un groupe. Le non-respect de cette règle entraînera la suppression immédiate et irréversible du compte ainsi que de toutes les prédictions créées. Nous rappelons que nous pouvons restreindre la création de prédictions !<br>
 3f. Les prédictions ne doivent pas contenir d'insultes, ni de contenu NSFW.
+</p>
+<hr>
+<h2>Bon à savoir</h2>
+<p>
+    Les modérateurs ont une icône de couronne à côté de leur nom.<br>
+    Ils peuvent, entre autres, supprimer n'importe quelle prédiction et n'importe quel compte. Ils peuvent également participer à toutes les prédictions.<br><br>
+
+    Vous pouvez passer votre curseur sur le temps restant pour voir l'heure exacte (UTC).<br><br>
+
+    Les bonus quotidiens sont distribués à 00:00 UTC et donnent 10 points plus le nombre de jours consécutifs de connexion.<br>
+    Par exemple, si vous êtes connecté depuis 24 jours consécutifs, votre bonus quotidien s'élève à 10 + 24 = 34 points.<br>
+    Si vous n'allez pas sur le site pendant un période 00:00-24:00 UTC, votre bonus quotidien retombe à 10 points et vous ne recevez pas votre bonus ce jour-là.<br><br>
 </p>
 <hr>
 <h2>Répartition des points</h2>
