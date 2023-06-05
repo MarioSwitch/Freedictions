@@ -13,9 +13,9 @@ if(userConnected()){
 </head>
 <body>
 <div class="navbar">
-    <a class="icon" href="index.php?view=home"><img src="svg/website.svg" alt="Icône du site" height="40px" width="40px"></a>
-    <a class="header-svg" href="index.php?view=about"><img src="svg/info.svg" width="25px" height="25px"></a>
-    <a class="header-svg" href="index.php?view=leaderboard"><img src="svg/leaderboard.svg" width="25px" height="25px"></a>
+    <a href="index.php?view=home"><img src="svg/website.svg" alt="Icône du site"></a>
+    <a href="index.php?view=about"><img src="svg/info.svg"></a>
+    <a href="index.php?view=leaderboard"><img src="svg/leaderboard.svg"></a>
     <form method="GET" action="controller.php" class="search-form">
         <input class="header-search" type="text" placeholder="Rechercher" name="search">
         <button type="submit" name="action" class="header-button" value="search"></button>
@@ -24,16 +24,16 @@ if(userConnected()){
         <?php
         // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion et/ou d'inscription
         if (!userConnected()){
-            echo "<a class='header-svg' href='index.php?view=signup'><img src='svg/signup.svg' width='25px' height='25px'></a>";
-            echo "<a class='header-svg' href='index.php?view=signin'><img src='svg/login.svg' width='25px' height='25px'></a>";
+            echo "<a class='header-svg' href='index.php?view=signup'><img src='svg/signup.svg'></a>";
+            echo "<a class='header-svg' href='index.php?view=signin'><img src='svg/login.svg'></a>";
         } //Si il est connecté, on affiche un lien "profil", "créer un prédiction"
         else {
-            $username = stringSQL("SELECT `username` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
-            $points = number_format(intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]), 0, '', ' ');
+            $username = $_SESSION["user"];
+            $points = number_format(intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]), 0, '', ' ');
             echo "<p class='header-text'>" . displayUsername($username) . " ($points points)</p>";
-            echo "<a class='header-svg' href='index.php?view=profile&user=$username'><img src='svg/profile.svg' width='25px' height='25px'></a>";
-            if(eligible()) echo "<a class='header-svg' href='index.php?view=createPrediction'><img src='svg/new.svg' width='25px' height='25px'></a>";
-            echo "<a class='header-svg' href='controller.php?action=logout'><img src='svg/logout.svg' width='25px' height='25px'></a>";
+            echo "<a href='index.php?view=profile&user=$username'><img src='svg/profile.svg'></a>";
+            if(eligible()) echo "<a href='index.php?view=createPrediction'><img src='svg/new.svg'></a>";
+            echo "<a href='controller.php?action=logout'><img src='svg/logout.svg'></a>";
         }
         ?>
     </div>

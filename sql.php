@@ -133,7 +133,7 @@ $now = stringSQL("SELECT NOW();");
  * @return bool true if the user is connected, false otherwise
  */
 function userConnected(){
-    return array_key_exists("user", $_SESSION);
+    return array_key_exists("user", $_SESSION) && intSQL("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
 }
 
 /**
