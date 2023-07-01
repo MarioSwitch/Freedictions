@@ -71,6 +71,13 @@ a > img {
     padding: 10px 25px;
 }
 
+.user-icon {
+    width: 25px;
+    height: 25px;
+    padding: 0 5px;
+    vertical-align: middle;
+}
+
 p {
     overflow: hidden;
     margin: 0;
@@ -270,4 +277,11 @@ form:not(.search-form) > button {
     flex-direction: column;
     width: 50vw;
     margin-top: 5vh
+}
+
+.form-group > label, .fill > label {
+    font: 2.5vh Roobert;
+    text-align: center;
+    border: 1vh 0 0 0;
+    color: white;
 }

@@ -151,9 +151,9 @@ function userMod(){
  * @return string the modified username
  */
 function displayUsername($username){
-    $string = "";
-    if(intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]) == 1){$string .= "👑 ";}
-    return ($string .= $username);
+    $icons = "";
+    if(intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]) == 1){$icons .= "<abbr title='Modérateur'><img class='user-icon' src='svg/mod.png'></abbr> ";}
+    return $icons . $username;
 }
 
 /**
