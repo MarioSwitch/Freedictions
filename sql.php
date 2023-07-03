@@ -152,7 +152,7 @@ function userMod(){
  */
 function displayUsername($username){
     $icons = "";
-    if(intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]) == 1){$icons .= "<abbr title='Modérateur'><img class='user-icon' src='svg/mod.png'></abbr> ";}
+    if(intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]) == 1){$icons .= "<abbr title='Modérateur'><img class='user-icon' src='svg/mod.png'></abbr>";}
     return $icons . $username;
 }
 

@@ -32,7 +32,7 @@ if(userConnected()){
             $points = number_format(intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]), 0, '', ' ');
             echo "<p class='header-text'>" . displayUsername($username) . " ($points points)</p>";
             echo "<a href='index.php?view=profile&user=$username'><img src='svg/profile.svg'></a>";
-            if(eligible()) echo "<a href='index.php?view=createPrediction'><img src='svg/new.svg'></a>";
+            echo "<a href='index.php?view=createPrediction'><img src='svg/new.svg'></a>";
             echo "<a href='controller.php?action=logout'><img src='svg/logout.svg'></a>";
         }
         ?>

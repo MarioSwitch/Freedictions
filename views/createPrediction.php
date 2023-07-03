@@ -11,6 +11,13 @@ if(array_key_exists("error",$_REQUEST)){
     }
     echo "<br>Veuillez réessayer.</p>";
 }
+if(!eligible()){
+    echo "<h1>Créer une nouvelle prédiction</h1>";
+    echo "<p>Pour éviter les abus, vous devez respecter les conditions suivantes pour pouvoir créer une prédiction :<br>
+        <br>Avoir un compte et y être connecté
+        <br><br>Une fois les conditions vérifiées, cette page deviendra un formulaire permettant de créer une prédiction.</p>";
+    die();
+}
 ?>
 <script src="choices.js"></script>
 <h1>Créer une nouvelle prédiction</h1>
@@ -28,9 +35,9 @@ if(array_key_exists("error",$_REQUEST)){
     <div id="choices">
         <div class="row">
             <div class="fill">
-                <input type="button" class="add-choice" value="Ajouter un choix" onclick="addChoice();">
+                <input type="button" class="add-choice" value="Ajouter" onclick="addChoice();">
                 <label for="prediChoicesBox">Choix</label>
-                <input type="button" class="rm-choice" value="Supprimer un choix" onclick="removeChoice();">
+                <input type="button" class="rm-choice" value="Supprimer" onclick="removeChoice();">
             </div>
         </div>
         <input type="text" class="prediChoicesBox" name="choices[]" placeholder="Choix 1" required="required">
