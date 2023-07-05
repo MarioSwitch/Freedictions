@@ -44,7 +44,13 @@ switch($_REQUEST["action"]){
             header("Location:index.php?view=createPrediction&error=data");
             die("");
         }
-        $addArgs = "?view=prediction&id=" . createPrediction($_REQUEST["name"],$_SESSION["user"],$_REQUEST["end"],$_REQUEST["offset"],$_REQUEST["choices"]);
+        $correctedName = $_REQUEST["name"];
+        $correctedName = preg_replace("/</", "&lt;", $correctedName);
+        $correctedName = preg_replace("/>/", "&gt;", $correctedName);
+        $correctedChoices = $_REQUEST["choices"];
+        $correctedChoices = preg_replace("/</", "&lt;", $correctedChoices);
+        $correctedChoices = preg_replace("/>/", "&gt;", $correctedChoices);
+        $addArgs = "?view=prediction&id=" . createPrediction($correctedName,$_SESSION["user"],$_REQUEST["end"],$_REQUEST["offset"],$correctedChoices);
     break;
 
     case 'vote' :

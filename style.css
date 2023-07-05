@@ -113,6 +113,12 @@ tr, td, th {
     border: 1px solid whitesmoke;
 }
 
+th {
+    position: sticky;
+    top: 55px;
+    background-color: #606;
+}
+
 /* ---------- Header / Navbar ---------- */
 
 .navbar {

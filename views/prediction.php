@@ -71,11 +71,12 @@ for($i = 0; $i < count($prediChoices); $i++){
     }else{
         $winRate = "-";
     }
-    $pointsMax = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
+    $pointsMaxChoice = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
+    $pointsMaxTotal = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
     $choiceName = $prediChoices[$i]["name"];
-    $prediChoicesText = $prediChoicesText . "<tr><td>" . $choiceName . "</td><td>" . $votesChoice . $votesPercentage . "</td><td>" . number_format($pointsChoice, 0, '', ' ') . $pointsPercentage .  "</td><td>" . $winRate . "</td><td>" . number_format($pointsMax, 0, '', ' ') . "</td></tr>";
+    $prediChoicesText = $prediChoicesText . "<tr><td>" . $choiceName . "</td><td>" . $votesChoice . $votesPercentage . "</td><td>" . number_format($pointsChoice, 0, '', ' ') . $pointsPercentage .  "</td><td>" . $winRate . "</td><td>" . number_format($pointsMaxChoice, 0, '', ' ') . "</td></tr>";
 }
-$prediChoicesText = $prediChoicesText . "</table><br><p>Au total, " . $votesTotal . " personnes ont parié sur cette prédiction pour un total de " . number_format($pointsTotal, 0, '', ' ') . " points.</p>";
+$prediChoicesText = $prediChoicesText . "<tr><th>Total</th><th>" . $votesTotal . "</th><th>" . number_format($pointsTotal, 0, '', ' ') . "</th><th>N/A</th><th>" . number_format($pointsMaxTotal, 0, '', ' ') . "</th></tr></table>";
 
 //Dynamic content
 if (!userConnected()){
