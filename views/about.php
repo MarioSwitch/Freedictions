@@ -33,14 +33,14 @@ Une fois la date limite dépassée, le créateur peut alors valider la bonne ré
 <hr>
 <h2>Bon à savoir</h2>
 <p>
-    Les modérateurs ont une icône de couronne à côté de leur pseudo.<br>
+    Les modérateurs ont une icône d'épée à côté de leur pseudo.<br>
     Ils peuvent, entre autres, supprimer n'importe quelle prédiction et n'importe quel compte. Ils peuvent également participer à leurs propres prédictions.<br><br>
 
     Vous pouvez passer votre curseur sur les temps restants pour voir l'heure exacte (UTC).<br><br>
 
     Les bonus quotidiens sont distribués à 00:00 UTC et donnent 10 points plus le nombre de jours consécutifs de connexion.<br>
     Par exemple, si vous êtes connecté depuis 24 jours consécutifs, votre bonus quotidien s'élève à 10 + 24 = 34 points.<br>
-    Si vous n'allez pas sur le site pendant un période 00:00-24:00 UTC, votre bonus quotidien retombe à 10 points et vous ne recevez pas votre bonus ce jour-là.<br><br>
+    Si vous n'allez pas sur le site pendant une période 00:00-24:00 UTC, votre bonus quotidien retombe à 10 points et vous ne recevez pas votre bonus ce jour-là.<br><br>
 </p>
 <hr>
 <h2>Répartition des points</h2>

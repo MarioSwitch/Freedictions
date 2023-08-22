@@ -1,12 +1,14 @@
 /*
-1000 days = 86 400 000 000 ms
-1 year = 365.25 days = 31 557 600 000 ms
-100 hours = 4d 4h = 360 000 000 ms
-1 day = 86 400 000 ms
-100 mins = 1h 40m = 6 000 000 ms
-1 hour = 3 600 000 ms
-1 minute = 60 000 ms
-1 second = 1 000 ms
+1000 days = 86,400,000,000 ms
+1 year (365.25 days) = 31,557,600,000 ms
+1 year (365 days) = 31,536,000,000 ms
+1 month = 365 / 12 = 30.417 days = 2,628,000,000 ms
+100 hours = 4d 4h = 360,000,000 ms
+1 day = 86,400,000 ms
+100 mins = 1h 40m = 6,000,000 ms
+1 hour = 3,600,000 ms
+1 minute = 60,000 ms
+1 second = 1,000 ms
 
 ----- ENGLISH -----
 Parameters:
@@ -38,10 +40,13 @@ function countdownTo(goal, formatBefore = "%countdown", formatAfter = "", id = "
     var goalDate = new Date(goal);
     var gap = Math.abs(goalDate - nowDate);
     //Formatting count
-    if(gap>=86400000000){ //if more than 1000 days
-        var countString = Math.floor(gap/31557600000)+" ans";
+    if(gap>=31536000000){ //if more than 1 year
+        var countString = Math.floor(gap/31557600000)+" an(s)";
     }
-    if(gap<86400000000 && gap>=360000000){ //if between 100 hours (4d 4h) and 1000 days
+    if(gap<31536000000 && gap>=2628000000){ //if between 1 month and 1 year
+        var countString = Math.floor(gap/2628000000)+" mois";
+    }
+    if(gap<2628000000 && gap>=360000000){ //if between 100 hours (4d 4h) and 1 month
         var countString = Math.floor(gap/86400000)+" jours";
     }
     if(gap<360000000 && gap>=3600000){ //if between 1 hour and 100 hours (4d 4h)
