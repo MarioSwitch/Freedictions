@@ -16,6 +16,9 @@ if(array_key_exists("error",$_REQUEST)){
         case "too_early":
             echo "Vous ne pouvez pas donner la bonne réponse avant la fin des votes !";
             break;
+        case "points":
+            echo "Vous n'avez pas assez de points !";
+            break;
         default:
             echo "Une erreur inconnue s'est produite, veuillez réessayer.";
             break;
@@ -116,6 +119,7 @@ switch($mode){
         $choice = stringSQL("SELECT `choices`.`name` FROM `choices` JOIN `votes` ON `choices`.`id` = `votes`.`choice` WHERE `votes`.`user` = ? AND `votes`.`prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
         $pointsSpent = intSQL("SELECT `points` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
         echo("<p>Vous avez parié sur " . $choice . " avec " . number_format($pointsSpent, 0, '', ' ') . " points.</p>");
+        echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Ajouter <input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'> points à votre mise</p><button type='submit' name='action' value='addPoints'>Ajouter à la mise</button></form>");
     break;
 
     case "waitingAnswer" :

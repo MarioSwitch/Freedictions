@@ -301,6 +301,25 @@ function vote($user,$prediction,$choice,$points){
 }
 
 /**
+ * Adds points to a vote
+ * @param string $user the username of the voter
+ * @param int $prediction the id of the prediction
+ * @param int $points the number of points added
+ * @return int the id of the prediction
+ */
+function addPoints($user,$prediction,$points){
+    global $now;
+    $end = stringSQL("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$prediction]);
+    if($now > $end){
+        header("Location:index.php?view=prediction&id=" . $prediction . "&error=closed");
+        die("");
+    }
+    rawSQL("UPDATE `users` SET `points` = points - ? WHERE `username` = ?;", [$points, $user]);
+    rawSQL("UPDATE `votes` SET `points` = points + ? WHERE `user` = ? AND `prediction` = ?;", [$points, $user, $prediction]);
+    return $prediction;
+}
+
+/**
  * Answers a prediction
  * @param int $prediction the id of the prediction
  * @param int $answer the id of the answer

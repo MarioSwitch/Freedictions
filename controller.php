@@ -3,9 +3,14 @@ session_start();
 
 include_once("sql.php");
 
+if(userConnected()){
+    $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
+}else{
+    $points = 0;
+}
+
 $addArgs = "";
 
-//ob_start();
 switch($_REQUEST["action"]){
     case 'createAccount' :
         if(!($_REQUEST["username"] && $_REQUEST["password"] && $_REQUEST["passwordconfirmation"])){
@@ -58,7 +63,23 @@ switch($_REQUEST["action"]){
             header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=vote");
             die("");
         }
+        if($points < $_REQUEST["points"]){
+            header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=points");
+            die("");
+        }
         $addArgs = "?view=prediction&id=" . vote($_SESSION["user"],$_REQUEST["prediction"],$_REQUEST["choice"],$_REQUEST["points"]);
+    break;
+
+    case 'addPoints' :
+        if(!(userConnected() && $_REQUEST["prediction"] && $_REQUEST["points"])){
+            header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=vote");
+            die("");
+        }
+        if($points < $_REQUEST["points"]){
+            header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=points");
+            die("");
+        }
+        $addArgs = "?view=prediction&id=" . addPoints($_SESSION["user"],$_REQUEST["prediction"],$_REQUEST["points"]);
     break;
 
     case 'answer' :
@@ -83,6 +104,4 @@ switch($_REQUEST["action"]){
 }
 
 header("Location:index.php" . $addArgs);
-
-//ob_end_flush();
 ?>

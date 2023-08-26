@@ -5,7 +5,7 @@ Ce site web permet de miser des points virtuels sur des prédictions créées pa
 Tous les utilisateurs peuvent créer des prédictions, du moment qu'ils sont connectés.<br><br>
 Les prédictions possèdent une date limite de mise (à partir de laquelle les paris sont bloqués) et un nombre variable de réponses.<br><br>
 Les prédictions peuvent posséder autant de choix que le créateur le souhaite. Cependant, 2 choix sont nécessaires pour créer une prédiction.<br><br>
-Une fois la date limite dépassée, le créateur peut alors valider la bonne réponse. Une fois fait, les utilisateurs ayant misés sur cette réponse se partagent tous les points (suivant leur mise initiale).
+Une fois la date limite dépassée, le créateur peut alors valider la bonne réponse. Une fois fait, les utilisateurs ayant misé sur cette réponse se partagent tous les points (suivant leur mise initiale).
 </p>
 <hr>
 <h2>Règles</h2>
@@ -34,7 +34,7 @@ Une fois la date limite dépassée, le créateur peut alors valider la bonne ré
 <h2>Bon à savoir</h2>
 <p>
     Les modérateurs ont une icône d'épée à côté de leur pseudo.<br>
-    Ils peuvent, entre autres, supprimer n'importe quelle prédiction et n'importe quel compte. Ils peuvent également participer à leurs propres prédictions.<br><br>
+    Ils peuvent, par exemple, gérer toutes les prédictions et supprimer n'importe quel compte.<br><br>
 
     Vous pouvez passer votre curseur sur les temps restants pour voir l'heure exacte (UTC).<br><br>
 
@@ -46,10 +46,10 @@ Une fois la date limite dépassée, le créateur peut alors valider la bonne ré
 <h2>Répartition des points</h2>
 <h3>Définition</h3>
 <p>
-Losqu'une réponse est donnée à une prédiction, les points sont répartis comme suit :<br><br>
+Lorsqu'une réponse est donnée à une prédiction, les points sont répartis comme suit :<br><br>
 Si la réponse gagnante n'a aucun vote, tous les points misés sont perdus.<br>
 Si la réponse gagnante a un seul vote, l'utilisateur ayant voté pour cette réponse gagne tous les points misés.<br>
-Dans le reste des cas, le total des points misés est réparti entre les gagnants, à hauteur du pourcentage de points dépensés dans la répose gagnante.<br>
+Dans le reste des cas, le total des points misés est réparti entre les gagnants, à hauteur du pourcentage de points dépensés dans la réponse gagnante.<br>
 </p>
 <h3>Exemple détaillé</h3>
 <table>
@@ -72,7 +72,7 @@ Dans le reste des cas, le total des points misés est réparti entre les gagnant
         <td>4</td>
         <td>400</td>
         <td>2,50</td>
-        <td>Personne 4 : 1 point<br>Personne 5 : 99 points<br>Personnes  6 et 7 : 150 points chacun</td>
+        <td>Personne 4 : 1 point<br>Personne 5 : 99 points<br>Personnes 6 et 7 : 150 points chacun</td>
     </tr>
     <tr>
         <td>Choix n°3</td>
@@ -109,7 +109,7 @@ Notez aussi que ce sont les mises perdues qui font votre victoire. Gagner alors 
 <p>
 Les icônes proviennent de <a href="https://www.streamlinehq.com/icons/streamline-mini-line">Stream Line HQ</a> et des prédictions <a href="https://www.twitch.tv/">Twitch</a>.<br><br>
 Le code source est disponible sur <a href="https://github.com/MarioSwitch/BetterTwitchPredictions">GitHub</a>.<br><br>
-v1.0 (juin 2022) par <a href="https://www.marioswitch.fr/">MarioSwitch</a> et <a href="https://github.com/yoshi2999">Yosh</a><br>
+v1.0 (juin 2022) par <a href="https://www.marioswitch.fr/">MarioSwitch</a> et <a href="https://github.com/yoshakami">Yosh</a><br>
 v1.1 (mai 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.0 (actuelle, juin 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a>
 </p>
