@@ -59,7 +59,7 @@ switch($_REQUEST["action"]){
     break;
 
     case 'vote' :
-        if(!(userConnected() && $_REQUEST["prediction"] && $_REQUEST["choice"] && $_REQUEST["points"])){
+        if(!(userConnected() && $_REQUEST["prediction"] && $_REQUEST["choice"] && $_REQUEST["points"] > 0)){
             header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=vote");
             die("");
         }
@@ -71,7 +71,7 @@ switch($_REQUEST["action"]){
     break;
 
     case 'addPoints' :
-        if(!(userConnected() && $_REQUEST["prediction"] && $_REQUEST["points"])){
+        if(!(userConnected() && $_REQUEST["prediction"] && $_REQUEST["points"] > 0)){
             header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=vote");
             die("");
         }

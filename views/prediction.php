@@ -82,7 +82,11 @@ for($i = 0; $i < count($prediChoices); $i++){
 $prediChoicesText = $prediChoicesText . "<tr><th>Total</th><th>" . $votesTotal . "</th><th>" . number_format($pointsTotal, 0, '', ' ') . "</th><th>N/A</th><th>" . number_format($pointsMaxTotal, 0, '', ' ') . "</th></tr></table>";
 
 //Dynamic content
-$creator = ($prediCreator == $_SESSION["user"]);
+if(array_key_exists("user",$_SESSION)){
+    $creator = ($prediCreator == $_SESSION["user"]);
+}else{
+    $creator = false;
+}
 
 if (!userConnected()){
     $mode = "disconnected";
@@ -98,7 +102,6 @@ for($i = 0; $i < count($prediChoices); $i++){
     $dropdownMenu = $dropdownMenu . "<option value=" . $prediChoices[$i]["id"] . ">" . $prediChoices[$i]["name"] . "</option>";
 }
 $dropdownMenu = $dropdownMenu . "</select>";
-$pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
 
 //Display
 echo("
@@ -118,8 +121,11 @@ switch($mode){
     case "alreadyVoted" :
         $choice = stringSQL("SELECT `choices`.`name` FROM `choices` JOIN `votes` ON `choices`.`id` = `votes`.`choice` WHERE `votes`.`user` = ? AND `votes`.`prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
         $pointsSpent = intSQL("SELECT `points` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
+        $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
         echo("<p>Vous avez parié sur " . $choice . " avec " . number_format($pointsSpent, 0, '', ' ') . " points.</p>");
-        echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Ajouter <input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'> points à votre mise</p><button type='submit' name='action' value='addPoints'>Ajouter à la mise</button></form>");
+        if($prediEnd >= stringSQL("SELECT NOW();")){
+            echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Ajouter <input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'> points à votre mise</p><button type='submit' name='action' value='addPoints'>Ajouter à la mise</button></form>");
+        }
     break;
 
     case "waitingAnswer" :
@@ -128,6 +134,7 @@ switch($mode){
 
     case "normal" :
     default :
+        $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
         echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Parier sur " . $dropdownMenu . " avec <input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'> points</p><button type='submit' name='action' value='vote'>Parier</button></form>");
     break;
 }
