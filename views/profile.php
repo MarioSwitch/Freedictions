@@ -1,5 +1,6 @@
 <?php
 $user = $_REQUEST["user"];
+$detailed = ($_REQUEST["detailed"] == "true");
 $userExists = intSQL("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$user]);
 if(!$userExists){
     echo("<h1>Le compte \"$user\" n'existe pas !</h1>");
@@ -29,7 +30,8 @@ $statsTotalCreated = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?
 //Predictions created
 $predictionsCreatedText = "";
 $predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND NOW() < `ended` AND `answer` IS NULL;", [$user]);
-$predictionsCreatedText = $predictionsCreatedText . "<h3>En cours</h3>";
+$predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
+$predictionsCreatedText = $predictionsCreatedText . "<h3>En cours (" . $predictionsCreatedCount . ")</h3>";
 if(!$predictionsCreated){
     $predictionsCreatedText = $predictionsCreatedText . "<p>Aucune</p>";
 }else{
@@ -40,7 +42,8 @@ if(!$predictionsCreated){
 }
 
 $predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND NOW() > `ended` AND `answer` IS NULL;", [$user]);
-$predictionsCreatedText = $predictionsCreatedText . "<h3>En attente de réponse</h3>";
+$predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
+$predictionsCreatedText = $predictionsCreatedText . "<h3>En attente de réponse (" . $predictionsCreatedCount . ")</h3>";
 if(!$predictionsCreated){
     $predictionsCreatedText = $predictionsCreatedText . "<p>Aucune</p>";
 }else{
@@ -51,20 +54,26 @@ if(!$predictionsCreated){
 }
 
 $predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND `answer` IS NOT NULL;", [$user]);
-$predictionsCreatedText = $predictionsCreatedText . "<h3>Terminées</h3>";
-if(!$predictionsCreated){
-    $predictionsCreatedText = $predictionsCreatedText . "<p>Aucune</p>";
-}else{
-    for ($i=0; $i < count($predictionsCreated); $i++){
-        $link = "index.php?view=prediction&id=" . $predictionsCreated[$i]["id"];
-        $predictionsCreatedText = $predictionsCreatedText . "<a href=\"$link\">" . $predictionsCreated[$i]["title"] . "</a><br/>";
+$predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
+$predictionsCreatedText = $predictionsCreatedText . "<h3>Terminées (" . $predictionsCreatedCount . ")</h3>";
+if($detailed){
+    if(!$predictionsCreated){
+        $predictionsCreatedText = $predictionsCreatedText . "<p>Aucune</p>";
+    }else{
+        for ($i=0; $i < count($predictionsCreated); $i++){
+            $link = "index.php?view=prediction&id=" . $predictionsCreated[$i]["id"];
+            $predictionsCreatedText = $predictionsCreatedText . "<a href=\"$link\">" . $predictionsCreated[$i]["title"] . "</a><br/>";
+        }
     }
+}else{
+    $predictionsCreatedText = $predictionsCreatedText . "<p>Ajoutez \"&detailed=true\" à l'URL pour afficher les prédictions terminées.</p>";
 }
 
 //Predictions participated
 $predictionsParticipatedText = "";
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND NOW() < `ended` AND `answer` IS NULL;", [$user]);
-$predictionsParticipatedText = $predictionsParticipatedText . "<h3>En cours</h3>";
+$predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
+$predictionsParticipatedText = $predictionsParticipatedText . "<h3>En cours (" . $predictionsParticipatedCount . ")</h3>";
 if(!$predictionsParticipated){
     $predictionsParticipatedText = $predictionsParticipatedText . "<p>Aucune</p>";
 }else{
@@ -75,7 +84,8 @@ if(!$predictionsParticipated){
 }
 
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND NOW() > `ended` AND `answer` IS NULL;", [$user]);
-$predictionsParticipatedText = $predictionsParticipatedText . "<h3>En attente de réponse</h3>";
+$predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
+$predictionsParticipatedText = $predictionsParticipatedText . "<h3>En attente de réponse (" . $predictionsParticipatedCount . ")</h3>";
 if(!$predictionsParticipated){
     $predictionsParticipatedText = $predictionsParticipatedText . "<p>Aucune</p>";
 }else{
@@ -86,14 +96,19 @@ if(!$predictionsParticipated){
 }
 
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NOT NULL;", [$user]);
-$predictionsParticipatedText = $predictionsParticipatedText . "<h3>Terminées</h3>";
-if(!$predictionsParticipated){
-    $predictionsParticipatedText = $predictionsParticipatedText . "<p>Aucune</p>";
-}else{
-    for ($i=0; $i < count($predictionsParticipated); $i++){
-        $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
-        $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . $predictionsParticipated[$i]["points"] . " points</p><br/>";
+$predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
+$predictionsParticipatedText = $predictionsParticipatedText . "<h3>Terminées (" . $predictionsParticipatedCount . ")</h3>";
+if($detailed){
+    if(!$predictionsParticipated){
+        $predictionsParticipatedText = $predictionsParticipatedText . "<p>Aucune</p>";
+    }else{
+        for ($i=0; $i < count($predictionsParticipated); $i++){
+            $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
+            $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . $predictionsParticipated[$i]["points"] . " points</p><br/>";
+        }
     }
+}else{
+    $predictionsParticipatedText = $predictionsParticipatedText . "<p>Ajoutez \"&detailed=true\" à l'URL pour afficher les prédictions terminées.</p>";
 }
 
 //Display
@@ -101,17 +116,13 @@ echo("
     <h1>" . displayUsername($user) . "</h1>
     <p>Compte créé <abbr title='" . $created . " UTC' id='createdCountdown'></abbr></p>
     <p>Dernière connexion <abbr title='" . $online . " UTC' id='onlineCountdown'></abbr></p>
-    <hr>
-	<h2>Statistiques</h2>
-	<p>" . number_format($points, 0, '', ' ') . " points (" . $rank . "<sup>e</sup>)</p>
     <p>Connecté consécutivement depuis " . $streak . " jours</p>
-	<p>A misé <b>" . $statsTotalBets . " </b> fois pour un total de <b>" . number_format($statsPointsSpent, 0, '', ' ') . "</b> points</p>
-	<p>A créé <b>" . $statsTotalCreated . "</b> prédictions</p>
+	<p>" . number_format($points, 0, '', ' ') . " points (" . $rank . "<sup>e</sup>)</p>
     <hr>
-	<h2>Prédictions créées</h2>
+	<h2>Prédictions créées (" . $statsTotalCreated . ")</h2>
 	<p>" . $predictionsCreatedText . "</p>
     <hr>
-	<h2>Participations à des prédictions</h2>
+	<h2>Participations à des prédictions (" . $statsTotalBets . " mises, " . $statsPointsSpent . " points)</h2>
 	<p>" . $predictionsParticipatedText . "</p>
 ");
 if(userConnected() && $user == $_SESSION["user"]){
