@@ -60,26 +60,26 @@ for($i = 0; $i < count($prediChoices); $i++){
     $pointsChoice = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
     $pointsTotal = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
     if($pointsTotal != 0 && $pointsChoice != 0){
-        $pointsPercentage = "<br>(" . number_format(($pointsChoice / $pointsTotal) * 100, 2, ',', '') . " %)";
+        $pointsPercentage = "<br>(" . displayFloat(($pointsChoice / $pointsTotal) * 100) . " %)";
     }else{
         $pointsPercentage = "";
     }
     if($votesTotal != 0 && $votesChoice != 0){
-        $votesPercentage = "<br>(" . number_format(($votesChoice / $votesTotal) * 100, 2, ',', '') . " %)";
+        $votesPercentage = "<br>(" . displayFloat(($votesChoice / $votesTotal) * 100) . " %)";
     }else{
         $votesPercentage = "";
     }
     if($pointsPercentage != ""){
-        $winRate = number_format($pointsTotal / $pointsChoice, 2, ',', ' ');
+        $winRate = displayFloat($pointsTotal / $pointsChoice);
     }else{
         $winRate = "-";
     }
     $pointsMaxChoice = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
     $pointsMaxTotal = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
     $choiceName = $prediChoices[$i]["name"];
-    $prediChoicesText = $prediChoicesText . "<tr><td>" . $choiceName . "</td><td>" . $votesChoice . $votesPercentage . "</td><td>" . number_format($pointsChoice, 0, '', ' ') . $pointsPercentage .  "</td><td>" . $winRate . "</td><td>" . number_format($pointsMaxChoice, 0, '', ' ') . "</td></tr>";
+    $prediChoicesText = $prediChoicesText . "<tr><td>" . $choiceName . "</td><td>" . displayInt($votesChoice) . $votesPercentage . "</td><td>" . displayInt($pointsChoice) . $pointsPercentage .  "</td><td>" . $winRate . "</td><td>" . displayInt($pointsMaxChoice) . "</td></tr>";
 }
-$prediChoicesText = $prediChoicesText . "<tr><th>Total</th><th>" . $votesTotal . "</th><th>" . number_format($pointsTotal, 0, '', ' ') . "</th><th>N/A</th><th>" . number_format($pointsMaxTotal, 0, '', ' ') . "</th></tr></table>";
+$prediChoicesText = $prediChoicesText . "<tr><th>Total</th><th>" . displayInt($votesTotal) . "</th><th>" . displayInt($pointsTotal) . "</th><th>N/A</th><th>" . displayInt($pointsMaxTotal) . "</th></tr></table>";
 
 //Dynamic content
 if(array_key_exists("user",$_SESSION)){
@@ -122,7 +122,7 @@ switch($mode){
         $choice = stringSQL("SELECT `choices`.`name` FROM `choices` JOIN `votes` ON `choices`.`id` = `votes`.`choice` WHERE `votes`.`user` = ? AND `votes`.`prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
         $pointsSpent = intSQL("SELECT `points` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
         $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
-        echo("<p>Vous avez parié sur " . $choice . " avec " . number_format($pointsSpent, 0, '', ' ') . " points.</p>");
+        echo("<p>Vous avez parié sur " . $choice . " avec " . displayInt($pointsSpent) . " points.</p>");
         if($prediEnd >= stringSQL("SELECT NOW();")){
             echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Ajouter <input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'> points à votre mise</p><button type='submit' name='action' value='addPoints'>Ajouter à la mise</button></form>");
         }

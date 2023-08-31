@@ -157,6 +157,57 @@ function displayUsername($username){
 }
 
 /**
+ * Displays an int value
+ * @param int $int int to be displayed
+ * @param bool $short true will short display using SI prefixes (M (mega), G (giga), T (tera), P (peta) and E (exa))
+ * @return string
+ */
+function displayInt($int, $short = true){
+    $full_number = number_format($int, 0, ',', ' ');
+    if(!$short || $int<1000000){
+        return  $full_number;
+    }
+    $string = (string) $int;
+    $digits = strlen($string);
+    switch($digits){
+        case 7:
+        case 8:
+        case 9:
+            $prefix = 'M';break;
+        case 10:
+        case 11:
+        case 12:
+            $prefix = 'G';break;
+        case 13:
+        case 14:
+        case 15:
+            $prefix = 'T';break;
+        case 16:
+        case 17:
+        case 18:
+            $prefix = 'P';break;
+        case 19: //Max points have 19 digits
+        default:
+            $prefix = 'E';break;
+    }
+    $cropped_result = (int) substr($string,0, 3);
+    $divisor = pow(10,(3-($digits%3))%3);
+    $result = ((float)$cropped_result) / $divisor;
+    $formatted_result = number_format($result, (3-($digits%3))%3, ',', ' ');
+    return "<abbr title='". $full_number . "'>" . $formatted_result . " " . $prefix . "</abbr>";
+}
+
+/**
+ * Displays a float value
+ * @param float $float float to be displayed
+ * @param int $decimals number of decimals (2 by default)
+ * @return string formatted float
+ */
+function displayFloat($float, $decimals = 2){
+    return number_format($float, $decimals, ',', ' ');
+}
+
+/**
  * Creates a new account
  * @param string $username the username
  * @param string $password1 the password

@@ -12,13 +12,13 @@ if(array_key_exists("error",$_REQUEST)){
     echo "</p>";
 }
 ?>
-<p class="error">Ce site n'est pas terminé et peut contenir des bugs.</p>
-<h1>[insérer nom du site]</h1>
-<h2>[insérer slogan/description]</h2>
+<p class="error">Ce projet est en développement et peut ne pas fonctionner correctement.</p>
+<h1>Better Twitch Predictions</h1>
 <hr>
-<h2>Prédictions ouvertes</h2>
 <?php
 $predictions = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `ended` > NOW() ORDER BY `ended` ASC;");
+$predictions_count = $predictions?count($predictions):0;
+echo "<h2>Prédictions ouvertes ($predictions_count)</h2>";
 if(!$predictions){
     echo "<p>Aucune prédiction ouverte</p>";
     die("");

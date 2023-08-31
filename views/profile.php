@@ -79,7 +79,7 @@ if(!$predictionsParticipated){
 }else{
     for ($i=0; $i < count($predictionsParticipated); $i++){
         $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
-        $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . $predictionsParticipated[$i]["points"] . " points</p><br/>";
+        $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . displayInt($predictionsParticipated[$i]["points"]) . " points</p><br/>";
     }
 }
 
@@ -91,7 +91,7 @@ if(!$predictionsParticipated){
 }else{
     for ($i=0; $i < count($predictionsParticipated); $i++){
         $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
-        $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . $predictionsParticipated[$i]["points"] . " points</p><br/>";
+        $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . displayInt($predictionsParticipated[$i]["points"]) . " points</p><br/>";
     }
 }
 
@@ -104,7 +104,7 @@ if($detailed){
     }else{
         for ($i=0; $i < count($predictionsParticipated); $i++){
             $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
-            $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . $predictionsParticipated[$i]["points"] . " points</p><br/>";
+            $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . displayInt($predictionsParticipated[$i]["points"]) . " points</p><br/>";
         }
     }
 }else{
@@ -117,12 +117,12 @@ echo("
     <p>Compte créé <abbr title='" . $created . " UTC' id='createdCountdown'></abbr></p>
     <p>Dernière connexion <abbr title='" . $online . " UTC' id='onlineCountdown'></abbr></p>
     <p>Connecté consécutivement depuis " . $streak . " jours</p>
-	<p>" . number_format($points, 0, '', ' ') . " points (" . $rank . "<sup>e</sup>)</p>
+	<p>" . displayInt($points, false) . " points (" . displayInt($rank, false) . "<sup>e</sup>)</p>
     <hr>
 	<h2>Prédictions créées (" . $statsTotalCreated . ")</h2>
 	<p>" . $predictionsCreatedText . "</p>
     <hr>
-	<h2>Participations à des prédictions (" . $statsTotalBets . " mises, " . $statsPointsSpent . " points)</h2>
+	<h2>Participations à des prédictions (" . $statsTotalBets . " mises, " . displayInt($statsPointsSpent) . " points)</h2>
 	<p>" . $predictionsParticipatedText . "</p>
 ");
 if(userConnected() && $user == $_SESSION["user"]){
