@@ -1,5 +1,6 @@
 /*
 1000 days = 86,400,000,000 ms
+2 years (730.5 days) = 63,115,200,000 ms
 1 year (365.25 days) = 31,557,600,000 ms
 1 year (365 days) = 31,536,000,000 ms
 1 month = 365 / 12 = 30.417 days = 2,628,000,000 ms
@@ -40,8 +41,11 @@ function countdownTo(goal, formatBefore = "%countdown", formatAfter = "", id = "
     var goalDate = new Date(goal);
     var gap = Math.abs(goalDate - nowDate);
     //Formatting count
-    if(gap>=31536000000){ //if more than 1 year
-        var countString = Math.floor(gap/31557600000)+" an(s)";
+    if(gap>=63115200000){ //if more than 2 years
+        var countString = Math.floor(gap/31557600000)+" ans";
+    }
+    if(gap<63115200000 && gap>=31536000000){ //if between 1 and 2 years
+        var countString = Math.floor(gap/31557600000)+" an";
     }
     if(gap<31536000000 && gap>=2628000000){ //if between 1 month and 1 year
         var countString = Math.floor(gap/2628000000)+" mois";
