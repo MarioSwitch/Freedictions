@@ -105,10 +105,16 @@ Notez que tant que la prédiction n'est pas terminée, le rendement peut ÉNORM�
 Notez aussi que ce sont les mises perdues qui font votre victoire. Gagner alors que tout le monde a voté la même chose ne sert à rien, puisque votre mise sera multipliée par 1,00.
 </p>
 <hr>
+<h2>Contact</h2>
+<p>
+Si vous avez des questions ou des bugs à signaler, vous pouvez nous contacter par mail à <a href="mailto:predictions@marioswitch.fr">predictions@marioswitch.fr</a>.
+</p>
+<hr>
 <h2>Crédits</h2>
 <p>
 Les icônes proviennent de <a href="https://www.streamlinehq.com/icons/streamline-mini-line">Stream Line HQ</a> et des prédictions <a href="https://www.twitch.tv/">Twitch</a>.<br><br>
 Le code source est disponible sur <a href="https://github.com/MarioSwitch/BetterTwitchPredictions">GitHub</a>.<br><br>
+<i>Disclaimer</i> : La plateforme Twitch, les logos ainsi que le nom "Twitch" sont des propriétés d'Amazon.com. Ce site n'est en aucun cas affilié à Twitch, ni à Amazon.<br><br>
 v1.0 (juin 2022) par <a href="https://www.marioswitch.fr/">MarioSwitch</a> et <a href="https://github.com/yoshakami">Yosh</a><br>
 v1.1 (mai 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.0 (actuelle, juin 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a>

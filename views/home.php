@@ -12,7 +12,6 @@ if(array_key_exists("error",$_REQUEST)){
     echo "</p>";
 }
 ?>
-<p class="error">Ce projet est en développement et peut ne pas fonctionner correctement.</p>
 <h1>Better Twitch Predictions</h1>
 <hr>
 <?php
