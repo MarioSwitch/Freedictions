@@ -1,6 +1,6 @@
 <?php
 $user = $_REQUEST["user"];
-$detailed = ($_REQUEST["detailed"] == "true");
+$detailed = array_key_exists("detailed", $_REQUEST)?($_REQUEST["detailed"] == "true"):false;
 $userExists = intSQL("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$user]);
 if(!$userExists){
     echo("<h1>Le compte \"$user\" n'existe pas !</h1>");
@@ -66,7 +66,7 @@ if($detailed){
         }
     }
 }else{
-    $predictionsCreatedText = $predictionsCreatedText . "<p>Ajoutez \"&detailed=true\" à l'URL pour afficher les prédictions terminées.</p>";
+    $predictionsCreatedText = $predictionsCreatedText . "<p>Pour éviter la surcharge de la page, les prédictions terminées sont masquées par défaut. Cliquez <a href=\"" . $_SERVER['REQUEST_URI'] . "&detailed=true\">ici</a> pour les afficher.</p>";
 }
 
 //Predictions participated
@@ -108,7 +108,7 @@ if($detailed){
         }
     }
 }else{
-    $predictionsParticipatedText = $predictionsParticipatedText . "<p>Ajoutez \"&detailed=true\" à l'URL pour afficher les prédictions terminées.</p>";
+    $predictionsParticipatedText = $predictionsParticipatedText . "<p>Pour éviter la surcharge de la page, les prédictions terminées sont masquées par défaut. Cliquez <a href=\"" . $_SERVER['REQUEST_URI'] . "&detailed=true\">ici</a> pour les afficher.</p>";
 }
 
 //Display

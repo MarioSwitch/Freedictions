@@ -22,4 +22,9 @@ Si vous souhaitez installer Better Twitch Predictions localement ou votre site w
     * Dans sql.php, remplacez la ligne ``include_once config.php`` par la déclaration de ces 4 variables.
 Il est tout de même préférable de créer un fichier séparé (c'est-à-dire la première solution) car elle permet de bien séparer le code des informations de connexion.
 5. Testez votre installation en vous rendant sur le dossier BetterTwitchPredictions avec votre navigateur.
-6. Créez le premier compte à l'aide des boutons de la barre de menu et en remplissant les champs. Il est recommandé d'avoir un compte "modérateur", notamment pour les installations publiques. Pour ce faire, une fois le compte créé, allez dans votre gestionnaire de bases de données et remplacez manuellement le "0" présent dans la table "users", colonne "mod" par un "1". En rafraîchissant la page, vous devriez voir l'icône de modérateur à côté de votre pseudo. Votre compte pourra alors gérer toutes les prédictions (y compris celles des autres utilisateurs) et supprimer n'importe quel compte.
+
+Vous pouvez désormais créer le premier compte à l'aide des boutons de la barre de menu et en remplissant les champs.
+
+Il est recommandé d'avoir un compte "modérateur", notamment pour les installations publiques. Pour ce faire, une fois le compte créé, allez dans votre gestionnaire de bases de données et remplacez manuellement le "0" présent dans la table "users", colonne "mod" par un "1". En rafraîchissant la page, vous devriez voir l'icône de modérateur à côté de votre pseudo. Votre compte pourra alors gérer toutes les prédictions (y compris celles des autres utilisateurs) et supprimer n'importe quel compte.
+
+Vous pouvez restreindre la création de prédictions à certains comptes uniquement en modifiant la fonction ``eligible()`` du fichier ``sql.php``. Par défaut, tous les utilisateurs connectés peuvent créer des prédictions.
