@@ -43,10 +43,10 @@ if(!$predictions){
 }
 echo "</table>";
 echo "<hr>";
-$predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended`, `answer` FROM `predictions` WHERE `answer` IS NOT NULL ORDER BY `id`;");
+$predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended`, `answer` FROM `predictions` WHERE `answer` IS NOT NULL ORDER BY `id` DESC;");
 $count = $predictions?count($predictions):0;
 echo "<h2>Prédictions terminées (" . displayInt($count) . ")</h2>";
-echo "<table><tr><th>ID ▲</th><th>Titre</th><th>Créateur</th><th>Création (UTC)</th><th>Fin des votes (UTC)</th><th>Réponse</th></tr>";
+echo "<table><tr><th>ID ▼</th><th>Titre</th><th>Créateur</th><th>Création (UTC)</th><th>Fin des votes (UTC)</th><th>Réponse</th></tr>";
 if(!$predictions){
     echo "<tr><td colspan='6'>Aucune prédiction</td></tr>";
 }else{
