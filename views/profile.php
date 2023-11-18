@@ -25,6 +25,9 @@ $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$user]);
 $rank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points) + 1;
 $statsPointsSpent = intSQL("SELECT SUM(points) FROM `votes` WHERE `user` = ?;", [$user]);
 $statsTotalBets = intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ?;", [$user]);
+$statsAnswerBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND predictions.answer IS NOT NULL;", [$user]);
+$statsCorrectBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$user]);
+$statsCorrectBetsPercentage = $statsAnswerBets?($statsCorrectBets/$statsTotalBets*100):"N/A";
 $statsTotalCreated = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$user]);
 
 //Predictions created
@@ -97,18 +100,19 @@ if(!$predictionsParticipated){
 
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NOT NULL;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
-$predictionsParticipatedText = $predictionsParticipatedText . "<h3>Terminées (" . $predictionsParticipatedCount . ")</h3>";
-if($detailed){
-    if(!$predictionsParticipated){
-        $predictionsParticipatedText = $predictionsParticipatedText . "<p>Aucune</p>";
-    }else{
+if($predictionsParticipatedCount > 0){
+    $predictionsParticipatedText = $predictionsParticipatedText . "<h3>Terminées (" . $statsCorrectBets . " gagnées sur " . $predictionsParticipatedCount . " (" . displayFloat($statsCorrectBetsPercentage) . " %))</h3>";
+    if($detailed){
         for ($i=0; $i < count($predictionsParticipated); $i++){
             $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
             $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . displayInt($predictionsParticipated[$i]["points"]) . " points</p><br/>";
         }
+    }else{
+        $predictionsParticipatedText = $predictionsParticipatedText . "<p>Pour éviter la surcharge de la page, les prédictions terminées sont masquées par défaut. Cliquez <a href=\"" . $_SERVER['REQUEST_URI'] . "&detailed=true\">ici</a> pour les afficher.</p>";
     }
 }else{
-    $predictionsParticipatedText = $predictionsParticipatedText . "<p>Pour éviter la surcharge de la page, les prédictions terminées sont masquées par défaut. Cliquez <a href=\"" . $_SERVER['REQUEST_URI'] . "&detailed=true\">ici</a> pour les afficher.</p>";
+    $predictionsParticipatedText = $predictionsParticipatedText . "<h3>Terminées (0)</h3>";
+    $predictionsParticipatedText = $predictionsParticipatedText . "<p>Aucune</p>";
 }
 
 //Display
