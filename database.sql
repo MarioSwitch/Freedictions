@@ -16,6 +16,7 @@ CREATE TABLE `predictions` (
     `user` varchar(20) NOT NULL,
     `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `ended` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `answered` timestamp DEFAULT NULL,
     `answer` int NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `pred_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`)

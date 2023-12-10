@@ -42,6 +42,12 @@ $prediEndTime = substr($prediEnd,11,8);
 echo "<script src='countdown.js'></script>";
 echo "<script>countdownTo('" . $prediCreatedDate . "T" . $prediCreatedTime . "Z', 'dans %countdown', 'il y a %countup', 'createdCountdown');</script>";
 echo "<script>countdownTo('" . $prediEndDate . "T" . $prediEndTime . "Z', 'Se termine dans %countdown', 'Terminé depuis %countup', 'endCountdown');</script>";
+$prediAnswered = $prediction[0]["answered"];
+if($prediAnswered != NULL){
+    $prediAnsweredDate = substr($prediAnswered,0,10);
+    $prediAnsweredTime = substr($prediAnswered,11,8);
+    echo "<script>countdownTo('" . $prediAnsweredDate . "T" . $prediAnsweredTime . "Z', 'dans %countdown', 'il y a %countup', 'answerCountdown');</script>";
+}
 $prediAnswer = $prediction[0]["answer"];
 if ($prediAnswer != NULL){
     $prediAnswerTitle = stringSQL("SELECT `name` FROM `choices` WHERE `id` = ?;", [$prediAnswer]);
@@ -107,7 +113,11 @@ $dropdownMenu = $dropdownMenu . "</select>";
 echo("
 <h1>" . $prediTitle . " </h1>
 <p>Créé par <a href='?view=profile&user=" . $prediCreator . "'>" . displayUsername($prediCreator) . "</a> <abbr id='createdCountdown' title='" . $prediCreated . " UTC'></abbr></p>
-<p><abbr id='endCountdown' title='" . $prediEnd . " UTC'></abbr></p>
+<p><abbr id='endCountdown' title='" . $prediEnd . " UTC'></abbr></p>");
+if($prediAnswered != NULL){
+    echo("<p>Réponse donnée <abbr id='answerCountdown' title='" . $prediAnswered . " UTC'></abbr></p>");
+}
+echo("
 <h2>" . $prediNumberOfAnswers . " réponses possibles</h2>
 " . $prediChoicesText . "
 <hr>

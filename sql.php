@@ -323,7 +323,7 @@ function createPrediction($name,$user,$end,$offset,$choices){//Variable $choices
     }
     date_default_timezone_set('UTC');
     $endUTC = date('Y-m-d\TH:i',strtotime($end)-($offset*60));
-    rawSQL("INSERT INTO `predictions` VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT, ?, DEFAULT);", [$name, $user, $endUTC]);
+    rawSQL("INSERT INTO `predictions` VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT, ?, DEFAULT, DEFAULT);", [$name, $user, $endUTC]);
     $predictionID = intSQL("SELECT `id` FROM `predictions` ORDER BY `created` DESC LIMIT 1;");
     foreach($choices as $choice){
         rawSQL("INSERT INTO `choices` VALUES (DEFAULT, ?, ?);", [$predictionID, $choice]);
@@ -389,6 +389,7 @@ function answer($prediction,$answer){
         header("Location:index.php?view=prediction&id=" . $prediction . "&error=too_early");
         die("");
     }
+    rawSQL("UPDATE `predictions` SET `answered` = ? WHERE `id` = ?;", [$now, $prediction]);
     rawSQL("UPDATE `predictions` SET `answer` = ? WHERE id = ?;", [$answer, $prediction]);
     $totalPoints = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ?;", [$prediction]);
     $winPoints = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$prediction, $answer]);
