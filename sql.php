@@ -151,8 +151,16 @@ function userMod(){
  * @return string the modified username
  */
 function displayUsername($username){
+    //Variables
+    $mod = intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]);
+    $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$username]);
+    //Code
     $icons = "";
-    if(intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]) == 1){$icons .= "<abbr title='Modérateur'><img class='user-icon' src='svg/mod.png'></abbr>";}
+    if($mod){$icons .= "<abbr title='Modérateur'><img class='user-icon' src='svg/mod.png'></abbr>";}
+    if($streak >= 7 && $streak < 14){$icons .= "<abbr title='Connecté tous les jours depuis plus de 1 semaine'><img class='user-icon' src='svg/achievements/calendarBronze.svg'></abbr>";}
+    if($streak >= 14 && $streak < 30){$icons .= "<abbr title='Connecté tous les jours depuis plus de 2 semaines'><img class='user-icon' src='svg/achievements/calendarSilver.svg'></abbr>";}
+    if($streak >= 30 && $streak < 365){$icons .= "<abbr title='Connecté tous les jours depuis plus de 1 mois'><img class='user-icon' src='svg/achievements/calendarGold.svg'></abbr>";}
+    if($streak >= 365){$icons .= "<abbr title='Connecté tous les jours depuis plus de 1 an'><img class='user-icon' src='svg/achievements/calendarRainbow.svg'></abbr>";}
     return $icons . $username;
 }
 

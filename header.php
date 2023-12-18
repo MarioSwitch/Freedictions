@@ -16,6 +16,7 @@ if(userConnected()){
     <a href="index.php?view=home"><img src="svg/website.svg" alt="Icône du site"></a>
     <a href="index.php?view=about"><img src="svg/info.svg"></a>
     <a href="index.php?view=leaderboard"><img src="svg/leaderboard.svg"></a>
+    <a href="index.php?view=achievements"><img src="svg/trophy.svg"></a>
     <a href="index.php?view=allUsers"><img src="svg/allUsers.svg"></a>
     <a href="index.php?view=allPredictions"><img src="svg/allPredictions.svg"></a>
     <form method="GET" action="controller.php" class="search-form">
@@ -24,11 +25,11 @@ if(userConnected()){
     </form>
     <div class="header-right">
         <?php
-        // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion et/ou d'inscription
+        // Si l'utilisateur n'est pas connecté, on affiche un lien de connexion et/ou d'inscription
         if (!userConnected()){
             echo "<a class='header-svg' href='index.php?view=signup'><img src='svg/signup.svg'></a>";
             echo "<a class='header-svg' href='index.php?view=signin'><img src='svg/login.svg'></a>";
-        } //Si il est connecté, on affiche un lien "profil", "créer un prédiction"
+        } //S'il est connecté, on affiche un lien "profil", "créer un prédiction"
         else {
             $username = $_SESSION["user"];
             $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
