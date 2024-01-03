@@ -117,5 +117,6 @@ Le code source est disponible sur <a href="https://github.com/MarioSwitch/Better
 <i>Disclaimer</i> : La plateforme Twitch, les logos ainsi que le nom "Twitch" sont des propriétés d'Amazon.com. Ce site n'est en aucun cas affilié à Twitch, ni à Amazon.<br><br>
 v1.0 (juin 2022) par <a href="https://www.marioswitch.fr/">MarioSwitch</a> et <a href="https://github.com/yoshakami">Yosh</a><br>
 v1.1 (mai 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
-v2.0 (actuelle, juin 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a>
+v2.0 (actuelle, juin 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br><br>
+<i>Version 2.0.33 du 3 janvier 2024</i>
 </p>
