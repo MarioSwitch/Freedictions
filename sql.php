@@ -155,11 +155,15 @@ function displayUsername($username){
     //Variables
     $mod = intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]);
     $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$username]);
+    $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
     global $streak_achievements;
+    global $points_top;
+    global $points_achievements;
     //Code
     $icons = "";
     if($mod){$icons .= "<abbr title='Modérateur'><img class='user-icon' src='svg/mod.png'></abbr>";}
     $icons .= checkStaticAchievement($streak, $streak_achievements, "calendar", "Jours de connexion consécutifs");
+    $icons .= checkDynamicAchievement($points, $points_top, $points_achievements, "points", "Points");
     return $icons . $username;
 }
 

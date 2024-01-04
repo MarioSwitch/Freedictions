@@ -33,7 +33,7 @@ if(userConnected()){
         else {
             $username = $_SESSION["user"];
             $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
-            echo "<p class='header-text'>" . displayUsername($username) . " (" . displayInt($points, false) . " points)</p>";
+            echo "<p class='header-text'>" . displayUsername($username) . " <small>(" . displayInt($points, false) . " points)</small></p>";
             echo "<a href='index.php?view=profile&user=$username'><img src='svg/profile.svg'></a>";
             echo "<a href='index.php?view=createPrediction'><img src='svg/new.svg'></a>";
             echo "<a href='controller.php?action=logout'><img src='svg/logout.svg'></a>";
