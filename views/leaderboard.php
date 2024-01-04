@@ -22,7 +22,7 @@ if(userConnected()){
 	echo "<p>Total : " . displayInt($accounts) . " utilisateurs</p>";
 }
 echo "<hr>";
-echo "<table><tr><th>Rang</th><th>Utilisateur</th><th>Points</th></tr>";
+echo "<table><tr><th>Rang<br><small>(" . displayInt($tableTop, false) . " - " . displayInt($tableBottom, false) . ")</small></th><th>Utilisateur</th><th>Points</th></tr>";
 if(!$classement){
 	echo "<tr><td colspan='3'>Aucun utilisateur</td></tr>";
 }else{

@@ -1,5 +1,6 @@
 <?php
 include_once "config.php";
+include_once "achievementsManager.php";
 /* This file contains $BDD_host, $BDD_base, $BDD_user and $BDD_password
     $BDD_host is the database server address (usually localhost)
     $BDD_base is the database name
@@ -154,13 +155,11 @@ function displayUsername($username){
     //Variables
     $mod = intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]);
     $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$username]);
+    global $streak_achievements;
     //Code
     $icons = "";
     if($mod){$icons .= "<abbr title='Modérateur'><img class='user-icon' src='svg/mod.png'></abbr>";}
-    if($streak >= 7 && $streak < 14){$icons .= "<abbr title='Connecté tous les jours depuis plus de 1 semaine'><img class='user-icon' src='svg/achievements/calendarBronze.svg'></abbr>";}
-    if($streak >= 14 && $streak < 30){$icons .= "<abbr title='Connecté tous les jours depuis plus de 2 semaines'><img class='user-icon' src='svg/achievements/calendarSilver.svg'></abbr>";}
-    if($streak >= 30 && $streak < 365){$icons .= "<abbr title='Connecté tous les jours depuis plus de 1 mois'><img class='user-icon' src='svg/achievements/calendarGold.svg'></abbr>";}
-    if($streak >= 365){$icons .= "<abbr title='Connecté tous les jours depuis plus de 1 an'><img class='user-icon' src='svg/achievements/calendarRainbow.svg'></abbr>";}
+    $icons .= checkStaticAchievement($streak, $streak_achievements, "calendar", "Jours de connexion consécutifs");
     return $icons . $username;
 }
 
@@ -171,7 +170,7 @@ function displayUsername($username){
  * @return string
  */
 function displayInt($int, $short = true){
-    $full_number = number_format($int, 0, ',', ' ');
+    $full_number = number_format($int, 0, ',', ' ');
     if(!$short || $int<1000000){
         return  $full_number;
     }
@@ -201,7 +200,7 @@ function displayInt($int, $short = true){
     $cropped_result = (int) substr($string,0, 3);
     $divisor = pow(10,(3-($digits%3))%3);
     $result = ((float)$cropped_result) / $divisor;
-    $formatted_result = number_format($result, (3-($digits%3))%3, ',', ' ');
+    $formatted_result = number_format($result, (3-($digits%3))%3, ',', ' ');
     return "<abbr title='". $full_number . "'>" . $formatted_result . " " . $prefix . "</abbr>";
 }
 
@@ -212,7 +211,7 @@ function displayInt($int, $short = true){
  * @return string formatted float
  */
 function displayFloat($float, $decimals = 2){
-    return number_format($float, $decimals, ',', ' ');
+    return number_format($float, $decimals, ',', ' ');
 }
 
 /**

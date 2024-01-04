@@ -167,14 +167,14 @@ th {
     background-color: white;
 }
 
-@media all and (max-width: 1000px)
+@media all and (max-width: 1500px)
 {
     .search-form {
         display: none;
     }
 }
 
-@media all and (max-width: 600px)
+@media all and (max-width: 1000px)
 {
     .header-text {
         display: none;
