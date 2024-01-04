@@ -36,7 +36,7 @@ function getCurrentAchievement(int $stat, array $tab, string $unit){
     if($stat < $tab[1]) return "Bronze<br><small>" . displayInt($stat) . " / " . displayInt($tab[0]) . " " . $unit . "</small>";
     if($stat < $tab[2]) return "Argent<br><small>" . displayInt($stat) . " / " . displayInt($tab[1]) . " " . $unit . "</small>";
     if($stat < $tab[3]) return "Or<br><small>" . displayInt($stat) . " / " . displayInt($tab[2]) . " " . $unit . "</small>";
-    if($stat >= $tab[3]) return "Arc-en-ciel<br><small>" . displayInt($stat) . " / " .  displayInt($tab[3]) . " " . $unit . "</small>";
+    if($stat >= $tab[3]) return "Diamant<br><small>" . displayInt($stat) . " / " .  displayInt($tab[3]) . " " . $unit . "</small>";
     return "";
 }
 
@@ -51,7 +51,7 @@ function getNextAchievement(int $stat, array $tab, string $unit){
     if($stat < $tab[0]) return "Bronze<br>Encore " . displayInt($tab[0] - $stat) . " " . $unit . "<br><small>(" . displayInt($stat) . " / " .  displayInt($tab[0]) . ")</small>";
     if($stat < $tab[1]) return "Argent<br>Encore " . displayInt($tab[1] - $stat) . " " . $unit . "<br><small>(" . displayInt($stat) . " / " .  displayInt($tab[1]) . ")</small>";
     if($stat < $tab[2]) return "Or<br>Encore " . displayInt($tab[2] - $stat) . " " . $unit . "<br><small>(" . displayInt($stat) . " / " .  displayInt($tab[2]) . ")</small>";
-    if($stat < $tab[3]) return "Arc-en-ciel<br>Encore " . displayInt($tab[3] - $stat) . " " . $unit . "<br><small>(" . displayInt($stat) . " / " .  displayInt($tab[3]) . ")</small>";
+    if($stat < $tab[3]) return "Diamant<br>Encore " . displayInt($tab[3] - $stat) . " " . $unit . "<br><small>(" . displayInt($stat) . " / " .  displayInt($tab[3]) . ")</small>";
     if($stat >= $tab[3]) return "Félicitations !";
     return "";
 }
@@ -68,7 +68,7 @@ function generateStaticAchievementRow(string $svg, array $goals, string $unit){
         <td><img src='svg/achievements/" . $svg . "Bronze.svg' alt='Bronze' title='Bronze'><br>" . displayInt($goals[0]) . " " . $unit . "</td>
         <td><img src='svg/achievements/" . $svg . "Silver.svg' alt='Argent' title='Argent'><br>" . displayInt($goals[1]) . " " . $unit . "</td>
         <td><img src='svg/achievements/" . $svg . "Gold.svg' alt='Or' title='Or'><br>" . displayInt($goals[2]) . " " . $unit . "</td>
-        <td><img src='svg/achievements/" . $svg . "Rainbow.svg' alt='Arc-en-ciel' title='Arc-en-ciel'><br>" . displayInt($goals[3]) . " " . $unit . "</td>
+        <td><img src='svg/achievements/" . $svg . "Diamond.svg' alt='Diamant' title='Diamant'><br>" . displayInt($goals[3]) . " " . $unit . "</td>
     ";
 }
 
@@ -85,7 +85,7 @@ function generateDynamicAchievementRow(string $svg, array $top, array $goals, st
         <td><img src='svg/achievements/" . $svg . "Bronze.svg' alt='Bronze' title='Bronze'><br>Top " . $top[0] . "%<br><small>" . displayInt($goals[0]) . " " . $unit . "</small></td>
         <td><img src='svg/achievements/" . $svg . "Silver.svg' alt='Argent' title='Argent'><br>Top " . $top[1] . "%<br><small>" . displayInt($goals[1]) . " " . $unit . "</small></td>
         <td><img src='svg/achievements/" . $svg . "Gold.svg' alt='Or' title='Or'><br>Top " . $top[2] . "%<br><small>" . displayInt($goals[2]) . " " . $unit . "</small></td>
-        <td><img src='svg/achievements/" . $svg . "Rainbow.svg' alt='Arc-en-ciel' title='Arc-en-ciel'><br>Top " . $top[3] . "%<br><small>" . displayInt($goals[3]) . " " . $unit . "</small></td>
+        <td><img src='svg/achievements/" . $svg . "Diamond.svg' alt='Diamant' title='Diamant'><br>Top " . $top[3] . "%<br><small>" . displayInt($goals[3]) . " " . $unit . "</small></td>
     ";
 }
 
@@ -102,7 +102,7 @@ function checkStaticAchievement(int $value, array $goals, string $svg, string $n
     if($value < $goals[1]) return "<abbr title='" . $name . " : " . $goals[0] . "+'><img class='user-icon' src='svg/achievements/" . $svg . "Bronze.svg'></abbr>";
     if($value < $goals[2]) return "<abbr title='" . $name . " : " . $goals[1] . "+'><img class='user-icon' src='svg/achievements/" . $svg . "Silver.svg'></abbr>";
     if($value < $goals[3]) return "<abbr title='" . $name . " : " . $goals[2] . "+'><img class='user-icon' src='svg/achievements/" . $svg . "Gold.svg'></abbr>";
-    if($value >= $goals[3]) return "<abbr title='" . $name . " : " . $goals[3] . "+'><img class='user-icon' src='svg/achievements/" . $svg . "Rainbow.svg'></abbr>";
+    if($value >= $goals[3]) return "<abbr title='" . $name . " : " . $goals[3] . "+'><img class='user-icon' src='svg/achievements/" . $svg . "Diamond.svg'></abbr>";
     return "";
 }
 
@@ -120,7 +120,7 @@ function checkDynamicAchievement(int $value, array $top, array $goals, string $s
     if($value < $goals[1]) return "<abbr title='" . $name . " : Top " . $top[0] . "%'><img class='user-icon' src='svg/achievements/" . $svg . "Bronze.svg'></abbr>";
     if($value < $goals[2]) return "<abbr title='" . $name . " : Top " . $top[1] . "%'><img class='user-icon' src='svg/achievements/" . $svg . "Silver.svg'></abbr>";
     if($value < $goals[3]) return "<abbr title='" . $name . " : Top " . $top[2] . "%'><img class='user-icon' src='svg/achievements/" . $svg . "Gold.svg'></abbr>";
-    if($value >= $goals[3]) return "<abbr title='" . $name . " : Top " . $top[3] . "%'><img class='user-icon' src='svg/achievements/" . $svg . "Rainbow.svg'></abbr>";
+    if($value >= $goals[3]) return "<abbr title='" . $name . " : Top " . $top[3] . "%'><img class='user-icon' src='svg/achievements/" . $svg . "Diamond.svg'></abbr>";
     return "";
 }
 ?>

@@ -21,7 +21,7 @@
         <th>Bronze</th>
         <th>Argent</th>
         <th>Or</th>
-        <th>Arc-en-ciel</th>
+        <th>Diamant</th>
         <th>Palier actuel</th>
         <th>Palier suivant</th>
     </tr>
