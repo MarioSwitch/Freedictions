@@ -1,5 +1,5 @@
 <?php
-if(!userConnected()){
+if(!isConnected()){
     header("Location:index.php?view=home");
     die("");
 }
@@ -22,9 +22,9 @@ if(array_key_exists("error",$_REQUEST)){
     echo "<br>Veuillez réessayer.</p>";
 }
 ?>
-<h1>Changer le mot de passe de votre compte (<?php echo displayUsername($_SESSION["user"]) ?>)</h1>
+<h1>Changer le mot de passe de votre compte (<?php echo displayUsername($_COOKIE["username"]) ?>)</h1>
 <form role='form' action='controller.php'>
-    <input type='hidden' name='username' value='<?php echo($_SESSION["user"]) ?>'>
+    <input type='hidden' name='username' value='<?php echo($_COOKIE["username"]) ?>'>
     <label for='password'>Mot de passe actuel</label>
     <input type='password' id='password' name='password' required='required'>
     <br/>

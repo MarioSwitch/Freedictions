@@ -129,13 +129,13 @@ echo("
 	<h2>Participations à des prédictions (" . $statsTotalBets . " mises, " . displayInt($statsPointsSpent) . " points)</h2>
 	<p>" . $predictionsParticipatedText . "</p>
 ");
-if(userConnected() && $user == $_SESSION["user"]){
+if(isConnected() && $user == $_COOKIE["username"]){
     echo("
         <hr>
         <h2>Gérer le compte</h2>
         <p>Vous pouvez <a href='?view=changePassword'>changer votre mot de passe</a> ou <a href='?view=deleteAccount&user=$user'>supprimer votre compte</a>.</p>
     ");
-} else if (userMod()){
+} else if (isMod()){
     echo("
         <hr>
         <h2>Modération</h2>

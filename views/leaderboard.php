@@ -13,8 +13,8 @@ $classement = arraySQL("SELECT `username`, `points` FROM `users` ORDER BY `point
 $accounts = intSQL("SELECT COUNT(*) FROM `users`");
 echo "<h1>Classement</h1>";
 echo "<p>Ci-dessous, le classement des utilisateurs ayant le plus de points.</p>";
-if(userConnected()){
-	$myPoints = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
+if(isConnected()){
+	$myPoints = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
 	$myRank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $myPoints . ";") + 1;
 	$myTop = ($myRank / $accounts)*100;
 	echo "<p>Vous êtes " . displayInt($myRank, false) . "<sup>e</sup> sur " . displayInt($accounts) . " (top " . displayFloat($myTop) . " %)</p>";

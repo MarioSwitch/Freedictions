@@ -1,6 +1,5 @@
 <?php
 include_once "config.php";
-include_once "achievementsManager.php";
 /* This file contains $BDD_host, $BDD_base, $BDD_user and $BDD_password
     $BDD_host is the database server address (usually localhost)
     $BDD_base is the database name
@@ -8,6 +7,7 @@ include_once "achievementsManager.php";
     $BDD_password is the password of the database's user
 You MUST have these 4 variables defined (either in a different php file or in replacement of the include_once line) to use the functions below.
 */
+include_once "achievementsManager.php";
 
 $dbh = null;
 
@@ -130,20 +130,33 @@ function rawPrint(mixed $a){
 $now = stringSQL("SELECT NOW();");
 
 /**
- * Checks if the user is connected
+ * Checks if cookies are correct AND returns login status
  * @return bool true if the user is connected, false otherwise
  */
-function userConnected(){
-    return array_key_exists("user", $_SESSION) && intSQL("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
+function isConnected(){
+    if(!(array_key_exists("username", $_COOKIE) && array_key_exists("password", $_COOKIE))){
+        logout();
+        return false;
+    }
+    if(intSQL("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]) == 0){
+        logout();
+        return false;
+    }
+    $hash_saved = stringSQL("SELECT `password` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
+    if(!password_verify($_COOKIE["password"],$hash_saved)){
+        logout();
+        return false;
+    }
+    return true;
 }
 
 /**
  * Checks if the user is a moderator
  * @return bool true if the user is a moderator, false otherwise
  */
-function userMod(){
-    if(!userConnected()) return false;
-    return intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]) == 1;
+function isMod(){
+    if(!isConnected()) return false;
+    return intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]) == 1;
 }
 
 /**
@@ -240,11 +253,11 @@ function createAccount($username, $password1, $password2){
     }
     $hash = password_hash($password1, PASSWORD_DEFAULT);
     rawSQL("INSERT INTO users (`username`, `password`, `created`, `updated`, `streak`, `points`, `mod`) VALUES (?, ?, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);", [$username, $hash]);
-    $_SESSION["user"] = $username;
+    login($username,$password1);
 }
 
 /**
- * Logs in the user
+ * Logs the user in
  * @param string $username the username
  * @param string $password the password
  * @return void
@@ -255,7 +268,30 @@ function login($username,$password){
         header("Location:index.php?view=signin&error=credentials");
         die("");
     }
-    $_SESSION["user"] = $username;
+    setcookie("username", $username, time() + 30*24*60*60); // 30 days
+    setcookie("password", $password, time() + 30*24*60*60); // 30 days
+    /* ---------- AVERTISSEMENT ----------
+    Le mot de passe est sauvegardé en clair dans le cookie, pour éviter qu'une personne ayant accès aux hashs puissent se connecter à tous les comptes.
+    Il est donc possible de connaître votre mot de passe si une personne accède à vos cookies !
+
+    -------------------- N'UTILISEZ JAMAIS LE MÊME MOT DE PASSE SUR PLUSIEURS SITES DIFFÉRENTS --------------------
+
+    Certains sites web demandent l'autorisation d'accéder aux cookies tiers. Si vous accordez cette autorisation, le site peut accéder à tous vos cookies, et donc à votre mot de passe.
+    N'autorisez jamais un site web que vous ne connaissez pas à accéder aux cookies tiers.
+
+    Enfin, il est très fortement conseillé de se déconnecter manuellement, après chaque utilisation du site, sur un ordinateur public ou partagé avec d'autres.
+    */
+}
+
+/**
+ * Logs the user out
+ * @return void
+ */
+function logout(){
+    setcookie("username", "", 1); // Epoch + 1
+    setcookie("password", "", 1); // Epoch + 1
+    unset($_COOKIE["username"]);
+    unset($_COOKIE["password"]);
 }
 
 /**
@@ -278,7 +314,7 @@ function changePassword($username,$oldpassword,$newpassword, $newpasswordconfirm
     }
     $newhash = password_hash($newpassword,PASSWORD_DEFAULT);
     rawSQL("UPDATE `users` SET `password` = '$newhash' WHERE `username` = ?;", [$username]);
-    session_destroy();
+    logout();
 }
 
 /**
@@ -288,11 +324,11 @@ function changePassword($username,$oldpassword,$newpassword, $newpasswordconfirm
  * @return void
  */
 function deleteAccount($username, $password){
-    if(!(userMod() || $username == $_SESSION["user"])){
+    if(!(isMod() || $username == $_COOKIE["username"])){
         header("Location:index.php?view=home&error=forbidden");
         die("");
     }
-    $hash_saved = stringSQL("SELECT `password` FROM `users` WHERE `username`= ?;", [$_SESSION["user"]]);
+    $hash_saved = stringSQL("SELECT `password` FROM `users` WHERE `username`= ?;", [$_COOKIE["username"]]);
     if(!password_verify($password,$hash_saved)){
         header("Location:index.php?view=deleteAccount&user=$username&error=password");
         die("");
@@ -305,8 +341,8 @@ function deleteAccount($username, $password){
         }
     }
     rawSQL("DELETE FROM `users` WHERE `username` = ?;", [$username]);
-    if(!userMod()){
-        session_destroy();
+    if(!isMod()){
+        logout();
     }
 }
 
@@ -315,7 +351,7 @@ function deleteAccount($username, $password){
  * @return bool true if the user is eligible, false otherwise
  */
 function eligible(){
-    return userConnected();
+    return isConnected();
 }
 
 /**
@@ -390,8 +426,8 @@ function addPoints($user,$prediction,$points){
 function answer($prediction,$answer){
     global $now;
     $author = stringSQL("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction]);
-    $userConnected = $_SESSION["user"];
-    if(!($author == $userConnected || userMod())){
+    $userConnected = $_COOKIE["username"];
+    if(!($author == $userConnected || isMod())){
         header("Location:index.php?view=prediction&id=" . $prediction . "&error=unauthorized");
         die("");
     }
@@ -425,8 +461,8 @@ function answer($prediction,$answer){
 function deletePrediction($prediction){
     global $now;
     $author = stringSQL("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction]);
-    $userConnected = $_SESSION["user"];
-    if(!($author == $userConnected || userMod())){
+    $userConnected = $_COOKIE["username"];
+    if(!($author == $userConnected || isMod())){
         header("Location:index.php?view=prediction&id=" . $prediction . "&error=unauthorized");
         die("");
     }

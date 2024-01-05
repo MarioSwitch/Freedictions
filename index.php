@@ -1,7 +1,5 @@
 <?php
-session_start();
-
-include_once "sql.php";
+include_once "functions.php";
 
 $view = array_key_exists("view",$_REQUEST)?$_REQUEST["view"]:"home";
 

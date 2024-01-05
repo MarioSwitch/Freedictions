@@ -1,5 +1,5 @@
 <?php
-if(!userConnected()){
+if(!isConnected()){
     header("Location:index.php?view=home");
     die("");
 }
@@ -22,7 +22,7 @@ if(array_key_exists("error",$_REQUEST)){
     echo "<br>Veuillez réessayer.</p>";
 }
 
-if($_SESSION["user"] == $_REQUEST["user"]){
+if($_COOKIE["username"] == $_REQUEST["user"]){
     echo "
     <h1>Supprimer votre compte (" . displayUsername($_REQUEST["user"]) . ")</h1>
         <form role='form' action='controller.php'>
@@ -33,7 +33,7 @@ if($_SESSION["user"] == $_REQUEST["user"]){
         <p>La suppression de votre compte est irréversible.<br>En supprimant votre compte, toutes les prédictions que vous avez créées ainsi que vos mises seront supprimées.</p>
         <button type='submit' name='action' value='deleteAccount'>Confirmer la suppression du compte</button>
     </form>";
-}else if(userMod()){
+}else if(isMod()){
     echo "
     <h1>Supprimer le compte : " . displayUsername($_REQUEST["user"]) . "</h1>
         <form role='form' action='controller.php'>

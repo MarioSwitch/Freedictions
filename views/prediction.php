@@ -88,15 +88,15 @@ for($i = 0; $i < count($prediChoices); $i++){
 $prediChoicesText = $prediChoicesText . "<tr><th>Total</th><th>" . displayInt($votesTotal) . "</th><th>" . displayInt($pointsTotal) . "</th><th>N/A</th><th>" . displayInt($pointsMaxTotal) . "</th></tr></table>";
 
 //Dynamic content
-if(array_key_exists("user",$_SESSION)){
-    $creator = ($prediCreator == $_SESSION["user"]);
+if(array_key_exists("username",$_COOKIE)){
+    $creator = ($prediCreator == $_COOKIE["username"]);
 }else{
     $creator = false;
 }
 
-if (!userConnected()){
+if (!isConnected()){
     $mode = "disconnected";
-} elseif (intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]) == 1){
+} elseif (intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $_REQUEST["id"]]) == 1){
     $mode = "alreadyVoted";
 } elseif ($prediEnd < stringSQL("SELECT NOW();")){
     $mode = "waitingAnswer";
@@ -129,9 +129,9 @@ switch($mode){
     break;
 
     case "alreadyVoted" :
-        $choice = stringSQL("SELECT `choices`.`name` FROM `choices` JOIN `votes` ON `choices`.`id` = `votes`.`choice` WHERE `votes`.`user` = ? AND `votes`.`prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
-        $pointsSpent = intSQL("SELECT `points` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_SESSION["user"], $_REQUEST["id"]]);
-        $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
+        $choice = stringSQL("SELECT `choices`.`name` FROM `choices` JOIN `votes` ON `choices`.`id` = `votes`.`choice` WHERE `votes`.`user` = ? AND `votes`.`prediction` = ?;", [$_COOKIE["username"], $_REQUEST["id"]]);
+        $pointsSpent = intSQL("SELECT `points` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $_REQUEST["id"]]);
+        $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
         echo("<p>Vous avez parié sur " . $choice . " avec " . displayInt($pointsSpent) . " points.</p>");
         if($prediEnd >= stringSQL("SELECT NOW();")){
             echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Ajouter <input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'> points à votre mise</p><button type='submit' name='action' value='addPoints'>Ajouter à la mise</button></form>");
@@ -144,11 +144,11 @@ switch($mode){
 
     case "normal" :
     default :
-        $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
+        $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
         echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Parier sur " . $dropdownMenu . " avec <input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'> points</p><button type='submit' name='action' value='vote'>Parier</button></form>");
     break;
 }
-if ($creator || userMod())
+if ($creator || isMod())
 {
     echo("<hr><h2>Gérer la prédiction</h2>");
     if ($prediAnswer == NULL){

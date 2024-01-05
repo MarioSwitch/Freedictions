@@ -1,15 +1,13 @@
 <?php
-session_start();
+include_once "functions.php";
 
-include_once("sql.php");
-
-if(userConnected()){
-    $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_SESSION["user"]]);
+if(isConnected()){
+    $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
 }else{
     $points = 0;
 }
 
-$addArgs = "";
+$args = "";
 
 switch($_REQUEST["action"]){
     case 'createAccount' :
@@ -25,11 +23,11 @@ switch($_REQUEST["action"]){
     break;
 
     case 'logout' :
-        session_destroy();
+        logout();
     break;
 
     case 'changePassword' :
-        if(!(userConnected() && $_REQUEST["username"] && $_REQUEST["password"] && $_REQUEST["newpassword"] && $_REQUEST["newpasswordconfirmation"])){
+        if(!(isConnected() && $_REQUEST["username"] && $_REQUEST["password"] && $_REQUEST["newpassword"] && $_REQUEST["newpasswordconfirmation"])){
             header("Location:index.php?view=changePassword&error=data");
             die("");
         }
@@ -37,7 +35,7 @@ switch($_REQUEST["action"]){
     break;
 
     case 'deleteAccount' :
-        if(!(userConnected() && $_REQUEST["username"] && $_REQUEST["password"])){
+        if(!(isConnected() && $_REQUEST["username"] && $_REQUEST["password"])){
             header("Location:index.php?view=deleteAccount&error=data");
             die("");
         }
@@ -45,7 +43,7 @@ switch($_REQUEST["action"]){
     break;
 
     case 'createPrediction' :
-        if(!(userConnected() && $_REQUEST["name"] && $_REQUEST["end"] && $_REQUEST["offset"] && $_REQUEST["choices"])){
+        if(!(isConnected() && $_REQUEST["name"] && $_REQUEST["end"] && $_REQUEST["offset"] && $_REQUEST["choices"])){
             header("Location:index.php?view=createPrediction&error=data");
             die("");
         }
@@ -55,11 +53,11 @@ switch($_REQUEST["action"]){
         $correctedChoices = $_REQUEST["choices"];
         $correctedChoices = preg_replace("/</", "&lt;", $correctedChoices);
         $correctedChoices = preg_replace("/>/", "&gt;", $correctedChoices);
-        $addArgs = "?view=prediction&id=" . createPrediction($correctedName,$_SESSION["user"],$_REQUEST["end"],$_REQUEST["offset"],$correctedChoices);
+        $args = "?view=prediction&id=" . createPrediction($correctedName,$_COOKIE["username"],$_REQUEST["end"],$_REQUEST["offset"],$correctedChoices);
     break;
 
     case 'vote' :
-        if(!(userConnected() && $_REQUEST["prediction"] && $_REQUEST["choice"] && $_REQUEST["points"] > 0)){
+        if(!(isConnected() && $_REQUEST["prediction"] && $_REQUEST["choice"] && $_REQUEST["points"] > 0)){
             header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=vote");
             die("");
         }
@@ -67,11 +65,11 @@ switch($_REQUEST["action"]){
             header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=points");
             die("");
         }
-        $addArgs = "?view=prediction&id=" . vote($_SESSION["user"],$_REQUEST["prediction"],$_REQUEST["choice"],$_REQUEST["points"]);
+        $args = "?view=prediction&id=" . vote($_COOKIE["username"],$_REQUEST["prediction"],$_REQUEST["choice"],$_REQUEST["points"]);
     break;
 
     case 'addPoints' :
-        if(!(userConnected() && $_REQUEST["prediction"] && $_REQUEST["points"] > 0)){
+        if(!(isConnected() && $_REQUEST["prediction"] && $_REQUEST["points"] > 0)){
             header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=vote");
             die("");
         }
@@ -79,19 +77,19 @@ switch($_REQUEST["action"]){
             header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=points");
             die("");
         }
-        $addArgs = "?view=prediction&id=" . addPoints($_SESSION["user"],$_REQUEST["prediction"],$_REQUEST["points"]);
+        $args = "?view=prediction&id=" . addPoints($_COOKIE["username"],$_REQUEST["prediction"],$_REQUEST["points"]);
     break;
 
     case 'answer' :
-        if(!(userConnected() && $_REQUEST["prediction"] && $_REQUEST["choice"])){
+        if(!(isConnected() && $_REQUEST["prediction"] && $_REQUEST["choice"])){
             header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=answer");
             die("");
         }
-        $addArgs = "?view=prediction&id=" . answer($_REQUEST["prediction"],$_REQUEST["choice"]);
+        $args = "?view=prediction&id=" . answer($_REQUEST["prediction"],$_REQUEST["choice"]);
     break;
 
     case 'deletePrediction' :
-        if(!(userConnected() && $_REQUEST["prediction"])){
+        if(!(isConnected() && $_REQUEST["prediction"])){
             header("Location:index.php?view=prediction&id=" . $_REQUEST["prediction"] . "&error=delete");
             die("");
         }
@@ -99,9 +97,9 @@ switch($_REQUEST["action"]){
     break;
 
     case 'search':
-        $addArgs = "?view=search&query=" . $_REQUEST["search"];
+        $args = "?view=search&query=" . $_REQUEST["search"];
     break;
 }
 
-header("Location:index.php" . $addArgs);
+header("Location:index.php" . $args);
 ?>

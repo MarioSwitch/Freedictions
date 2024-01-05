@@ -1,6 +1,6 @@
 <?php
-if(userConnected()){
-    rawSQL("UPDATE `users` SET `updated` = NOW() WHERE username = ?;", [$_SESSION["user"]]);
+if(isConnected()){
+    rawSQL("UPDATE `users` SET `updated` = NOW() WHERE username = ?;", [$_COOKIE["username"]]);
 }
 ?>
 <!DOCTYPE html>
@@ -26,12 +26,12 @@ if(userConnected()){
     <div class="header-right">
         <?php
         // Si l'utilisateur n'est pas connecté, on affiche un lien de connexion et/ou d'inscription
-        if (!userConnected()){
+        if (!isConnected()){
             echo "<a class='header-svg' href='index.php?view=signup'><img src='svg/signup.svg'></a>";
             echo "<a class='header-svg' href='index.php?view=signin'><img src='svg/login.svg'></a>";
         } //S'il est connecté, on affiche un lien "profil", "créer un prédiction"
         else {
-            $username = $_SESSION["user"];
+            $username = $_COOKIE["username"];
             $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
             echo "<p class='header-text'>" . displayUsername($username) . " <small>(" . displayInt($points, false) . " points)</small></p>";
             echo "<a href='index.php?view=profile&user=$username'><img src='svg/profile.svg'></a>";
