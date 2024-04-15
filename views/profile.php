@@ -27,7 +27,7 @@ $statsPointsSpent = intSQL("SELECT SUM(points) FROM `votes` WHERE `user` = ?;", 
 $statsTotalBets = intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ?;", [$user]);
 $statsAnswerBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND predictions.answer IS NOT NULL;", [$user]);
 $statsCorrectBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$user]);
-$statsCorrectBetsPercentage = $statsAnswerBets?($statsCorrectBets/$statsTotalBets*100):"N/A";
+$statsCorrectBetsPercentage = $statsAnswerBets?($statsCorrectBets/$statsAnswerBets*100):"N/A";
 $statsTotalCreated = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$user]);
 
 //Predictions created
