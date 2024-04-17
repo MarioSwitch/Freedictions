@@ -1,8 +1,8 @@
 <?php
 if(isConnected()){
     rawSQL("UPDATE `users` SET `updated` = NOW() WHERE username = ?;", [$_COOKIE["username"]]);
-    setcookie("username", $username, time() + 30*24*60*60); // 30 days
-    setcookie("password", $password, time() + 30*24*60*60); // 30 days
+    setcookie("username", $_COOKIE["username"], time() + 30*24*60*60); // 30 days
+    setcookie("password", $_COOKIE["password"], time() + 30*24*60*60); // 30 days
 }
 ?>
 <!DOCTYPE html>
