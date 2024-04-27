@@ -43,6 +43,7 @@ if(!$predictionsCreated){
         $predictionsCreatedText = $predictionsCreatedText . "<a href=\"$link\">" . $predictionsCreated[$i]["title"] . "</a><br/>";
     }
 }
+$predictionsCreatedText = $predictionsCreatedText . "<hr class='mini'>";
 
 $predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND NOW() > `ended` AND `answer` IS NULL;", [$user]);
 $predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
@@ -55,6 +56,7 @@ if(!$predictionsCreated){
         $predictionsCreatedText = $predictionsCreatedText . "<a href=\"$link\">" . $predictionsCreated[$i]["title"] . "</a><br/>";
     }
 }
+$predictionsCreatedText = $predictionsCreatedText . "<hr class='mini'>";
 
 $predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND `answer` IS NOT NULL;", [$user]);
 $predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
@@ -85,6 +87,7 @@ if(!$predictionsParticipated){
         $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . displayInt($predictionsParticipated[$i]["points"]) . " points</p><br/>";
     }
 }
+$predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>";
 
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND NOW() > `ended` AND `answer` IS NULL;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
@@ -97,6 +100,7 @@ if(!$predictionsParticipated){
         $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>Parié sur " . $predictionsParticipated[$i]["name"] . " avec " . displayInt($predictionsParticipated[$i]["points"]) . " points</p><br/>";
     }
 }
+$predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>";
 
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NOT NULL;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;

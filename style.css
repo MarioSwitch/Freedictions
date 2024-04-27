@@ -62,6 +62,12 @@ hr {
 
 }
 
+hr.mini {
+    width: 20vw;
+    height: 1px;
+    margin: 20px auto 20px auto;
+}
+
 img {
     width: 30px;
     height: 30px;

@@ -163,6 +163,20 @@ if ($creator || isMod())
     }
 }
 if ($prediAnswer != NULL){
-    echo("<hr><h3>" . $prediAnswerTitle . " était la bonne réponse. Les points ont été redistribués !</h3>");
+    echo("<hr><h3>" . $prediAnswerTitle . " était la bonne réponse.</h3>");
+    if(isConnected()){
+        $choiceID = intSQL("SELECT `choice` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $_REQUEST["id"]]);
+        if($choiceID){
+            if($choiceID == $prediAnswer){
+                $pointsChoiceVictory = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $prediAnswer]);
+                $winRateVictory = $pointsTotal / $pointsChoiceVictory;
+                $earnedPoints = floor($pointsSpent * $winRateVictory);
+                $balance = $earnedPoints - $pointsSpent;
+                echo("<p>Vous avez gagné " . displayInt($earnedPoints) . " points (+" . displayInt($balance) . ").</p>");
+            }else{
+                echo("<p>Vous avez perdu les " . displayInt($pointsSpent) . " points misés.</p>");
+            }
+        }
+    }
 }
 ?>
