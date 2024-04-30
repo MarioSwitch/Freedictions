@@ -19,16 +19,22 @@ $onlineDate = substr($online,0,10);
 $onlineTime = substr($online,11,8);
 echo "<script>countdownTo(\"" . $onlineDate . "T" . $onlineTime . "Z\", \"dans %countdown\", \"il y a %countup\", \"onlineCountdown\");</script>";
 
-//Stats
-$points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$user]);
+//Values
 $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$user]);
-$rank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points) + 1;
-$statsPointsSpent = intSQL("SELECT SUM(points) FROM `votes` WHERE `user` = ?;", [$user]);
-$statsTotalBets = intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ?;", [$user]);
-$statsAnswerBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND predictions.answer IS NOT NULL;", [$user]);
-$statsCorrectBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$user]);
-$statsCorrectBetsPercentage = $statsAnswerBets?($statsCorrectBets/$statsAnswerBets*100):"N/A";
-$statsTotalCreated = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$user]);
+$points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$user]);
+$totalCreated = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$user]);
+$totalBets = intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ?;", [$user]);
+$totalBetsPoints = intSQL("SELECT SUM(points) FROM `votes` WHERE `user` = ?;", [$user]);
+$answerBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND predictions.answer IS NOT NULL;", [$user]);
+$answerBetsPoints = intSQL("SELECT SUM(points) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND predictions.answer IS NOT NULL;", [$user]);
+$correctBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$user]);
+$correctBetsPoints = intSQL("SELECT SUM(points) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$user]);
+$correctBetsPercentage = $answerBets?($correctBets/$answerBets*100):"N/A";
+$correctBetsPercentagePoints = $answerBetsPoints?($correctBetsPoints/$answerBetsPoints*100):"N/A";
+
+//Ranks
+$rankStreak = intSQL("SELECT COUNT(*) FROM `users` WHERE `streak` > " . $streak) + 1;
+$rankPoints = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points) + 1;
 
 //Predictions created
 $predictionsCreatedText = "";
@@ -105,7 +111,7 @@ $predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NOT NULL;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
 if($predictionsParticipatedCount > 0){
-    $predictionsParticipatedText = $predictionsParticipatedText . "<h3>Terminées (" . $statsCorrectBets . " gagnées sur " . $predictionsParticipatedCount . " (" . displayFloat($statsCorrectBetsPercentage) . " %))</h3>";
+    $predictionsParticipatedText = $predictionsParticipatedText . "<h3>Terminées (" . $predictionsParticipatedCount . ")</h3>";
     if($detailed){
         for ($i=0; $i < count($predictionsParticipated); $i++){
             $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
@@ -124,13 +130,50 @@ echo("
     <h1>" . displayUsername($user) . "</h1>
     <p>Compte créé <abbr title='" . $created . " UTC' id='createdCountdown'></abbr></p>
     <p>Dernière connexion <abbr title='" . $online . " UTC' id='onlineCountdown'></abbr></p>
-    <p>Connecté consécutivement depuis " . $streak . " jours</p>
-	<p>" . displayInt($points, false) . " points (" . displayInt($rank, false) . "<sup>e</sup>)</p>
     <hr>
-	<h2>Prédictions créées (" . $statsTotalCreated . ")</h2>
+    <h2>Statistiques</h2>
+    <table>
+        <tr>
+            <th>Statistique</th>
+            <th>Valeur</th>
+            <th>Rang</th>
+        </tr>
+        <tr>
+            <td>Jours de connexion consécutifs</td>
+            <td>" . displayInt($streak, false) . "</td>
+            <td>" . displayInt($rankStreak, false) . "<sup>e</sup></td>
+        </tr>
+        <tr>
+            <td>Points</td>
+            <td>" . displayInt($points, false) . "</td>
+            <td>" . displayInt($rankPoints, false) . "<sup>e</sup></td>
+        </tr>
+        <tr>
+            <td>Prédictions créées</td>
+            <td>" . displayInt($totalCreated, false) . "</td>
+            <td>À venir</td>
+        </tr>
+        <tr>
+            <td>Participations à des prédictions</td>
+            <td>" . displayInt($totalBets, false) . " mises<br>" . displayInt($totalBetsPoints, false) . " points</td>
+            <td>À venir</td>
+        </tr>
+        <tr>
+            <td>Bons paris (mises)</td>
+            <td>" . displayInt($correctBets, false) . " sur " . $answerBets . "<br><small>" . ($answerBets?displayFloat($correctBetsPercentage):"N/A") . " %</small></td>
+            <td>À venir</td>
+        </tr>
+        <tr>
+            <td>Bons paris (points)</td>
+            <td>" . displayInt($correctBetsPoints, false) . " sur " . $answerBetsPoints . "<br><small>" . ($answerBetsPoints?displayFloat($correctBetsPercentagePoints):"N/A") . " %</small></td>
+            <td>À venir</td>
+        </tr>
+    </table>
+    <hr>
+	<h2>Prédictions créées (" . $totalCreated . ")</h2>
 	<p>" . $predictionsCreatedText . "</p>
     <hr>
-	<h2>Participations à des prédictions (" . $statsTotalBets . " mises, " . displayInt($statsPointsSpent) . " points)</h2>
+	<h2>Participations à des prédictions (" . $totalBets . ")</h2>
 	<p>" . $predictionsParticipatedText . "</p>
 ");
 if(isConnected() && $user == $_COOKIE["username"]){
