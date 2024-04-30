@@ -118,5 +118,5 @@ Le code source est disponible sur <a href="https://github.com/MarioSwitch/Better
 v1.0 (juin 2022) par <a href="https://www.marioswitch.fr/">MarioSwitch</a> et <a href="https://github.com/yoshakami">Yosh</a><br>
 v1.1 (mai 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.0 (actuelle, juin 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br><br>
-<i>Version 2.0.48 du 30 avril 2024</i>
+<i>Version 2.0.49 du 30 avril 2024</i>
 </p>

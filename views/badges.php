@@ -17,6 +17,10 @@
         $predictionsCreated = intSQL("SELECT `predictionsCreated` FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `predictionsCreated` FROM `predictions` GROUP BY `user`) `predictions2` ON `users`.`username` = `predictions2`.`user` WHERE `username` = ?;", [$_COOKIE["username"]]);
         $predictionsCreatedCurrentBadgeLevel = getCurrentBadgeLevel($predictionsCreated, $predictionsCreated_badges, "prédictions");
         $predictionsCreatedNextBadgeLevel = getNextBadgeLevel($predictionsCreated, $predictionsCreated_badges, "prédictions");
+        //Bets
+        $bets = intSQL("SELECT `bets` FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `bets` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `username` = ?;", [$_COOKIE["username"]]);
+        $betsCurrentBadgeLevel = getCurrentBadgeLevel($bets, $bets_badges, "mises");
+        $betsNextBadgeLevel = getNextBadgeLevel($bets, $bets_badges, "mises");
         //Points spent
         $pointsSpent = intSQL("SELECT `pointsSpent` FROM `users` LEFT JOIN (SELECT `user`, SUM(`points`) AS `pointsSpent` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `username` = ?;", [$_COOKIE["username"]]);
         $pointsSpentCurrentBadgeLevel = getCurrentBadgeLevel($pointsSpent, $pointsSpent_badges, "points");
@@ -64,6 +68,18 @@
             if(isConnected()){
                 echo "<td>" . $predictionsCreatedCurrentBadgeLevel . "</td>";
                 echo "<td>" . $predictionsCreatedNextBadgeLevel . "</td>";
+            } else {
+                echo "<td colspan='2'>" . displayInvite("voir votre progression") . "</td>";
+            }
+        ?>
+    </tr>
+    <tr>
+        <td>Mises</td>
+        <?php
+            generateDynamicBadgeRow("bets", $bets_top, $bets_badges, "mises");
+            if(isConnected()){
+                echo "<td>" . $betsCurrentBadgeLevel . "</td>";
+                echo "<td>" . $betsNextBadgeLevel . "</td>";
             } else {
                 echo "<td colspan='2'>" . displayInvite("voir votre progression") . "</td>";
             }

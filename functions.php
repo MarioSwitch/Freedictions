@@ -170,12 +170,15 @@ function displayUsername($username){
     $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$username]);
     $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
     $predictionsCreated = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$username]);
+    $bets = intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ?;", [$username]);
     $pointsSpent = intSQL("SELECT SUM(`points`) FROM `votes` WHERE `user` = ?;", [$username]);
     global $streak_badges;
     global $points_top;
     global $points_badges;
     global $predictionsCreated_top;
     global $predictionsCreated_badges;
+    global $bets_top;
+    global $bets_badges;
     global $pointsSpent_top;
     global $pointsSpent_badges;
     //Code
@@ -184,6 +187,7 @@ function displayUsername($username){
     $icons .= checkStaticBadge($streak, $streak_badges, "calendar", "Jours de connexion consécutifs");
     $icons .= checkDynamicBadge($points, $points_top, $points_badges, "points", "Points");
     $icons .= checkDynamicBadge($predictionsCreated, $predictionsCreated_top, $predictionsCreated_badges, "predictionsCreated", "Prédictions créées");
+    $icons .= checkDynamicBadge($bets, $bets_top, $bets_badges, "bets", "Mises");
     $icons .= checkDynamicBadge($pointsSpent, $pointsSpent_top, $pointsSpent_badges, "pointsSpent", "Points dépensés");
     return $icons . $username;
 }
