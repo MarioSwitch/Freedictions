@@ -169,7 +169,7 @@ function displayUsername($username){
     $mod = intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]);
     $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$username]);
     $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
-    $pointsSpent = intSQL("SELECT SUM(`points`) FROM `votes` WHERE `username` = ?;", [$username]);
+    $pointsSpent = intSQL("SELECT SUM(`points`) FROM `votes` WHERE `user` = ?;", [$username]);
     global $streak_badges;
     global $points_top;
     global $points_badges;
