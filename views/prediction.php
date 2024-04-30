@@ -125,7 +125,7 @@ echo("
 ");
 switch($mode){
     case "disconnected" :
-        echo("<p>Vous devez être connecté pour pouvoir parier !</p>");
+        echo displayInvite("pouvoir parier");
     break;
 
     case "alreadyVoted" :

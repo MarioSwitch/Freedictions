@@ -141,12 +141,12 @@ echo("
         <tr>
             <td>Jours de connexion consécutifs</td>
             <td>" . displayInt($streak, false) . "</td>
-            <td>" . displayInt($rankStreak, false) . "<sup>e</sup></td>
+            <td>" . displayOrdinal($rankStreak) . "</td>
         </tr>
         <tr>
             <td>Points</td>
             <td>" . displayInt($points, false) . "</td>
-            <td>" . displayInt($rankPoints, false) . "<sup>e</sup></td>
+            <td>" . displayOrdinal($rankPoints) . "</td>
         </tr>
         <tr>
             <td>Prédictions créées</td>

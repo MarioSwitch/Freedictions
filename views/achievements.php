@@ -33,7 +33,7 @@
                 echo "<td>" . $streak_current_achievement . "</td>";
                 echo "<td>" . $streak_next_achievement . "</td>";
             } else {
-                echo "<td colspan='2'>Connectez-vous pour voir votre progression !</td>";
+                echo "<td colspan='2'>" . displayInvite("voir votre progression") . "</td>";
             }
         ?>
     </tr>
@@ -45,7 +45,7 @@
                 echo "<td>" . $points_current_achievement . "</td>";
                 echo "<td>" . $points_next_achievement . "</td>";
             } else {
-                echo "<td colspan='2'>Connectez-vous pour voir votre progression !</td>";
+                echo "<td colspan='2'>" . displayInvite("voir votre progression") . "</td>";
             }
         ?>
     </tr>

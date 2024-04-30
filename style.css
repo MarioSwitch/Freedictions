@@ -84,6 +84,11 @@ a > img {
     vertical-align: middle;
 }
 
+h1 .user-icon {
+    width: 40px;
+    height: 40px;
+}
+
 p {
     overflow: hidden;
     margin: 0;

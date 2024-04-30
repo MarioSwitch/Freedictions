@@ -222,6 +222,16 @@ function displayInt($int, $short = true){
 }
 
 /**
+ * Displays an ordinal value
+ * @param int $int int to be displayed as an ordinal
+ * @return string formatted ordinal
+ */
+function displayOrdinal($int){
+    if($int == 1) return "1<sup>er</sup>";
+    return displayInt($int, false) . "<sup>e</sup>";
+}
+
+/**
  * Displays a float value
  * @param float $float float to be displayed
  * @param int $decimals number of decimals (2 by default)
@@ -229,6 +239,15 @@ function displayInt($int, $short = true){
  */
 function displayFloat($float, $decimals = 2){
     return number_format($float, $decimals, ',', ' ');
+}
+
+/**
+ * Displays a sign in / sign up invite
+ * @param string $action action to be displayed
+ * @return string the invite
+ */
+function displayInvite(string $action){
+    return "<p>Vous devez être connecté pour $action !<br><a href='?view=signin'>Se connecter</a> ou <a href='?view=signup'>créer un compte</a></p>";
 }
 
 /**
