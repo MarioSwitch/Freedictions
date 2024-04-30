@@ -35,6 +35,9 @@ $correctBetsPercentagePoints = $answerBetsPoints?($correctBetsPoints/$answerBets
 //Ranks
 $rankStreak = intSQL("SELECT COUNT(*) FROM `users` WHERE `streak` > " . $streak) + 1;
 $rankPoints = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points) + 1;
+$rankCreated = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `totalCreated` FROM `predictions` GROUP BY `user`) `predictions2` ON `users`.`username` = `predictions2`.`user` WHERE `totalCreated` > " . $totalCreated) + 1;
+$rankBets = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `totalBets` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `totalBets` > " . $totalBets) + 1;
+$rankBetsPoints = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`, SUM(`points`) AS `pointsSpent` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `pointsSpent` > " . $totalBetsPoints) + 1;
 
 //Predictions created
 $predictionsCreatedText = "";
@@ -151,12 +154,12 @@ echo("
         <tr>
             <td>Prédictions créées</td>
             <td>" . displayInt($totalCreated, false) . "</td>
-            <td>À venir</td>
+            <td>" . displayOrdinal($rankCreated) . "</td>
         </tr>
         <tr>
             <td>Participations à des prédictions</td>
             <td>" . displayInt($totalBets, false) . " mises<br>" . displayInt($totalBetsPoints, false) . " points</td>
-            <td>À venir</td>
+            <td>" . displayOrdinal($rankBets) . "<br>" . displayOrdinal($rankBetsPoints) . "</td>
         </tr>
         <tr>
             <td>Bons paris (mises)</td>
