@@ -7,7 +7,7 @@ include_once "config.php";
     $BDD_password is the password of the database's user
 You MUST have these 4 variables defined (either in a different php file or in replacement of the include_once line) to use the functions below.
 */
-include_once "achievementsManager.php";
+include_once "badgesManager.php";
 
 $dbh = null;
 
@@ -169,14 +169,14 @@ function displayUsername($username){
     $mod = intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]);
     $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$username]);
     $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
-    global $streak_achievements;
+    global $streak_badges;
     global $points_top;
-    global $points_achievements;
+    global $points_badges;
     //Code
     $icons = "";
     if($mod){$icons .= "<abbr title='Modérateur'><img class='user-icon' src='svg/mod.png'></abbr>";}
-    $icons .= checkStaticAchievement($streak, $streak_achievements, "calendar", "Jours de connexion consécutifs");
-    $icons .= checkDynamicAchievement($points, $points_top, $points_achievements, "points", "Points");
+    $icons .= checkStaticBadge($streak, $streak_badges, "calendar", "Jours de connexion consécutifs");
+    $icons .= checkDynamicBadge($points, $points_top, $points_badges, "points", "Points");
     return $icons . $username;
 }
 

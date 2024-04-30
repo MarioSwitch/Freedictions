@@ -17,7 +17,7 @@ if(isConnected()){
 	$myPoints = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
 	$myRank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $myPoints . ";") + 1;
 	$myTop = ($myRank / $accounts)*100;
-	echo "<p>Vous êtes " . displayOrdinal($myRank) . " sur " . displayInt($accounts) . " (top " . displayFloat($myTop) . " %)</p>";
+	echo "<p>Vous êtes " . displayOrdinal($myRank) . " sur " . displayInt($accounts) . " (top " . displayFloat($myTop) . " %).</p>";
 }else{
 	echo "<p>Total : " . displayInt($accounts) . " utilisateurs</p>";
 }
