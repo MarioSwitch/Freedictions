@@ -24,7 +24,7 @@ $points_badges = array();
 foreach($points_top as $top){
     array_push($points_badges, topPercentToValue($top, $points_sql));
 }
-$pointsSpent_sql = "SELECT `username`, `pointsSpent` FROM `users` LEFT JOIN (SELECT `user`, SUM(`points`) AS `pointsSpent` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` ORDER BY `pointsSpent` DESC";
+$pointsSpent_sql = "SELECT `pointsSpent` FROM `users` LEFT JOIN (SELECT `user`, SUM(`points`) AS `pointsSpent` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` ORDER BY `pointsSpent` DESC";
 $pointsSpent_badges = array();
 foreach($pointsSpent_top as $top){
     array_push($pointsSpent_badges, topPercentToValue($top, $pointsSpent_sql));

@@ -169,14 +169,18 @@ function displayUsername($username){
     $mod = intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]);
     $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$username]);
     $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
+    $pointsSpent = intSQL("SELECT SUM(`points`) FROM `votes` WHERE `username` = ?;", [$username]);
     global $streak_badges;
     global $points_top;
     global $points_badges;
+    global $pointsSpent_top;
+    global $pointsSpent_badges;
     //Code
     $icons = "";
     if($mod){$icons .= "<abbr title='Modérateur'><img class='user-icon' src='svg/mod.png'></abbr>";}
     $icons .= checkStaticBadge($streak, $streak_badges, "calendar", "Jours de connexion consécutifs");
     $icons .= checkDynamicBadge($points, $points_top, $points_badges, "points", "Points");
+    $icons .= checkDynamicBadge($pointsSpent, $pointsSpent_top, $pointsSpent_badges, "pointsSpent", "Points dépensés");
     return $icons . $username;
 }
 
