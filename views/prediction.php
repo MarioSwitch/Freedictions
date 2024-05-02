@@ -66,12 +66,12 @@ for($i = 0; $i < count($prediChoices); $i++){
     $pointsChoice = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
     $pointsTotal = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
     if($pointsTotal != 0 && $pointsChoice != 0){
-        $pointsPercentage = "<br>(" . displayFloat(($pointsChoice / $pointsTotal) * 100) . " %)";
+        $pointsPercentage = "<br><small>" . displayFloat(($pointsChoice / $pointsTotal) * 100) . " %</small>";
     }else{
         $pointsPercentage = "";
     }
     if($votesTotal != 0 && $votesChoice != 0){
-        $votesPercentage = "<br>(" . displayFloat(($votesChoice / $votesTotal) * 100) . " %)";
+        $votesPercentage = "<br><small>" . displayFloat(($votesChoice / $votesTotal) * 100) . " %</small>";
     }else{
         $votesPercentage = "";
     }
