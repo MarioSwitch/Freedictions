@@ -11,13 +11,10 @@ if(!$userExists){
 $created = stringSQL("SELECT `created` FROM `users` WHERE `username` = ?;", [$user]);
 $createdDate = substr($created,0,10);
 $createdTime = substr($created,11,8);
-echo "<script src=\"countdown.js\"></script>";
-echo "<script>countdownTo(\"" . $createdDate . "T" . $createdTime . "Z\", \"dans %countdown\", \"il y a %countup\", \"createdCountdown\");</script>";
 
 $online = stringSQL("SELECT `updated` FROM `users` WHERE `username` = ?;", [$user]);
 $onlineDate = substr($online,0,10);
 $onlineTime = substr($online,11,8);
-echo "<script>countdownTo(\"" . $onlineDate . "T" . $onlineTime . "Z\", \"dans %countdown\", \"il y a %countup\", \"onlineCountdown\");</script>";
 
 //Values
 $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$user]);
@@ -192,4 +189,9 @@ if(isConnected() && $user == $_COOKIE["username"]){
         <p>Vous pouvez <a href='?view=deleteAccount&user=$user'>supprimer le compte</a>.</p>
     ");
 }
+
+//JavaScript
+echo "<script src=\"countdown.js\"></script>";
+echo "<script>countdownTo(\"" . $createdDate . "T" . $createdTime . "Z\", \"dans %countdown\", \"il y a %countup\", \"createdCountdown\");</script>";
+echo "<script>countdownTo(\"" . $onlineDate . "T" . $onlineTime . "Z\", \"dans %countdown\", \"il y a %countup\", \"onlineCountdown\");</script>";
 ?>
