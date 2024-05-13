@@ -302,3 +302,49 @@ form:not(.search-form) > button {
     border: 1vh 0 0 0;
     color: white;
 }
+
+@media all and (max-width: 1500px)
+{
+    .prediChoicesBox {
+        width: 45vw;
+    }
+
+    #prediNameBox {
+        width: 95vw;
+        left: 2vw;
+    }
+
+    #prediEndBox {
+        width: 95vw;
+        left: 2vw;
+    }
+
+    .add-choice, .rm-choice {
+        width: 20vw;
+        min-height: 4vh;
+        border-radius: 2vh;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .form-group {
+        display: block;
+    }
+
+    .top-row{
+        display: block;
+    }
+
+    .form-group > label {
+        display: block;
+        width: 95vw;
+        left: 2vw;
+    }
+}
+
+@media all and (max-width: 1000px)
+{
+    .prediChoicesBox {
+        width:95vw;
+    }
+}

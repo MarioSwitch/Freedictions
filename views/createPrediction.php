@@ -40,9 +40,11 @@ if(!eligible()){
                 <input type="button" class="rm-choice" value="Supprimer" onclick="removeChoice();">
             </div>
         </div>
-        <input type="text" class="prediChoicesBox" name="choices[]" placeholder="Choix 1" required="required">
-        <input type="text" class="prediChoicesBox" name="choices[]" placeholder="Choix 2" required="required">
-    </div>
+<?php //Les retours à la ligne sont considérés comme des espaces en HTML et décalent donc les 2 premiers choix au niveau de l'affichage. En insérant le texte dans un bloc PHP, les retours à la ligne et les indentations ne sont plus retournés par les "echo" et ne sont donc plus présents dans la page HTML générée. Il est également possible de simplement retirer les retours à la ligne, mais cela dégrade la lisibilité du code.
+        echo '<input type="text" class="prediChoicesBox" name="choices[]" placeholder="Choix 1" required="required">';
+        echo '<input type="text" class="prediChoicesBox" name="choices[]" placeholder="Choix 2" required="required">';
+    echo '</div>';
+?>
     <button type="submit" name="action" value="createPrediction">Publier</button>
 </form>
 <script>
