@@ -24,6 +24,10 @@ p > a {
     display: inline;
 }
 
+small > a {
+    font: revert;
+}
+
 abbr {
     cursor: help;
     text-decoration: none;

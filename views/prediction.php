@@ -73,11 +73,29 @@ for($i = 0; $i < count($prediChoices); $i++){
         $winRate = "-";
     }
     $pointsMaxChoice = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
-    $pointsMaxTotal = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
+    if($pointsMaxChoice){
+        $pointsMaxChoiceUsers = arraySQL("SELECT `user` FROM `votes` WHERE `prediction` = ? AND `choice` = ? AND `points` = ?;", [$_REQUEST["id"], $choiceID, $pointsMaxChoice]);
+        $pointsMaxChoiceUsersText = "<br><small>";
+        for($j = 0; $j < count($pointsMaxChoiceUsers); $j++){
+            $pointsMaxChoiceUsersText = $pointsMaxChoiceUsersText . "<a href='?view=profile&user=" . $pointsMaxChoiceUsers[$j]["user"] . "'>" . displayUsername($pointsMaxChoiceUsers[$j]["user"]) . "</a>";
+        }
+        $pointsMaxChoiceUsersText = $pointsMaxChoiceUsersText . "</small>";
+    }
+    
     $choiceName = $prediChoices[$i]["name"];
-    $prediChoicesText = $prediChoicesText . "<tr><td>" . $choiceName . "</td><td>" . displayInt($votesChoice) . $votesPercentage . "</td><td>" . displayInt($pointsChoice) . $pointsPercentage .  "</td><td>" . $winRate . "</td><td>" . displayInt($pointsMaxChoice) . "</td></tr>";
+    $prediChoicesText = $prediChoicesText . "<tr><td>" . $choiceName . "</td><td>" . displayInt($votesChoice) . $votesPercentage . "</td><td>" . displayInt($pointsChoice) . $pointsPercentage .  "</td><td>" . $winRate . "</td><td>" . displayInt($pointsMaxChoice) . $pointsMaxChoiceUsersText . "</td></tr>";
+    $pointsMaxChoiceUsersText = "";
 }
-$prediChoicesText = $prediChoicesText . "<tr><th>Total</th><th>" . displayInt($votesTotal) . "</th><th>" . displayInt($pointsTotal) . "</th><th>N/A</th><th>" . displayInt($pointsMaxTotal) . "</th></tr></table>";
+$pointsMaxTotal = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
+if($pointsMaxTotal){
+    $pointsMaxTotalUsers = arraySQL("SELECT `user` FROM `votes` WHERE `prediction` = ? AND `points` = ?;", [$_REQUEST["id"], $pointsMaxTotal]);
+    $pointsMaxTotalUsersText = "<br><small>";
+    for($j = 0; $j < count($pointsMaxTotalUsers); $j++){
+        $pointsMaxTotalUsersText = $pointsMaxTotalUsersText . "<a href='?view=profile&user=" . $pointsMaxTotalUsers[$j]["user"] . "'>" . displayUsername($pointsMaxTotalUsers[$j]["user"]) . "</a>";
+    }
+    $pointsMaxTotalUsersText = $pointsMaxTotalUsersText . "</small>";
+}
+$prediChoicesText = $prediChoicesText . "<tr><th>Total</th><th>" . displayInt($votesTotal) . "</th><th>" . displayInt($pointsTotal) . "</th><th>N/A</th><th>" . displayInt($pointsMaxTotal) . $pointsMaxTotalUsersText . "</th></tr></table>";
 
 //Dynamic content
 if(array_key_exists("username",$_COOKIE)){
