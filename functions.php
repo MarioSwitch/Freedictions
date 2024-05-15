@@ -129,6 +129,15 @@ function rawPrint(mixed $a){
 
 $now = stringSQL("SELECT NOW();");
 
+
+// ----- CONDITIONS TO CREATE PREDICTIONS -----
+// These conditions are used to determine if a user is eligible to create a prediction. You can change these values to adapt the eligibility to your website.
+$eligibleMinimumDays = 0; // Minimum number of days since the account was created
+$eligibleMinimumPoints = 0; // Minimum number of points
+$eligibleMinimumPointsSpent = 200; // Minimum number of points spent
+$eligibleMinimumVotes = 0; // Minimum number of votes
+$eligibleMinimumWins = 0; // Minimum number of wins
+
 /**
  * Checks if cookies are correct AND returns login status
  * @return bool true if the user is connected, false otherwise
@@ -382,7 +391,21 @@ function deleteAccount($username, $password){
  * @return bool true if the user is eligible, false otherwise
  */
 function eligible(){
-    return isConnected();
+    if(!isConnected()) return false;
+
+    global $eligibleMinimumDays;
+    global $eligibleMinimumPoints;
+    global $eligibleMinimumPointsSpent;
+    global $eligibleMinimumVotes;
+    global $eligibleMinimumWins;
+
+    $days = intSQL("SELECT DATEDIFF(NOW(), `created`) FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
+    $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
+    $pointsSpent = intSQL("SELECT SUM(`points`) FROM `votes` WHERE `user` = ?;", [$_COOKIE["username"]]);
+    $votes = intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ?;", [$_COOKIE["username"]]);
+    $wins = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$_COOKIE["username"]]);
+    
+    return $days >= $eligibleMinimumDays && $points >= $eligibleMinimumPoints && $pointsSpent >= $eligibleMinimumPointsSpent && $votes >= $eligibleMinimumVotes && $wins >= $eligibleMinimumWins;
 }
 
 /**

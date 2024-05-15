@@ -27,4 +27,4 @@ Vous pouvez désormais créer le premier compte à l'aide des boutons de la barr
 
 Il est recommandé d'avoir un compte "modérateur", notamment pour les installations publiques. Pour ce faire, une fois le compte créé, allez dans votre gestionnaire de bases de données et remplacez manuellement le "0" présent dans la table "users", colonne "mod" par un "1". En rafraîchissant la page, vous devriez voir l'icône de modérateur à côté de votre pseudo. Votre compte pourra alors gérer toutes les prédictions (y compris celles des autres utilisateurs) et supprimer n'importe quel compte.
 
-Vous pouvez restreindre la création de prédictions à certains comptes uniquement en modifiant la fonction ``eligible()`` du fichier ``functions.php``. Par défaut, tous les utilisateurs connectés peuvent créer des prédictions.
+Vous pouvez restreindre la création de prédictions à certains comptes uniquement en modifiant les variables correspondantes du fichier ``functions.php``. Par défaut, tous les utilisateurs connectés **et ayant déjà dépensé au moins 200 points** peuvent créer des prédictions.

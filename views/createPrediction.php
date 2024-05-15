@@ -11,16 +11,48 @@ if(array_key_exists("error",$_REQUEST)){
     }
     echo "<br>Veuillez réessayer.</p>";
 }
-if(!eligible()){
-    echo "<h1>Créer une nouvelle prédiction</h1>";
-    echo "<p>Pour éviter les abus, vous devez respecter les conditions suivantes pour pouvoir créer une prédiction :<br>
-        <br>Avoir un compte et y être connecté
-        <br><br>Une fois les conditions vérifiées, cette page deviendra un formulaire permettant de créer une prédiction.</p>";
-    die();
-}
 ?>
 <script src="choices.js"></script>
 <h1>Créer une nouvelle prédiction</h1>
+<?php 
+if(!isConnected()){
+    echo "<p>La création de prédiction nécessite d'être connecté à un compte !</p>";
+    die();
+}
+if(!eligible()){
+    global $eligibleMinimumDays;
+    global $eligibleMinimumPoints;
+    global $eligibleMinimumPointsSpent;
+    global $eligibleMinimumVotes;
+    global $eligibleMinimumWins;
+
+    $days = intSQL("SELECT DATEDIFF(NOW(), `created`) FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
+    $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
+    $pointsSpent = intSQL("SELECT SUM(`points`) FROM `votes` WHERE `user` = ?;", [$_COOKIE["username"]]);
+    $votes = intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ?;", [$_COOKIE["username"]]);
+    $wins = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$_COOKIE["username"]]);
+
+    echo "<p>Pour éviter les abus, vous devez vérifier les conditions suivantes pour pouvoir créer une prédiction :<br>";
+    if($eligibleMinimumDays){
+        echo"<br><span class='" . (($days < $eligibleMinimumDays)?"not_completed":"completed") . "'>Avoir un compte depuis au moins $eligibleMinimumDays jours <small>($days / $eligibleMinimumDays)</small></span>";
+    }
+    if($eligibleMinimumPoints){
+        echo "<br><span class='" . (($points < $eligibleMinimumPoints)?"not_completed":"completed") . "'>Avoir au moins $eligibleMinimumPoints points <small>($points / $eligibleMinimumPoints)</small></span>";
+    }
+    if($eligibleMinimumPointsSpent){
+        echo "<br><span class='" . (($pointsSpent < $eligibleMinimumPointsSpent)?"not_completed":"completed") . "'>Avoir dépensé au moins $eligibleMinimumPointsSpent points <small>($pointsSpent / $eligibleMinimumPointsSpent)</small></span>";
+    }
+    if($eligibleMinimumVotes){
+        echo "<br><span class='" . (($votes < $eligibleMinimumVotes)?"not_completed":"completed") . "'>Avoir voté au moins $eligibleMinimumVotes fois <small>($votes / $eligibleMinimumVotes)</small></span>";
+    }
+    if($eligibleMinimumWins){
+        echo "<br><span class='" . (($wins < $eligibleMinimumWins)?"not_completed":"completed") . "'>Avoir gagné au moins $eligibleMinimumWins fois <small>($wins / $eligibleMinimumWins)</small></span>";
+    }
+    echo "<br><br>Une fois les conditions vérifiées, cette page deviendra un formulaire permettant de créer une prédiction.<br>Notez que les conditions peuvent être modifiées à tout moment, et sans avertissement préalable.</p>";
+
+    die();
+}
+?>
 <form action="controller.php">
     <div class="top-row">
         <div class="form-group">
