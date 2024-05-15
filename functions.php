@@ -392,6 +392,7 @@ function deleteAccount($username, $password){
  */
 function eligible(){
     if(!isConnected()) return false;
+    if(isMod()) return true;
 
     global $eligibleMinimumDays;
     global $eligibleMinimumPoints;

@@ -160,12 +160,12 @@ echo("
         </tr>
         <tr>
             <td>Bons paris (mises)</td>
-            <td>" . displayInt($correctBets, false) . " sur " . $answerBets . "<br><small>" . ($answerBets?displayFloat($correctBetsPercentage):"N/A") . " %</small></td>
+            <td>" . displayInt($correctBets, false) . " sur " . $answerBets . ($answerBets?("<br><small>" . displayFloat($correctBetsPercentage) . " %</small>"):"") . "</td>
             <td>À venir</td>
         </tr>
         <tr>
             <td>Bons paris (points)</td>
-            <td>" . displayInt($correctBetsPoints, false) . " sur " . $answerBetsPoints . "<br><small>" . ($answerBetsPoints?displayFloat($correctBetsPercentagePoints):"N/A") . " %</small></td>
+            <td>" . displayInt($correctBetsPoints, false) . " sur " . $answerBetsPoints . ($answerBetsPoints?("<br><small>" . displayFloat($correctBetsPercentagePoints) . " %</small>"):"") . "</td>
             <td>À venir</td>
         </tr>
     </table>
