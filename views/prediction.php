@@ -126,8 +126,8 @@ echo("
 <p>Fin des votes <abbr id='endedCountdown' title='" . $prediEnd . " UTC'>" . $prediEnd . " UTC</abbr></p>");
 if($prediAnswered != NULL){
     echo("<p>Réponse donnée <abbr id='answeredCountdown' title='" . $prediAnswered . " UTC'>" . $prediAnswered . " UTC</abbr></p>");
-}else if($mode == "waitingAnswer"){
-    echo("<p>En attente de réponse...</p>");
+}else if($prediEnd < stringSQL("SELECT NOW();")){
+    echo("<p>En attente de réponse…</p>");
 }
 echo("
 <h2>" . $prediNumberOfAnswers . " réponses possibles</h2>

@@ -17,7 +17,7 @@ if(isConnected()){
 	$myPoints = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
 	$myRank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $myPoints . ";") + 1;
 	$myTop = ($myRank / $accounts)*100;
-	echo "<p>Vous êtes " . displayOrdinal($myRank) . " sur " . displayInt($accounts) . " (top " . displayFloat($myTop) . " %).</p>";
+	echo "<p>Vous êtes " . displayOrdinal($myRank) . " sur " . displayInt($accounts) . " (top " . displayFloat($myTop) . " %).</p>";
 }else{
 	echo "<p>Total : " . displayInt($accounts) . " utilisateurs</p>";
 }
@@ -30,7 +30,7 @@ if(!$classement){
 		$user = $classement[$i]["username"];
 		$points = $classement[$i]["points"];
 		$rank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points . ";") + 1;
-		echo "<tr><td>" . displayInt($rank, false) . "</td><td><p><a href='?view=profile&user=" . $user . "'>" . displayUsername($user) . "</a></p></td><td>" . displayInt($points) . "</td></tr>";
+		echo "<tr><td>" . displayOrdinal($rank) . "</td><td><p><a href='?view=profile&user=" . $user . "'>" . displayUsername($user) . "</a></p></td><td>" . displayInt($points) . "</td></tr>";
 	}
 }
 echo "<tr><td colspan='3'>";

@@ -1,16 +1,4 @@
 /*
-1000 days = 86,400,000,000 ms
-2 years (730.5 days) = 63,115,200,000 ms
-1 year (365.25 days) = 31,557,600,000 ms
-1 year (365 days) = 31,536,000,000 ms
-1 month = 365 / 12 = 30.417 days = 2,628,000,000 ms
-100 hours = 4d 4h = 360,000,000 ms
-1 day = 86,400,000 ms
-100 mins = 1h 40m = 6,000,000 ms
-1 hour = 3,600,000 ms
-1 minute = 60,000 ms
-1 second = 1,000 ms
-
 ----- ENGLISH -----
 Parameters:
     goal parameter must be in YYYY-MM-DDTHH:ii:ssZ format (YYYY for year, MM for month, DD for day, HH for hours, ii for minutes and ss for seconds. "T" and "Z" must be left as is. Example: "2022-07-04T14:43:58Z" for July 4th, 2022 at 2:43:58 PM UTC)
@@ -36,31 +24,38 @@ Utilisation :
     Mettez l'identifiant de l'élément que vous souhaitez transformer en compte à rebours sur un identifiant relié à un compteur.
 */
 
+var year = 31556952000; //1 year = 365.2425 days = 31,556,952,000 ms
+var month = year/12; //1 month = 30.436875 days = 2,629,746,000 ms
+var day = 86400000; //1 day = 86,400,000 ms
+var hour = day/24; //1 hour = 3,600,000 ms
+var minute = hour/60; //1 minute = 60,000 ms
+var second = minute/60; //1 second = 1,000 ms
+
 function countdownTo(goal, formatBefore = "%countdown", formatAfter = "", id = "countdown"){
     var nowDate = new Date();
     var goalDate = new Date(goal);
     var gap = Math.abs(goalDate - nowDate);
     //Formatting count
-    if(gap>=63115200000){ //if more than 2 years
-        var countString = Math.floor(gap/31557600000)+" ans";
+    if(gap>=2*year){ //if more than 2 years
+        var countString = Math.floor(gap/year)+" ans";
     }
-    if(gap<63115200000 && gap>=31536000000){ //if between 1 and 2 years
-        var countString = Math.floor(gap/31557600000)+" an";
+    if(gap<2*year && gap>=year){ //if between 1 and 2 years
+        var countString = Math.floor(gap/year)+" an";
     }
-    if(gap<31536000000 && gap>=2628000000){ //if between 1 month and 1 year
-        var countString = Math.floor(gap/2628000000)+" mois";
+    if(gap<year && gap>=month){ //if between 1 month and 1 year
+        var countString = Math.floor(gap/month)+" mois";
     }
-    if(gap<2628000000 && gap>=360000000){ //if between 100 hours (4d 4h) and 1 month
-        var countString = Math.floor(gap/86400000)+" jours";
+    if(gap<month && gap>=100*hour){ //if between 100 hours (4d 4h) and 1 month
+        var countString = Math.floor(gap/day)+" jours";
     }
-    if(gap<360000000 && gap>=3600000){ //if between 1 hour and 100 hours (4d 4h)
-        var countString = Math.floor(gap/3600000)+"h "+("0"+Math.floor(gap/60000)%60).slice(-2)+"m";
+    if(gap<100*hour && gap>=hour){ //if between 1 hour and 100 hours (4d 4h)
+        var countString = Math.floor(gap/hour)+"h "+("0"+Math.floor(gap/minute)%60).slice(-2)+"m";
     }
-    if(gap<3600000 && gap>=60000){ //if between 1 min and 1 hour
-        var countString = Math.floor(gap/60000)+"' "+("0"+Math.floor(gap/1000)%60).slice(-2)+"''";
+    if(gap<hour && gap>=minute){ //if between 1 min and 1 hour
+        var countString = Math.floor(gap/minute)+"' "+("0"+Math.floor(gap/second)%60).slice(-2)+"''";
     }
-    if(gap<60000 && gap>=0){ //if less than 1 min
-        var countString = Math.floor(gap/1000)+"''";
+    if(gap<minute && gap>=0){ //if less than 1 min
+        var countString = Math.floor(gap/second)+"''";
     }
     //Choosing the right format
     if(goalDate > nowDate){
@@ -68,6 +63,6 @@ function countdownTo(goal, formatBefore = "%countdown", formatAfter = "", id = "
     }else{
         var finalString = formatAfter.replace('%countup',countString);
     }
-    setTimeout(countdownTo, 1000, goal, formatBefore, formatAfter, id);
+    setTimeout(countdownTo, second, goal, formatBefore, formatAfter, id);
     document.getElementById(id).innerHTML = finalString;
 }
