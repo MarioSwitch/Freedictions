@@ -194,4 +194,8 @@ if(isConnected() && $user == $_COOKIE["username"]){
 echo "<script src=\"countdown.js\"></script>";
 echo "<script>countdownTo(\"" . $createdDate . "T" . $createdTime . "Z\", \"dans %countdown\", \"il y a %countup\", \"createdCountdown\");</script>";
 echo "<script>countdownTo(\"" . $onlineDate . "T" . $onlineTime . "Z\", \"dans %countdown\", \"il y a %countup\", \"onlineCountdown\");</script>";
+
+echo "<script src=\"UTC_Local_Converter.js\"></script>";
+echo "<script>UTCtoLocal(\"$created\",document.querySelectorAll('p')[1]);</script>";
+echo "<script>UTCtoLocal(\"$online\",document.querySelectorAll('p')[2]);</script>";
 ?>

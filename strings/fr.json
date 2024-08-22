@@ -1,0 +1,67 @@
+{
+    "thousand_separator": " ",
+
+    "user":"Utilisateur",
+    "created":"Création (UTC)",
+    "latest_online":"Dernière connexion (UTC)",
+    "streak":"Série de connexion",
+    "points":"Points",
+    "mod":"Modérateur",
+    "predictions_created":"Prédictions créées",
+    "votes":"Votes",
+    "points_spent":"Points dépensés",
+    
+    "id":"ID",
+    "title":"Titre",
+    "creator":"Créateur",
+    "ended":"Fin des votes (UTC)",
+    "answer":"Réponse",
+
+    "sortedA-Z":"▲",
+    "sortedZ-A":"▼",
+
+    "predictions_ongoing":"Prédictions en cours ([TBR])",
+    "predictions_waiting":"Prédictions en attente de réponse ([TBR])",
+    "predictions_ended":"Prédictions terminées ([TBR])",
+    "predictions_none":"Aucune prédiction",
+    
+    "users_none":"Aucun utilisateur",
+
+    "error_data":"La requête contient une erreur.",
+    "error_old_password":"Le mot de passe actuel est incorrect !",
+    "error_password":"Les mots de passe ne correspondent pas !",
+    "error_default":"Une erreur inconnue s'est produite.",
+    "error_try_again":"Veuillez réessayer.",
+
+
+
+
+    "allPredictions_title":"Liste des prédictions",
+    "allPredictions_description":"Ci-dessous, la liste des [TBR] prédictions.",
+
+    "allUsers_title":"Liste des utilisateurs",
+    "allUsers_description":"Ci-dessous, la liste des [TBR] utilisateurs.",
+
+    "badges_title":"Badges",
+    "badges_description":"Ci-dessous, la liste des badges disponibles. Obtenir un badge affichera une icône à côté de votre pseudo sur tout le site !",
+    "badges_available":"Badges à obtenir",
+    "badges_badge":"Badge",
+    "badges_bronze":"Bronze",
+    "badges_silver":"Argent",
+    "badges_gold":"Or",
+    "badges_diamond":"Diamant",
+    "badges_level_current":"Palier actuel",
+    "badges_level_next":"Palier suivant",
+    "badges_other":"Autres badges",
+    "badges_role":"Rôle",
+    "badges_mod":"Modérateur du site",
+    "badges_unit_days":"jours",
+    "badges_unit_points":"points",
+    "badges_unit_votes":"votes",
+
+    "changePassword_title":"Changer le mot de passe de votre compte ([TBR])",
+    "changePassword_password_current":"Mot de passe actuel",
+    "changePassword_password_new":"Nouveau mot de passe",
+    "changePassword_password_confirm":"Confirmer le nouveau mot de passe",
+    "changePassword_confirm":"Confirmer le changement de mot de passe",
+}
