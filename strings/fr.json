@@ -1,4 +1,6 @@
 {
+    "site_name":"Better Twitch Predictions",
+    
     "thousand_separator": " ",
 
     "user":"Utilisateur",
@@ -28,8 +30,11 @@
     "users_none":"Aucun utilisateur",
 
     "error_data":"La requête contient une erreur.",
-    "error_old_password":"Le mot de passe actuel est incorrect !",
-    "error_password":"Les mots de passe ne correspondent pas !",
+    "error_password":"Le mot de passe est incorrect !",
+    "error_password_old":"Le mot de passe actuel est incorrect !",
+    "error_password_mismatch":"Les mots de passe ne correspondent pas !",
+    "error_forbidden":"Vous ne pouvez pas effectuer cette action !",
+    "error_forbidden_delete_account":"Vous n'avez pas le droit de supprimer ce compte !",
     "error_default":"Une erreur inconnue s'est produite.",
     "error_try_again":"Veuillez réessayer.",
 
@@ -64,4 +69,41 @@
     "changePassword_password_new":"Nouveau mot de passe",
     "changePassword_password_confirm":"Confirmer le nouveau mot de passe",
     "changePassword_confirm":"Confirmer le changement de mot de passe",
+
+    "createPrediction_title":"Créer une nouvelle prédiction",
+    "createPrediction_not_connected":"La création de prédiction nécessite d'être connecté à un compte !",
+    "createPrediction_eligible_intro":"Pour éviter les abus, vous devez vérifier les conditions suivantes pour pouvoir créer une prédiction :",
+    "createPrediction_eligible_days":"Avoir un compte depuis au moins [TBR] jours",
+    "createPrediction_eligible_points":"Avoir au moins [TBR] points",
+    "createPrediction_eligible_points_spent":"Avoir dépensé au moins [TBR] points",
+    "createPrediction_eligible_votes":"Avoir voté au moins [TBR] fois",
+    "createPrediction_eligible_wins":"Avoir gagné au moins [TBR] fois",
+    "createPrediction_eligible_outro1":"Une fois les conditions vérifiées, cette page deviendra un formulaire permettant de créer une prédiction.",
+    "createPrediction_eligible_outro2":"Notez que les conditions peuvent être modifiées à tout moment, et sans avertissement préalable.",
+    "createPrediction_form_name":"Question",
+    "createPrediction_form_end":"Fin des votes*",
+    "createPrediction_form_end_tooltip":"Le champ est à remplir suivant l'heure locale (c'est-à-dire l'heure qu'il est actuellement chez vous). Toutes les conversions sont automatiquement effectuées pour que le temps restant soit correct peu importe le fuseau horaire.",
+    "createPrediction_form_choices":"Choix",
+    "createPrediction_form_choices_placeholder":"Choix n°[TBR]",
+    "createPrediction_form_choices_add":"Ajouter un choix",
+    "createPrediction_form_choices_remove":"Supprimer le dernier choix",
+    "createPrediction_form_submit":"Publier",
+
+    "deleteAccount_title":"Supprimer votre compte ([TBR])",
+    "deleteAccount_title_mod":"Supprimer le compte : [TBR]",
+    "deleteAccount_password":"Mot de passe",
+    "deleteAccount_info1":"La suppression de votre compte est irréversible.",
+    "deleteAccount_info2":"En supprimant votre compte, toutes les prédictions que vous avez créées ainsi que vos mises seront supprimées.",
+    "deleteAccount_info_mod":"Toutes les données associées à cet utilisateur seront supprimées.",
+    "deleteAccount_confirm":"Confirmer la suppression du compte",
+
+    "leaderboard_title":"Classement",
+    "leaderboard_description":"Ci-dessous, le classement des utilisateurs ayant le plus de points.",
+    "leaderboard_info_connected": "Vous êtes [TBR] sur [TBR] (top [TBR]%).",
+    "leaderboard_info_disconnected": "Total : [TBR] utilisateurs",
+    "leaderboard_rank":"Rang",
+    "leaderboard_previous":"◄ Rangs [TBR] - [TBR]",
+    "leaderboard_next":"Rangs [TBR] - [TBR] ►",
+
+    
 }
