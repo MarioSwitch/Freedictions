@@ -1,13 +1,18 @@
 {
     "site_name":"Better Twitch Predictions",
     
-    "thousand_separator": " ",
+    "thousands_separator": " ",
+    "decimal_separator": ",",
     "n_a":"N/A",
     "coming_soon":"À venir",
 
     "id":"ID",
     "title":"Titre",
     "user":"Utilisateur",
+    "username":"Nom d'utilisateur",
+    "password":"Mot de passe",
+    "signin":"Se connecter",
+    "search":"Rechercher",
     "creator":"Créateur",
     "created":"Création (UTC)",
     "ended":"Fin des votes (UTC)",
@@ -17,24 +22,21 @@
     "points":"Points",
     "points_unit":"points",
     "mod":"Modérateur",
-    "predictions_created":"Prédictions créées",
-    "predictions_participated":"Prédictions participées",
+    "predictions_created_no_value":"Prédictions créées",
+    "predictions_participated_no_value":"Prédictions participées",
     "votes":"Votes",
     "votes_unit":"votes",
     "points_spent":"Points dépensés",
     "answer":"Réponse",
     "rank":"Rang",
 
-    "sortedA-Z":"▲",
-    "sortedZ-A":"▼",
-
-    "predictions_created_value":"Prédictions créées ([TBR])",
-    "predictions_participated_value":"Prédictions participées ([TBR])",
+    "predictions_created":"Prédictions créées ([TBR])",
+    "predictions_participated":"Prédictions participées ([TBR])",
     "predictions_ongoing":"Prédictions en cours ([TBR])",
     "predictions_waiting":"Prédictions en attente de réponse ([TBR])",
     "predictions_ended":"Prédictions terminées ([TBR])",
-    "predictions_none":"Aucune prédiction",
     
+    "predictions_none":"Aucune prédiction",
     "users_none":"Aucun utilisateur",
 
     "error_data":"La requête contient une erreur.",
@@ -47,6 +49,9 @@
     "error_forbidden":"Vous ne pouvez pas effectuer cette action !",
     "error_forbidden_delete_account":"Vous n'avez pas le droit de supprimer ce compte !",
     "error_forbidden_manage_prediction":"Vous n'avez pas la permission de gérer cette prédiction !",
+    "error_credentials":"Les informations saisies sont incorrectes !",
+    "error_username_invalid":"Le nom d'utilisateur ne correspond pas au format requis.",
+    "error_username_taken":"Le nom d'utilisateur est déjà utilisé !",
     "error_default":"Une erreur inconnue s'est produite.",
     "error_try_again":"Veuillez réessayer.",
 
@@ -63,12 +68,15 @@
     "badges_description":"Ci-dessous, la liste des badges disponibles. Obtenir un badge affichera une icône à côté de votre pseudo sur tout le site !",
     "badges_available":"Badges à obtenir",
     "badges_badge":"Badge",
+    "badges_none":"Aucun",
     "badges_bronze":"Bronze",
     "badges_silver":"Argent",
     "badges_gold":"Or",
     "badges_diamond":"Diamant",
     "badges_level_current":"Palier actuel",
     "badges_level_next":"Palier suivant",
+    "badges_progress":"Encore [TBR] [TBR]",
+    "badges_congratulations":"Félicitations !",
     "badges_other":"Autres badges",
     "badges_role":"Rôle",
 
@@ -99,7 +107,6 @@
 
     "deleteAccount_title":"Supprimer votre compte ([TBR])",
     "deleteAccount_title_mod":"Supprimer le compte : [TBR]",
-    "deleteAccount_password":"Mot de passe",
     "deleteAccount_info1":"La suppression de votre compte est irréversible.",
     "deleteAccount_info2":"En supprimant votre compte, toutes les prédictions que vous avez créées ainsi que vos mises seront supprimées.",
     "deleteAccount_info_mod":"Toutes les données associées à cet utilisateur seront supprimées.",
@@ -158,7 +165,39 @@
     "profile_manage_info_delete_account":"supprimer votre compte",
     "profile_manage_info_delete_account_mod":"supprimer le compte",
 
+    "search_results":"Résultats de recherche pour \"[TBR]\"",
+    "search_users":"Utilisateurs ([TBR])",
+
+    "signin_title":"Connexion",
+
+    "signup_title":"Création de compte",
+    "signup_password_confirm":"Confirmer le mot de passe",
+    "signup_confirm":"Créer",
+
+
+
+
 
     "javascript_countdown_in":"dans [TBR]",
-    "javascript_countdown_ago":"il y a [TBR]"
+    "javascript_countdown_ago":"il y a [TBR]",
+
+    "javascript_countdown_years":"ans",
+    "javascript_countdown_year":"an",
+    "javascript_countdown_months":"mois",
+    "javascript_countdown_month":"mois",
+    "javascript_countdown_days":"jours",
+    "javascript_countdown_hours":"h",
+    "javascript_countdown_minutes":"m",
+    "javascript_countdown_minutes_short":"'",
+    "javascript_countdown_seconds":"''",
+
+    "javascript_converter_local_time":"Heure locale ([TBR] | [TBR])",
+
+    "invite_sentence1":"Vous devez être connecté pour [TBR] !",
+    "invite_sentence2":"[TBR] ou [TBR]",
+    "invite_create_account":"créer un compte",
+
+    "debug_error_database":"Pas de connexion à la base de données !",
+    "debug_error_execution":"Erreur lors de l'exécution :",
+    "debug_error_query":"Erreur lors de la requête !"
 }
