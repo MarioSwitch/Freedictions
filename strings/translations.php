@@ -8,7 +8,7 @@ $placeholder = "[TBR]";
 function getString(string $key, array $args = []){
     $lang = getLanguage();
     global $placeholder;
-    $lang_strings = json_decode(file_get_contents("$lang.json"), true);
+    $lang_strings = json_decode(file_get_contents("strings/$lang.json"), true);
     $string = $lang_strings[$key];
     if(preg_match($placeholder, $string)){
         foreach($args as $key => $value){
@@ -17,6 +17,4 @@ function getString(string $key, array $args = []){
     }
     return $string;
 }
-
-echo getString("allPredictions_description", [2]);
 ?>

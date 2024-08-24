@@ -8,6 +8,7 @@ include_once "config.php";
 You MUST have these 4 variables defined (either in a different php file or in replacement of the include_once line) to use the functions below.
 */
 include_once "badgesManager.php";
+include_once "strings/translations.php";
 
 $dbh = null;
 

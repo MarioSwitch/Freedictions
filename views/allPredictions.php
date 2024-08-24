@@ -1,14 +1,20 @@
 <?php
 $count = intSQL("SELECT COUNT(*) FROM `predictions`");
-echo "<h1>Liste des prédictions</h1>";
-echo "<p>Ci-dessous, la liste des " . displayInt($count) . " prédictions.</p>";
+echo "<h1>" . getString("allPredictions_title") . "</h1>";
+echo "<p>" . getString("allPredictions_description", [displayInt($count)]) . "</p>";
 echo "<hr>";
 $predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended` FROM `predictions` WHERE `ended` > NOW() ORDER BY `ended`;");
 $count = $predictions?count($predictions):0;
-echo "<h2>Prédictions en cours (" . $count . ")</h2>";
-echo "<table><tr><th>ID</th><th>Titre</th><th>Créateur</th><th>Création (UTC)</th><th>Fin des votes (UTC) ▲</th></tr>";
+echo "<h2>" . getString("predictions_ongoing", [displayInt($count)]) . "</h2>";
+echo "<table><tr>";
+    echo "<th>" . getString("id") . "</th>";
+    echo "<th>" . getString("title") . "</th>";
+    echo "<th>" . getString("creator") . "</th>";
+    echo "<th>" . getString("created") . "</th>";
+    echo "<th>" . getString("ended") . " ▲</th>";
+echo "</tr>";
 if(!$predictions){
-    echo "<tr><td colspan='5'>Aucune prédiction</td></tr>";
+    echo "<tr><td colspan='5'>" . getString("predictions_none") . "</td></tr>";
 }else{
     for($i = 0; $i < $count; $i++){
         $link_prediction = "?view=prediction&id=" . $predictions[$i]["id"];
@@ -25,10 +31,16 @@ echo "</table>";
 echo "<hr>";
 $predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended` FROM `predictions` WHERE `ended` < NOW() AND `answer` IS NULL ORDER BY `ended`;");
 $count = $predictions?count($predictions):0;
-echo "<h2>Prédictions en attente de réponse (" . displayInt($count) . ")</h2>";
-echo "<table><tr><th>ID</th><th>Titre</th><th>Créateur</th><th>Création (UTC)</th><th>Fin des votes (UTC) ▲</th></tr>";
+echo "<h2>" . getString("predictions_waiting", [displayInt($count)]) . "</h2>";
+echo "<table><tr>";
+    echo "<th>" . getString("id") . "</th>";
+    echo "<th>" . getString("title") . "</th>";
+    echo "<th>" . getString("creator") . "</th>";
+    echo "<th>" . getString("created") . "</th>";
+    echo "<th>" . getString("ended") . " ▲</th>";
+echo "</tr>";
 if(!$predictions){
-    echo "<tr><td colspan='5'>Aucune prédiction</td></tr>";
+    echo "<tr><td colspan='5'>" . getString("predictions_none") . "</td></tr>";
 }else{
     for($i = 0; $i < $count; $i++){
         $link_prediction = "?view=prediction&id=" . $predictions[$i]["id"];
@@ -45,10 +57,17 @@ echo "</table>";
 echo "<hr>";
 $predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended`, `answer` FROM `predictions` WHERE `answer` IS NOT NULL ORDER BY `id` DESC;");
 $count = $predictions?count($predictions):0;
-echo "<h2>Prédictions terminées (" . displayInt($count) . ")</h2>";
-echo "<table><tr><th>ID ▼</th><th>Titre</th><th>Créateur</th><th>Création (UTC)</th><th>Fin des votes (UTC)</th><th>Réponse</th></tr>";
+echo "<h2>" . getString("predictions_ended", [displayInt($count)]) . "</h2>";
+echo "<table><tr>";
+    echo "<th>" . getString("id") . " ▼</th>";
+    echo "<th>" . getString("title") . "</th>";
+    echo "<th>" . getString("creator") . "</th>";
+    echo "<th>" . getString("created") . "</th>";
+    echo "<th>" . getString("ended") . "</th>";
+    echo "<th>" . getString("answer") . "</th>";
+echo "</tr>";
 if(!$predictions){
-    echo "<tr><td colspan='6'>Aucune prédiction</td></tr>";
+    echo "<tr><td colspan='6'>" . getString("predictions_none") . "</td></tr>";
 }else{
     for($i = 0; $i < $count; $i++){
         $link_prediction = "?view=prediction&id=" . $predictions[$i]["id"];
