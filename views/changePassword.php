@@ -7,31 +7,32 @@ if(array_key_exists("error",$_REQUEST)){
     echo "<p class='error'>";
     switch($_REQUEST["error"]){
         case "data":
-            echo "La requête contient une erreur.";
+            echo getString("error_data");
             break;
         case "old_password":
-            echo "Le mot de passe actuel est incorrect !";
+            echo getString("error_password_old");
             break;
         case "password":
-            echo "Les mots de passe ne correspondent pas !";
+            echo getString("error_password_mismatch");
             break;
         default:
-            echo "Une erreur inconnue s'est produite.";
+            echo getString("error_default");
             break;
     }
-    echo "<br>Veuillez réessayer.</p>";
+    echo "<br>" . getString("error_try_again") . "</p>";
 }
-?>
-<h1>Changer le mot de passe de votre compte (<?php echo displayUsername($_COOKIE["username"]) ?>)</h1>
+echo "
+<h1>" . getString("changePassword_title", [displayUsername($_COOKIE["username"])]) . "</h1>
 <form role='form' action='controller.php'>
-    <input type='hidden' name='username' value='<?php echo($_COOKIE["username"]) ?>'>
-    <label for='password'>Mot de passe actuel</label>
+    <input type='hidden' name='username' value='" . $_COOKIE["username"] . "'>
+    <label for='password'>" . getString("changePassword_password_current") . "</label>
     <input type='password' id='password' name='password' required='required'>
     <br/>
-    <label for='newpassword'>Nouveau mot de passe</label>
+    <label for='newpassword'>" . getString("changePassword_password_new") . "</label>
     <input type='password' name='newpassword' required='required'>
     <br/>
-    <label for='newpasswordconfirmation'>Confirmer le nouveau mot de passe</label>
+    <label for='newpasswordconfirmation'>" . getString("changePassword_password_confirm") . "</label>
     <input type='password' name='newpasswordconfirmation' required='required'>
-    <button type='submit' name='action' value='changePassword'>Confirmer le changement de mot de passe</button>
-</form>
+    <button type='submit' name='action' value='changePassword'>" . getString("changePassword_confirm") . "</button>
+</form>";
+?>
