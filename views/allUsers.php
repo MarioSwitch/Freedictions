@@ -130,4 +130,3 @@ if(!$users){
     }
 }
 echo "</table>";
-?>

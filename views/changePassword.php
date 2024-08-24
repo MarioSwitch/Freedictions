@@ -35,4 +35,3 @@ echo "
     <input type='password' name='newpasswordconfirmation' required='required'>
     <button type='submit' name='action' value='changePassword'>" . getString("changePassword_confirm") . "</button>
 </form>";
-?>

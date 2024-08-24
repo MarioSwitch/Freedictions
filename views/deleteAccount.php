@@ -7,42 +7,42 @@ if(array_key_exists("error",$_REQUEST)){
     echo "<p class='error'>";
     switch($_REQUEST["error"]){
         case "data":
-            echo "La requête contient une erreur.";
+            echo getString("error_data");
             break;
         case "password":
-            echo "Le mot de passe est incorrect !";
+            echo getString("error_password");
             break;
         case "forbidden":
-            echo "Vous n'avez pas le droit de supprimer ce compte !";
+            echo getString("error_forbidden_delete_account");
             break;
         default:
-            echo "Une erreur inconnue s'est produite.";
+            echo getString("error_default");
             break;
     }
-    echo "<br>Veuillez réessayer.</p>";
+    echo "<br>" . getString("error_try_again") . "</p>";
 }
 
 if($_COOKIE["username"] == $_REQUEST["user"]){
     echo "
-    <h1>Supprimer votre compte (" . displayUsername($_REQUEST["user"]) . ")</h1>
+    <h1>" . getString("deleteAccount_title", [displayUsername($_REQUEST["user"])]) . "</h1>
         <form role='form' action='controller.php'>
         <input type='hidden' name='username' value='" . $_REQUEST["user"] . "'>
-        <label for='password'>Mot de passe</label>
+        <label for='password'>" . getString("password") . "</label>
         <input type='password' name='password' required='required'>
         <br/>
-        <p>La suppression de votre compte est irréversible.<br>En supprimant votre compte, toutes les prédictions que vous avez créées ainsi que vos mises seront supprimées.</p>
-        <button type='submit' name='action' value='deleteAccount'>Confirmer la suppression du compte</button>
+        <p>" . getString("deleteAccount_info1") . "<br>" . getString("deleteAccount_info2") . "</p>
+        <button type='submit' name='action' value='deleteAccount'>" . getString("deleteAccount_confirm") . "</button>
     </form>";
 }else if(isMod()){
     echo "
-    <h1>Supprimer le compte : " . displayUsername($_REQUEST["user"]) . "</h1>
+    <h1>" . getString("deleteAccount_title_mod", [displayUsername($_REQUEST["user"])]) . "</h1>
         <form role='form' action='controller.php'>
         <input type='hidden' name='username' value='" . $_REQUEST["user"] . "'>
-        <label for='password'>Mot de passe</label>
+        <label for='password'>" . getString("password") . "</label>
         <input type='password' name='password' required='required'>
         <br/>
-        <p>Toutes les données associées à cet utilisateur seront supprimées.</p>
-        <button type='submit' name='action' value='deleteAccount'>Confirmer la suppression du compte</button>
+        <p>" . getString("deleteAccount_info_mod") . "</p>
+        <button type='submit' name='action' value='deleteAccount'>" . getString("deleteAccount_confirm") . "</button>
     </form>";
 }else{
     header("Location:index.php?view=home");

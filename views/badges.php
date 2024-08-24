@@ -107,4 +107,3 @@ echo "
         <td>" . getString("mod") . "</td>
     </tr>
 </table>";
-?>

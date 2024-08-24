@@ -89,4 +89,3 @@ echo "
 	document.getElementById(\"end\").innerHTML += \"<input type='datetime-local' class='form-control' id='prediEndBox' name='end' required='required' min='\" + local + \"' max='2037-12-31T23:59'>\";
 	document.getElementById(\"end\").innerHTML += \"<input type='hidden' name='offset' value=\" + -(date.getTimezoneOffset()) + \">\";
 </script>";
-?>

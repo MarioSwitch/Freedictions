@@ -82,4 +82,3 @@ if(!$predictions){
     }
 }
 echo "</table>";
-?>
