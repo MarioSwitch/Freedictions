@@ -24,6 +24,7 @@
     "mod":"Modérateur",
     "predictions_created_no_value":"Prédictions créées",
     "predictions_participated_no_value":"Prédictions participées",
+    "predictions_unit":"prédictions",
     "votes":"Votes",
     "votes_correct":"(dont corrects)",
     "votes_unit":"votes",
@@ -198,6 +199,7 @@
     "invite_sentence1":"Vous devez être connecté pour [TBR] !",
     "invite_sentence2":"[TBR] ou [TBR]",
     "invite_create_account":"créer un compte",
+    "invite_action_show_progress":"voir votre progression",
 
     "debug_error_database":"Pas de connexion à la base de données !",
     "debug_error_execution":"Erreur lors de l'exécution :",
