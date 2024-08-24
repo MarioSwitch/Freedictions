@@ -57,11 +57,11 @@ switch($order){
     default:$users = arraySQL($request . ";");break;
 }
 $accounts = intSQL("SELECT COUNT(*) FROM `users`");
-echo "<h1>Liste des utilisateurs</h1>";
-echo "<p>Ci-dessous, la liste des " . displayInt($accounts) . " utilisateurs.</p>";
+echo "<h1>" . getString("allUsers_title") . "</h1>";
+echo "<p>" . getString("allUsers_description", [displayInt($accounts)]) . "</p>";
 echo "<hr>";
 $sort_username = ($order == "usernameA-Z")?"usernameZ-A":"usernameA-Z";
-$sort_created = ($order == "createdOld")?"createdNew":"createdOld";
+$sort_created = ($order == "createdNew")?"createdOld":"createdNew";
 $sort_updated = ($order == "updatedNew")?"updatedOld":"updatedNew";
 $sort_streak = ($order == "streakHigh")?"streakLow":"streakHigh";
 $sort_points = ($order == "pointsHigh")?"pointsLow":"pointsHigh";
@@ -90,18 +90,18 @@ function isOrderedBy(string $tag){
 }
 echo "<table>
     <tr>
-        <th><p><a href=\"" . $link_username . "\">Utilisateur" . isOrderedBy("username") . "</a></th>
-        <th><p><a href=\"" . $link_created . "\">Création (UTC)" . isOrderedBy("created") . "</a></th>
-        <th><p><a href=\"" . $link_updated . "\">Dernière connexion (UTC)" . isOrderedBy("updated") . "</a></th>
-        <th><p><a href=\"" . $link_streak . "\">Série de connexion" . isOrderedBy("streak") . "</a></th>
-        <th><p><a href=\"" . $link_points . "\">Points" . isOrderedBy("points") . "</a></th>
-        <th><p><a href=\"" . $link_mod . "\">Modérateur" . isOrderedBy("mod") . "</a></th>
-        <th><p><a href=\"" . $link_predictions . "\">Prédictions créées" . isOrderedBy("predictions") . "</a></th>
-        <th><p><a href=\"" . $link_votes . "\">Votes" . isOrderedBy("votes") . "<br><small>(dont corrects)</small></a></th>
-        <th><p><a href=\"" . $link_spent . "\">Points dépensés" . isOrderedBy("spent") . "<br><small>(dont mises remportées)</small></a></th>
+        <th><p><a href=\"" . $link_username . "\">" . getString("user") . isOrderedBy("username") . "</a></th>
+        <th><p><a href=\"" . $link_created . "\">" . getString("created") . isOrderedBy("created") . "</a></th>
+        <th><p><a href=\"" . $link_updated . "\">" . getString("online") . isOrderedBy("updated") . "</a></th>
+        <th><p><a href=\"" . $link_streak . "\">" . getString("streak") . isOrderedBy("streak") . "</a></th>
+        <th><p><a href=\"" . $link_points . "\"> " . getString("points") . isOrderedBy("points") . "</a></th>
+        <th><p><a href=\"" . $link_mod . "\">" . getString("mod") . isOrderedBy("mod") . "</a></th>
+        <th><p><a href=\"" . $link_predictions . "\">" . getString("predictions_created_no_value") . isOrderedBy("predictions") . "</a></th>
+        <th><p><a href=\"" . $link_votes . "\">" . getString("votes") . isOrderedBy("votes") . "<br><small>" . getString("votes_correct") . "</small></a></th>
+        <th><p><a href=\"" . $link_spent . "\">" . getString("points_spent") . isOrderedBy("spent") . "<br><small>" . getString("points_spent_correct") . "</small></a></th>
     </tr>";
 if(!$users){
-    echo "<tr><td colspan='9'>Aucun utilisateur</td></tr>";
+    echo "<tr><td colspan='9'>" . getString("users_none") . "</td></tr>";
 }else{
     for($i = 0; $i < $accounts; $i++){
         $link_user = "?view=profile&user=" . $users[$i]["username"];
