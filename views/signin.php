@@ -3,23 +3,22 @@ if(array_key_exists("error",$_REQUEST)){
     echo "<p class='error'>";
     switch($_REQUEST["error"]){
         case "credentials":
-            echo "Les informations saisies sont incorrectes !";
+            echo getString("error_credentials");
             break;
         default:
-            echo "Une erreur inconnue s'est produite.";
+            echo getString("error_default");
             break;
     }
-    echo "<br>Veuillez réessayer.</p>";
+    echo "<br>" . getString("error_try_again") . "</p>";
 }
-?>
-
-<h1 class="title">Connexion</h1>
-<form role="form" action="controller.php">
-    <label for="username">Nom d'utilisateur</label>
-    <input type="text" id="username" name="username" required="required">
+echo "
+<h1 class=\"title\">" . getString("signin_title") . "</h1>
+<form role=\"form\" action=\"controller.php\">
+    <label for=\"username\">" . getString("username") . "</label>
+    <input type=\"text\" id=\"username\" name=\"username\" required=\"required\">
     <br/>
-    <label for="password">Mot de passe</label>
-    <input type="password" id="password" name="password" required="required">
+    <label for=\"password\">" . getString("password") . "</label>
+    <input type=\"password\" id=\"password\" name=\"password\" required=\"required\">
     <br/>
-    <button type="submit" name="action" value="login">Se connecter</button>
-</form>
+    <button type=\"submit\" name=\"action\" value=\"login\">" . getString("signin") . "</button>
+</form>";

@@ -152,8 +152,8 @@
     "prediction_answer_lose":"Vous avez perdu les [TBR] points misés.",
 
     "profile_not_found":"Le compte \"[TBR]\" n'existe pas !",
-    "profile_created":"Compte créé [TBR]",
-    "profile_online":"Dernière connexion [TBR]",
+    "profile_created":"Compte créé",
+    "profile_online":"Dernière connexion",
     "profile_stats":"Statistiques",
     "profile_stats_stat":"Statistique",
     "profile_stats_value":"Valeur",
@@ -162,7 +162,8 @@
     "profile_stats_correct_points":"Votes corrects (points)",
     "profile_detailed":"Pour éviter la surcharge de la page, les prédictions terminées sont masquées par défaut. Cliquez [TBR] pour les afficher.",
     "profile_detailed_here":"ici",
-    "profile_manage":"Gérer le compte",
+    "profile_manage":"Gérer votre compte",
+    "profile_manage_mod":"Modération",
     "profile_manage_info":"Vous pouvez [TBR] ou [TBR].",
     "profile_manage_info_mod":"Vous pouvez [TBR].",
     "profile_manage_info_change_password":"changer votre mot de passe",
@@ -171,10 +172,12 @@
 
     "search_results":"Résultats de recherche pour \"[TBR]\"",
     "search_users":"Utilisateurs ([TBR])",
+    "search_predictions_closed":"Prédictions fermées ([TBR])",
 
     "signin_title":"Connexion",
 
     "signup_title":"Création de compte",
+    "signup_username_format":"Le nom d'utilisateur doit comporter 4 à 20 caractères et n'être composé que de lettres ou de chiffres.",
     "signup_password_confirm":"Confirmer le mot de passe",
     "signup_confirm":"Créer",
 

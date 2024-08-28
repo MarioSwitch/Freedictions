@@ -1,6 +1,6 @@
 <?php 
 function getLanguage(){
-    return "fr";
+    return "en";
 }
 
 $placeholder = "/\[TBR\]/";
