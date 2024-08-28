@@ -1,6 +1,7 @@
 {
     "site_name":"Better Twitch Predictions",
     
+    "percentage":"[TBR] %",
     "thousands_separator": " ",
     "decimal_separator": ",",
     "n_a":"N/A",
@@ -124,9 +125,9 @@
 
     "prediction_not_found_info1":"Cette prédiction n'existe pas ou a été supprimée !",
     "prediction_not_found_info2":"Si vous avez parié sur cette prédiction, vous avez récupéré les points misés !",
-    "prediction_created":"Créé par [TBR]",
-    "prediction_ended":"Fin des votes [TBR]",
-    "prediction_answered":"Réponse donnée [TBR]",
+    "prediction_created":"Créé par",
+    "prediction_ended":"Fin des votes",
+    "prediction_answered":"Réponse donnée",
     "prediction_waiting_answer":"En attente de réponse…",
     "prediction_answer_count":"[TBR] réponses possibles",
     "prediction_table_choice":"Choix",
@@ -200,6 +201,7 @@
     "invite_sentence2":"[TBR] ou [TBR]",
     "invite_create_account":"créer un compte",
     "invite_action_show_progress":"voir votre progression",
+    "invite_action_bet":"pouvoir parier",
 
     "debug_error_database":"Pas de connexion à la base de données !",
     "debug_error_execution":"Erreur lors de l'exécution :",

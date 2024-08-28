@@ -5,29 +5,29 @@ if(array_key_exists("error",$_REQUEST)){
         case "vote":
         case "answer":
         case "delete":
-            echo "La requête contient une erreur. Assurez-vous d'avoir correctement rempli tous les champs et réessayez.";
+            echo getString("error_data");
             break;
         case "closed":
-            echo "La prédiction est terminée, vous ne pouvez plus parier !";
+            echo getString("error_prediction_closed");
             break;
         case "unauthorized":
-            echo "Vous n'avez pas la permission de gérer cette prédiction.";
+            echo getString("error_forbidden_manage_prediction");
             break;
         case "too_early":
-            echo "Vous ne pouvez pas donner la bonne réponse avant la fin des votes !";
+            echo getString("error_prediction_answer");
             break;
         case "points":
-            echo "Vous n'avez pas assez de points !";
+            echo getString("error_prediction_points");
             break;
         default:
-            echo "Une erreur inconnue s'est produite, veuillez réessayer.";
+            echo getString("error_default") . "<br>" . getString("error_try_again");
             break;
     }
     echo "</p>";
 }
 $prediExists = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `id` = ?;", [$_REQUEST["id"]]);
 if (!$prediExists){
-    echo("<h1>Cette prédiction n'existe pas ou a été supprimée !</h1><br><p>Si vous avez parié sur cette prédiction, vous avez récupéré les points misés !</p>");
+    echo "<h1>" . getString("prediction_not_found_info1") . "</h1><br><p>" . getString("prediction_not_found_info2") . "</p>";
     die("");
 }
 $prediction =  arraySQL("SELECT * FROM `predictions` WHERE `id` = ?;", [$_REQUEST["id"]]);
@@ -46,11 +46,11 @@ if ($prediAnswer != NULL){
 }
 $prediNumberOfAnswers = intSQL("SELECT COUNT(*) FROM `choices` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
 $prediChoices = arraySQL("SELECT * FROM `choices` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
-$svgVotes = "<abbr title='Nombre de votes'><img src='svg/people.svg'></abbr>";
-$svgPoints = "<abbr title='Points dépensés'><img src='svg/points.svg'></abbr>";
-$svgRatio = "<abbr title='Rendement (si vous gagnez, votre mise sera multipliée par ce coefficient)'><img src='svg/cup.svg'>";
-$svgMax = "<abbr title='Record de mise'><img src='svg/podium.svg'></abbr>";
-$prediChoicesText = "<table><tr><th>Choix</th><th>" . $svgVotes . "</th><th>" . $svgPoints . "</th><th>" . $svgRatio . "</th><th>" . $svgMax . "</th></tr>";
+$svgVotes = "<abbr title='" . getString("prediction_table_votes_count") . "'><img src='svg/people.svg'></abbr>";
+$svgPoints = "<abbr title='" . getString("points_spent") . "'><img src='svg/points.svg'></abbr>";
+$svgRatio = "<abbr title='" . getString("prediction_table_win_rate") . "'><img src='svg/cup.svg'></abbr>";
+$svgMax = "<abbr title='" . getString("prediction_table_vote_record") . "'><img src='svg/podium.svg'></abbr>";
+$prediChoicesText = "<table><tr><th>" . getString("prediction_table_choice") . "</th><th>" . $svgVotes . "</th><th>" . $svgPoints . "</th><th>" . $svgRatio . "</th><th>" . $svgMax . "</th></tr>";
 for($i = 0; $i < count($prediChoices); $i++){
     $choiceID = $prediChoices[$i]["id"];
     $votesChoice = intSQL("SELECT COUNT(*) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
@@ -58,19 +58,19 @@ for($i = 0; $i < count($prediChoices); $i++){
     $pointsChoice = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
     $pointsTotal = intSQL("SELECT SUM(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
     if($pointsTotal != 0 && $pointsChoice != 0){
-        $pointsPercentage = "<br><small>" . displayFloat(($pointsChoice / $pointsTotal) * 100) . " %</small>";
+        $pointsPercentage = "<br><small>" . getString("percentage", [displayFloat(($pointsChoice / $pointsTotal) * 100)]) . "</small>";
     }else{
         $pointsPercentage = "";
     }
     if($votesTotal != 0 && $votesChoice != 0){
-        $votesPercentage = "<br><small>" . displayFloat(($votesChoice / $votesTotal) * 100) . " %</small>";
+        $votesPercentage = "<br><small>" . getString("percentage", [displayFloat(($votesChoice / $votesTotal) * 100)]) . "</small>";
     }else{
         $votesPercentage = "";
     }
     if($pointsPercentage != ""){
         $winRate = displayFloat($pointsTotal / $pointsChoice);
     }else{
-        $winRate = "-";
+        $winRate = "–";
     }
     $pointsMaxChoice = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
     if($pointsMaxChoice){
@@ -95,11 +95,11 @@ if($pointsMaxTotal){
     }
     $pointsMaxTotalUsersText = $pointsMaxTotalUsersText . "</small>";
 }
-$prediChoicesText = $prediChoicesText . "<tr><th>Total</th><th>" . displayInt($votesTotal) . "</th><th>" . displayInt($pointsTotal) . "</th><th>N/A</th><th>" . displayInt($pointsMaxTotal) . $pointsMaxTotalUsersText . "</th></tr></table>";
+$prediChoicesText = $prediChoicesText . "<tr><th>" . getString("prediction_table_total") . "</th><th>" . displayInt($votesTotal) . "</th><th>" . displayInt($pointsTotal) . "</th><th>" . getString("n_a") . "</th><th>" . displayInt($pointsMaxTotal) . $pointsMaxTotalUsersText . "</th></tr></table>";
 
 //Dynamic content
 if(array_key_exists("username",$_COOKIE)){
-    $creator = ($prediCreator == $_COOKIE["username"]);
+    $creator = $prediCreator == $_COOKIE["username"];
 }else{
     $creator = false;
 }
@@ -120,62 +120,80 @@ for($i = 0; $i < count($prediChoices); $i++){
 $dropdownMenu = $dropdownMenu . "</select>";
 
 //Display
-echo("
+echo "
 <h1>" . $prediTitle . "</h1>
-<p>Créé par <a href='?view=profile&user=" . $prediCreator . "'>" . displayUsername($prediCreator) . "</a> <abbr id='createdCountdown' title='" . $prediCreated . " UTC'>" . $prediCreated . " UTC</abbr></p>
-<p>Fin des votes <abbr id='endedCountdown' title='" . $prediEnd . " UTC'>" . $prediEnd . " UTC</abbr></p>");
+<p>" . getString("prediction_created") . " <a href='?view=profile&user=" . $prediCreator . "'>" . displayUsername($prediCreator) . "</a> <abbr id='createdCountdown' title='" . $prediCreated . " UTC'>" . $prediCreated . " UTC</abbr></p>
+<p>" . getString("prediction_ended") . " <abbr id='endedCountdown' title='" . $prediEnd . " UTC'>" . $prediEnd . " UTC</abbr></p>";
 if($prediAnswered != NULL){
-    echo("<p>Réponse donnée <abbr id='answeredCountdown' title='" . $prediAnswered . " UTC'>" . $prediAnswered . " UTC</abbr></p>");
+    echo "<p>" . getString("prediction_answered") . " <abbr id='answeredCountdown' title='" . $prediAnswered . " UTC'>" . $prediAnswered . " UTC</abbr></p>";
 }else if($prediEnd < stringSQL("SELECT NOW();")){
-    echo("<p>En attente de réponse…</p>");
+    echo "<p>" . getString("prediction_waiting_answer") . "</p>";
 }
-echo("
-<h2>" . $prediNumberOfAnswers . " réponses possibles</h2>
+echo "
+<h2>" . getString("prediction_answer_count", [$prediNumberOfAnswers]) . "</h2>
 " . $prediChoicesText . "
 <hr>
-<h2>Parier</h2>
-");
+<h2>" . getString("prediction_bet") . "</h2>
+";
 switch($mode){
     case "disconnected" :
-        echo displayInvite("pouvoir parier");
+        echo displayInvite(getString("invite_action_bet"));
     break;
 
     case "alreadyVoted" :
         $choice = stringSQL("SELECT `choices`.`name` FROM `choices` JOIN `votes` ON `choices`.`id` = `votes`.`choice` WHERE `votes`.`user` = ? AND `votes`.`prediction` = ?;", [$_COOKIE["username"], $_REQUEST["id"]]);
         $pointsSpent = intSQL("SELECT `points` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $_REQUEST["id"]]);
         $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
-        echo("<p>Vous avez parié sur " . $choice . " avec " . displayInt($pointsSpent) . " points.</p>");
+        echo "<p>" . getString("prediction_bet_info", [$choice, displayInt($pointsSpent)]) . "</p>";
         if($prediEnd >= stringSQL("SELECT NOW();")){
-            echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Ajouter <input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'> points à votre mise</p><button type='submit' name='action' value='addPoints'>Ajouter à la mise</button></form>");
+            echo "<form role='form' action='controller.php'>
+                <input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'>
+                <p>" . getString("prediction_bet_add", ["<input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'>"]) . "</p>
+                <button type='submit' name='action' value='addPoints'>" . getString("prediction_bet_add_confirm") . "</button>
+            </form>";
         }
     break;
 
     case "waitingAnswer" :
-        echo("<p>Les votes sont terminés.</p>");
+        echo "<p>" . getString("prediction_bet_closed") . "</p>";
     break;
 
     case "normal" :
     default :
         $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
-        echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Parier sur " . $dropdownMenu . " avec <input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'> points</p><button type='submit' name='action' value='vote'>Parier</button></form>");
+        echo "<form role='form' action='controller.php'>
+            <input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'>
+            <p>" . getString("prediction_bet_bet", [$dropdownMenu, "<input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'>"]) . "</p>
+            <button type='submit' name='action' value='vote'>" . getString("prediction_bet") . "</button>
+        </form>";
     break;
 }
 if ($creator || isMod())
 {
-    echo("<hr><h2>Gérer la prédiction</h2>");
+    echo "<hr><h2>" . getString("prediction_manage") . "</h2>";
     if ($prediAnswer == NULL){
         if ($prediEnd < stringSQL("SELECT NOW();")){
-            echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><p>Définir " . $dropdownMenu . " comme étant la bonne réponse</p><button type='submit' name='action' value='answer'>Terminer la prédiction et redistribuer les points</button></form>");
+            echo "<form role='form' action='controller.php'>
+                <input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'>
+                <p>" . getString("prediction_manage_answer", [$dropdownMenu]) . "</p>
+                <button type='submit' name='action' value='answer'>" . getString("prediction_manage_answer_confirm") . "</button>
+            </form>";
         } else {
-            echo("<p>Vous devez attendre la fin des votes pour donner la bonne réponse !</p>");
+            echo "<p>" . getString("prediction_manage_answer_early") . "</p>";
         }
-        echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><button type='submit' name='action' value='deletePrediction'>Supprimer la prédiction et rendre les points</button></form>");
+        echo "<form role='form' action='controller.php'>
+            <input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'>
+            <button type='submit' name='action' value='deletePrediction'>" . getString("prediction_manage_delete_points") . "</button>
+        </form>";
     } else {
-        echo("<form role='form' action='controller.php'><input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'><button type='submit' name='action' value='deletePrediction'>Supprimer la prédiction</button></form>");
+        echo "<form role='form' action='controller.php'>
+            <input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'>
+            <button type='submit' name='action' value='deletePrediction'>" . getString("prediction_manage_delete") . "</button>
+        </form>";
     }
 }
 if ($prediAnswer != NULL){
-    echo("<hr><h3>" . $prediAnswerTitle . " était la bonne réponse.</h3>");
+    echo "<hr><h3>" . getString("prediction_answer", [$prediAnswerTitle]) . "</h3>";
     if(isConnected()){
         $choiceID = intSQL("SELECT `choice` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $_REQUEST["id"]]);
         if($choiceID){
@@ -184,9 +202,9 @@ if ($prediAnswer != NULL){
                 $winRateVictory = $pointsTotal / $pointsChoiceVictory;
                 $earnedPoints = floor($pointsSpent * $winRateVictory);
                 $balance = $earnedPoints - $pointsSpent;
-                echo("<p>Vous avez gagné " . displayInt($earnedPoints) . " points (+" . displayInt($balance) . ").</p>");
+                echo "<p>" . getString("prediction_answer_win", [displayInt($earnedPoints), displayInt($balance)]) . "</p>";
             }else{
-                echo("<p>Vous avez perdu les " . displayInt($pointsSpent) . " points misés.</p>");
+                echo "<p>" . getString("prediction_answer_lose", [displayInt($pointsSpent)]) . "</p>";
             }
         }
     }
@@ -194,11 +212,11 @@ if ($prediAnswer != NULL){
 
 //JavaScript
 echo "<script src='countdown.js'></script>";
-echo "<script>countdownTo('" . $prediCreatedDate . "T" . $prediCreatedTime ."Z', 'dans %countdown', 'il y a %countup', 'createdCountdown');</script>";
-echo "<script>countdownTo('" . $prediEndDate . "T" . $prediEndTime ."Z', 'dans %countdown', 'il y a %countup', 'endedCountdown');</script>";
+echo "<script>countdownTo('" . $prediCreatedDate . "T" . $prediCreatedTime ."Z', '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'createdCountdown');</script>";
+echo "<script>countdownTo('" . $prediEndDate . "T" . $prediEndTime ."Z', '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'endedCountdown');</script>";
 if($prediAnswered != NULL){
     $prediAnsweredDate = substr($prediAnswered,0,10);
     $prediAnsweredTime = substr($prediAnswered,11,8);
-    echo "<script>countdownTo('" . $prediAnsweredDate . "T" . $prediAnsweredTime ."Z', 'dans %countdown', 'il y a %countup', 'answeredCountdown');</script>";
+    echo "<script>countdownTo('" . $prediAnsweredDate . "T" . $prediAnsweredTime ."Z', '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'answeredCountdown');</script>";
 }
 ?>
