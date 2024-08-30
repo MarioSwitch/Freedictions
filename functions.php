@@ -27,7 +27,7 @@ function startSQL(){
         $dbh = new PDO("mysql:host=$BDD_host;dbname=$BDD_base", $BDD_user, $BDD_password);
         $dbh->exec("SET CHARACTER SET utf8");
     } catch (PDOException $e) {
-        die("<strong style='color:red'>Error connecting: " . $e->getMessage() . "</strong>");
+        die("<strong style='color:red'>" . getString("debug_error_connecting", [$e->getMessage()]) . "</strong>");
     }
 }
 
@@ -49,7 +49,7 @@ function endSQL(){
 function arraySQL(string $sql, array $param_array = null){
     startSQL();
     global $dbh;
-    if ($dbh == null) echo "<p style='color:red;'>Pas de connexion à la base de données !</p>";
+    if ($dbh == null) echo "<p style='color:red;'>" . getString("debug_error_database") . "</p>";
     try {
         $sth = $dbh->prepare($sql);
         if ($param_array){ // checks if $param_array isn't null
@@ -61,19 +61,19 @@ function arraySQL(string $sql, array $param_array = null){
         if ($res === false){
             // die();
             // for debug only:
-            die("<strong style='color:red'>Erreur lors de l'exécution : " . $dbh->errorInfo()[2] . "</strong>");
+            die("<strong style='color:red'>" . getString("debug_error_execution", [$dbh->errorInfo()[2]]) . "</strong>");
         }
         $res = $sth->fetchAll();
     } catch (Exception $e){  // debug code to handle database problems - uncomment only for developping purposes
         echo "<div style='color:red;margin: 5%;margin-top: 100px;padding: 5%;font-size: 125%;border: 1px solid black;border-radius: 40px;'>";
-        echo "Erreur lors de la requête !<br><br>$sql";
+        echo getString("debug_error_query") . "<br><br>$sql";
         rawPrint($param_array);
         for ($i = 0; $i < count($param_array); $i++){
             $sql = preg_replace("/\?/", $param_array[$i], $sql, 1);
         }
         echo $sql;
         echo "</div>";
-        echo 'Caught exception: ', $e->getMessage(), "<br>";
+        echo getString("debug_error_exception", [$e->getMessage()]) . "<br>";
     }
     endSQL();
     if ($res === []) return false;
@@ -193,12 +193,12 @@ function displayUsername($username){
     global $pointsSpent_badges;
     //Code
     $icons = "";
-    if($mod){$icons .= "<abbr title='Modérateur'><img class='user-icon' src='svg/mod.png'></abbr>";}
-    $icons .= checkStaticBadge($streak, $streak_badges, "calendar", "Jours de connexion consécutifs");
-    $icons .= checkDynamicBadge($points, $points_top, $points_badges, "points", "Points");
-    $icons .= checkDynamicBadge($predictionsCreated, $predictionsCreated_top, $predictionsCreated_badges, "predictionsCreated", "Prédictions créées");
-    $icons .= checkDynamicBadge($bets, $bets_top, $bets_badges, "bets", "Mises");
-    $icons .= checkDynamicBadge($pointsSpent, $pointsSpent_top, $pointsSpent_badges, "pointsSpent", "Points dépensés");
+    if($mod){$icons .= "<abbr title='" . getString("mod") . "'><img class='user-icon' src='svg/mod.png'></abbr>";}
+    $icons .= checkStaticBadge($streak, $streak_badges, "calendar", getString("streak"));
+    $icons .= checkDynamicBadge($points, $points_top, $points_badges, "points", getString("points"));
+    $icons .= checkDynamicBadge($predictionsCreated, $predictionsCreated_top, $predictionsCreated_badges, "predictionsCreated", getString("predictions_created_no_value"));
+    $icons .= checkDynamicBadge($bets, $bets_top, $bets_badges, "bets", getString("predictions_participated_no_value"));
+    $icons .= checkDynamicBadge($pointsSpent, $pointsSpent_top, $pointsSpent_badges, "pointsSpent", getString("points_spent"));
     return $icons . $username;
 }
 
@@ -209,7 +209,7 @@ function displayUsername($username){
  * @return string
  */
 function displayInt($int, $short = true){
-    $full_number = number_format($int, 0, ',', ' ');
+    $full_number = number_format($int, 0, getString("decimal_separator"), getString("thousands_separator"));
     if(!$short || $int<1000000){
         return  $full_number;
     }
@@ -239,7 +239,7 @@ function displayInt($int, $short = true){
     $cropped_result = (int) substr($string,0, 3);
     $divisor = pow(10,(3-($digits%3))%3);
     $result = ((float)$cropped_result) / $divisor;
-    $formatted_result = number_format($result, (3-($digits%3))%3, ',', ' ');
+    $formatted_result = number_format($result, (3-($digits%3))%3, getString("decimal_separator"), getString("thousands_separator"));
     return "<abbr title='". $full_number . "'>" . $formatted_result . " " . $prefix . "</abbr>";
 }
 
@@ -249,8 +249,19 @@ function displayInt($int, $short = true){
  * @return string formatted ordinal
  */
 function displayOrdinal($int){
-    if($int == 1) return "1<sup>er</sup>";
-    return displayInt($int, false) . "<sup>e</sup>";
+    switch(getLanguage()){
+        case "fr":
+            if($int == 1) return "1<sup>er</sup>";
+            return displayInt($int, false) . "<sup>e</sup>";
+        case "en":
+            if($int % 100 == 11 || $int % 100 == 12 || $int % 100 == 13) return displayInt($int, false) . "<sup>th</sup>";
+            if($int % 10 == 1) return displayInt($int, false) . "<sup>st</sup>";
+            if($int % 10 == 2) return displayInt($int, false) . "<sup>nd</sup>";
+            if($int % 10 == 3) return displayInt($int, false) . "<sup>rd</sup>";
+            return displayInt($int, false) . "<sup>th</sup>";
+        default:
+            return displayInt($int, false);
+    }
 }
 
 /**
@@ -260,7 +271,7 @@ function displayOrdinal($int){
  * @return string formatted float
  */
 function displayFloat($float, $decimals = 2){
-    return number_format($float, $decimals, ',', ' ');
+    return number_format($float, $decimals, getString("decimal_separator"), getString("thousands_separator"));
 }
 
 /**
@@ -269,7 +280,7 @@ function displayFloat($float, $decimals = 2){
  * @return string the invite
  */
 function displayInvite(string $action){
-    return "<p>Vous devez être connecté pour $action !<br><a href='?view=signin'>Se connecter</a> ou <a href='?view=signup'>créer un compte</a></p>";
+    return "<p>" . getString("invite_sentence1", [$action]) . "<br>" . getString("invite_sentence2", ["<a href='?view=signin'>" . getString("signin") . "</a>", "<a href='?view=signup'>" . getString("invite_create_account") . "</a>"]) . "</p>";
 }
 
 /**
@@ -425,7 +436,7 @@ function createPrediction($name,$user,$end,$offset,$choices){//Variable $choices
         die("");
     }
     date_default_timezone_set('UTC');
-    $endUTC = date('Y-m-d\TH:i',strtotime($end)-($offset*60));
+    $endUTC = date('Y-m-d\TH:i',strtotime($end)- $offset*60 );
     rawSQL("INSERT INTO `predictions` VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT, ?, DEFAULT, DEFAULT);", [$name, $user, $endUTC]);
     $predictionID = intSQL("SELECT `id` FROM `predictions` ORDER BY `created` DESC LIMIT 1;");
     foreach($choices as $choice){
@@ -538,4 +549,3 @@ function deletePrediction($prediction){
     rawSQL("DELETE FROM `choices` WHERE `prediction` = ?;", [$prediction]);
     rawSQL("DELETE FROM `predictions` WHERE `id` = ?;", [$prediction]);
 }
-?>

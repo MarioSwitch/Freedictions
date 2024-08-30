@@ -1,11 +1,7 @@
 <?php
 include_once "functions.php";
 
-if(isConnected()){
-    $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
-}else{
-    $points = 0;
-}
+$points = isConnected()?intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]):0;
 
 $args = "";
 
@@ -102,4 +98,3 @@ switch($_REQUEST["action"]){
 }
 
 header("Location:index.php" . $args);
-?>

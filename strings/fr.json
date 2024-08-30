@@ -211,7 +211,9 @@
     "invite_action_show_progress":"voir votre progression",
     "invite_action_bet":"pouvoir parier",
 
+    "debug_error_connecting":"Erreur lors de la connexion : [TBR]",
     "debug_error_database":"Pas de connexion à la base de données !",
-    "debug_error_execution":"Erreur lors de l'exécution :",
-    "debug_error_query":"Erreur lors de la requête !"
+    "debug_error_execution":"Erreur lors de l'exécution : [TBR]",
+    "debug_error_query":"Erreur lors de la requête !",
+    "debug_error_exception":"Exception : [TBR]"
 }
