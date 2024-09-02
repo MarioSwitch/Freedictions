@@ -190,11 +190,12 @@ if(isConnected() && $user == $_COOKIE["username"]){
 }
 
 //JavaScript
-echo "<script src=\"countdown.js\"></script>";
+include_once "countdown.js.php";
 echo "<script>countdownTo(\"" . $createdDate . "T" . $createdTime . "Z\", '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'createdCountdown');</script>";
 echo "<script>countdownTo(\"" . $onlineDate . "T" . $onlineTime . "Z\", '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'onlineCountdown');</script>";
 
-echo "<script src=\"UTC_Local_Converter.js\"></script>";
+/* Weird behaviour... To be fixed
+include_once "UTC_Local_Converter.js.php";
 echo "<script>UTCtoLocal(\"$created\",document.querySelectorAll('p')[1]);</script>";
 echo "<script>UTCtoLocal(\"$online\",document.querySelectorAll('p')[2]);</script>";
-?>
+*/

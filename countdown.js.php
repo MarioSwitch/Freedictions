@@ -1,3 +1,4 @@
+<?php
 /*
 ----- ENGLISH -----
 Parameters:
@@ -23,7 +24,8 @@ Utilisation :
     Créez un nouveau script : <script>countdownTo(paramètres);</script>
     Mettez l'identifiant de l'élément que vous souhaitez transformer en compte à rebours sur un identifiant relié à un compteur.
 */
-
+echo "
+<script>
 var year = 31556952000; //1 year = 365.2425 days = 31,556,952,000 ms
 var month = year/12; //1 month = 30.436875 days = 2,629,746,000 ms
 var day = 86400000; //1 day = 86,400,000 ms
@@ -31,31 +33,34 @@ var hour = day/24; //1 hour = 3,600,000 ms
 var minute = hour/60; //1 minute = 60,000 ms
 var second = minute/60; //1 second = 1,000 ms
 
-function countdownTo(goal, formatBefore = "%countdown", formatAfter = "", id = "countdown"){
+function countdownTo(goal, formatBefore = \"%countdown\", formatAfter = \"\", id = \"countdown\"){
     var nowDate = new Date();
     var goalDate = new Date(goal);
     var gap = Math.abs(goalDate - nowDate);
     //Formatting count
     if(gap>=2*year){ //if more than 2 years
-        var countString = Math.floor(gap/year)+" ans";
+        var countString = Math.floor(gap/year)+\" \"+\"" . getString("javascript_countdown_years") . "\";
     }
     if(gap<2*year && gap>=year){ //if between 1 and 2 years
-        var countString = Math.floor(gap/year)+" an";
+        var countString = Math.floor(gap/year)+\" \"+\"" . getString("javascript_countdown_year") . "\";
     }
-    if(gap<year && gap>=month){ //if between 1 month and 1 year
-        var countString = Math.floor(gap/month)+" mois";
+    if(gap<year && gap>=2*month){ //if between 2 months and 1 year
+        var countString = Math.floor(gap/month)+\" \"+\"" . getString("javascript_countdown_months") . "\";
+    }
+    if(gap<2*month && gap>=month){ //if between 1 and 2 months
+        var countString = Math.floor(gap/month)+\" \"+\"" . getString("javascript_countdown_month") . "\";
     }
     if(gap<month && gap>=100*hour){ //if between 100 hours (4d 4h) and 1 month
-        var countString = Math.floor(gap/day)+" jours";
+        var countString = Math.floor(gap/day)+\" \"+\"" . getString("javascript_countdown_days") . "\";
     }
     if(gap<100*hour && gap>=hour){ //if between 1 hour and 100 hours (4d 4h)
-        var countString = Math.floor(gap/hour)+"h "+("0"+Math.floor(gap/minute)%60).slice(-2)+"m";
+        var countString = Math.floor(gap/hour)+\"" . getString("javascript_countdown_hours") . "\"+\" \"+(\"0\"+Math.floor(gap/minute)%60).slice(-2)+\"" . getString("javascript_countdown_minutes") . "\";
     }
     if(gap<hour && gap>=minute){ //if between 1 min and 1 hour
-        var countString = Math.floor(gap/minute)+"' "+("0"+Math.floor(gap/second)%60).slice(-2)+"''";
+        var countString = Math.floor(gap/minute)+\"" . getString("javascript_countdown_minutes_short") . "\"+\" \"+(\"0\"+Math.floor(gap/second)%60).slice(-2)+\"" . getString("javascript_countdown_seconds") . "\";
     }
     if(gap<minute && gap>=0){ //if less than 1 min
-        var countString = Math.floor(gap/second)+"''";
+        var countString = Math.floor(gap/second)+\"" . getString("javascript_countdown_seconds") . "\";
     }
     //Choosing the right format
     if(goalDate > nowDate){
@@ -66,3 +71,4 @@ function countdownTo(goal, formatBefore = "%countdown", formatAfter = "", id = "
     setTimeout(countdownTo, second, goal, formatBefore, formatAfter, id);
     document.getElementById(id).innerHTML = finalString;
 }
+</script>";

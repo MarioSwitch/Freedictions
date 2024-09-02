@@ -211,7 +211,7 @@ if ($prediAnswer != NULL){
 }
 
 //JavaScript
-echo "<script src='countdown.js'></script>";
+include_once "countdown.js.php";
 echo "<script>countdownTo('" . $prediCreatedDate . "T" . $prediCreatedTime ."Z', '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'createdCountdown');</script>";
 echo "<script>countdownTo('" . $prediEndDate . "T" . $prediEndTime ."Z', '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'endedCountdown');</script>";
 if($prediAnswered != NULL){
@@ -219,4 +219,3 @@ if($prediAnswered != NULL){
     $prediAnsweredTime = substr($prediAnswered,11,8);
     echo "<script>countdownTo('" . $prediAnsweredDate . "T" . $prediAnsweredTime ."Z', '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'answeredCountdown');</script>";
 }
-?>

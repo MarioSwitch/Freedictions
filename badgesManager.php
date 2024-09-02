@@ -141,4 +141,3 @@ function checkDynamicBadge(int $value, array $top, array $goals, string $svg, st
     if($value >= $goals[3]) return "<abbr title='" . getString("badges_icon_tooltip_top", [$name, displayInt($top[3])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Diamond.svg'></abbr>";
     return "";
 }
-?>

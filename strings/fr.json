@@ -190,21 +190,6 @@
 
 
 
-    "javascript_countdown_in":"dans [TBR]",
-    "javascript_countdown_ago":"il y a [TBR]",
-
-    "javascript_countdown_years":"ans",
-    "javascript_countdown_year":"an",
-    "javascript_countdown_months":"mois",
-    "javascript_countdown_month":"mois",
-    "javascript_countdown_days":"jours",
-    "javascript_countdown_hours":"h",
-    "javascript_countdown_minutes":"m",
-    "javascript_countdown_minutes_short":"'",
-    "javascript_countdown_seconds":"''",
-
-    "javascript_converter_local_time":"Heure locale ([TBR] | [TBR])",
-
     "invite_sentence1":"Vous devez être connecté pour [TBR] !",
     "invite_sentence2":"[TBR] ou [TBR]",
     "invite_create_account":"créer un compte",
@@ -215,5 +200,24 @@
     "debug_error_database":"Pas de connexion à la base de données !",
     "debug_error_execution":"Erreur lors de l'exécution : [TBR]",
     "debug_error_query":"Erreur lors de la requête !",
-    "debug_error_exception":"Exception : [TBR]"
+    "debug_error_exception":"Exception : [TBR]",
+
+
+
+
+    "javascript_choices_placeholder":"Choix n°",
+
+    "javascript_countdown_in":"dans [TBR]",
+    "javascript_countdown_ago":"il y a [TBR]",
+    "javascript_countdown_years":"ans",
+    "javascript_countdown_year":"an",
+    "javascript_countdown_months":"mois",
+    "javascript_countdown_month":"mois",
+    "javascript_countdown_days":"jours",
+    "javascript_countdown_hours":"h",
+    "javascript_countdown_minutes":"m",
+    "javascript_countdown_minutes_short":"'",
+    "javascript_countdown_seconds":"''",
+
+    "javascript_converter_local_time":"Heure locale"
 }

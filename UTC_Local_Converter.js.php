@@ -1,4 +1,7 @@
-function UTCtoLocal(UTCString, paragraph){ // UTCString: "YYYY-MM-DD HH:MM:SS"
+<?php
+echo "
+<script>
+function UTCtoLocal(UTCString, paragraph){ // UTCString: \"YYYY-MM-DD HH:MM:SS\"
     var year = parseInt(UTCString.substring(0, 4));
     var month = parseInt(UTCString.substring(5, 7));
     var day = parseInt(UTCString.substring(8, 10));
@@ -10,7 +13,7 @@ function UTCtoLocal(UTCString, paragraph){ // UTCString: "YYYY-MM-DD HH:MM:SS"
     var timezoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
     var timezoneAbbr = localDate.toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ').pop();
     
-    var fullString = localDate.toLocaleString() + " Heure locale (" + timezoneName + " | " + timezoneAbbr + ")";
+    var fullString = localDate.toLocaleString() + \" \" + \"" . getString("javascript_converter_local_time") . "\" + \" (\" + timezoneName + \" | \" + timezoneAbbr + \")\";
     
     // Find the <abbr> element within this <p> tag
     const abbrElement = paragraph.querySelector('abbr');
@@ -18,6 +21,7 @@ function UTCtoLocal(UTCString, paragraph){ // UTCString: "YYYY-MM-DD HH:MM:SS"
     // Check if the <abbr> element exists to avoid errors
     if (abbrElement) {
         // Append text to the title attribute
-        abbrElement.title += "\n" + fullString;
+        abbrElement.title += \"\\n\" + fullString;
     }
 }
+</script>";

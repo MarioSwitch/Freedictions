@@ -34,4 +34,3 @@ if(!$closed){
         echo "<a href='?view=prediction&id=" . $closed[$i]["id"] . "'>" . $closed[$i]["title"] . "</a>";
     }
 }
-?>

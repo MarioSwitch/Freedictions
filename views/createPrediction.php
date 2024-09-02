@@ -11,8 +11,8 @@ if(array_key_exists("error",$_REQUEST)){
     }
     echo "<br>" . getString("error_try_again") . "</p>";
 }
+include_once "choices.js.php";
 echo "
-<script src=\"choices.js\"></script>
 <h1>" . getString("createPrediction_title") . "</h1>";
 if(!isConnected()){
     echo "<p>" . getString("createPrediction_not_connected") . "</p>";
