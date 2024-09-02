@@ -12,7 +12,7 @@ if(array_key_exists("error",$_REQUEST)){
     echo "<br>" . getString("error_try_again") . "</p>";
 }
 echo "
-<h1 class=\"title\">" . getString("signin_title") . "</h1>
+<h1>" . getString("signin_title") . "</h1>
 <form role=\"form\" action=\"controller.php\">
     <label for=\"username\">" . getString("username") . "</label>
     <input type=\"text\" id=\"username\" name=\"username\" required=\"required\">

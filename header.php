@@ -21,6 +21,7 @@ echo "
     <a href=\"index.php?view=badges\"><img src=\"svg/trophy.svg\"></a>
     <a href=\"index.php?view=allUsers\"><img src=\"svg/allUsers.svg\"></a>
     <a href=\"index.php?view=allPredictions\"><img src=\"svg/allPredictions.svg\"></a>
+    <a href=\"index.php?view=settings\"><img src=\"svg/settings.svg\"></a>
     <form method=\"GET\" action=\"controller.php\" class=\"search-form\">
         <input class=\"header-search\" type=\"text\" placeholder=\"" . getString("search") . "\" name=\"search\">
         <button type=\"submit\" name=\"action\" class=\"header-button\" value=\"search\"></button>

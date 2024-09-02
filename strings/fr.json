@@ -179,6 +179,12 @@
     "search_users":"Utilisateurs ([TBR])",
     "search_predictions_closed":"Prédictions fermées ([TBR])",
 
+    "settings_title":"Paramètres",
+    "settings_language":"Langue :",
+    "settings_language_fr":"Français (par défaut)",
+    "settings_language_en":"Anglais (bêta)",
+    "settings_apply":"Appliquer les modifications",
+
     "signin_title":"Connexion",
 
     "signup_title":"Création de compte",

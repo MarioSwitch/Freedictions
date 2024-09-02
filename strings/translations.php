@@ -1,6 +1,14 @@
 <?php 
 function getLanguage(){
-    return "en";
+    $default_language = "fr";
+    $supported_languages = ["fr", "en"];
+    if (array_key_exists("language", $_COOKIE)){
+        $language = $_COOKIE["language"];
+        return in_array($language, $supported_languages) ? $language : $default_language;
+    }else{
+        setcookie("language", $default_language, time() + 30*24*60*60); // 30 days
+        return $default_language;
+    }
 }
 
 $placeholder = "/\[TBR\]/";

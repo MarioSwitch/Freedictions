@@ -95,6 +95,13 @@ switch($_REQUEST["action"]){
     case 'search':
         $args = "?view=search&query=" . $_REQUEST["search"];
     break;
+
+    case 'settings':
+        if($_REQUEST["language"]){
+            setcookie("language", $_REQUEST["language"], time() + 30*24*60*60); // 30 days
+        }
+        $args = "?view=settings";
+    break;
 }
 
 header("Location:index.php" . $args);
