@@ -73,6 +73,7 @@ for($i = 0; $i < count($prediChoices); $i++){
         $winRate = "–";
     }
     $pointsMaxChoice = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
+    $pointsMaxChoiceUsersText = "";
     if($pointsMaxChoice){
         $pointsMaxChoiceUsers = arraySQL("SELECT `user` FROM `votes` WHERE `prediction` = ? AND `choice` = ? AND `points` = ?;", [$_REQUEST["id"], $choiceID, $pointsMaxChoice]);
         $pointsMaxChoiceUsersText = "<br><small>";
@@ -84,7 +85,6 @@ for($i = 0; $i < count($prediChoices); $i++){
     
     $choiceName = $prediChoices[$i]["name"];
     $prediChoicesText = $prediChoicesText . "<tr" . (($choiceID == $prediAnswer)?" class='correct_answer'":"") . "><td>" . $choiceName . "</td><td>" . displayInt($votesChoice) . $votesPercentage . "</td><td>" . displayInt($pointsChoice) . $pointsPercentage .  "</td><td>" . $winRate . "</td><td>" . displayInt($pointsMaxChoice) . $pointsMaxChoiceUsersText . "</td></tr>";
-    $pointsMaxChoiceUsersText = "";
 }
 $pointsMaxTotal = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
 if($pointsMaxTotal){

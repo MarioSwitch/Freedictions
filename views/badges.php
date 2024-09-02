@@ -1,4 +1,5 @@
 <?php
+ob_start();
     include_once "badgesManager.php";
     echo "<h1>" . getString("badges_title") . "</h1>";
     echo "<p>" . getString("badges_description") . "</p>";
@@ -29,7 +30,7 @@
     function displayInviteShowProgress(){
         echo "<td colspan='2'>" . displayInvite(getString("invite_action_show_progress")) . "</td>";
     }
- echo "<table>
+echo "<table>
     <tr>
         <th>" . getString("badges_badge") . "</th>
         <th>" . getString("badges_bronze") . "</th>
@@ -107,3 +108,4 @@ echo "
         <td>" . getString("mod") . "</td>
     </tr>
 </table>";
+ob_end_flush();
