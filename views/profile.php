@@ -28,6 +28,7 @@ $correctBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.
 $correctBetsPoints = intSQL("SELECT SUM(points) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$user]);
 $correctBetsPercentage = $answerBets?($correctBets/$answerBets*100):getString("n_a");
 $correctBetsPercentagePoints = $answerBetsPoints?($correctBetsPoints/$answerBetsPoints*100):getString("n_a");
+$accounts = intSQL("SELECT COUNT(*) FROM `users`");
 
 //Ranks
 $rankStreak = intSQL("SELECT COUNT(*) FROM `users` WHERE `streak` > " . $streak) + 1;
@@ -90,7 +91,7 @@ if(!$predictionsParticipated){
 }else{
     for ($i=0; $i < count($predictionsParticipated); $i++){
         $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
-        $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>" . getString("prediction_bet_info", [$predictionsParticipated[$i]["name"], displayInt($predictionsParticipated[$i]["points"])]) . "</p><br/>";
+        $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>" . getString("profile_prediction_bet", [$predictionsParticipated[$i]["name"], displayInt($predictionsParticipated[$i]["points"])]) . "</p><br/>";
     }
 }
 $predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>";
@@ -103,7 +104,7 @@ if(!$predictionsParticipated){
 }else{
     for ($i=0; $i < count($predictionsParticipated); $i++){
         $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
-        $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>" . getString("prediction_bet_info", [$predictionsParticipated[$i]["name"], displayInt($predictionsParticipated[$i]["points"])]) . "</p><br/>";
+        $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>" . getString("profile_prediction_bet", [$predictionsParticipated[$i]["name"], displayInt($predictionsParticipated[$i]["points"])]) . "</p><br/>";
     }
 }
 $predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>";
@@ -117,7 +118,7 @@ if($detailed){
     }else{
         for ($i=0; $i < count($predictionsParticipated); $i++){
             $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
-            $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>" . getString("prediction_bet_info", [$predictionsParticipated[$i]["name"], displayInt($predictionsParticipated[$i]["points"])]) . "</p><br/>";
+            $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>" . getString("profile_prediction_bet", [$predictionsParticipated[$i]["name"], displayInt($predictionsParticipated[$i]["points"])]) . "</p><br/>";
         }
     }
 }else{
@@ -140,22 +141,22 @@ echo "
         <tr>
             <td>" . getString("streak") . "</td>
             <td>" . displayInt($streak, false) . "</td>
-            <td>" . displayOrdinal($rankStreak) . "</td>
+            <td><p><a href=\"?view=allUsers&order=streakHigh\">" . displayOrdinal($rankStreak) . "</a></p></td>
         </tr>
         <tr>
             <td>" . getString("points") . "</td>
             <td>" . displayInt($points, false) . "</td>
-            <td>" . displayOrdinal($rankPoints) . "</td>
+            <td><p><a href=\"?view=allUsers&order=pointsHigh\">" . displayOrdinal($rankPoints) . "</a></p></td>
         </tr>
         <tr>
             <td>" . getString("predictions_created_no_value") . "</td>
             <td>" . displayInt($totalCreated, false) . "</td>
-            <td>" . displayOrdinal($rankCreated) . "</td>
+            <td><p><a href=\"?view=allUsers&order=predictionsHigh\">" . displayOrdinal($rankCreated) . "</a></p></td>
         </tr>
         <tr>
             <td>" . getString("predictions_participated_no_value") . "</td>
             <td>" . displayInt($totalBets, false) . " " . getString("votes_unit") . "<br>" . displayInt($totalBetsPoints, false) . " " . getString("points_unit") . "</td>
-            <td>" . displayOrdinal($rankBets) . "<br>" . displayOrdinal($rankBetsPoints) . "</td>
+            <td><p><a href=\"?view=allUsers&order=votesHigh\">" . displayOrdinal($rankBets) . "</a><br><a href=\"?view=allUsers&order=spentHigh\">" . displayOrdinal($rankBetsPoints) . "</p></td>
         </tr>
         <tr>
             <td>" . getString("profile_stats_correct_votes") . "</td>

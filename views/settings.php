@@ -11,6 +11,8 @@ echo "
             <option value=\"fr\"" . ($language=="fr"?" selected":"") . ">" . getString("settings_language_fr") . " " . getString("settings_default") . "</option>
             <option value=\"en\"" . ($language=="en"?" selected":"") . ">" . getString("settings_language_en") . " " . getString("settings_beta") . "</option>
         </select>
+        <br/>
+        <small>" . getString("settings_language_description") . "</small>
     </p>
     <br/>
     <p>
