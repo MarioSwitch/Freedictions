@@ -130,7 +130,6 @@ function rawPrint(mixed $a){
 
 $now = stringSQL("SELECT NOW();");
 
-
 // ----- CONDITIONS TO CREATE PREDICTIONS -----
 // These conditions are used to determine if a user is eligible to create a prediction. You can change these values to adapt the eligibility to your website.
 $eligibleMinimumDays = 0; // Minimum number of days since the account was created
@@ -138,6 +137,41 @@ $eligibleMinimumPoints = 0; // Minimum number of points
 $eligibleMinimumPointsSpent = 200; // Minimum number of points spent
 $eligibleMinimumVotes = 0; // Minimum number of votes
 $eligibleMinimumWins = 0; // Minimum number of wins
+
+/**
+ * Verify if a setting is correctly set and return his value.
+ * Also creates it if it doesn't exist.
+ * @param string $name the name of the setting
+ * @return string the value of the setting
+ */
+function getSetting($name){
+    switch($name){
+        case 'language':
+            $default = "fr";
+            $supported = ["fr", "en"];
+            break;
+        case 'sln':
+            $default = "yes";
+            $supported = ["yes", "no"];
+            break;
+    }
+    if (array_key_exists($name, $_COOKIE)){
+        return in_array($_COOKIE[$name], $supported) ? $_COOKIE[$name] : $default;
+    }else{
+        setcookie($name, $default, time() + 30*24*60*60); // 30 days
+        return $default;
+    }
+}
+
+/**
+ * Resets the expiration date of all cookies
+ * @return void
+ */
+function resetCookiesExpiration(){
+    foreach($_COOKIE as $key => $value){
+        setcookie($key, $value, time() + 30*24*60*60); // 30 days
+    }
+}
 
 /**
  * Checks if cookies are correct AND returns login status
@@ -210,7 +244,8 @@ function displayUsername($username){
  */
 function displayInt($int, $short = true){
     $full_number = number_format($int, 0, getString("decimal_separator"), getString("thousands_separator"));
-    if(!$short || $int<1000000){
+    $sln = getSetting("sln");
+    if(!$short || $int<1000000 || $sln == "no"){
         return  $full_number;
     }
     $string = (string) $int;
@@ -249,7 +284,7 @@ function displayInt($int, $short = true){
  * @return string formatted ordinal
  */
 function displayOrdinal($int){
-    switch(getLanguage()){
+    switch(getSetting("language")){
         case "fr":
             if($int == 1) return "1<sup>er</sup>";
             return displayInt($int, false) . "<sup>e</sup>";

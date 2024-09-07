@@ -120,5 +120,5 @@ v1.1 (mai 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.0 (juin 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.1 (bêta actuelle, septembre 2024) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 <br>
-<i>Version 2.1.19 (bêta) du 2 septembre 2024</i>
+<i>Version 2.1.20 (bêta) du 7 septembre 2024</i>
 </p>

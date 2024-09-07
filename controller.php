@@ -97,9 +97,8 @@ switch($_REQUEST["action"]){
     break;
 
     case 'settings':
-        if($_REQUEST["language"]){
-            setcookie("language", $_REQUEST["language"], time() + 30*24*60*60); // 30 days
-        }
+        if($_REQUEST["language"]) setcookie("language", $_REQUEST["language"], time() + 30*24*60*60); // 30 days
+        if($_REQUEST["sln"]) setcookie("sln", $_REQUEST["sln"], time() + 30*24*60*60); // 30 days
         $args = "?view=settings";
     break;
 }
