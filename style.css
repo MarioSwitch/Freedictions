@@ -132,6 +132,10 @@ tr.correct_answer {
     background-color: #040;
 }
 
+tr.selected_answer {
+    background-color: #006;
+}
+
 th {
     position: sticky;
     top: 55px;

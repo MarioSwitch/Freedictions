@@ -84,7 +84,9 @@ for($i = 0; $i < count($prediChoices); $i++){
     }
     
     $choiceName = $prediChoices[$i]["name"];
-    $prediChoicesText = $prediChoicesText . "<tr" . (($choiceID == $prediAnswer)?" class='correct_answer'":"") . "><td>" . $choiceName . "</td><td>" . displayInt($votesChoice) . $votesPercentage . "</td><td>" . displayInt($pointsChoice) . $pointsPercentage .  "</td><td>" . $winRate . "</td><td>" . displayInt($pointsMaxChoice) . $pointsMaxChoiceUsersText . "</td></tr>";
+    $selectedChoice = isConnected()?intSQL("SELECT `choice` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $_REQUEST["id"]]):NULL;
+    $choiceClass = ($choiceID == $prediAnswer)?" class='correct_answer'":(($choiceID == $selectedChoice)?" class='selected_answer'":"");
+    $prediChoicesText = $prediChoicesText . "<tr" . $choiceClass . "><td>" . $choiceName . "</td><td>" . displayInt($votesChoice) . $votesPercentage . "</td><td>" . displayInt($pointsChoice) . $pointsPercentage .  "</td><td>" . $winRate . "</td><td>" . displayInt($pointsMaxChoice) . $pointsMaxChoiceUsersText . "</td></tr>";
 }
 $pointsMaxTotal = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
 if($pointsMaxTotal){
