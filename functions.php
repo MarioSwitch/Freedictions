@@ -148,7 +148,7 @@ function getSetting($name){
     switch($name){
         case 'language':
             $default = "fr";
-            $supported = ["fr", "en"];
+            $supported = ["fr", "en", "de"];
             break;
         case 'sln':
             $default = "yes";
@@ -243,6 +243,7 @@ function displayUsername($username){
  * @return string
  */
 function displayInt($int, $short = true){
+    if($int >= 9e18) return "—"; // PHP_INT_MAX is a placeholder, should not be displayed
     $full_number = number_format($int, 0, getString("decimal_separator"), getString("thousands_separator"));
     $sln = getSetting("sln");
     if(!$short || $int<1000000 || $sln == "no"){
@@ -294,6 +295,8 @@ function displayOrdinal($int){
             if($int % 10 == 2) return displayInt($int, false) . "<sup>nd</sup>";
             if($int % 10 == 3) return displayInt($int, false) . "<sup>rd</sup>";
             return displayInt($int, false) . "<sup>th</sup>";
+        case "de":
+            return displayInt($int, false) . ".";
         default:
             return displayInt($int, false);
     }
