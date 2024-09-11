@@ -140,32 +140,32 @@ echo "
         </tr>
         <tr>
             <td>" . getString("streak") . "</td>
-            <td>" . displayInt($streak, false) . "</td>
+            <td>" . displayInt($streak) . "</td>
             <td><p><a href=\"?view=allUsers&order=streakHigh\">" . displayOrdinal($rankStreak) . "</a></p></td>
         </tr>
         <tr>
             <td>" . getString("points") . "</td>
-            <td>" . displayInt($points, false) . "</td>
+            <td>" . displayInt($points) . "</td>
             <td><p><a href=\"?view=allUsers&order=pointsHigh\">" . displayOrdinal($rankPoints) . "</a></p></td>
         </tr>
         <tr>
             <td>" . getString("predictions_created_no_value") . "</td>
-            <td>" . displayInt($totalCreated, false) . "</td>
+            <td>" . displayInt($totalCreated) . "</td>
             <td><p><a href=\"?view=allUsers&order=predictionsHigh\">" . displayOrdinal($rankCreated) . "</a></p></td>
         </tr>
         <tr>
             <td>" . getString("predictions_participated_no_value") . "</td>
-            <td>" . displayInt($totalBets, false) . " " . getString("votes_unit") . "<br>" . displayInt($totalBetsPoints, false) . " " . getString("points_unit") . "</td>
+            <td>" . displayInt($totalBets) . " " . getString("votes_unit") . "<br>" . displayInt($totalBetsPoints) . " " . getString("points_unit") . "</td>
             <td><p><a href=\"?view=allUsers&order=votesHigh\">" . displayOrdinal($rankBets) . "</a><br><a href=\"?view=allUsers&order=spentHigh\">" . displayOrdinal($rankBetsPoints) . "</p></td>
         </tr>
         <tr>
             <td>" . getString("profile_stats_correct_votes") . "</td>
-            <td>" . getString("profile_stats_ratio", [displayInt($correctBets, false), displayInt($answerBets, false)]) . ($answerBets?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentage)]) . "</small>"):"") . "</td>
+            <td>" . getString("profile_stats_ratio", [displayInt($correctBets), displayInt($answerBets)]) . ($answerBets?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentage)]) . "</small>"):"") . "</td>
             <td>" . getString("coming_soon") . "</td>
         </tr>
         <tr>
             <td>" . getString("profile_stats_correct_points") . "</td>
-            <td>" . getString("profile_stats_ratio", [displayInt($correctBetsPoints, false), displayInt($answerBetsPoints, false)]) . ($answerBetsPoints?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentagePoints)]) . "</small>"):"") . "</td>
+            <td>" . getString("profile_stats_ratio", [displayInt($correctBetsPoints), displayInt($answerBetsPoints)]) . ($answerBetsPoints?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentagePoints)]) . "</small>"):"") . "</td>
             <td>" . getString("coming_soon") . "</td>
         </tr>
     </table>

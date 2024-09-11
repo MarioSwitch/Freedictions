@@ -32,7 +32,7 @@ echo "
         else {
             $username = $_COOKIE["username"];
             $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
-            echo "<p class='header-text'>" . displayUsername($username) . " <small>(" . displayInt($points, false) . " " . getString("points_unit") . ")</small></p>";
+            echo "<p class='header-text'>" . displayUsername($username) . " <small>(" . displayInt($points) . " " . getString("points_unit") . ")</small></p>";
             echo "<a href='index.php?view=profile&user=$username'><img src='svg/profile.svg'></a>";
             echo "<a href='index.php?view=createPrediction'><img src='svg/new.svg'></a>";
             echo "<a href='controller.php?action=logout'><img src='svg/logout.svg'></a>";

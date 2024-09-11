@@ -309,6 +309,7 @@ function displayOrdinal($int){
  * @return string formatted float
  */
 function displayFloat($float, $decimals = 2){
+    if($float >= 1000) return displayInt($float);
     return number_format($float, $decimals, getString("decimal_separator"), getString("thousands_separator"));
 }
 

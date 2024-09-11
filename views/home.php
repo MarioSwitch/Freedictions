@@ -31,5 +31,5 @@ if(!$predictions){
 for($i = 0; $i < count($predictions); $i++){
     $id = $predictions[$i]["id"];
     $title = $predictions[$i]["title"];
-    echo "<a href='?view=prediction&id=" . $id . "'>" . $title . "</a>";
+    echo "<a href='?view=prediction&id=" . $id . "'>" . $title . "</a><br>";
 }
