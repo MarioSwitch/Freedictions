@@ -10,6 +10,9 @@ $tableBottom = intval($tableBottom);
 $sqlLimit = $tableBottom - $tableTop + 1;
 $sqlOffset = $tableTop - 1;
 $leaderboard = arraySQL("SELECT `username`, `points` FROM `users` ORDER BY `points` DESC LIMIT $sqlLimit OFFSET $sqlOffset;");
+$myUsername = "";
+$myTableTop = NULL;
+$myTableBottom = NULL;
 $accounts = intSQL("SELECT COUNT(*) FROM `users`");
 echo "<h1>" . getString("leaderboard_title") . "</h1>";
 echo "<p>" . getString("leaderboard_description") . "</p>";
@@ -18,12 +21,15 @@ if(isConnected()){
 	$myRank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $myPoints . ";") + 1;
 	$myTop = ($myRank / $accounts)*100;
 	echo "<p>" . getString("leaderboard_info_connected", [displayOrdinal($myRank), displayInt($accounts), displayFloat($myTop)]) . "</p>";
+	$myUsername = $_COOKIE["username"];
+	$myTableTop = $myRank - ($myRank % $sqlLimit) + 1;
+	$myTableBottom = $myTableTop + $sqlLimit - 1;
 }else{
 	echo "<p>" . getString("leaderboard_info_disconnected", [displayInt($accounts)]) . "</p>";
 }
 echo "<hr>";
 echo "<table><tr>
-	<th>" . getString("rank") . "<br><small>(" . displayInt($tableTop, false) . " - " . displayInt($tableBottom, false) . ")</small></th>
+	<th>" . getString("rank") . "<br><small>(" . displayInt($tableTop, false) . " – " . displayInt($tableBottom, false) . ")</small></th>
 	<th>" . getString("user") . "</th>
 	<th>" . getString("points") . "</th>
 </tr>";
@@ -34,7 +40,7 @@ if(!$leaderboard){
 		$user = $leaderboard[$i]["username"];
 		$points = $leaderboard[$i]["points"];
 		$rank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points . ";") + 1;
-		echo "<tr><td>" . displayOrdinal($rank) . "</td><td><p><a href='?view=profile&user=" . $user . "'>" . displayUsername($user) . "</a></p></td><td>" . displayInt($points) . "</td></tr>";
+		echo "<tr" . ($myUsername == $user ?" class=\"selected_answer\"":"") . "><td>" . displayOrdinal($rank) . "</td><td><p><a href='?view=profile&user=" . $user . "'>" . displayUsername($user) . "</a></p></td><td>" . displayInt($points) . "</td></tr>";
 	}
 }
 echo "<tr><td colspan='3'>";
@@ -46,4 +52,7 @@ if($previousTop != $previousBottom) echo "<a href='?view=leaderboard&start=$prev
 $nextTop = $tableTop + $sqlLimit;
 $nextBottom = $tableBottom + $sqlLimit;
 echo "<a href='?view=leaderboard&start=$nextTop&end=$nextBottom'>" . getString("leaderboard_next", [displayInt($nextTop, false), displayInt($nextBottom, false)]) . "</a>";
+if(!is_null($myTableTop)){
+	echo "<br><a href='?view=leaderboard&start=$myTableTop&end=$myTableBottom'>" . getString("leaderboard_my_page") . " <small>(" . displayInt($myTableTop, false) . " – " . displayInt($myTableBottom, false) . ")</small></a>";
+}
 echo "</td></tr></table>";

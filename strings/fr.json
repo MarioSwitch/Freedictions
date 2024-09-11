@@ -125,8 +125,9 @@
     "leaderboard_description":"Ci-dessous, le classement des utilisateurs ayant le plus de points.",
     "leaderboard_info_connected": "Vous êtes [TBR] sur [TBR] (top [TBR] %).",
     "leaderboard_info_disconnected": "Total : [TBR] utilisateurs",
-    "leaderboard_previous":"◄ Rangs [TBR] - [TBR]",
-    "leaderboard_next":"Rangs [TBR] - [TBR] ►",
+    "leaderboard_previous":"◄ Rangs [TBR] – [TBR]",
+    "leaderboard_next":"Rangs [TBR] – [TBR] ►",
+    "leaderboard_my_page":"Aller à ma page",
 
     "prediction_not_found_info1":"Cette prédiction n'existe pas ou a été supprimée !",
     "prediction_not_found_info2":"Si vous avez parié sur cette prédiction, vous avez récupéré les points pariés !",

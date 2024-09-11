@@ -70,7 +70,7 @@ for($i = 0; $i < count($prediChoices); $i++){
     if($pointsPercentage != ""){
         $winRate = displayFloat($pointsTotal / $pointsChoice);
     }else{
-        $winRate = "–";
+        $winRate = "—";
     }
     $pointsMaxChoice = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
     $pointsMaxChoiceUsersText = "";
