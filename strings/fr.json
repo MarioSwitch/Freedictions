@@ -205,6 +205,20 @@
     "signup_password_confirm":"Confirmer le mot de passe",
     "signup_confirm":"Créer",
 
+    "stats_title":"Statistiques du site",
+    "stats_stat":"Statistique",
+    "stats_last":"Derniers/ères",
+    "stats_1d":"24 heures",
+    "stats_1w":"7 jours",
+    "stats_1mo":"30 jours",
+    "stats_1y":"365 jours",
+    "stats_all":"Total",
+    "stats_average":"Moyenne",
+    "stats_users":"Utilisateurs",
+    "stats_users_online":"Utilisateurs connectés",
+    "stats_users_created":"Utilisateurs créés",
+    "stats_predictions":"Prédictions",
+
 
 
 
