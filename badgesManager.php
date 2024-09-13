@@ -51,10 +51,10 @@ foreach($pointsSpent_top as $top){
 */
 function getCurrentBadgeLevel(int $stat, array $tab, string $unit){
     if($stat < $tab[0]) return getString("badges_none");
-    if($stat < $tab[1]) return getString("badges_bronze") . "<br><small>" . getString("badges_progress_current", [displayInt($stat), displayInt($tab[0]), $unit]) . "</small>";
-    if($stat < $tab[2]) return getString("badges_silver") . "<br><small>" . getString("badges_progress_current", [displayInt($stat), displayInt($tab[1]), $unit]) . "</small>";
-    if($stat < $tab[3]) return getString("badges_gold") . "<br><small>" . getString("badges_progress_current", [displayInt($stat), displayInt($tab[2]), $unit]) . "</small>";
-    if($stat >= $tab[3]) return getString("badges_diamond") . "<br><small>" . getString("badges_progress_current", [displayInt($stat), displayInt($tab[3]), $unit]) . "</small>";
+    if($stat < $tab[1]) return getString("badges_bronze") . "<br><small>" . displayInt($stat) . " / " . displayInt($tab[0]) . " " . $unit . "</small>";
+    if($stat < $tab[2]) return getString("badges_silver") . "<br><small>" . displayInt($stat) . " / " . displayInt($tab[1]) . " " . $unit . "</small>";
+    if($stat < $tab[3]) return getString("badges_gold") . "<br><small>" . displayInt($stat) . " / " . displayInt($tab[2]) . " " . $unit . "</small>";
+    if($stat >= $tab[3]) return getString("badges_diamond") . "<br><small>" . displayInt($stat) . " / " . displayInt($tab[3]) . " " . $unit . "</small>";
     return "";
 }
 
@@ -66,10 +66,10 @@ function getCurrentBadgeLevel(int $stat, array $tab, string $unit){
  * @return string the next badge level
  */
 function getNextBadgeLevel(int $stat, array $tab, string $unit){
-    if($stat < $tab[0]) return getString("badges_bronze") . "<br>" . getString("badges_progress_next", [displayInt($tab[0] - $stat), $unit]) . "<br><small>" . getString("badges_progress_next_details", [displayInt($stat), displayInt($tab[0])]) . "</small>";
-    if($stat < $tab[1]) return getString("badges_silver") . "<br>" . getString("badges_progress_next", [displayInt($tab[1] - $stat), $unit]) . "<br><small>" . getString("badges_progress_next_details", [displayInt($stat), displayInt($tab[1])]) . "</small>";
-    if($stat < $tab[2]) return getString("badges_gold") . "<br>" . getString("badges_progress_next", [displayInt($tab[2] - $stat), $unit]) . "<br><small>" . getString("badges_progress_next_details", [displayInt($stat), displayInt($tab[2])]) . "</small>";
-    if($stat < $tab[3]) return getString("badges_diamond") . "<br>" . getString("badges_progress_next", [displayInt($tab[3] - $stat), $unit]) . "<br><small>" . getString("badges_progress_next_details", [displayInt($stat), displayInt($tab[3])]) . "</small>";
+    if($stat < $tab[0]) return getString("badges_bronze") . "<br>" . getString("badges_progress", [displayInt($tab[0] - $stat), $unit]) . "<br><small>(" . displayInt($stat) . " / " . displayInt($tab[0]) . ")</small>";
+    if($stat < $tab[1]) return getString("badges_silver") . "<br>" . getString("badges_progress", [displayInt($tab[1] - $stat), $unit]) . "<br><small>(" . displayInt($stat) . " / " . displayInt($tab[1]) . ")</small>";
+    if($stat < $tab[2]) return getString("badges_gold") . "<br>" . getString("badges_progress", [displayInt($tab[2] - $stat), $unit]) . "<br><small>(" . displayInt($stat) . " / " . displayInt($tab[2]) . ")</small>";
+    if($stat < $tab[3]) return getString("badges_diamond") . "<br>" . getString("badges_progress", [displayInt($tab[3] - $stat), $unit]) . "<br><small>(" . displayInt($stat) . " / " . displayInt($tab[3]) . ")</small>";
     if($stat >= $tab[3]) return getString("badges_congratulations");
     return "";
 }
@@ -100,10 +100,10 @@ function generateStaticBadgeRow(string $svg, array $goals, string $unit){
  */
 function generateDynamicBadgeRow(string $svg, array $top, array $goals, string $unit){
     echo "
-        <td><img src='svg/badges/" . $svg . "Bronze.svg' alt='" . getString("badges_bronze") . "' title='" . getString("badges_bronze") . "'><br>" . getString("badges_top_percentage", [displayFloat($top[0])]) . "<br><small>" . displayInt($goals[0]) . " " . $unit . "</small></td>
-        <td><img src='svg/badges/" . $svg . "Silver.svg' alt='" . getString("badges_silver") . "' title='" . getString("badges_silver") . "'><br>" . getString("badges_top_percentage", [displayFloat($top[1])]) . "<br><small>" . displayInt($goals[1]) . " " . $unit . "</small></td>
-        <td><img src='svg/badges/" . $svg . "Gold.svg' alt='" . getString("badges_gold") . "' title='" . getString("badges_gold") . "'><br>" . getString("badges_top_percentage", [displayFloat($top[2])]) . "<br><small>" . displayInt($goals[2]) . " " . $unit . "</small></td>
-        <td><img src='svg/badges/" . $svg . "Diamond.svg' alt='" . getString("badges_diamond") . "' title='" . getString("badges_diamond") . "'><br>" . getString("badges_top_percentage", [displayFloat($top[3])]) . "<br><small>" . displayInt($goals[3]) . " " . $unit . "</small></td>
+        <td><img src='svg/badges/" . $svg . "Bronze.svg' alt='" . getString("badges_bronze") . "' title='" . getString("badges_bronze") . "'><br>" . getString("percentage_top", [displayFloat($top[0])]) . "<br><small>" . displayInt($goals[0]) . " " . $unit . "</small></td>
+        <td><img src='svg/badges/" . $svg . "Silver.svg' alt='" . getString("badges_silver") . "' title='" . getString("badges_silver") . "'><br>" . getString("percentage_top", [displayFloat($top[1])]) . "<br><small>" . displayInt($goals[1]) . " " . $unit . "</small></td>
+        <td><img src='svg/badges/" . $svg . "Gold.svg' alt='" . getString("badges_gold") . "' title='" . getString("badges_gold") . "'><br>" . getString("percentage_top", [displayFloat($top[2])]) . "<br><small>" . displayInt($goals[2]) . " " . $unit . "</small></td>
+        <td><img src='svg/badges/" . $svg . "Diamond.svg' alt='" . getString("badges_diamond") . "' title='" . getString("badges_diamond") . "'><br>" . getString("percentage_top", [displayFloat($top[3])]) . "<br><small>" . displayInt($goals[3]) . " " . $unit . "</small></td>
     ";
 }
 
@@ -117,10 +117,10 @@ function generateDynamicBadgeRow(string $svg, array $top, array $goals, string $
  */
 function checkStaticBadge(int $value, array $goals, string $svg, string $name){
     if($value < $goals[0]) return "";
-    if($value < $goals[1]) return "<abbr title='" . getString("badges_icon_tooltip", [$name, displayInt($goals[0])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Bronze.svg'></abbr>";
-    if($value < $goals[2]) return "<abbr title='" . getString("badges_icon_tooltip", [$name, displayInt($goals[1])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Silver.svg'></abbr>";
-    if($value < $goals[3]) return "<abbr title='" . getString("badges_icon_tooltip", [$name, displayInt($goals[2])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Gold.svg'></abbr>";
-    if($value >= $goals[3]) return "<abbr title='" . getString("badges_icon_tooltip", [$name, displayInt($goals[3])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Diamond.svg'></abbr>";
+    if($value < $goals[1]) return "<abbr title='" . $name . " – " . displayInt($goals[0]) . "+'><img class='user-icon' src='svg/badges/" . $svg . "Bronze.svg'></abbr>";
+    if($value < $goals[2]) return "<abbr title='" . $name . " – " . displayInt($goals[1]) . "+'><img class='user-icon' src='svg/badges/" . $svg . "Silver.svg'></abbr>";
+    if($value < $goals[3]) return "<abbr title='" . $name . " – " . displayInt($goals[2]) . "+'><img class='user-icon' src='svg/badges/" . $svg . "Gold.svg'></abbr>";
+    if($value >= $goals[3]) return "<abbr title='" . $name . " – " . displayInt($goals[3]) . "+'><img class='user-icon' src='svg/badges/" . $svg . "Diamond.svg'></abbr>";
     return "";
 }
 
@@ -135,9 +135,9 @@ function checkStaticBadge(int $value, array $goals, string $svg, string $name){
  */
 function checkDynamicBadge(int $value, array $top, array $goals, string $svg, string $name){
     if($value < $goals[0]) return "";
-    if($value < $goals[1]) return "<abbr title='" . getString("badges_icon_tooltip_top", [$name, displayInt($top[0])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Bronze.svg'></abbr>";
-    if($value < $goals[2]) return "<abbr title='" . getString("badges_icon_tooltip_top", [$name, displayInt($top[1])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Silver.svg'></abbr>";
-    if($value < $goals[3]) return "<abbr title='" . getString("badges_icon_tooltip_top", [$name, displayInt($top[2])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Gold.svg'></abbr>";
-    if($value >= $goals[3]) return "<abbr title='" . getString("badges_icon_tooltip_top", [$name, displayInt($top[3])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Diamond.svg'></abbr>";
+    if($value < $goals[1]) return "<abbr title='" . $name . " – " . getString("percentage_top", [displayFloat($top[0])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Bronze.svg'></abbr>";
+    if($value < $goals[2]) return "<abbr title='" . $name . " – " . getString("percentage_top", [displayFloat($top[1])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Silver.svg'></abbr>";
+    if($value < $goals[3]) return "<abbr title='" . $name . " – " . getString("percentage_top", [displayFloat($top[2])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Gold.svg'></abbr>";
+    if($value >= $goals[3]) return "<abbr title='" . $name . " – " . getString("percentage_top", [displayFloat($top[3])]) . "'><img class='user-icon' src='svg/badges/" . $svg . "Diamond.svg'></abbr>";
     return "";
 }

@@ -91,13 +91,13 @@ function isOrderedBy(string $tag){
 echo "<table>
     <tr>
         <th><p><a href=\"" . $link_username . "\">" . getString("user") . isOrderedBy("username") . "</a></th>
-        <th><p><a href=\"" . $link_created . "\">" . getString("created") . isOrderedBy("created") . "</a></th>
-        <th><p><a href=\"" . $link_updated . "\">" . getString("online") . isOrderedBy("updated") . "</a></th>
+        <th><p><a href=\"" . $link_created . "\">" . getString("created") . " (UTC)" . isOrderedBy("created") . "</a></th>
+        <th><p><a href=\"" . $link_updated . "\">" . getString("online") . " (UTC)" . isOrderedBy("updated") . "</a></th>
         <th><p><a href=\"" . $link_streak . "\">" . getString("streak") . isOrderedBy("streak") . "</a></th>
         <th><p><a href=\"" . $link_points . "\"> " . getString("points") . isOrderedBy("points") . "</a></th>
         <th><p><a href=\"" . $link_mod . "\">" . getString("mod") . isOrderedBy("mod") . "</a></th>
-        <th><p><a href=\"" . $link_predictions . "\">" . getString("predictions_created_no_value") . isOrderedBy("predictions") . "</a></th>
-        <th><p><a href=\"" . $link_votes . "\">" . getString("votes") . isOrderedBy("votes") . "<br><small>" . getString("votes_correct") . "</small></a></th>
+        <th><p><a href=\"" . $link_predictions . "\">" . getString("predictions_created") . isOrderedBy("predictions") . "</a></th>
+        <th><p><a href=\"" . $link_votes . "\">" . getString("bets") . isOrderedBy("votes") . "<br><small>" . getString("bets_correct") . "</small></a></th>
         <th><p><a href=\"" . $link_spent . "\">" . getString("points_spent") . isOrderedBy("spent") . "<br><small>" . getString("points_spent_correct") . "</small></a></th>
     </tr>";
 if(!$users){

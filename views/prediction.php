@@ -46,11 +46,11 @@ if ($prediAnswer != NULL){
 }
 $prediNumberOfAnswers = intSQL("SELECT COUNT(*) FROM `choices` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
 $prediChoices = arraySQL("SELECT * FROM `choices` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
-$svgVotes = "<abbr title='" . getString("prediction_table_votes_count") . "'><img src='svg/people.svg'></abbr>";
+$svgVotes = "<abbr title='" . getString("prediction_table_bet_count") . "'><img src='svg/people.svg'></abbr>";
 $svgPoints = "<abbr title='" . getString("points_spent") . "'><img src='svg/points.svg'></abbr>";
-$svgRatio = "<abbr title='" . getString("prediction_table_win_rate") . "'><img src='svg/cup.svg'></abbr>";
-$svgMax = "<abbr title='" . getString("prediction_table_vote_record") . "'><img src='svg/podium.svg'></abbr>";
-$prediChoicesText = "<table><tr><th>" . getString("prediction_table_choice") . "</th><th>" . $svgVotes . "</th><th>" . $svgPoints . "</th><th>" . $svgRatio . "</th><th>" . $svgMax . "</th></tr>";
+$svgRatio = "<abbr title='" . getString("prediction_table_bet_multiplier") . "'><img src='svg/cup.svg'></abbr>";
+$svgMax = "<abbr title='" . getString("prediction_table_bet_record") . "'><img src='svg/podium.svg'></abbr>";
+$prediChoicesText = "<table><tr><th>" . getString("choices") . "</th><th>" . $svgVotes . "</th><th>" . $svgPoints . "</th><th>" . $svgRatio . "</th><th>" . $svgMax . "</th></tr>";
 for($i = 0; $i < count($prediChoices); $i++){
     $choiceID = $prediChoices[$i]["id"];
     $votesChoice = intSQL("SELECT COUNT(*) FROM `votes` WHERE `prediction` = ? AND `choice` = ?;", [$_REQUEST["id"], $choiceID]);
@@ -97,7 +97,7 @@ if($pointsMaxTotal){
     }
     $pointsMaxTotalUsersText = $pointsMaxTotalUsersText . "</small>";
 }
-$prediChoicesText = $prediChoicesText . "<tr><th>" . getString("prediction_table_total") . "</th><th>" . displayInt($votesTotal) . "</th><th>" . displayInt($pointsTotal) . "</th><th>" . getString("n_a") . "</th><th>" . displayInt($pointsMaxTotal) . $pointsMaxTotalUsersText . "</th></tr></table>";
+$prediChoicesText = $prediChoicesText . "<tr><th>" . getString("total") . "</th><th>" . displayInt($votesTotal) . "</th><th>" . displayInt($pointsTotal) . "</th><th>" . getString("n_a") . "</th><th>" . displayInt($pointsMaxTotal) . $pointsMaxTotalUsersText . "</th></tr></table>";
 
 //Dynamic content
 if(array_key_exists("username",$_COOKIE)){
@@ -124,8 +124,8 @@ $dropdownMenu = $dropdownMenu . "</select>";
 //Display
 echo "
 <h1>" . $prediTitle . "</h1>
-<p>" . getString("prediction_created") . " <a href='?view=profile&user=" . $prediCreator . "'>" . displayUsername($prediCreator) . "</a> <abbr id='createdCountdown' title='" . $prediCreated . " UTC'>" . $prediCreated . " UTC</abbr></p>
-<p>" . getString("prediction_ended") . " <abbr id='endedCountdown' title='" . $prediEnd . " UTC'>" . $prediEnd . " UTC</abbr></p>";
+<p>" . getString("created_by") . " <a href='?view=profile&user=" . $prediCreator . "'>" . displayUsername($prediCreator) . "</a> <abbr id='createdCountdown' title='" . $prediCreated . " UTC'>" . $prediCreated . " UTC</abbr></p>
+<p>" . getString("bets_end") . " <abbr id='endedCountdown' title='" . $prediEnd . " UTC'>" . $prediEnd . " UTC</abbr></p>";
 if($prediAnswered != NULL){
     echo "<p>" . getString("prediction_answered") . " <abbr id='answeredCountdown' title='" . $prediAnswered . " UTC'>" . $prediAnswered . " UTC</abbr></p>";
 }else if($prediEnd < stringSQL("SELECT NOW();")){

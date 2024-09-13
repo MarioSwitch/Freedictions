@@ -11,7 +11,7 @@ function displayStat($array){
 }
 
 $usersOnline = [
-    "name" => getString("stats_users_online"),
+    "name" => getString("users_online"),
     "1d" => intSQL("SELECT COUNT(*) FROM `users` WHERE `updated` > NOW() - INTERVAL 1 DAY;"),
     "1w" => intSQL("SELECT COUNT(*) FROM `users` WHERE `updated` > NOW() - INTERVAL 1 WEEK;"),
     "1mo" => intSQL("SELECT COUNT(*) FROM `users` WHERE `updated` > NOW() - INTERVAL 1 MONTH;"),
@@ -20,7 +20,7 @@ $usersOnline = [
 ];
 
 $usersCreated = [
-    "name" => getString("stats_users_created"),
+    "name" => getString("users_created"),
     "1d" => intSQL("SELECT COUNT(*) FROM `users` WHERE `created` > NOW() - INTERVAL 1 DAY;"),
     "1w" => intSQL("SELECT COUNT(*) FROM `users` WHERE `created` > NOW() - INTERVAL 1 WEEK;"),
     "1mo" => intSQL("SELECT COUNT(*) FROM `users` WHERE `created` > NOW() - INTERVAL 1 MONTH;"),
@@ -29,7 +29,7 @@ $usersCreated = [
 ];
 
 $predictionsCreated = [
-    "name" => getString("predictions_created_no_value"),
+    "name" => getString("predictions_created"),
     "1d" => intSQL("SELECT COUNT(*) FROM `predictions` WHERE `created` > NOW() - INTERVAL 1 DAY;"),
     "1w" => intSQL("SELECT COUNT(*) FROM `predictions` WHERE `created` > NOW() - INTERVAL 1 WEEK;"),
     "1mo" => intSQL("SELECT COUNT(*) FROM `predictions` WHERE `created` > NOW() - INTERVAL 1 MONTH;"),
@@ -50,12 +50,12 @@ $totalChoices = intSQL("SELECT COUNT(*) FROM `choices`;");
 $averageChoices = $totalChoices / $predictionsCreated["all"];
 
 echo "
-<h1>" . getString("stats_title") . "</h1>
+<h1>" . getString("stats") . "</h1>
 <table>
     <tr>
-        <th>" . getString("stats_stat") . "</th>
-        <th>" . getString("stats_all") . "</th>
-        <th>" . getString("stats_average") . "</th>
+        <th>" . getString("stat") . "</th>
+        <th>" . getString("total") . "</th>
+        <th>" . getString("average") . "</th>
     </tr>
     <tr>
         <td>" . getString("points") . "</td>
@@ -68,12 +68,12 @@ echo "
         <td>" . displayFloat($averagePointsSpent) . "</td>
     </tr>
     <tr>
-        <td>" . getString("votes") . "</td>
+        <td>" . getString("bets") . "</td>
         <td>" . displayInt($totalBets) . "</td>
         <td>" . displayFloat($averageBets) . "</td>
     </tr>
     <tr>
-        <td>" . getString("createPrediction_form_choices") . "</td>
+        <td>" . getString("choices") . "</td>
         <td>" . displayInt($totalChoices) . "</td>
         <td>" . displayFloat($averageChoices) . "</td>
     </tr>
@@ -83,19 +83,19 @@ echo "
 
 <table>
     <tr>
-        <th rowspan=\"2\">" . getString("stats_stat") . "</th>
-        <th colspan=\"4\">" . getString("stats_last") . "</th>
-        <th rowspan=\"2\">" . getString("stats_all") . "</th>
+        <th rowspan=\"2\">" . getString("stat") . "</th>
+        <th colspan=\"4\">" . getString("last") . "</th>
+        <th rowspan=\"2\">" . getString("total") . "</th>
     </tr>
     <tr>
-        <th>" . getString("stats_1d") . "</th>
-        <th>" . getString("stats_1w") . "</th>
-        <th>" . getString("stats_1mo") . "</th>
-        <th>" . getString("stats_1y") . "</th>
+        <th>24 " . getString("javascript_countdown_hours") . "</th>
+        <th>7 " . getString("javascript_countdown_days") . "</th>
+        <th>30 " . getString("javascript_countdown_days") . "</th>
+        <th>365 " . getString("javascript_countdown_days") . "</th>
     </tr>
-    <tr><td colspan=\"6\">" . getString("stats_users") . "</td></tr>" . 
+    <tr><td colspan=\"6\">" . getString("users") . "</td></tr>" . 
     displayStat($usersOnline) . 
     displayStat($usersCreated) . "
-    <tr><td colspan=\"6\">" . getString("stats_predictions") . "</td></tr>" . 
+    <tr><td colspan=\"6\">" . getString("predictions") . "</td></tr>" . 
     displayStat($predictionsCreated) . "
 </table>";

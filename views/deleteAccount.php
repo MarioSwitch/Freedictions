@@ -24,7 +24,7 @@ if(array_key_exists("error",$_REQUEST)){
 
 if($_COOKIE["username"] == $_REQUEST["user"]){
     echo "
-    <h1>" . getString("deleteAccount_title", [displayUsername($_REQUEST["user"])]) . "</h1>
+    <h1>" . getString("deleteAccount_title") . " (" . displayUsername($_REQUEST["user"]) . ")</h1>
         <form role='form' action='controller.php'>
         <input type='hidden' name='username' value='" . $_REQUEST["user"] . "'>
         <label for='password'>" . getString("password") . "</label>
@@ -35,7 +35,7 @@ if($_COOKIE["username"] == $_REQUEST["user"]){
     </form>";
 }else if(isMod()){
     echo "
-    <h1>" . getString("deleteAccount_title_mod", [displayUsername($_REQUEST["user"])]) . "</h1>
+    <h1>" . getString("deleteAccount_title_mod") . " : " . displayUsername($_REQUEST["user"]) . "</h1>
         <form role='form' action='controller.php'>
         <input type='hidden' name='username' value='" . $_REQUEST["user"] . "'>
         <label for='password'>" . getString("password") . "</label>

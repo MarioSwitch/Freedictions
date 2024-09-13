@@ -41,7 +41,7 @@ $rankBetsPoints = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`,
 $predictionsCreatedText = "";
 $predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND NOW() < `ended` AND `answer` IS NULL;", [$user]);
 $predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
-$predictionsCreatedText = $predictionsCreatedText . "<h3>" . getString("predictions_ongoing", [$predictionsCreatedCount]) . "</h3>";
+$predictionsCreatedText = $predictionsCreatedText . "<h3>" . getString("predictions_ongoing") . " (" . displayInt($predictionsCreatedCount) . ")</h3>";
 if(!$predictionsCreated){
     $predictionsCreatedText = $predictionsCreatedText . "<p>" . getString("predictions_none") . "</p>";
 }else{
@@ -54,7 +54,7 @@ $predictionsCreatedText = $predictionsCreatedText . "<hr class='mini'>";
 
 $predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND NOW() > `ended` AND `answer` IS NULL;", [$user]);
 $predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
-$predictionsCreatedText = $predictionsCreatedText . "<h3>" . getString("predictions_waiting", [$predictionsCreatedCount]) . "</h3>";
+$predictionsCreatedText = $predictionsCreatedText . "<h3>" . getString("predictions_waiting") . " (" . displayInt($predictionsCreatedCount) . ")</h3>";
 if(!$predictionsCreated){
     $predictionsCreatedText = $predictionsCreatedText . "<p>" . getString("predictions_none") . "</p>";
 }else{
@@ -67,7 +67,7 @@ $predictionsCreatedText = $predictionsCreatedText . "<hr class='mini'>";
 
 $predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND `answer` IS NOT NULL;", [$user]);
 $predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
-$predictionsCreatedText = $predictionsCreatedText . "<h3>" . getString("predictions_ended", [$predictionsCreatedCount]) . "</h3>";
+$predictionsCreatedText = $predictionsCreatedText . "<h3>" . getString("predictions_ended") . " (" . displayInt($predictionsCreatedCount) . ")</h3>";
 if($detailed){
     if(!$predictionsCreated){
         $predictionsCreatedText = $predictionsCreatedText . "<p>" . getString("predictions_none") . "</p>";
@@ -85,7 +85,7 @@ if($detailed){
 $predictionsParticipatedText = "";
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND NOW() < `ended` AND `answer` IS NULL;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
-$predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_ongoing", [$predictionsParticipatedCount]) . "</h3>";
+$predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_ongoing") . " (" . displayInt($predictionsParticipatedCount) . ")</h3>";
 if(!$predictionsParticipated){
     $predictionsParticipatedText = $predictionsParticipatedText . "<p>" . getString("predictions_none") . "</p>";
 }else{
@@ -98,7 +98,7 @@ $predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>
 
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND NOW() > `ended` AND `answer` IS NULL;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
-$predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_waiting", [$predictionsParticipatedCount]) . "</h3>";
+$predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_waiting") . " (" . displayInt($predictionsParticipatedCount) . ")</h3>";
 if(!$predictionsParticipated){
     $predictionsParticipatedText = $predictionsParticipatedText . "<p>" . getString("predictions_none") . "</p>";
 }else{
@@ -111,7 +111,7 @@ $predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>
 
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NOT NULL;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
-$predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_ended", [$predictionsParticipatedCount]) . "</h3>";
+$predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_ended") . " (" . displayInt($predictionsParticipatedCount) . ")</h3>";
 if($detailed){
     if(!$predictionsParticipated){
         $predictionsParticipatedText = $predictionsParticipatedText . "<p>" . getString("predictions_none") . "</p>";
@@ -129,13 +129,13 @@ if($detailed){
 echo "
     <h1>" . displayUsername($user) . "</h1>
     <p>" . getString("profile_created") . " <abbr title='" . $created . " UTC' id='createdCountdown'></abbr></p>
-    <p>" . getString("profile_online") . " <abbr title='" . $online . " UTC' id='onlineCountdown'></abbr></p>
+    <p>" . getString("online") . " <abbr title='" . $online . " UTC' id='onlineCountdown'></abbr></p>
     <hr>
-    <h2>" . getString("profile_stats") . "</h2>
+    <h2>" . getString("stats") . "</h2>
     <table>
         <tr>
-            <th>" . getString("profile_stats_stat") . "</th>
-            <th>" . getString("profile_stats_value") . "</th>
+            <th>" . getString("stat") . "</th>
+            <th>" . getString("value") . "</th>
             <th>" . getString("rank") . "</th>
         </tr>
         <tr>
@@ -149,31 +149,31 @@ echo "
             <td><p><a href=\"?view=allUsers&order=pointsHigh\">" . displayOrdinal($rankPoints) . "</a></p></td>
         </tr>
         <tr>
-            <td>" . getString("predictions_created_no_value") . "</td>
+            <td>" . getString("predictions_created") . "</td>
             <td>" . displayInt($totalCreated) . "</td>
             <td><p><a href=\"?view=allUsers&order=predictionsHigh\">" . displayOrdinal($rankCreated) . "</a></p></td>
         </tr>
         <tr>
-            <td>" . getString("predictions_participated_no_value") . "</td>
-            <td>" . displayInt($totalBets) . " " . getString("votes_unit") . "<br>" . displayInt($totalBetsPoints) . " " . getString("points_unit") . "</td>
+            <td>" . getString("predictions_participated") . "</td>
+            <td>" . displayInt($totalBets) . " " . getString("bets_unit") . "<br>" . displayInt($totalBetsPoints) . " " . getString("points_unit") . "</td>
             <td><p><a href=\"?view=allUsers&order=votesHigh\">" . displayOrdinal($rankBets) . "</a><br><a href=\"?view=allUsers&order=spentHigh\">" . displayOrdinal($rankBetsPoints) . "</p></td>
         </tr>
         <tr>
-            <td>" . getString("profile_stats_correct_votes") . "</td>
-            <td>" . getString("profile_stats_ratio", [displayInt($correctBets), displayInt($answerBets)]) . ($answerBets?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentage)]) . "</small>"):"") . "</td>
+            <td>" . getString("bets_won") . "</td>
+            <td>" . getString("of", [displayInt($correctBets), displayInt($answerBets)]) . ($answerBets?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentage)]) . "</small>"):"") . "</td>
             <td>" . getString("coming_soon") . "</td>
         </tr>
         <tr>
-            <td>" . getString("profile_stats_correct_points") . "</td>
-            <td>" . getString("profile_stats_ratio", [displayInt($correctBetsPoints), displayInt($answerBetsPoints)]) . ($answerBetsPoints?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentagePoints)]) . "</small>"):"") . "</td>
+            <td>" . getString("bets_won_points") . "</td>
+            <td>" . getString("of", [displayInt($correctBetsPoints), displayInt($answerBetsPoints)]) . ($answerBetsPoints?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentagePoints)]) . "</small>"):"") . "</td>
             <td>" . getString("coming_soon") . "</td>
         </tr>
     </table>
     <hr>
-	<h2>" . getString("predictions_created", [$totalCreated]) . "</h2>
+	<h2>" . getString("predictions_created") . " (" . displayInt($totalCreated) . ")</h2>
 	<p>" . $predictionsCreatedText . "</p>
     <hr>
-	<h2>" . getString("predictions_participated", [$totalBets]) . "</h2>
+	<h2>" . getString("predictions_participated") . " (" . displayInt($totalBets) . ")</h2>
 	<p>" . $predictionsParticipatedText . "</p>
 ";
 if(isConnected() && $user == $_COOKIE["username"]){

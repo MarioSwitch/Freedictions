@@ -39,28 +39,28 @@ function countdownTo(goal, formatBefore = \"%countdown\", formatAfter = \"\", id
     var gap = Math.abs(goalDate - nowDate);
     //Formatting count
     if(gap>=2*year){ //if more than 2 years
-        var countString = Math.floor(gap/year)+\" \"+\"" . getString("javascript_countdown_years") . "\";
+        var countString = Math.floor(gap/year)+\" \"+\"" . getString("time_years") . "\";
     }
     if(gap<2*year && gap>=year){ //if between 1 and 2 years
-        var countString = Math.floor(gap/year)+\" \"+\"" . getString("javascript_countdown_year") . "\";
+        var countString = Math.floor(gap/year)+\" \"+\"" . getString("time_year") . "\";
     }
     if(gap<year && gap>=2*month){ //if between 2 months and 1 year
-        var countString = Math.floor(gap/month)+\" \"+\"" . getString("javascript_countdown_months") . "\";
+        var countString = Math.floor(gap/month)+\" \"+\"" . getString("time_months") . "\";
     }
     if(gap<2*month && gap>=month){ //if between 1 and 2 months
-        var countString = Math.floor(gap/month)+\" \"+\"" . getString("javascript_countdown_month") . "\";
+        var countString = Math.floor(gap/month)+\" \"+\"" . getString("time_month") . "\";
     }
     if(gap<month && gap>=100*hour){ //if between 100 hours (4d 4h) and 1 month
-        var countString = Math.floor(gap/day)+\" \"+\"" . getString("javascript_countdown_days") . "\";
+        var countString = Math.floor(gap/day)+\" \"+\"" . getString("time_days") . "\";
     }
     if(gap<100*hour && gap>=hour){ //if between 1 hour and 100 hours (4d 4h)
-        var countString = Math.floor(gap/hour)+\"" . getString("javascript_countdown_hours") . "\"+\" \"+(\"0\"+Math.floor(gap/minute)%60).slice(-2)+\"" . getString("javascript_countdown_minutes") . "\";
+        var countString = Math.floor(gap/hour)+\"" . getString("time_h") . "\"+\" \"+(\"0\"+Math.floor(gap/minute)%60).slice(-2)+\"" . getString("time_m") . "\";
     }
     if(gap<hour && gap>=minute){ //if between 1 min and 1 hour
-        var countString = Math.floor(gap/minute)+\"" . getString("javascript_countdown_minutes_short") . "\"+\" \"+(\"0\"+Math.floor(gap/second)%60).slice(-2)+\"" . getString("javascript_countdown_seconds") . "\";
+        var countString = Math.floor(gap/minute)+\"" . getString("time_m_short") . "\"+\" \"+(\"0\"+Math.floor(gap/second)%60).slice(-2)+\"" . getString("time_s_short") . "\";
     }
     if(gap<minute && gap>=0){ //if less than 1 min
-        var countString = Math.floor(gap/second)+\"" . getString("javascript_countdown_seconds") . "\";
+        var countString = Math.floor(gap/second)+\"" . getString("time_s_short") . "\";
     }
     //Choosing the right format
     if(goalDate > nowDate){

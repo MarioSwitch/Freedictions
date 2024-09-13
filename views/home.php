@@ -23,7 +23,7 @@ echo "<h2>Nouveautés de la version 2.1</h2>
     <hr>";
 $predictions = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `ended` > NOW() ORDER BY `ended` ASC;");
 $predictions_count = $predictions?count($predictions):0;
-echo "<h2>" . getString("predictions_ongoing", [$predictions_count]) . "</h2>";
+echo "<h2>" . getString("predictions_ongoing") . " (" . displayInt($predictions_count) . ")</h2>";
 if(!$predictions){
     echo "<p>" . getString("predictions_none") . "</p>";
     die("");

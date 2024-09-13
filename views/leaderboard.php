@@ -20,12 +20,10 @@ if(isConnected()){
 	$myPoints = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
 	$myRank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $myPoints . ";") + 1;
 	$myTop = ($myRank / $accounts)*100;
-	echo "<p>" . getString("leaderboard_info_connected", [displayOrdinal($myRank), displayInt($accounts), displayFloat($myTop)]) . "</p>";
+	echo "<p>" . getString("leaderboard_info", [displayOrdinal($myRank), displayInt($accounts)]) . " (" . getString("percentage_top", [displayFloat($myTop)]) . ").</p>";
 	$myUsername = $_COOKIE["username"];
 	$myTableTop = $myRank - ($myRank % $sqlLimit) + 1;
 	$myTableBottom = $myTableTop + $sqlLimit - 1;
-}else{
-	echo "<p>" . getString("leaderboard_info_disconnected", [displayInt($accounts)]) . "</p>";
 }
 echo "<hr>";
 echo "<table><tr>
@@ -48,11 +46,11 @@ $previousTop = $tableTop - $sqlLimit;
 $previousBottom = $tableBottom - $sqlLimit;
 if($previousTop < 1) $previousTop = 1;
 if($previousBottom < 1) $previousBottom = 1;
-if($previousTop != $previousBottom) echo "<a href='?view=leaderboard&start=$previousTop&end=$previousBottom'>" . getString("leaderboard_previous", [displayInt($previousTop, false), displayInt($previousBottom, false)]) . "</a><br>";
+if($previousTop != $previousBottom) echo "<a href='?view=leaderboard&start=$previousTop&end=$previousBottom'>◄ " . getString("ranks") . " " . displayInt($previousTop, false) . " – " . displayInt($previousBottom, false) . "</a><br>";
 $nextTop = $tableTop + $sqlLimit;
 $nextBottom = $tableBottom + $sqlLimit;
-echo "<a href='?view=leaderboard&start=$nextTop&end=$nextBottom'>" . getString("leaderboard_next", [displayInt($nextTop, false), displayInt($nextBottom, false)]) . "</a>";
+echo "<a href='?view=leaderboard&start=$nextTop&end=$nextBottom'>" . getString("ranks") . " " . displayInt($nextTop, false) . " – " . displayInt($nextBottom, false) . " ►</a><br>";
 if(!is_null($myTableTop)){
-	echo "<br><a href='?view=leaderboard&start=$myTableTop&end=$myTableBottom'>" . getString("leaderboard_my_page") . " <small>(" . displayInt($myTableTop, false) . " – " . displayInt($myTableBottom, false) . ")</small></a>";
+	echo "<a href='?view=leaderboard&start=$myTableTop&end=$myTableBottom'>" . getString("leaderboard_my_page") . " <small>(" . getString("ranks") . " " . displayInt($myTableTop, false) . " – " . displayInt($myTableBottom, false) . ")</small></a>";
 }
 echo "</td></tr></table>";

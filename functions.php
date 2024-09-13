@@ -230,8 +230,8 @@ function displayUsername($username){
     if($mod){$icons .= "<abbr title='" . getString("mod") . "'><img class='user-icon' src='svg/mod.png'></abbr>";}
     $icons .= checkStaticBadge($streak, $streak_badges, "calendar", getString("streak"));
     $icons .= checkDynamicBadge($points, $points_top, $points_badges, "points", getString("points"));
-    $icons .= checkDynamicBadge($predictionsCreated, $predictionsCreated_top, $predictionsCreated_badges, "predictionsCreated", getString("predictions_created_no_value"));
-    $icons .= checkDynamicBadge($bets, $bets_top, $bets_badges, "bets", getString("predictions_participated_no_value"));
+    $icons .= checkDynamicBadge($predictionsCreated, $predictionsCreated_top, $predictionsCreated_badges, "predictionsCreated", getString("predictions_created"));
+    $icons .= checkDynamicBadge($bets, $bets_top, $bets_badges, "bets", getString("predictions_participated"));
     $icons .= checkDynamicBadge($pointsSpent, $pointsSpent_top, $pointsSpent_badges, "pointsSpent", getString("points_spent"));
     return $icons . $username;
 }

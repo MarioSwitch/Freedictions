@@ -20,8 +20,8 @@ ob_start();
         $predictionsCreatedNextBadgeLevel = getNextBadgeLevel($predictionsCreated, $predictionsCreated_badges, getString("predictions_unit"));
         //Bets
         $bets = intSQL("SELECT `bets` FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `bets` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `username` = ?;", [$_COOKIE["username"]]);
-        $betsCurrentBadgeLevel = getCurrentBadgeLevel($bets, $bets_badges, getString("votes_unit"));
-        $betsNextBadgeLevel = getNextBadgeLevel($bets, $bets_badges, getString("votes_unit"));
+        $betsCurrentBadgeLevel = getCurrentBadgeLevel($bets, $bets_badges, getString("bets_unit"));
+        $betsNextBadgeLevel = getNextBadgeLevel($bets, $bets_badges, getString("bets_unit"));
         //Points spent
         $pointsSpent = intSQL("SELECT `pointsSpent` FROM `users` LEFT JOIN (SELECT `user`, SUM(`points`) AS `pointsSpent` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `username` = ?;", [$_COOKIE["username"]]);
         $pointsSpentCurrentBadgeLevel = getCurrentBadgeLevel($pointsSpent, $pointsSpent_badges, getString("points_unit"));
@@ -63,7 +63,7 @@ echo "
 echo "
     </tr>
     <tr>
-        <td>" . getString("predictions_created_no_value") . "</td>";
+        <td>" . getString("predictions_created") . "</td>";
         generateDynamicBadgeRow("predictionsCreated", $predictionsCreated_top, $predictionsCreated_badges, getString("predictions_unit"));
         if(isConnected()){
             echo "<td>" . $predictionsCreatedCurrentBadgeLevel . "</td>";
@@ -74,8 +74,8 @@ echo "
 echo "
     </tr>
     <tr>
-        <td>" . getString("votes") . "</td>";
-        generateDynamicBadgeRow("bets", $bets_top, $bets_badges, getString("votes_unit"));
+        <td>" . getString("bets") . "</td>";
+        generateDynamicBadgeRow("bets", $bets_top, $bets_badges, getString("bets_unit"));
         if(isConnected()){
             echo "<td>" . $betsCurrentBadgeLevel . "</td>";
             echo "<td>" . $betsNextBadgeLevel . "</td>";

@@ -4,7 +4,7 @@ echo "
 var ChoiceNumber = 3;
 
 function addChoice(){
-    let placeholder = \"" . getString("javascript_choices_placeholder") . "\" + ChoiceNumber;
+    let placeholder = \"" . getString("choices_number") . "\" + ChoiceNumber;
     let newChoice = document.createElement(\"input\");
     newChoice.setAttribute(\"type\",\"text\");
     newChoice.setAttribute(\"class\",\"prediChoicesBox\");

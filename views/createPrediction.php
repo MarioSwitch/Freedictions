@@ -42,7 +42,7 @@ if(!eligible()){
         echo "<br><span class='" . (($pointsSpent < $eligibleMinimumPointsSpent)?"not_completed":"completed") . "'>" . getString("createPrediction_eligible_points_spent", [$eligibleMinimumPointsSpent]) . " <small>($pointsSpent / $eligibleMinimumPointsSpent)</small></span>";
     }
     if($eligibleMinimumVotes){
-        echo "<br><span class='" . (($votes < $eligibleMinimumVotes)?"not_completed":"completed") . "'>" . getString("createPrediction_eligible_votes", [$eligibleMinimumVotes]) . " <small>($votes / $eligibleMinimumVotes)</small></span>";
+        echo "<br><span class='" . (($votes < $eligibleMinimumVotes)?"not_completed":"completed") . "'>" . getString("createPrediction_eligible_bets", [$eligibleMinimumVotes]) . " <small>($votes / $eligibleMinimumVotes)</small></span>";
     }
     if($eligibleMinimumWins){
         echo "<br><span class='" . (($wins < $eligibleMinimumWins)?"not_completed":"completed") . "'>" . getString("createPrediction_eligible_wins", [$eligibleMinimumWins]) . " <small>($wins / $eligibleMinimumWins)</small></span>";
@@ -59,7 +59,7 @@ echo "
             <input type=\"text\" class=\"form-control\" id=\"prediNameBox\" name=\"name\" required=\"required\">
         </div>
         <div id=\"end\" class=\"form-group\">
-            <label for=\"prediEndBox\"><abbr title=\"" . getString("createPrediction_form_end_tooltip") . "\">" . getString("createPrediction_form_end") . "</abbr></label>
+            <label for=\"prediEndBox\"><abbr title=\"" . getString("createPrediction_form_end_tooltip") . "\">" . getString("bets_end") . "*</abbr></label>
         </div>
     </div>
     <hr>
@@ -67,13 +67,13 @@ echo "
         <div class=\"row\">
             <div class=\"fill\">
                 <input type=\"button\" class=\"add-choice\" value=\"" . getString("createPrediction_form_choices_add") . "\" onclick=\"addChoice();\">
-                <label for=\"prediChoicesBox\">" . getString("createPrediction_form_choices") . "</label>
+                <label for=\"prediChoicesBox\">" . getString("choices") . "</label>
                 <input type=\"button\" class=\"rm-choice\" value=\"" . getString("createPrediction_form_choices_remove") . "\" onclick=\"removeChoice();\">
             </div>
         </div>";
 //Les retours à la ligne sont considérés comme des espaces en HTML et décalent donc les 2 premiers choix au niveau de l'affichage. En insérant le texte dans un bloc PHP, les retours à la ligne et les indentations ne sont plus retournés par les "echo" et ne sont donc plus présents dans la page HTML générée. Il est également possible de simplement retirer les retours à la ligne, mais cela dégrade la lisibilité du code.
-        echo "<input type=\"text\" class=\"prediChoicesBox\" name=\"choices[]\" placeholder=\"" . getString("createPrediction_form_choices_placeholder", [1]) . "\" required=\"required\">";
-        echo "<input type=\"text\" class=\"prediChoicesBox\" name=\"choices[]\" placeholder=\"" . getString("createPrediction_form_choices_placeholder", [2]) . "\" required=\"required\">";
+        echo "<input type=\"text\" class=\"prediChoicesBox\" name=\"choices[]\" placeholder=\"" . getString("choices_number") . "1\" required=\"required\">";
+        echo "<input type=\"text\" class=\"prediChoicesBox\" name=\"choices[]\" placeholder=\"" . getString("choices_number") . "2\" required=\"required\">";
     echo '</div>';
 echo "
     <button type=\"submit\" name=\"action\" value=\"createPrediction\">" . getString("createPrediction_form_submit") . "</button>
