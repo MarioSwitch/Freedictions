@@ -54,7 +54,7 @@ function countdownTo(goal, formatBefore = \"%countdown\", formatAfter = \"\", id
         var countString = Math.floor(gap/day)+\" \"+\"" . getString("time_days") . "\";
     }
     if(gap<100*hour && gap>=hour){ //if between 1 hour and 100 hours (4d 4h)
-        var countString = Math.floor(gap/hour)+\"" . getString("time_h") . "\"+\" \"+(\"0\"+Math.floor(gap/minute)%60).slice(-2)+\"" . getString("time_m") . "\";
+        var countString = Math.floor(gap/hour)+\" \"+\"" . getString("time_h") . "\"+\" \"+(\"0\"+Math.floor(gap/minute)%60).slice(-2)+\" \"+\"" . getString("time_m") . "\";
     }
     if(gap<hour && gap>=minute){ //if between 1 min and 1 hour
         var countString = Math.floor(gap/minute)+\"" . getString("time_m_short") . "\"+\" \"+(\"0\"+Math.floor(gap/second)%60).slice(-2)+\"" . getString("time_s_short") . "\";

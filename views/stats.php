@@ -88,10 +88,10 @@ echo "
         <th rowspan=\"2\">" . getString("total") . "</th>
     </tr>
     <tr>
-        <th>24 " . getString("javascript_countdown_hours") . "</th>
-        <th>7 " . getString("javascript_countdown_days") . "</th>
-        <th>30 " . getString("javascript_countdown_days") . "</th>
-        <th>365 " . getString("javascript_countdown_days") . "</th>
+        <th>24 " . getString("time_hours") . "</th>
+        <th>7 " . getString("time_days") . "</th>
+        <th>30 " . getString("time_days") . "</th>
+        <th>365 " . getString("time_days") . "</th>
     </tr>
     <tr><td colspan=\"6\">" . getString("users") . "</td></tr>" . 
     displayStat($usersOnline) . 
