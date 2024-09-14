@@ -164,7 +164,7 @@ echo "
             <td>" . getString("coming_soon") . "</td>
         </tr>
         <tr>
-            <td>" . getString("bets_won_points") . "</td>
+            <td>" . getString("bets_won") . " (" . getString("points_unit") . ")</td>
             <td>" . getString("of", [displayInt($correctBetsPoints), displayInt($answerBetsPoints)]) . ($answerBetsPoints?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentagePoints)]) . "</small>"):"") . "</td>
             <td>" . getString("coming_soon") . "</td>
         </tr>

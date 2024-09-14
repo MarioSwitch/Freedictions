@@ -57,6 +57,7 @@ switch($order){
     default:$users = arraySQL($request . ";");break;
 }
 $accounts = intSQL("SELECT COUNT(*) FROM `users`");
+$myUsername = isConnected()?$_COOKIE["username"]:"";
 echo "<h1>" . getString("allUsers_title") . "</h1>";
 echo "<p>" . getString("allUsers_description", [displayInt($accounts)]) . "</p>";
 echo "<hr>";
@@ -116,7 +117,7 @@ if(!$users){
         $votes_correct = $users[$i]["correct_vote_count"];
         $spent = $users[$i]["vote_points"];
         $spent_on_wins = $users[$i]["points_spent_on_wins"];
-        echo "<tr>
+        echo "<tr" . ($myUsername == $username ? " class=\"selected_answer\"":"") . ">
             <td><p><a href=\"" . $link_user . "\">" . displayUsername($username) . "</a></td>
             <td>" . $created . "</td>
             <td>" . $updated . "</td>
