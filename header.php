@@ -15,7 +15,7 @@ echo "
     <a href=\"index.php?view=home\"><img src=\"svg/website.svg\"></a>
     <a href=\"index.php?view=about\"><img src=\"svg/info.svg\"></a>
     <a href=\"index.php?view=leaderboard\"><img src=\"svg/leaderboard.svg\"></a>
-    <a href=\"index.php?view=badges\"><img src=\"svg/trophy.svg\"></a>
+    <a href=\"index.php?view=badges\"><img src=\"svg/badges.svg\"></a>
     <a href=\"index.php?view=allUsers\"><img src=\"svg/allUsers.svg\"></a>
     <a href=\"index.php?view=allPredictions\"><img src=\"svg/allPredictions.svg\"></a>
     <a href=\"index.php?view=stats\"><img src=\"svg/stats.svg\"></a>
