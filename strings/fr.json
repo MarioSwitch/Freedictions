@@ -131,6 +131,9 @@
     "deleteAccount_info_mod":"Toutes les données associées à cet utilisateur seront supprimées.",
     "deleteAccount_confirm":"Confirmer la suppression du compte",
 
+    "home_bet_waiting":"Pas encore parié",
+    "home_bet_already":"Déjà parié",
+
     "leaderboard_title":"Classement",
     "leaderboard_description":"Ci-dessous, le classement des utilisateurs ayant le plus de points.",
     "leaderboard_info": "Vous êtes [TBR] sur [TBR]",

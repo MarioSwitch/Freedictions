@@ -114,6 +114,8 @@
     "deleteAccount_info2": "By deleting your account, all predictions you created and all your bets will be deleted.",
     "deleteAccount_info_mod": "All data linked to this user will be deleted.",
     "deleteAccount_confirm": "Confirm account deletion",
+    "home_bet_waiting": "Not yet bet",
+    "home_bet_already": "Already bet",
     "leaderboard_title": "Leaderboard",
     "leaderboard_description": "The ranking of users with the most points is displayed below.",
     "leaderboard_info": "You are [TBR] of [TBR]",

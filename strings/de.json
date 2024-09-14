@@ -114,6 +114,8 @@
     "deleteAccount_info2": "Wenn Sie Ihr Konto löschen, werden alle von Ihnen erstellten Vorhersagen und Ihre Wetten gelöscht.",
     "deleteAccount_info_mod": "Alle mit diesem Benutzer verbundenen Daten werden gelöscht.",
     "deleteAccount_confirm": "Bestätigen Sie die Löschung des Kontos",
+    "home_bet_waiting": "Noch nicht gewettet",
+    "home_bet_already": "Bereits gewettet",
     "leaderboard_title": "Rangliste",
     "leaderboard_description": "Im Folgenden finden Sie die Rangliste der Benutzer mit den meisten Punkten.",
     "leaderboard_info": "Sie sind [TBR] von [TBR]",
