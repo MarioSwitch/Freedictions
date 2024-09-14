@@ -124,10 +124,10 @@ $dropdownMenu = $dropdownMenu . "</select>";
 //Display
 echo "
 <h1>" . $prediTitle . "</h1>
-<p>" . getString("created_by") . " <a href='?view=profile&user=" . $prediCreator . "'>" . displayUsername($prediCreator) . "</a> <abbr id='createdCountdown' title='" . $prediCreated . " UTC'>" . $prediCreated . " UTC</abbr></p>
-<p>" . getString("bets_end") . " <abbr id='endedCountdown' title='" . $prediEnd . " UTC'>" . $prediEnd . " UTC</abbr></p>";
+<p>" . getString("created_by") . " <a href='?view=profile&user=" . $prediCreator . "'>" . displayUsername($prediCreator) . "</a> <abbr id='createdCountdown' title='" . $prediCreated . " – UTC'></abbr></p>
+<p>" . getString("bets_end") . " <abbr id='endedCountdown' title='" . $prediEnd . " – UTC'></abbr></p>";
 if($prediAnswered != NULL){
-    echo "<p>" . getString("prediction_answered") . " <abbr id='answeredCountdown' title='" . $prediAnswered . " UTC'>" . $prediAnswered . " UTC</abbr></p>";
+    echo "<p>" . getString("prediction_answered") . " <abbr id='answeredCountdown' title='" . $prediAnswered . " – UTC'></abbr></p>";
 }else if($prediEnd < stringSQL("SELECT NOW();")){
     echo "<p>" . getString("prediction_waiting_answer") . "</p>";
 }
@@ -220,4 +220,11 @@ if($prediAnswered != NULL){
     $prediAnsweredDate = substr($prediAnswered,0,10);
     $prediAnsweredTime = substr($prediAnswered,11,8);
     echo "<script>countdownTo('" . $prediAnsweredDate . "T" . $prediAnsweredTime ."Z', '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'answeredCountdown');</script>";
+}
+
+include_once "UTC_Local_Converter.js.php";
+echo "<script>UTCtoLocal(\"$prediCreated\",document.getElementById(\"createdCountdown\"));</script>";
+echo "<script>UTCtoLocal(\"$prediEnd\",document.getElementById(\"endedCountdown\"));</script>";
+if($prediAnswered != NULL){
+    echo "<script>UTCtoLocal(\"$prediAnswered\",document.getElementById(\"answeredCountdown\"));</script>";
 }

@@ -128,8 +128,8 @@ if($detailed){
 //Display
 echo "
     <h1>" . displayUsername($user) . "</h1>
-    <p>" . getString("profile_created") . " <abbr title='" . $created . " UTC' id='createdCountdown'></abbr></p>
-    <p>" . getString("online") . " <abbr title='" . $online . " UTC' id='onlineCountdown'></abbr></p>
+    <p>" . getString("profile_created") . " <abbr title='" . $created . " – UTC' id='createdCountdown'></abbr></p>
+    <p>" . getString("online") . " <abbr title='" . $online . " – UTC' id='onlineCountdown'></abbr></p>
     <hr>
     <h2>" . getString("stats") . "</h2>
     <table>
@@ -195,8 +195,6 @@ include_once "countdown.js.php";
 echo "<script>countdownTo(\"" . $createdDate . "T" . $createdTime . "Z\", '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'createdCountdown');</script>";
 echo "<script>countdownTo(\"" . $onlineDate . "T" . $onlineTime . "Z\", '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'onlineCountdown');</script>";
 
-/* Weird behaviour... To be fixed
 include_once "UTC_Local_Converter.js.php";
-echo "<script>UTCtoLocal(\"$created\",document.querySelectorAll('p')[1]);</script>";
-echo "<script>UTCtoLocal(\"$online\",document.querySelectorAll('p')[2]);</script>";
-*/
+echo "<script>UTCtoLocal(\"$created\",document.getElementById(\"createdCountdown\"));</script>";
+echo "<script>UTCtoLocal(\"$online\",document.getElementById(\"onlineCountdown\"));</script>";
