@@ -128,7 +128,7 @@ echo "
 <p>" . getString("bets_end") . " <abbr id='endedCountdown' title='" . $prediEnd . " – UTC'></abbr></p>";
 if($prediAnswered != NULL){
     echo "<p>" . getString("prediction_answered") . " <abbr id='answeredCountdown' title='" . $prediAnswered . " – UTC'></abbr></p>";
-}else if($prediEnd < stringSQL("SELECT NOW();")){
+}else if($prediAnswer == NULL && $prediEnd < stringSQL("SELECT NOW();")){
     echo "<p>" . getString("prediction_waiting_answer") . "</p>";
 }
 echo "

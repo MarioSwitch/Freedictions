@@ -17,7 +17,7 @@ echo "<h2>Nouveautés de la version 2.1</h2>
     <p>
         Le 2 septembre 2024, le site a reçu une mise à jour majeure : la version 2.1.<br><br>
         Cette version apporte, outre les multiples corrections mineures, une grande nouveauté : le support multilingue !<br>
-        Le site est déjà disponible en anglais (bêta). N'hésitez pas à améliorer les traductions et/ou à traduire le site dans d'autres langues en vous rendant sur la page <a href=\"https://crowdin.com/project/better-twitch-predictions\">Crowdin</a> du projet !<br>
+        Le site est déjà disponible en anglais et en allemand (bêta). N'hésitez pas à améliorer les traductions et/ou à traduire le site dans d'autres langues en vous rendant sur la page <a href=\"https://crowdin.com/project/better-twitch-predictions\">Crowdin</a> du projet !<br>
         Si vous souhaitez traduire le site dans une langue autre que celles présentes pour l'instant, contactez le développeur (voir page \"À propos\")<br>
     </p>
     <hr>";
@@ -50,7 +50,7 @@ if(isConnected()){
     }else{
         for ($i=0; $i < count($predictionsParticipated); $i++){
             $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
-            echo "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>" . getString("profile_prediction_bet", [$predictionsParticipated[$i]["name"], displayInt($predictionsParticipated[$i]["points"])]) . "</p><br/>";
+            echo "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>" . getString("prediction_bet_info", [$predictionsParticipated[$i]["name"], displayInt($predictionsParticipated[$i]["points"])]) . "</p><br/>";
         }
     }
 }else{
