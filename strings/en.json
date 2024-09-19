@@ -45,6 +45,7 @@
     "value": "Value",
     "total": "Total",
     "average": "Average",
+    "median": "Median",
     "last": "Last",
     "predictions_created": "Created predictions",
     "predictions_participated": "Participated predictions",

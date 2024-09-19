@@ -117,7 +117,7 @@ if(!$users){
         $votes_correct = $users[$i]["correct_vote_count"];
         $spent = $users[$i]["vote_points"];
         $spent_on_wins = $users[$i]["points_spent_on_wins"];
-        echo "<tr" . ($myUsername == $username ? " class=\"selected_answer\"":"") . ">
+        echo "<tr" . ($myUsername == $username ? " class=\"blue\"":"") . ">
             <td><p><a href=\"" . $link_user . "\">" . displayUsername($username) . "</a></td>
             <td>" . $created . "</td>
             <td>" . $updated . "</td>

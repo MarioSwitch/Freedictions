@@ -128,11 +128,11 @@ tr, td, th {
     border: 1px solid whitesmoke;
 }
 
-tr.correct_answer {
+tr.green, td.green {
     background-color: #040;
 }
 
-tr.selected_answer {
+tr.blue, td.blue {
     background-color: #006;
 }
 

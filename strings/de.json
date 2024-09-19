@@ -45,6 +45,7 @@
     "value": "Anzahl",
     "total": "Gesamt",
     "average": "Mittelwert",
+    "median": "Median",
     "last": "Letzte(n)",
     "predictions_created": "Erstellte Vorhersagen",
     "predictions_participated": "Teilgenommen Vorhersagen",

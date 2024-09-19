@@ -10,6 +10,39 @@ function displayStat($array){
     </tr>";
 }
 
+function getMedian(string $key){
+    switch($key){
+        case "points":
+            $request = "SELECT `points` FROM `users` ORDER BY `points` DESC;";
+            $count = intSQL("SELECT COUNT(*) FROM `users`;");
+            break;
+        case "created":
+            $request = "SELECT COUNT(*) FROM `predictions` GROUP BY `user` ORDER BY COUNT(*) DESC;";
+            $count = intSQL("SELECT COUNT(*) FROM `users`;");
+            break;
+        case "bets":
+            $request = "SELECT COUNT(*) FROM `votes` GROUP BY `user` ORDER BY COUNT(*) DESC;";
+            $count = intSQL("SELECT COUNT(*) FROM `users`;");
+            break;
+        case "pointsSpent":
+            $request = "SELECT SUM(`points`) FROM `votes` GROUP BY `user` ORDER BY SUM(`points`) DESC;";
+            $count = intSQL("SELECT COUNT(*) FROM `users`;");
+            break;
+        case "choices":
+            $request = "SELECT COUNT(*) FROM `choices` GROUP BY `prediction` ORDER BY COUNT(*) DESC;";
+            $count = intSQL("SELECT COUNT(*) FROM `predictions`;");
+            break;
+    }
+    $array = arraySQL($request);
+    $middle = ceil($count / 2) - 1; // -1 because arrays start at 0
+    if(count($array) < $count) return 0;
+    if($count % 2 == 1){
+        return $array[$middle][0];
+    }else{
+        return ($array[$middle][0] + $array[$middle + 1][0]) / 2;
+    }
+}
+
 $usersOnline = [
     "name" => getString("users_online"),
     "1d" => intSQL("SELECT COUNT(*) FROM `users` WHERE `updated` > NOW() - INTERVAL 1 DAY;"),
@@ -39,15 +72,23 @@ $predictionsCreated = [
 
 $totalPoints = intSQL("SELECT SUM(`points`) FROM `users`;");
 $averagePoints = $totalPoints / $usersOnline["all"];
+$medianPoints = getMedian("points");
 
-$totalPointsSpent = intSQL("SELECT SUM(`points`) FROM `votes`;");
-$averagePointsSpent = $totalPointsSpent / $usersOnline["all"];
+$totalCreated = intSQL("SELECT COUNT(*) FROM `predictions`;");
+$averageCreated = $totalCreated / $usersOnline["all"];
+$medianCreated = getMedian("created");
 
 $totalBets = intSQL("SELECT COUNT(*) FROM `votes`;");
 $averageBets = $totalBets / $usersOnline["all"];
+$medianBets = getMedian("bets");
+
+$totalPointsSpent = intSQL("SELECT SUM(`points`) FROM `votes`;");
+$averagePointsSpent = $totalPointsSpent / $usersOnline["all"];
+$medianPointsSpent = getMedian("pointsSpent");
 
 $totalChoices = intSQL("SELECT COUNT(*) FROM `choices`;");
 $averageChoices = $totalChoices / $predictionsCreated["all"];
+$medianChoices = getMedian("choices");
 
 echo "
 <h1>" . getString("stats") . "</h1>
@@ -56,26 +97,37 @@ echo "
         <th>" . getString("stat") . "</th>
         <th>" . getString("total") . "</th>
         <th>" . getString("average") . "</th>
+        <th>" . getString("median") . "</th>
     </tr>
     <tr>
         <td>" . getString("points") . "</td>
         <td>" . displayInt($totalPoints) . "</td>
         <td>" . displayFloat($averagePoints) . "</td>
+        <td>" . displayInt($medianPoints) . "</td>
     </tr>
     <tr>
-        <td>" . getString("points_spent") . "</td>
-        <td>" . displayInt($totalPointsSpent) . "</td>
-        <td>" . displayFloat($averagePointsSpent) . "</td>
+        <td>" . getString("predictions_created") . "</td>
+        <td>" . displayInt($totalCreated) . "</td>
+        <td>" . displayFloat($averageCreated) . "</td>
+        <td>" . displayInt($medianCreated) . "</td>
     </tr>
     <tr>
         <td>" . getString("bets") . "</td>
         <td>" . displayInt($totalBets) . "</td>
         <td>" . displayFloat($averageBets) . "</td>
+        <td>" . displayInt($medianBets) . "</td>
+    </tr>
+    <tr>
+        <td>" . getString("points_spent") . "</td>
+        <td>" . displayInt($totalPointsSpent) . "</td>
+        <td>" . displayFloat($averagePointsSpent) . "</td>
+        <td>" . displayInt($medianPointsSpent) . "</td>
     </tr>
     <tr>
         <td>" . getString("choices") . "</td>
         <td>" . displayInt($totalChoices) . "</td>
         <td>" . displayFloat($averageChoices) . "</td>
+        <td>" . displayInt($medianChoices) . "</td>
     </tr>
 </table>
 

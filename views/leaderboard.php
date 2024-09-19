@@ -38,7 +38,7 @@ if(!$leaderboard){
 		$user = $leaderboard[$i]["username"];
 		$points = $leaderboard[$i]["points"];
 		$rank = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points . ";") + 1;
-		echo "<tr" . ($myUsername == $user ?" class=\"selected_answer\"":"") . "><td>" . displayOrdinal($rank) . "</td><td><p><a href='?view=profile&user=" . $user . "'>" . displayUsername($user) . "</a></p></td><td>" . displayInt($points) . "</td></tr>";
+		echo "<tr" . ($myUsername == $user ?" class=\"blue\"":"") . "><td>" . displayOrdinal($rank) . "</td><td><p><a href='?view=profile&user=" . $user . "'>" . displayUsername($user) . "</a></p></td><td>" . displayInt($points) . "</td></tr>";
 	}
 }
 echo "<tr><td colspan='3'>";
