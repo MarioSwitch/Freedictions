@@ -120,6 +120,8 @@
     "createPrediction_eligible_outro1":"Une fois les conditions vérifiées, cette page deviendra un formulaire permettant de créer une prédiction.",
     "createPrediction_eligible_outro2":"Notez que les conditions peuvent être modifiées à tout moment, et sans avertissement préalable.",
     "createPrediction_form_name":"Question",
+    "createPrediction_form_desc":"Description (optionnel)",
+    "createPrediction_form_desc_placeholder":"Précisions ou détails supplémentaires concernant votre prédiction",
     "createPrediction_form_end_tooltip":"Le champ est à remplir suivant l'heure locale (c'est-à-dire l'heure qu'il est actuellement chez vous). Toutes les conversions sont automatiquement effectuées pour que le temps restant soit correct peu importe le fuseau horaire.",
     "createPrediction_form_choices_add":"Ajouter un choix",
     "createPrediction_form_choices_remove":"Supprimer le dernier choix",

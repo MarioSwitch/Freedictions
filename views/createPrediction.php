@@ -62,6 +62,12 @@ echo "
             <label for=\"prediEndBox\"><abbr title=\"" . getString("createPrediction_form_end_tooltip") . "\">" . getString("bets_end") . "*</abbr></label>
         </div>
     </div>
+    <div class=\"top-row\">
+        <div class=\"form-group\">
+                <label for=\"prediDesc\">" . getString("createPrediction_form_desc") . "</label>
+                <input type=\"text\" class=\"form-control\" id=\"prediDesc\" name=\"desc\" placeholder=\"" . getString("createPrediction_form_desc_placeholder") . "\">
+        </div>
+    </div>
     <hr>
     <div id=\"choices\">
         <div class=\"row\">

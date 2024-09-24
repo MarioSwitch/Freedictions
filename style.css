@@ -199,14 +199,14 @@ th {
     background-color: white;
 }
 
-@media all and (max-width: 1500px)
+@media all and (max-width: 1700px)
 {
     .search-form {
         display: none;
     }
 }
 
-@media all and (max-width: 1000px)
+@media all and (max-width: 1200px)
 {
     .header-text {
         display: none;
@@ -262,7 +262,7 @@ form:not(.search-form) > button {
     margin: 1vh 0 1vh 1vw;
 }
 
-#prediNameBox {
+#prediNameBox, #prediDesc {
     width: 40vw;
     height: 3.5vh;
     border: 0;
@@ -300,7 +300,7 @@ form:not(.search-form) > button {
     margin: auto;
 }
 
-.form-control:not(#prediNameBox, #prediEndBox) {
+.form-control:not(#prediNameBox, #prediDesc, #prediEndBox) {
     width: 30vw;
     height: 3.5vh;
     border: 0;
@@ -324,13 +324,13 @@ form:not(.search-form) > button {
     color: white;
 }
 
-@media all and (max-width: 1500px)
+@media all and (max-width: 1700px)
 {
     .prediChoicesBox {
         width: 45vw;
     }
 
-    #prediNameBox {
+    #prediNameBox, #prediDesc {
         width: 95vw;
         left: 2vw;
     }
@@ -363,7 +363,7 @@ form:not(.search-form) > button {
     }
 }
 
-@media all and (max-width: 1000px)
+@media all and (max-width: 1200px)
 {
     .prediChoicesBox {
         width:95vw;

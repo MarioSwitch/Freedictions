@@ -105,6 +105,8 @@
     "createPrediction_eligible_outro1": "Once conditions been verified, this page will become a form to create a prediction.",
     "createPrediction_eligible_outro2": "Notice that conditions can be edited at any moment, and without advance notice.",
     "createPrediction_form_name": "Question",
+    "createPrediction_form_desc": "Description (optional)",
+    "createPrediction_form_desc_placeholder": "Additional details about your prediction",
     "createPrediction_form_end_tooltip": "This field must be filled using local time (i.e. current time at your location). All conversions are made automatically to remaining time being correct, regardless of the time zone.",
     "createPrediction_form_choices_add": "Add choice",
     "createPrediction_form_choices_remove": "Delete last choice",

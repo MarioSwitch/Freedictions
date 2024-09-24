@@ -105,6 +105,8 @@
     "createPrediction_eligible_outro1": "Sobald die Bedingungen überprüft wurden, wird diese Seite zu einem Formular, mit dem Sie eine Vorhersage erstellen können.",
     "createPrediction_eligible_outro2": "Beachten Sie, dass die Bedingungen jederzeit und ohne vorherige Ankündigung geändert werden können.",
     "createPrediction_form_name": "Frage",
+    "createPrediction_form_desc": "Beschreibung (optional)",
+    "createPrediction_form_desc_placeholder": "Zusätzliche Präzisierungen oder Details zu Ihrer Vorhersage",
     "createPrediction_form_end_tooltip": "Das Feld ist nach der Ortszeit auszufüllen (d. h. der Zeit, die es bei Ihnen gerade ist). Alle Umrechnungen werden automatisch vorgenommen, sodass die verbleibende Zeit unabhängig von der Zeitzone korrekt ist.",
     "createPrediction_form_choices_add": "Auswahl hinzufügen",
     "createPrediction_form_choices_remove": "Letzte Wahl löschen",

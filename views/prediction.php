@@ -32,6 +32,7 @@ if (!$prediExists){
 }
 $prediction =  arraySQL("SELECT * FROM `predictions` WHERE `id` = ?;", [$_REQUEST["id"]]);
 $prediTitle = $prediction[0]["title"];
+$prediDesc = $prediction[0]["description"];
 $prediCreator = $prediction[0]["user"];
 $prediCreated = $prediction[0]["created"];
 $prediCreatedDate = substr($prediCreated,0,10);
@@ -89,9 +90,9 @@ for($i = 0; $i < count($prediChoices); $i++){
     $prediChoicesText = $prediChoicesText . "<tr" . $choiceClass . "><td>" . $choiceName . "</td><td>" . displayInt($votesChoice) . $votesPercentage . "</td><td>" . displayInt($pointsChoice) . $pointsPercentage .  "</td><td>" . $winRate . "</td><td>" . displayInt($pointsMaxChoice) . $pointsMaxChoiceUsersText . "</td></tr>";
 }
 $pointsMaxTotal = intSQL("SELECT MAX(points) FROM `votes` WHERE `prediction` = ?;", [$_REQUEST["id"]]);
+$pointsMaxTotalUsersText = "<br><small>";
 if($pointsMaxTotal){
     $pointsMaxTotalUsers = arraySQL("SELECT `user` FROM `votes` WHERE `prediction` = ? AND `points` = ?;", [$_REQUEST["id"], $pointsMaxTotal]);
-    $pointsMaxTotalUsersText = "<br><small>";
     for($j = 0; $j < count($pointsMaxTotalUsers); $j++){
         $pointsMaxTotalUsersText = $pointsMaxTotalUsersText . "<a href='?view=profile&user=" . $pointsMaxTotalUsers[$j]["user"] . "'>" . displayUsername($pointsMaxTotalUsers[$j]["user"]) . "</a>";
     }
@@ -124,6 +125,7 @@ $dropdownMenu = $dropdownMenu . "</select>";
 //Display
 echo "
 <h1>" . $prediTitle . "</h1>
+" . ($prediDesc != NULL ? ("<p>" . $prediDesc . "</p><br><br>") : "") . "
 <p>" . getString("created_by") . " <a href='?view=profile&user=" . $prediCreator . "'>" . displayUsername($prediCreator) . "</a> <abbr id='createdCountdown' title='" . $prediCreated . " – UTC'></abbr></p>
 <p>" . getString("bets_end") . " <abbr id='endedCountdown' title='" . $prediEnd . " – UTC'></abbr></p>";
 if($prediAnswered != NULL){

@@ -469,14 +469,14 @@ function eligible(){
  * @param array $choices the choices of the prediction
  * @return int the id of the prediction
  */
-function createPrediction($name,$user,$end,$offset,$choices){//Variable $choices is an array of strings containing titles of choices
+function createPrediction($name,$desc,$user,$end,$offset,$choices){//Variable $choices is an array of strings containing titles of choices
     if(!eligible()){
         header("Location:index.php?view=home&error=forbidden");
         die("");
     }
     date_default_timezone_set('UTC');
     $endUTC = date('Y-m-d\TH:i',strtotime($end)- $offset*60 );
-    rawSQL("INSERT INTO `predictions` VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT, ?, DEFAULT, DEFAULT);", [$name, $user, $endUTC]);
+    rawSQL("INSERT INTO `predictions` VALUES (DEFAULT, ?, ?, ?, DEFAULT, ?, DEFAULT, DEFAULT);", [$name, $desc, $user, $endUTC]);
     $predictionID = intSQL("SELECT `id` FROM `predictions` ORDER BY `created` DESC LIMIT 1;");
     foreach($choices as $choice){
         rawSQL("INSERT INTO `choices` VALUES (DEFAULT, ?, ?);", [$predictionID, $choice]);
