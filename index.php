@@ -1,10 +1,20 @@
 <?php
 include_once "functions.php";
 
-$view = array_key_exists("view",$_REQUEST)?$_REQUEST["view"]:"home";
+if(!array_key_exists("view", $_REQUEST)){
+    header("Location:index.php?view=home");
+    die();
+}
+
+$view = $_REQUEST["view"];
+
+if(!file_exists("views/$view.php")){
+    header("Location:index.php?view=home");
+    die();
+}
 
 include "header.php";
 
-if(file_exists("views/$view.php")) include "views/$view.php";
+include "views/$view.php";
 
 echo "<br>";

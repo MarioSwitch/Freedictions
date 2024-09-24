@@ -1,6 +1,20 @@
 <?php
 if(isConnected()) rawSQL("UPDATE `users` SET `updated` = NOW() WHERE username = ?;", [$_COOKIE["username"]]);
+
+if($_REQUEST["view"] != "signin" && $_REQUEST["view"] != "signup"){
+    foreach($_COOKIE as $key => $value){
+        if(preg_match("/^redirect_/", $key)){
+            setcookie("$key", "", 1); // Epoch + 1
+            unset($_COOKIE["$key"]);
+        }
+    }
+    foreach($_REQUEST as $key => $value){
+        setcookie("redirect_$key", $value, time() + 30*24*60*60); // 30 days
+    }
+}
+
 resetCookiesExpiration();
+
 echo "
 <!DOCTYPE html>
 <html>

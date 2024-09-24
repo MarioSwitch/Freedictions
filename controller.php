@@ -1,6 +1,17 @@
 <?php
 include_once "functions.php";
 
+function redirectUsingCookies(){
+    $string = "?";
+    foreach($_COOKIE as $key => $value){
+        if(preg_match("/^redirect_/", $key)){
+            $key = explode("_", $key)[1];
+            $string .= $key . "=" . $value . "&";
+        }
+    }
+    return $string;
+}
+
 $points = isConnected()?intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]):0;
 
 $args = "";
@@ -12,14 +23,17 @@ switch($_REQUEST["action"]){
             die("");
         }
         createAccount($_REQUEST["username"],$_REQUEST["password"],$_REQUEST["passwordconfirmation"]);
+        $args = redirectUsingCookies();
     break;
 
     case 'login' :
         login($_REQUEST["username"],$_REQUEST["password"]);
+        $args = redirectUsingCookies();
     break;
 
     case 'logout' :
         logout();
+        $args = redirectUsingCookies();
     break;
 
     case 'changePassword' :
