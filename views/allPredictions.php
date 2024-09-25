@@ -3,7 +3,7 @@ $count = intSQL("SELECT COUNT(*) FROM `predictions`");
 echo "<h1>" . getString("allPredictions_title") . "</h1>";
 echo "<p>" . getString("allPredictions_description", [displayInt($count)]) . "</p>";
 echo "<hr>";
-$predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended` FROM `predictions` WHERE `ended` > NOW() ORDER BY `ended`;");
+$predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended` FROM `predictions` WHERE `ended` > NOW() ORDER BY `ended` ASC;");
 $count = $predictions?count($predictions):0;
 echo "<h2>" . getString("predictions_ongoing") . " (" . displayInt($count) . ")</h2>";
 echo "<table><tr>";
@@ -29,7 +29,7 @@ if(!$predictions){
 }
 echo "</table>";
 echo "<hr>";
-$predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended` FROM `predictions` WHERE `ended` < NOW() AND `answer` IS NULL ORDER BY `ended`;");
+$predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended` FROM `predictions` WHERE `ended` < NOW() AND `answer` IS NULL ORDER BY `ended` ASC;");
 $count = $predictions?count($predictions):0;
 echo "<h2>" . getString("predictions_waiting") . " (" . displayInt($count) . ")</h2>";
 echo "<table><tr>";
@@ -55,15 +55,15 @@ if(!$predictions){
 }
 echo "</table>";
 echo "<hr>";
-$predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended`, `answer` FROM `predictions` WHERE `answer` IS NOT NULL ORDER BY `id` DESC;");
+$predictions = arraySQL("SELECT `id`, `title`, `user`, `created`, `ended`, `answer` FROM `predictions` WHERE `answer` IS NOT NULL ORDER BY `ended` DESC;");
 $count = $predictions?count($predictions):0;
 echo "<h2>" . getString("predictions_ended") . " (" . displayInt($count) . ")</h2>";
 echo "<table><tr>";
-    echo "<th>" . getString("id") . " ▼</th>";
+    echo "<th>" . getString("id") . "</th>";
     echo "<th>" . getString("title") . "</th>";
     echo "<th>" . getString("creator") . "</th>";
     echo "<th>" . getString("created") . " (UTC)</th>";
-    echo "<th>" . getString("bets_end") . " (UTC)</th>";
+    echo "<th>" . getString("bets_end") . " (UTC) ▼</th>";
     echo "<th>" . getString("answer") . "</th>";
 echo "</tr>";
 if(!$predictions){

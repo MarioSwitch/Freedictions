@@ -39,7 +39,7 @@ $rankBetsPoints = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`,
 
 //Predictions created
 $predictionsCreatedText = "";
-$predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND NOW() < `ended` AND `answer` IS NULL;", [$user]);
+$predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND NOW() < `ended` AND `answer` IS NULL ORDER BY `ended` ASC;", [$user]);
 $predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
 $predictionsCreatedText = $predictionsCreatedText . "<h3>" . getString("predictions_ongoing") . " (" . displayInt($predictionsCreatedCount) . ")</h3>";
 if(!$predictionsCreated){
@@ -52,7 +52,7 @@ if(!$predictionsCreated){
 }
 $predictionsCreatedText = $predictionsCreatedText . "<hr class='mini'>";
 
-$predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND NOW() > `ended` AND `answer` IS NULL;", [$user]);
+$predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND NOW() > `ended` AND `answer` IS NULL ORDER BY `ended` ASC;", [$user]);
 $predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
 $predictionsCreatedText = $predictionsCreatedText . "<h3>" . getString("predictions_waiting") . " (" . displayInt($predictionsCreatedCount) . ")</h3>";
 if(!$predictionsCreated){
@@ -65,7 +65,7 @@ if(!$predictionsCreated){
 }
 $predictionsCreatedText = $predictionsCreatedText . "<hr class='mini'>";
 
-$predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND `answer` IS NOT NULL;", [$user]);
+$predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND `answer` IS NOT NULL ORDER BY `ended` DESC;", [$user]);
 $predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
 $predictionsCreatedText = $predictionsCreatedText . "<h3>" . getString("predictions_ended") . " (" . displayInt($predictionsCreatedCount) . ")</h3>";
 if($detailed){
@@ -83,7 +83,7 @@ if($detailed){
 
 //Predictions participated
 $predictionsParticipatedText = "";
-$predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND NOW() < `ended` AND `answer` IS NULL;", [$user]);
+$predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND NOW() < `ended` AND `answer` IS NULL ORDER BY `ended` ASC;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
 $predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_ongoing") . " (" . displayInt($predictionsParticipatedCount) . ")</h3>";
 if(!$predictionsParticipated){
@@ -96,7 +96,7 @@ if(!$predictionsParticipated){
 }
 $predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>";
 
-$predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND NOW() > `ended` AND `answer` IS NULL;", [$user]);
+$predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND NOW() > `ended` AND `answer` IS NULL ORDER BY `ended` ASC;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
 $predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_waiting") . " (" . displayInt($predictionsParticipatedCount) . ")</h3>";
 if(!$predictionsParticipated){
@@ -109,7 +109,7 @@ if(!$predictionsParticipated){
 }
 $predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>";
 
-$predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NOT NULL;", [$user]);
+$predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NOT NULL ORDER BY `ended` DESC;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
 $predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_ended") . " (" . displayInt($predictionsParticipatedCount) . ")</h3>";
 if($detailed){
