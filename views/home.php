@@ -28,13 +28,22 @@ if(isConnected()){
     // Predictions not participated
     $predictionsNotParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`ended` FROM `predictions` WHERE `predictions`.`ended` > NOW() AND `predictions`.`id` NOT IN (SELECT `predictions`.`id` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NULL) ORDER BY `predictions`.`ended` ASC;", [$_COOKIE["username"]]);
     $predictionsNotParticipatedCount = $predictionsNotParticipated?count($predictionsNotParticipated):0;
+    $predictionsNotParticipatedEndDates = [];
+    foreach($predictionsNotParticipated as $prediction){
+        foreach($prediction as $key => $value){
+            if($key == "ended"){
+                array_push($predictionsNotParticipatedEndDates, [$value, substr($value, 0, 10), substr($value, 11, 8)]);
+            }
+        }
+    }
     echo "<h3>" . getString("home_bet_waiting") . " (" . displayInt($predictionsNotParticipatedCount) . ")</h3>";
     if(!$predictionsNotParticipated){
         echo "<p>" . getString("predictions_none") . "</p>";
     }else{
         for ($i=0; $i < count($predictionsNotParticipated); $i++){
             $link = "index.php?view=prediction&id=" . $predictionsNotParticipated[$i]["id"];
-            echo "<a href=\"$link\">" . $predictionsNotParticipated[$i]["title"] . "</a><br>";
+            echo "<a href=\"$link\">" . $predictionsNotParticipated[$i]["title"] . "</a>";
+            echo "<p>" . getString("bets_end") . " <abbr id='ended_$i' title='" . $predictionsNotParticipatedEndDates[$i][0] . " – UTC'></abbr></p><br>";
         }
     }
 
@@ -64,4 +73,11 @@ if(isConnected()){
         $title = $predictions[$i]["title"];
         echo "<a href='?view=prediction&id=" . $id . "'>" . $title . "</a><br>";
     }
+}
+
+include_once "countdown.js.php";
+include_once "UTC_Local_Converter.js.php";
+for ($i=0; $i < count($predictionsNotParticipated); $i++){
+    echo "<script>countdownTo('" . $predictionsNotParticipatedEndDates[$i][1] . "T" . $predictionsNotParticipatedEndDates[$i][2] ."Z', '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'ended_$i');</script>";
+    echo "<script>UTCtoLocal(\"" . $predictionsNotParticipatedEndDates[$i][0] . "\",document.getElementById(\"ended_$i\"));</script>";
 }
