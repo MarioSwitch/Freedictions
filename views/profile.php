@@ -177,7 +177,7 @@ if(isConnected() && $user == $_COOKIE["username"]){
         <h2>" . getString("profile_manage") . "</h2>
         <p>" . getString("profile_manage_info", ["<a href='?view=changePassword'>" . getString("profile_manage_info_change_password") . "</a>", "<a href='?view=deleteAccount&user=$user'>" . getString("profile_manage_info_delete_account") . "</a>"]) . "</p>
     ";
-} else if (isMod()){
+} else if (isMod() && !isMod($user)){
     echo "
         <hr>
         <h2>" . getString("profile_manage_mod") . "</h2>

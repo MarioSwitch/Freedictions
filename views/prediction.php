@@ -168,8 +168,7 @@ switch($mode){
         </form>";
     break;
 }
-if ($creator || isMod())
-{
+if ($creator || (isMod() && !isMod($prediCreator))){
     echo "<hr><h2>" . getString("prediction_manage") . "</h2>";
     if ($prediAnswer == NULL){
         if ($prediEnd < stringSQL("SELECT NOW();")){

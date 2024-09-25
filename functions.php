@@ -198,12 +198,19 @@ function isConnected(){
 }
 
 /**
- * Checks if the user is a moderator
+ * Checks if a user is a moderator
+ * @param string $user username to check. If empty, checks the current user
  * @return bool true if the user is a moderator, false otherwise
  */
-function isMod(){
-    if(!isConnected()) return false;
-    return intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]) == 1;
+function isMod($user = NULL){
+    if($user == NULL){ // Current user
+        if(!isConnected()) return false;
+        return intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]) == 1;
+    }else{ // Specified user
+        $userExists = intSQL("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$user]);
+        if(!$userExists) return false;
+        return intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$user]) == 1;
+    }
 }
 
 /**
@@ -418,7 +425,7 @@ function changePassword($username,$oldpassword,$newpassword, $newpasswordconfirm
  * @return void
  */
 function deleteAccount($username, $password){
-    if(!(isMod() || $username == $_COOKIE["username"])){
+    if(!((isMod() && !isMod($username)) || $username == $_COOKIE["username"])){
         header("Location:index.php?view=home&error=forbidden");
         die("");
     }
@@ -536,7 +543,7 @@ function answer($prediction,$answer){
     global $now;
     $author = stringSQL("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction]);
     $userConnected = $_COOKIE["username"];
-    if(!($author == $userConnected || isMod())){
+    if(!($author == $userConnected || (isMod() && !isMod($author)))){
         header("Location:index.php?view=prediction&id=" . $prediction . "&error=unauthorized");
         die("");
     }
@@ -571,7 +578,7 @@ function deletePrediction($prediction){
     global $now;
     $author = stringSQL("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction]);
     $userConnected = $_COOKIE["username"];
-    if(!($author == $userConnected || isMod())){
+    if(!($author == $userConnected || (isMod() && !isMod($author)))){
         header("Location:index.php?view=prediction&id=" . $prediction . "&error=unauthorized");
         die("");
     }
