@@ -28,11 +28,13 @@ if(isConnected()){
     // Predictions not participated
     $predictionsNotParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`ended` FROM `predictions` WHERE `predictions`.`ended` > NOW() AND `predictions`.`id` NOT IN (SELECT `predictions`.`id` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NULL) ORDER BY `predictions`.`ended` ASC;", [$_COOKIE["username"]]);
     $predictionsNotParticipatedCount = $predictionsNotParticipated?count($predictionsNotParticipated):0;
-    $predictionsNotParticipatedEndDates = [];
-    foreach($predictionsNotParticipated as $prediction){
-        foreach($prediction as $key => $value){
-            if($key == "ended"){
-                array_push($predictionsNotParticipatedEndDates, $value);
+    if($predictionsNotParticipatedCount){
+        $predictionsNotParticipatedEndDates = [];
+        foreach($predictionsNotParticipated as $prediction){
+            foreach($prediction as $key => $value){
+                if($key == "ended"){
+                    array_push($predictionsNotParticipatedEndDates, $value);
+                }
             }
         }
     }
@@ -76,6 +78,8 @@ if(isConnected()){
 }
 
 include_once "time.js.php";
-for ($i=0; $i < count($predictionsNotParticipated); $i++){
-    echo "<script>displayDateTime(\"" . $predictionsNotParticipatedEndDates[$i] . "\",\"ended_$i\");</script>";
+if($predictionsNotParticipatedCount){
+    for ($i=0; $i < count($predictionsNotParticipated); $i++){
+        echo "<script>displayDateTime(\"" . $predictionsNotParticipatedEndDates[$i] . "\",\"ended_$i\");</script>";
+    }
 }
