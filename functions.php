@@ -154,6 +154,9 @@ function getSetting($name){
             $default = "yes";
             $supported = ["yes", "no"];
             break;
+        case 'td':
+            $default = "relative";
+            $supported = ["relative", "local", "utc"];
     }
     if (array_key_exists($name, $_COOKIE)){
         return in_array($_COOKIE[$name], $supported) ? $_COOKIE[$name] : $default;

@@ -9,12 +9,7 @@ if(!$userExists){
 
 //Timestamps
 $created = stringSQL("SELECT `created` FROM `users` WHERE `username` = ?;", [$user]);
-$createdDate = substr($created,0,10);
-$createdTime = substr($created,11,8);
-
 $online = stringSQL("SELECT `updated` FROM `users` WHERE `username` = ?;", [$user]);
-$onlineDate = substr($online,0,10);
-$onlineTime = substr($online,11,8);
 
 //Values
 $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$user]);
@@ -128,8 +123,8 @@ if($detailed){
 //Display
 echo "
     <h1>" . displayUsername($user) . "</h1>
-    <p>" . getString("profile_created") . " <abbr title='" . $created . " – UTC' id='createdCountdown'></abbr></p>
-    <p>" . getString("online") . " <abbr title='" . $online . " – UTC' id='onlineCountdown'></abbr></p>
+    <p>" . getString("profile_created") . " <abbr id='createdCountdown'>$created</abbr></p>
+    <p>" . getString("online") . " <abbr id='onlineCountdown'>$online</abbr></p>
     <hr>
     <h2>" . getString("stats") . "</h2>
     <table>
@@ -191,10 +186,6 @@ if(isConnected() && $user == $_COOKIE["username"]){
 }
 
 //JavaScript
-include_once "countdown.js.php";
-echo "<script>countdownTo(\"" . $createdDate . "T" . $createdTime . "Z\", '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'createdCountdown');</script>";
-echo "<script>countdownTo(\"" . $onlineDate . "T" . $onlineTime . "Z\", '" . getString("javascript_countdown_in", ["%countdown"]) . "', '" . getString("javascript_countdown_ago", ["%countup"]) . "', 'onlineCountdown');</script>";
-
-include_once "UTC_Local_Converter.js.php";
-echo "<script>UTCtoLocal(\"$created\",document.getElementById(\"createdCountdown\"));</script>";
-echo "<script>UTCtoLocal(\"$online\",document.getElementById(\"onlineCountdown\"));</script>";
+include_once "time.js.php";
+echo "<script>displayDateTime(\"$created\",\"createdCountdown\");</script>";
+echo "<script>displayDateTime(\"$online\",\"onlineCountdown\");</script>";
