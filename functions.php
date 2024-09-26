@@ -226,6 +226,7 @@ function displayUsername($username){
     $predictionsCreated = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$username]);
     $bets = intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ?;", [$username]);
     $pointsSpent = intSQL("SELECT SUM(`points`) FROM `votes` WHERE `user` = ?;", [$username]);
+    $betsWon = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$username]);
     global $streak_badges;
     global $points_top;
     global $points_badges;
@@ -235,6 +236,8 @@ function displayUsername($username){
     global $bets_badges;
     global $pointsSpent_top;
     global $pointsSpent_badges;
+    global $betsWon_top;
+    global $betsWon_badges;
     //Code
     $icons = "";
     if($mod){$icons .= "<abbr title='" . getString("mod") . "'><img class='user-icon' src='svg/mod.png'></abbr>";}
@@ -243,6 +246,7 @@ function displayUsername($username){
     $icons .= checkDynamicBadge($predictionsCreated, $predictionsCreated_top, $predictionsCreated_badges, "predictionsCreated", getString("predictions_created"));
     $icons .= checkDynamicBadge($bets, $bets_top, $bets_badges, "bets", getString("predictions_participated"));
     $icons .= checkDynamicBadge($pointsSpent, $pointsSpent_top, $pointsSpent_badges, "pointsSpent", getString("points_spent"));
+    $icons .= checkDynamicBadge($betsWon, $betsWon_top, $betsWon_badges, "betsWon", getString("bets_won"));
     return $icons . $username;
 }
 

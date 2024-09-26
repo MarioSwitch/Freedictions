@@ -26,6 +26,10 @@ ob_start();
         $pointsSpent = intSQL("SELECT `pointsSpent` FROM `users` LEFT JOIN (SELECT `user`, SUM(`points`) AS `pointsSpent` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `username` = ?;", [$_COOKIE["username"]]);
         $pointsSpentCurrentBadgeLevel = getCurrentBadgeLevel($pointsSpent, $pointsSpent_badges, getString("points_unit"));
         $pointsSpentNextBadgeLevel = getNextBadgeLevel($pointsSpent, $pointsSpent_badges, getString("points_unit"));
+        //Bets won
+        $betsWon = intSQL("SELECT `correct_vote_count` FROM `users` LEFT JOIN (SELECT votes.user, COUNT(*) AS correct_vote_count FROM votes JOIN predictions ON votes.prediction = predictions.id WHERE votes.choice = predictions.answer GROUP BY votes.user) correct_votes ON users.username = correct_votes.user WHERE `username` = ?;", [$_COOKIE["username"]]);
+        $betsWonCurrentBadgeLevel = getCurrentBadgeLevel($betsWon, $betsWon_badges, getString("bets_unit"));
+        $betsWonNextBadgeLevel = getNextBadgeLevel($betsWon, $betsWon_badges, getString("bets_unit"));
     }
     function displayInviteShowProgress(){
         echo "<td colspan='2'>" . displayInvite(getString("invite_action_show_progress")) . "</td>";
@@ -90,6 +94,17 @@ echo "
         if(isConnected()){
             echo "<td>" . $pointsSpentCurrentBadgeLevel . "</td>";
             echo "<td>" . $pointsSpentNextBadgeLevel . "</td>";
+        } else {
+            displayInviteShowProgress();
+        }
+echo "
+    </tr>
+    <tr>
+        <td>" . getString("bets_won") . "</td>";
+        generateDynamicBadgeRow("betsWon", $betsWon_top, $betsWon_badges, getString("bets_unit"));
+        if(isConnected()){
+            echo "<td>" . $betsWonCurrentBadgeLevel . "</td>";
+            echo "<td>" . $betsWonNextBadgeLevel . "</td>";
         } else {
             displayInviteShowProgress();
         }
