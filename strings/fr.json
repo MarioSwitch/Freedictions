@@ -39,7 +39,7 @@
     "bets_won":"Paris remportés",
     "bets_end":"Fin des paris",
     "points_spent":"Points dépensés",
-    "points_spent_correct":"(dont paris remportés)",
+    "points_spent_on_wins":"Points dépensés sur les paris remportés",
     "answer":"Réponse",
     "rank":"Rang",
     "ranks":"Rangs",

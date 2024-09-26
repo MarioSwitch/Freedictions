@@ -17,10 +17,12 @@ $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$user]);
 $totalCreated = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$user]);
 $totalBets = intSQL("SELECT COUNT(*) FROM `votes` WHERE `user` = ?;", [$user]);
 $totalBetsPoints = intSQL("SELECT SUM(points) FROM `votes` WHERE `user` = ?;", [$user]);
-$answerBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND predictions.answer IS NOT NULL;", [$user]);
-$answerBetsPoints = intSQL("SELECT SUM(points) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND predictions.answer IS NOT NULL;", [$user]);
 $correctBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$user]);
 $correctBetsPoints = intSQL("SELECT SUM(points) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND choice = answer;", [$user]);
+$earned = intSQL("WITH prediction_yields AS (SELECT p.id AS prediction_id, SUM(v.points) / SUM(CASE WHEN v.choice = p.answer THEN v.points ELSE 0 END) AS yield FROM predictions p JOIN votes v ON v.prediction = p.id WHERE p.answer IS NOT NULL GROUP BY p.id), user_points AS (SELECT v.user AS username, v.prediction AS prediction_id, FLOOR(v.points * py.yield) AS points_gained FROM votes v JOIN predictions p ON v.prediction = p.id JOIN prediction_yields py ON v.prediction = py.prediction_id WHERE v.choice = p.answer AND v.user = ?) SELECT COALESCE(SUM(up.points_gained), 0) AS total_points_gained FROM user_points up;", [$user]);
+
+$answerBets = intSQL("SELECT COUNT(*) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND predictions.answer IS NOT NULL;", [$user]);
+$answerBetsPoints = intSQL("SELECT SUM(points) FROM `votes` JOIN `predictions` ON votes.prediction = predictions.id WHERE votes.user = ? AND predictions.answer IS NOT NULL;", [$user]);
 $correctBetsPercentage = $answerBets?($correctBets/$answerBets*100):getString("n_a");
 $correctBetsPercentagePoints = $answerBetsPoints?($correctBetsPoints/$answerBetsPoints*100):getString("n_a");
 $accounts = intSQL("SELECT COUNT(*) FROM `users`");
@@ -31,7 +33,9 @@ $rankPoints = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points)
 $rankCreated = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `totalCreated` FROM `predictions` GROUP BY `user`) `predictions2` ON `users`.`username` = `predictions2`.`user` WHERE `totalCreated` > " . $totalCreated) + 1;
 $rankBets = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `totalBets` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `totalBets` > " . $totalBets) + 1;
 $rankBetsPoints = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`, SUM(`points`) AS `pointsSpent` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `pointsSpent` > " . $totalBetsPoints) + 1;
-$rankWins = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `votes`.`user`, COUNT(*) AS `correct_vote_count` FROM `votes` JOIN `predictions` ON `votes`.`prediction` = `predictions`.`id` WHERE `votes`.`choice` = `predictions`.`answer` GROUP BY `votes`.`user`) `correct_votes` ON `users`.`username` = `correct_votes`.`user` WHERE `correct_vote_count` > " . $correctBets) + 1;
+$rankCorrectBets = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `votes`.`user`, COUNT(*) AS `correct_vote_count` FROM `votes` JOIN `predictions` ON `votes`.`prediction` = `predictions`.`id` WHERE `votes`.`choice` = `predictions`.`answer` GROUP BY `votes`.`user`) `correct_votes` ON `users`.`username` = `correct_votes`.`user` WHERE `correct_vote_count` > " . $correctBets) + 1;
+$rankCorrectBetsPoints = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `votes`.`user`, SUM(`points`) AS `pointsSpentWins` FROM `votes` JOIN `predictions` ON `votes`.`prediction` = `predictions`.`id` WHERE `votes`.`choice` = `predictions`.`answer` GROUP BY `votes`.`user`) `correct_votes` ON `users`.`username` = `correct_votes`.`user` WHERE `pointsSpentWins` > " . $correctBetsPoints) + 1;
+$rankEarned = intSQL("WITH prediction_yields AS (SELECT p.id AS prediction_id, SUM(v.points) / SUM(CASE WHEN v.choice = p.answer THEN v.points ELSE 0 END) AS yield FROM predictions p JOIN votes v ON v.prediction = p.id WHERE p.answer IS NOT NULL GROUP BY p.id), user_points AS (SELECT v.user AS username, v.prediction AS prediction_id, FLOOR(v.points * py.yield) AS points_gained FROM votes v JOIN predictions p ON v.prediction = p.id JOIN prediction_yields py ON v.prediction = py.prediction_id WHERE v.choice = p.answer) SELECT COUNT(*) FROM (SELECT username, COALESCE(SUM(up.points_gained), 0) AS total_points_gained FROM user_points up GROUP BY username) `earned` WHERE `total_points_gained` > " . $earned) + 1;
 
 //Predictions created
 $predictionsCreatedText = "";
@@ -157,16 +161,17 @@ echo "
         <tr>
             <td>" . getString("bets_won") . "</td>
             <td>" . getString("of", [displayInt($correctBets), displayInt($answerBets)]) . ($answerBets?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentage)]) . "</small>"):"") . "</td>
-            <td><p><a href=\"?view=allUsers&order=winsHigh\">" . displayOrdinal($rankWins) . "</a></p></td>
+            <td><p><a href=\"?view=allUsers&order=winsHigh\">" . displayOrdinal($rankCorrectBets) . "</a></p></td>
         </tr>
         <tr>
             <td>" . getString("bets_won") . " (" . getString("points_unit") . ")</td>
             <td>" . getString("of", [displayInt($correctBetsPoints), displayInt($answerBetsPoints)]) . ($answerBetsPoints?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentagePoints)]) . "</small>"):"") . "</td>
-            <td>" . getString("coming_soon") . "</td>
+            <td><p><a href=\"?view=allUsers&order=psowHigh\">" . displayOrdinal($rankCorrectBetsPoints) . "</a></p></td>
         </tr>
         <tr>
             <td>" . getString("points_earned") . "</td>
-            <td colspan='2'>" . getString("coming_soon") . "</td>
+            <td>" . displayInt($earned) . "</td>
+            <td><p><a href=\"?view=allUsers&order=earnedHigh\">" . displayOrdinal($rankEarned) . "</a></p></td>
         </tr>
     </table>
     <hr>
