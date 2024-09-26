@@ -31,6 +31,7 @@ $rankPoints = intSQL("SELECT COUNT(*) FROM `users` WHERE `points` > " . $points)
 $rankCreated = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `totalCreated` FROM `predictions` GROUP BY `user`) `predictions2` ON `users`.`username` = `predictions2`.`user` WHERE `totalCreated` > " . $totalCreated) + 1;
 $rankBets = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `totalBets` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `totalBets` > " . $totalBets) + 1;
 $rankBetsPoints = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `user`, SUM(`points`) AS `pointsSpent` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `pointsSpent` > " . $totalBetsPoints) + 1;
+$rankWins = intSQL("SELECT COUNT(*) FROM `users` LEFT JOIN (SELECT `votes`.`user`, COUNT(*) AS `correct_vote_count` FROM `votes` JOIN `predictions` ON `votes`.`prediction` = `predictions`.`id` WHERE `votes`.`choice` = `predictions`.`answer` GROUP BY `votes`.`user`) `correct_votes` ON `users`.`username` = `correct_votes`.`user` WHERE `correct_vote_count` > " . $correctBets) + 1;
 
 //Predictions created
 $predictionsCreatedText = "";
@@ -156,12 +157,16 @@ echo "
         <tr>
             <td>" . getString("bets_won") . "</td>
             <td>" . getString("of", [displayInt($correctBets), displayInt($answerBets)]) . ($answerBets?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentage)]) . "</small>"):"") . "</td>
-            <td>" . getString("coming_soon") . "</td>
+            <td><p><a href=\"?view=allUsers&order=winsHigh\">" . displayOrdinal($rankWins) . "</a></p></td>
         </tr>
         <tr>
             <td>" . getString("bets_won") . " (" . getString("points_unit") . ")</td>
             <td>" . getString("of", [displayInt($correctBetsPoints), displayInt($answerBetsPoints)]) . ($answerBetsPoints?("<br><small>" . getString("percentage", [displayFloat($correctBetsPercentagePoints)]) . "</small>"):"") . "</td>
             <td>" . getString("coming_soon") . "</td>
+        </tr>
+        <tr>
+            <td>" . getString("points_earned") . "</td>
+            <td colspan='2'>" . getString("coming_soon") . "</td>
         </tr>
     </table>
     <hr>

@@ -52,6 +52,8 @@ switch($order){
     case "predictionsHigh":$users = arraySQL($request . " ORDER BY `predictions_created` DESC;");break;
     case "votesLow":$users = arraySQL($request . " ORDER BY `vote_count` ASC;");break;
     case "votesHigh":$users = arraySQL($request . " ORDER BY `vote_count` DESC;");break;
+    case "winsLow":$users = arraySQL($request . " ORDER BY `correct_vote_count` ASC;");break;
+    case "winsHigh":$users = arraySQL($request . " ORDER BY `correct_vote_count` DESC;");break;
     case "spentLow":$users = arraySQL($request . " ORDER BY `vote_points` ASC;");break;
     case "spentHigh":$users = arraySQL($request . " ORDER BY `vote_points` DESC;");break;
     default:$users = arraySQL($request . ";");break;
@@ -61,6 +63,7 @@ $myUsername = isConnected()?$_COOKIE["username"]:"";
 echo "<h1>" . getString("allUsers_title") . "</h1>";
 echo "<p>" . getString("allUsers_description", [displayInt($accounts)]) . "</p>";
 echo "<hr>";
+
 $sort_username = ($order == "usernameA-Z")?"usernameZ-A":"usernameA-Z";
 $sort_created = ($order == "createdNew")?"createdOld":"createdNew";
 $sort_updated = ($order == "updatedNew")?"updatedOld":"updatedNew";
@@ -68,7 +71,9 @@ $sort_streak = ($order == "streakHigh")?"streakLow":"streakHigh";
 $sort_points = ($order == "pointsHigh")?"pointsLow":"pointsHigh";
 $sort_predictions = ($order == "predictionsHigh")?"predictionsLow":"predictionsHigh";
 $sort_votes = ($order == "votesHigh")?"votesLow":"votesHigh";
+$sort_wins = ($order == "winsHigh")?"winsLow":"winsHigh";
 $sort_spent = ($order == "spentHigh")?"spentLow":"spentHigh";
+
 $link_username = "?view=allUsers&order=" . $sort_username;
 $link_created = "?view=allUsers&order=" . $sort_created;
 $link_updated = "?view=allUsers&order=" . $sort_updated;
@@ -77,7 +82,9 @@ $link_points = "?view=allUsers&order=" . $sort_points;
 $link_mod = "?view=allUsers&order=mod";
 $link_predictions = "?view=allUsers&order=" . $sort_predictions;
 $link_votes = "?view=allUsers&order=" . $sort_votes;
+$link_wins = "?view=allUsers&order=" . $sort_wins;
 $link_spent = "?view=allUsers&order=" . $sort_spent;
+
 function isOrderedBy(string $tag){
     global $order;
     if (str_contains($order, $tag)){
@@ -98,7 +105,8 @@ echo "<table>
         <th><p><a href=\"" . $link_points . "\"> " . getString("points") . isOrderedBy("points") . "</a></th>
         <th><p><a href=\"" . $link_mod . "\">" . getString("mod") . isOrderedBy("mod") . "</a></th>
         <th><p><a href=\"" . $link_predictions . "\">" . getString("predictions_created") . isOrderedBy("predictions") . "</a></th>
-        <th><p><a href=\"" . $link_votes . "\">" . getString("bets") . isOrderedBy("votes") . "<br><small>" . getString("bets_correct") . "</small></a></th>
+        <th><p><a href=\"" . $link_votes . "\">" . getString("bets") . isOrderedBy("votes") . "</a></th>
+        <th><p><a href=\"" . $link_wins . "\">" . getString("bets_won") . isOrderedBy("wins") . "</a></th>
         <th><p><a href=\"" . $link_spent . "\">" . getString("points_spent") . isOrderedBy("spent") . "<br><small>" . getString("points_spent_correct") . "</small></a></th>
     </tr>";
 if(!$users){
@@ -121,11 +129,12 @@ if(!$users){
             <td><p><a href=\"" . $link_user . "\">" . displayUsername($username) . "</a></td>
             <td>" . $created . "</td>
             <td>" . $updated . "</td>
-            <td>" . $streak . "</td>
+            <td>" . displayInt($streak) . "</td>
             <td>" . displayInt($points) . "</td>
             <td>" . $mod . "</td>
-            <td>" . $predictions . "</td>
-            <td>" . $votes . " <small>(" . $votes_correct . ")</small></td>
+            <td>" . displayInt($predictions) . "</td>
+            <td>" . displayInt($votes) . "</td>
+            <td>" . displayInt($votes_correct) . "</td>
             <td>" . displayInt($spent) . " <small>(" . displayInt($spent_on_wins) . ")</small></td>
         </tr>";
     }
