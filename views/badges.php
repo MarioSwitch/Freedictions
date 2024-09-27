@@ -119,8 +119,20 @@ echo "
         <th>" . getString("badges_role") . "</th>
     </tr>
     <tr>
-        <td><img src=\"svg/mod.png\" alt=\"" . getString("mod") . "\" title=\"" . getString("mod") . "\"></td>
+        <td><img src=\"svg/verified.svg\" alt=\"" . getString("verified") . "\" title=\"" . getString("verified") . "\"></td>
+        <td>" . getString("verified") . "</td>
+    </tr>
+    <tr>
+        <td><img src=\"svg/mod.svg\" alt=\"" . getString("mod") . "\" title=\"" . getString("mod") . "\"></td>
         <td>" . getString("mod") . "</td>
+    </tr>
+    <tr>
+        <td><img src=\"svg/developer.svg\" alt=\"" . getString("developer") . "\" title=\"" . getString("developer") . "\"></td>
+        <td>" . getString("developer") . "</td>
+    </tr>
+    <tr>
+        <td><img src=\"svg/translator.svg\" alt=\"" . getString("translator") . "\" title=\"" . getString("translator") . "\"></td>
+        <td>" . getString("translator") . "</td>
     </tr>
 </table>";
 ob_end_flush();

@@ -221,6 +221,12 @@ function isMod($user = NULL){
 function displayUsername($username){
     //Variables
     $mod = intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]);
+
+    $extra = intSQL("SELECT `extra` FROM `users` WHERE `username` = ?;", [$username]);
+    $verified = $extra % 10;
+    $translator = ($extra / 10) % 10;
+    $developer = ($extra / 100) % 10;
+
     $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$username]);
     $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
     $predictionsCreated = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$username]);
@@ -240,7 +246,10 @@ function displayUsername($username){
     global $betsWon_badges;
     //Code
     $icons = "";
-    if($mod){$icons .= "<abbr title='" . getString("mod") . "'><img class='user-icon' src='svg/mod.png'></abbr>";}
+    if($verified){$icons .= "<abbr title='" . getString("verified") . "'><img class='user-icon' src='svg/verified.svg'></abbr>";}
+    if($mod){$icons .= "<abbr title='" . getString("mod") . "'><img class='user-icon' src='svg/mod.svg'></abbr>";}
+    if($developer){$icons .= "<abbr title='" . getString("developer") . "'><img class='user-icon' src='svg/developer.svg'></abbr>";}
+    if($translator){$icons .= "<abbr title='" . getString("translator") . "'><img class='user-icon' src='svg/translator.svg'></abbr>";}
     $icons .= checkStaticBadge($streak, $streak_badges, "calendar", getString("streak"));
     $icons .= checkDynamicBadge($points, $points_top, $points_badges, "points", getString("points"));
     $icons .= checkDynamicBadge($predictionsCreated, $predictionsCreated_top, $predictionsCreated_badges, "predictionsCreated", getString("predictions_created"));
@@ -357,7 +366,7 @@ function createAccount($username, $password1, $password2){
         die("");
     }
     $hash = password_hash($password1, PASSWORD_DEFAULT);
-    rawSQL("INSERT INTO users (`username`, `password`, `created`, `updated`, `streak`, `points`, `mod`) VALUES (?, ?, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);", [$username, $hash]);
+    rawSQL("INSERT INTO users (`username`, `password`, `created`, `updated`, `streak`, `points`, `mod`, `extra`) VALUES (?, ?, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);", [$username, $hash]);
     login($username,$password1);
 }
 

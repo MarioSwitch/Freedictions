@@ -6,6 +6,7 @@ CREATE TABLE `users` (
     `streak` int NOT NULL DEFAULT 0,
     `points` bigint NOT NULL DEFAULT 100,
     `mod` tinyint(1) NOT NULL DEFAULT 0,
+    `extra` int NOT NULL DEFAULT 0 COMMENT '1 = verified | 10 = translator | 100 = developer',
     PRIMARY KEY (`username`)
 );
 
@@ -16,7 +17,7 @@ CREATE TABLE `predictions` (
     `user` varchar(20) NOT NULL,
     `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `ended` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `answered` timestamp DEFAULT NULL,
+    `answered` timestamp NULL,
     `answer` int NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `pred_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`)

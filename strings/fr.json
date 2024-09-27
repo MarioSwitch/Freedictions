@@ -10,9 +10,13 @@
     "n_a":"N/A",
     "coming_soon":"À venir",
 
+    "verified":"Vérifié",
+    "mod":"Modérateur",
+    "translator":"Traducteur",
+    "developer":"Développeur",
+
     "id":"ID",
     "title":"Titre",
-    "mod":"Modérateur",
     "user":"Utilisateur",
     "users":"Utilisateurs",
     "users_online":"Utilisateurs en ligne",
