@@ -33,14 +33,52 @@ Une fois la date limite dépassée, le créateur peut alors valider la bonne ré
 <hr>
 <h2>Bon à savoir</h2>
 <p>
-    Les modérateurs ont une icône d'épée à côté de leur pseudo.<br>
-    Ils peuvent, par exemple, gérer toutes les prédictions et supprimer n'importe quel compte.<br><br>
+    Les modérateurs <img src="svg/mod.svg" style="width:21px;height:21px"> peuvent toujours créer des prédictions, gérer toutes les prédictions créées par des non-modérateurs, et supprimer n'importe quel compte non-modérateur.<br><br>
 
-    Vous pouvez passer votre curseur sur les temps restants pour voir l'heure exacte (UTC).<br><br>
+    Vous pouvez passer votre curseur sur les temps restants / dates pour voir les autres formats.<br><br>
 
     Les bonus quotidiens sont distribués à 00:00 UTC et donnent 10 points plus le nombre de jours consécutifs de connexion.<br>
     Par exemple, si vous êtes connecté depuis 24 jours consécutifs, votre bonus quotidien s'élève à 10 + 24 = 34 points.<br>
     Si vous n'allez pas sur le site pendant une période 00:00-24:00 UTC, votre bonus quotidien retombe à 10 points et vous ne recevez pas votre bonus ce jour-là.<br><br>
+</p>
+<hr>
+<h2>Notes pour les traducteurs</h2>
+<p>
+    Il existe 3 moyens de contribuer à la traduction du site.<br><br>
+
+    Premièrement, en améliorant la traduction en langues déjà disponibles (anglais et allemand), par l'ajout ou la correction de traductions ;<br><br>
+
+    Deuxièmement, en traduisant le site dans une nouvelle langue.<br>
+    Seuls le néerlandais, l'italien et l'espagnol sont ouverts à une première traduction, n'hésitez pas à contacter le développeur si vous souhaitez traduire le site dans une autre langue ;<br><br>
+
+    Troisièmement, en approuvant les traductions effectuées par d'autres utilisateurs.<br>
+    Pour cela, nous vous demandons d'avoir une maîtrise <u>solide</u> de la langue concernée.<br>
+    Par exemple, se contenter d'un traducteur en ligne peut être un bon point de départ, mais n'est <u>PAS suffisant</u> pour l'approbation d'une traduction.<br>
+    Pour effectuer ces vérifications, vous devez demander un statut spécial à un administrateur.<br>
+    Notez enfin que les textes approuvés <u>ne peuvent plus</u> être modifiés par les autres utilisateurs.<br><br>
+</p>
+<hr class="mini"><br>
+<p>
+    Pour les 3 types de contributeurs, nous vous demandons votre attention sur les points suivants :<br><br>
+
+    Les traductions ne doivent pas être faites mot à mot.<br>
+    Si une expression n'est pas traduisible dans la langue cible, utilisez des expressions équivalentes.<br><br>
+
+    Les traductions doivent être <u>cohérentes</u> et <u>uniformes</u> au sein d'une même langue.<br>
+    Par exemple, si la traduction de « parier » est « bet » en anglais, n'utilisez pas « vote » ou « predict » dans d'autres traductions.<br>
+    De même, utilisez les dérivés de « bet » (« bets », « betting », etc.) pour les autres traductions.<br><br>
+
+    Certaines traductions peuvent paraître étranges (ex. « , » en anglais devient « . » en allemand).<br>
+    Dans ces cas, vérifiez la clé de la traduction (ici, il s'agissait de « thousands_separator », qui signifie « séparateur de milliers ») afin de comprendre pourquoi un caractère spécial est traduit par un autre.<br><br>
+
+    Le fichier source en français est mis à jour <u>très régulièrement</u>. Nous vous invitons à vérifier le plus souvent possible les modifications apportées, afin de maintenir une traduction à jour.<br><br>
+</p>
+<hr class="mini"><br>
+<p>
+    Une fois ces précisions prises en compte, vous pouvez commencer à contribuer au projet sur la plateforme <a href="https://crowdin.com/project/better-twitch-predictions">Crowdin</a>.<br>
+    N'hésitez pas à commencer par vous familiariser avec l'éditeur, notamment si vous ne connaissez pas son fonctionnement.<br><br>
+    Afin de vous distinguer, vous recevrez un badge spécial <img src="svg/translator.svg" style="width:21px;height:21px"> ainsi qu'un rôle sur le serveur Discord.<br>
+    
 </p>
 <hr>
 <h2>Répartition des points</h2>
@@ -120,5 +158,5 @@ v1.1 (mai 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.0 (juin 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.1 (septembre 2024) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 <br>
-<i>Version 2.1.47 du 27 septembre 2024</i>
+<i>Version 2.1.48 du 27 septembre 2024</i>
 </p>
