@@ -65,7 +65,7 @@ for($i = 0; $i < count($prediChoices); $i++){
         $votesPercentage = "";
     }
     if($pointsPercentage != ""){
-        $winRate = displayFloat($pointsTotal / $pointsChoice);
+        $winRate = "×" . displayFloat($pointsTotal / $pointsChoice);
     }else{
         $winRate = "—";
     }

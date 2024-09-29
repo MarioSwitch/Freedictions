@@ -20,6 +20,12 @@ echo "<h2>Nouveautés de la version 2.1</h2>
         Le site est déjà disponible en anglais et en allemand (bêta).<br>
         Si vous souhaitez contribuer à la traduction du site, des informations complémentaires sont disponibles dans la partie « Notes pour les traducteurs » de la page « À propos du site ».
     </p>
+    <br>
+    <hr class=\"mini\">
+    <h3>Serveur Discord</h3>
+    <p>
+        Échangez avec la communauté, discutez des prédictions, proposez des idées d'amélioration et bien plus encore, en rejoignant le serveur Discord officiel du site !<br>
+        Lien d'invitation : <a href=\"https://discord.gg/PCKx4qf9XZ\">https://discord.gg/PCKx4qf9XZ</a>
     <hr>";
 $predictions = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `ended` > NOW() ORDER BY `ended` ASC;");
 $predictions_count = $predictions?count($predictions):0;
