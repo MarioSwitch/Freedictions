@@ -20,7 +20,7 @@ if($detailed == NULL || $detailed == "users"){
         for($i = 0; $i < count($users); $i++){
             echo "<a href='?view=profile&user=" . $users[$i]["username"] . "'>" . displayUsername($users[$i]["username"]) . "<small> (" . displayInt($users[$i]["points"]) . " " . getString("points_unit") . ")</small></a><br>";
             if($i >= 4 && $detailed == NULL){
-                echo "<a href='?view=search&query=" . $search . "&detailed=users'>" . getString("search_detailed") . " ►</a><br>";
+                echo "<a href='?view=search&query=" . $search . "&detailed=users'>" . getString("show_all") . " ►</a><br>";
                 break;
             }
         }
@@ -35,7 +35,7 @@ if($detailed == NULL || $detailed == "opened"){
         for($i = 0; $i < count($opened); $i++){
             echo "<a href='?view=prediction&id=" . $opened[$i]["id"] . "'>" . $opened[$i]["title"] . "</a><br>";
             if($i >= 4 && $detailed == NULL){
-                echo "<a href='?view=search&query=" . $search . "&detailed=opened'>" . getString("search_detailed") . " ►</a><br>";
+                echo "<a href='?view=search&query=" . $search . "&detailed=opened'>" . getString("show_all") . " ►</a><br>";
                 break;
             }
         }
@@ -50,7 +50,7 @@ if($detailed == NULL || $detailed == "closed"){
         for($i = 0; $i < count($closed); $i++){
             echo "<a href='?view=prediction&id=" . $closed[$i]["id"] . "'>" . $closed[$i]["title"] . "</a><br>";
             if($i >= 4 && $detailed == NULL){
-                echo "<a href='?view=search&query=" . $search . "&detailed=closed'>" . getString("search_detailed") . " ►</a><br>";
+                echo "<a href='?view=search&query=" . $search . "&detailed=closed'>" . getString("show_all") . " ►</a><br>";
                 break;
             }
         }

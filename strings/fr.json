@@ -9,6 +9,7 @@
 
     "n_a":"N/A",
     "coming_soon":"À venir",
+    "show_all":"Afficher tout",
 
     "verified":"Vérifié",
     "mod":"Modérateur",
@@ -41,6 +42,7 @@
     "bets":"Paris",
     "bets_unit":"paris",
     "bets_won":"Paris remportés",
+    "bets_lost":"Paris perdus",
     "bets_end":"Fin des paris",
     "points_spent":"Points dépensés",
     "points_spent_on_wins":"Points dépensés sur les paris remportés",
@@ -173,8 +175,6 @@
     "profile_not_found":"Le compte « [TBR] » n'existe pas !",
     "profile_created":"Compte créé",
     "profile_prediction_bet":"Parié sur « [TBR] » avec [TBR] points",
-    "profile_detailed":"Pour éviter la surcharge de la page, les prédictions terminées sont masquées par défaut. Cliquez [TBR] pour les afficher.",
-    "profile_detailed_here":"ici",
     "profile_manage":"Gérer votre compte",
     "profile_manage_mod":"Modération",
     "profile_manage_info":"Vous pouvez [TBR] ou [TBR].",
@@ -184,7 +184,6 @@
     "profile_manage_info_delete_account_mod":"supprimer le compte",
 
     "search_results":"Résultats de recherche pour « [TBR] »",
-    "search_detailed":"Afficher tout",
 
     "settings_title":"Paramètres",
     "settings_default":"(par défaut)",

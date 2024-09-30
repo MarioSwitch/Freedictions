@@ -68,17 +68,17 @@ $predictionsCreatedText = $predictionsCreatedText . "<hr class='mini'>";
 $predictionsCreated = arraySQL("SELECT `id`, `title` FROM `predictions` WHERE `user` = ? AND `answer` IS NOT NULL ORDER BY `ended` DESC;", [$user]);
 $predictionsCreatedCount = $predictionsCreated?count($predictionsCreated):0;
 $predictionsCreatedText = $predictionsCreatedText . "<h3>" . getString("predictions_ended") . " (" . displayInt($predictionsCreatedCount) . ")</h3>";
-if($detailed){
-    if(!$predictionsCreated){
-        $predictionsCreatedText = $predictionsCreatedText . "<p>" . getString("predictions_none") . "</p>";
-    }else{
-        for ($i=0; $i < count($predictionsCreated); $i++){
-            $link = "index.php?view=prediction&id=" . $predictionsCreated[$i]["id"];
-            $predictionsCreatedText = $predictionsCreatedText . "<a href=\"$link\">" . $predictionsCreated[$i]["title"] . "</a><br/>";
+if(!$predictionsCreated){
+    $predictionsCreatedText = $predictionsCreatedText . "<p>" . getString("predictions_none") . "</p>";
+}else{
+    for ($i=0; $i < count($predictionsCreated); $i++){
+        $link = "index.php?view=prediction&id=" . $predictionsCreated[$i]["id"];
+        $predictionsCreatedText = $predictionsCreatedText . "<a href=\"$link\">" . $predictionsCreated[$i]["title"] . "</a><br/>";
+        if(!$detailed && $i >= 4){
+            $predictionsCreatedText .= "<a href=\"" . $_SERVER['REQUEST_URI'] . "&detailed=true\">" . getString("show_all") . " ►</a><br>";
+            break;
         }
     }
-}else{
-    $predictionsCreatedText = $predictionsCreatedText . "<p>" . getString("profile_detailed", ["<a href=\"" . $_SERVER['REQUEST_URI'] . "&detailed=true\">" . getString("profile_detailed_here") . "</a>"]) . "</p>";
 }
 
 //Predictions participated
@@ -109,20 +109,40 @@ if(!$predictionsParticipated){
 }
 $predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>";
 
-$predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NOT NULL ORDER BY `ended` DESC;", [$user]);
+$predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`answer`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NOT NULL ORDER BY `ended` DESC;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
-$predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_ended") . " (" . displayInt($predictionsParticipatedCount) . ")</h3>";
-if($detailed){
-    if(!$predictionsParticipated){
-        $predictionsParticipatedText = $predictionsParticipatedText . "<p>" . getString("predictions_none") . "</p>";
+if(!$predictionsParticipated){
+    $predictionsParticipatedText = $predictionsParticipatedText . "<p>" . getString("predictions_none") . "</p>";
+}else{
+    if($detailed){
+        $predictionsWon = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`answer`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` = `votes`.`choice` ORDER BY `ended` DESC;", [$user]);
+        $predictionsWonCount = $predictionsWon?count($predictionsWon):0;
+        $predictionsParticipatedText .= "<h3>" . getString("bets_won") . " (" . displayInt($predictionsWonCount) . ")</h3>";
+        for ($i=0; $i < $predictionsWonCount; $i++){
+            $link = "index.php?view=prediction&id=" . $predictionsWon[$i]["id"];
+            $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsWon[$i]["title"] . "</a><p>" . getString("profile_prediction_bet", [$predictionsWon[$i]["name"], displayInt($predictionsWon[$i]["points"])]) . "</p><br/>";
+        }
+        $predictionsParticipatedText .= "<hr class='mini'>";
+        $predictionsLost = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`answer`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` != `votes`.`choice` ORDER BY `ended` DESC;", [$user]);
+        $predictionsLostCount = $predictionsLost?count($predictionsLost):0;
+        $predictionsParticipatedText .= "<h3>" . getString("bets_lost") . " (" . displayInt($predictionsLostCount) . ")</h3>";
+        for ($i=0; $i < $predictionsLostCount; $i++){
+            $link = "index.php?view=prediction&id=" . $predictionsLost[$i]["id"];
+            $answer = stringSQL("SELECT `name` FROM `choices` WHERE `id`=?;", [$predictionsLost[$i]["answer"]]);
+            $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsLost[$i]["title"] . "</a><p>" . getString("profile_prediction_bet", [$predictionsLost[$i]["name"], displayInt($predictionsLost[$i]["points"])]) . "<br/>" . getString("prediction_answer", [$answer]) . "</p><br/>";
+        }
     }else{
+        $predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_ended") . " (" . displayInt($predictionsParticipatedCount) . ")</h3>";
         for ($i=0; $i < count($predictionsParticipated); $i++){
             $link = "index.php?view=prediction&id=" . $predictionsParticipated[$i]["id"];
-            $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>" . getString("profile_prediction_bet", [$predictionsParticipated[$i]["name"], displayInt($predictionsParticipated[$i]["points"])]) . "</p><br/>";
+            $answer = stringSQL("SELECT `name` FROM `choices` WHERE `id`=?;", [$predictionsParticipated[$i]["answer"]]);
+            $predictionsParticipatedText = $predictionsParticipatedText . "<a href=\"$link\">" . $predictionsParticipated[$i]["title"] . "</a><p>" . getString("profile_prediction_bet", [$predictionsParticipated[$i]["name"], displayInt($predictionsParticipated[$i]["points"])]) . "<br/>". getString("prediction_answer", [$answer]) . "</p><br/>";
+            if($i >= 4){
+                $predictionsParticipatedText .= "<a href=\"" . $_SERVER['REQUEST_URI'] . "&detailed=true\">" . getString("show_all") . " ►</a><br>";
+                break;
+            }
         }
     }
-}else{
-    $predictionsParticipatedText = $predictionsParticipatedText . "<p>" . getString("profile_detailed", ["<a href=\"" . $_SERVER['REQUEST_URI'] . "&detailed=true\">" . getString("profile_detailed_here") . "</a>"]) . "</p>";
 }
 
 //Display
