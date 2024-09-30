@@ -183,18 +183,9 @@ table#settings > tbody > tr > td:nth-child(2){
     background: #3b4866;
 }
 
-
-.header-right {
-    right: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .header-search {
-    margin: auto;
     font-size: 25px;
-    width: 30vw;
+    width: 20vw;
     height: 40px;
     border: 0;
     border-radius: 50px 0 0 50px;
@@ -221,15 +212,34 @@ table#settings > tbody > tr > td:nth-child(2){
 
 @media all and (max-width: 1700px)
 {
-    .search-form {
-        display: none;
+    h1 {
+        margin-top: 200px;
     }
-}
 
-@media all and (max-width: 1200px)
-{
-    .header-text {
-        display: none;
+    th {
+        position: revert;
+    }
+
+    .navbar {
+        display: revert;
+        align-items: revert;
+        text-align: center;
+    }
+
+    .navbar > a {
+        display: inline-block;
+    }
+
+    .navbar > a > img {
+        padding: 10px 15px;
+    }
+
+    .header-search {
+        width: 50vw;
+    }
+
+    .search-form {
+        justify-content: center;
     }
 }
 
@@ -347,7 +357,7 @@ form:not(.search-form) > button {
 @media all and (max-width: 1700px)
 {
     .prediChoicesBox {
-        width: 45vw;
+        width: 95vw;
     }
 
     #prediNameBox, #prediDesc {
@@ -380,12 +390,5 @@ form:not(.search-form) > button {
         display: block;
         width: 95vw;
         left: 2vw;
-    }
-}
-
-@media all and (max-width: 1200px)
-{
-    .prediChoicesBox {
-        width:95vw;
     }
 }

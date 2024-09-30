@@ -37,8 +37,7 @@ echo "
     <form method=\"GET\" action=\"controller.php\" class=\"search-form\">
         <input class=\"header-search\" type=\"text\" placeholder=\"" . getString("search") . "\" name=\"search\">
         <button type=\"submit\" name=\"action\" class=\"header-button\" value=\"search\"></button>
-    </form>
-    <div class=\"header-right\">";
+    </form>";
         // Si l'utilisateur n'est pas connecté, on affiche un lien de connexion et/ou d'inscription
         if (!isConnected()){
             echo "<a class='header-svg' href='index.php?view=signup'><img src='svg/signup.svg'></a>";
@@ -53,5 +52,4 @@ echo "
             echo "<a href='controller.php?action=logout'><img src='svg/logout.svg'></a>";
         }
 echo "
-    </div>
 </div>";
