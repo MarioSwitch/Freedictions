@@ -112,6 +112,7 @@ $predictionsParticipatedText = $predictionsParticipatedText . "<hr class='mini'>
 $predictionsParticipated = arraySQL("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`answer`, `choices`.`name`, `votes`.`points` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `votes` ON `votes`.`choice` = `choices`.`id` WHERE `votes`.`user` = ? AND `answer` IS NOT NULL ORDER BY `ended` DESC;", [$user]);
 $predictionsParticipatedCount = $predictionsParticipated?count($predictionsParticipated):0;
 if(!$predictionsParticipated){
+    $predictionsParticipatedText = $predictionsParticipatedText . "<h3>" . getString("predictions_ended") . " (" . displayInt($predictionsParticipatedCount) . ")</h3>";
     $predictionsParticipatedText = $predictionsParticipatedText . "<p>" . getString("predictions_none") . "</p>";
 }else{
     if($detailed){

@@ -158,5 +158,5 @@ v1.1 (mai 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.0 (juin 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.1 (septembre 2024) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 <br>
-<i>Version 2.1.50 du 30 septembre 2024</i>
+<i>Version 2.1.51 du 30 septembre 2024</i>
 </p>
