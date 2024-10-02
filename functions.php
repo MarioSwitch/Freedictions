@@ -222,10 +222,10 @@ function displayUsername($username){
     //Variables
     $mod = intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]);
 
-    $extra = intSQL("SELECT `extra` FROM `users` WHERE `username` = ?;", [$username]);
-    $verified = $extra % 10;
-    $translator = ($extra / 10) % 10;
-    $developer = ($extra / 100) % 10;
+    $extra = stringSQL("SELECT `extra` FROM `users` WHERE `username` = ?;", [$username]);
+    $verified = preg_match("/verified/", $extra);
+    $translator = preg_match("/translator/", $extra);
+    $developer = preg_match("/developer/", $extra);
 
     $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$username]);
     $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);

@@ -6,7 +6,7 @@ CREATE TABLE `users` (
     `streak` int NOT NULL DEFAULT 0,
     `points` bigint NOT NULL DEFAULT 100,
     `mod` tinyint(1) NOT NULL DEFAULT 0,
-    `extra` int NOT NULL DEFAULT 0 COMMENT '1 = verified | 10 = translator | 100 = developer',
+    `extra` varchar(1000) DEFAULT NULL,
     PRIMARY KEY (`username`)
 );
 
