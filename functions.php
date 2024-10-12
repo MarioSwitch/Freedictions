@@ -157,6 +157,7 @@ function getSetting($name){
         case 'td':
             $default = "relative";
             $supported = ["relative", "local", "utc"];
+            break;
     }
     if (array_key_exists($name, $_COOKIE)){
         return in_array($_COOKIE[$name], $supported) ? $_COOKIE[$name] : $default;
@@ -332,7 +333,7 @@ function displayOrdinal($int){
  * @return string formatted float
  */
 function displayFloat($float, $decimals = 2){
-    if($float >= 1000) return displayInt($float);
+    if($float >= 1000) return displayInt(floor($float));
     return number_format($float, $decimals, getString("decimal_separator"), getString("thousands_separator"));
 }
 

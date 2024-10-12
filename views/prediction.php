@@ -112,11 +112,16 @@ if (!isConnected()){
 } else{
     $mode = "normal";
 }
-$dropdownMenu = "<select name='choice'>";
+
+$dropdownMenu = "<select name='choice' required='required'>";
+$dropdownMenu .= "<option selected disabled value=''>" . getString("select") . "</option>";
 for($i = 0; $i < count($prediChoices); $i++){
     $dropdownMenu = $dropdownMenu . "<option value=" . $prediChoices[$i]["id"] . ">" . $prediChoices[$i]["name"] . "</option>";
 }
 $dropdownMenu = $dropdownMenu . "</select>";
+
+$pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
+$pointsField = "<input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'>";
 
 //Display
 echo "
@@ -143,12 +148,11 @@ switch($mode){
     case "alreadyVoted" :
         $choice = stringSQL("SELECT `choices`.`name` FROM `choices` JOIN `votes` ON `choices`.`id` = `votes`.`choice` WHERE `votes`.`user` = ? AND `votes`.`prediction` = ?;", [$_COOKIE["username"], $_REQUEST["id"]]);
         $pointsSpent = intSQL("SELECT `points` FROM `votes` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $_REQUEST["id"]]);
-        $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
         echo "<p>" . getString("prediction_bet_info", [$choice, displayInt($pointsSpent)]) . "</p>";
         if($prediEnd >= stringSQL("SELECT NOW();")){
             echo "<form role='form' action='controller.php'>
                 <input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'>
-                <p>" . getString("prediction_bet_add", ["<input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'>"]) . "</p>
+                <p>" . getString("prediction_bet_add", [$pointsField]) . "</p>
                 <button type='submit' name='action' value='addPoints'>" . getString("prediction_bet_add_confirm") . "</button>
             </form>";
         }
@@ -160,10 +164,9 @@ switch($mode){
 
     case "normal" :
     default :
-        $pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
         echo "<form role='form' action='controller.php'>
             <input type='hidden' name='prediction' value='" . $_REQUEST["id"] . "'>
-            <p>" . getString("prediction_bet_bet", [$dropdownMenu, "<input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'>"]) . "</p>
+            <p>" . getString("prediction_bet_bet", [$dropdownMenu, $pointsField]) . "</p>
             <button type='submit' name='action' value='vote'>" . getString("prediction_bet") . "</button>
         </form>";
     break;

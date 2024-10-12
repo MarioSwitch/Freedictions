@@ -84,8 +84,8 @@ if(isConnected()){
 }
 
 include_once "time.js.php";
-if($predictionsNotParticipatedCount){
-    for ($i=0; $i < count($predictionsNotParticipated); $i++){
+if(isset($predictionsNotParticipatedCount)){
+    for ($i=0; $i < $predictionsNotParticipatedCount; $i++){
         echo "<script>displayDateTime(\"" . $predictionsNotParticipatedEndDates[$i] . "\",\"ended_$i\");</script>";
     }
 }
