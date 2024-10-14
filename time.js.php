@@ -92,4 +92,10 @@ function displayDateTime(UTC, abbrID){ // UTC: \"YYYY-MM-DD HH:MM:SS\"
 
     setTimeout(displayDateTime, second, UTC, abbrID);
 }
+
+function displayTime(hours, minutes){
+    var now = new Date();
+    var utc = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0));
+    return utc.toLocaleTimeString();
+}
 </script>";

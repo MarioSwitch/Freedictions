@@ -35,11 +35,13 @@ Une fois la date limite dépassée, le créateur peut alors valider la bonne ré
 <p>
     Les modérateurs <img src="svg/mod.svg" style="width:21px;height:21px"> peuvent toujours créer des prédictions, gérer toutes les prédictions créées par des non-modérateurs, et supprimer n'importe quel compte non-modérateur.<br><br>
 
-    Vous pouvez passer votre curseur sur les temps restants / dates pour voir les autres formats.<br><br>
+    Vous pouvez passer votre curseur sur les temps restants / dates pour voir les autres formats.<br>
+    Vous pouvez également obtenir des détails supplémentaires pour les <abbr title="Comme ceci">termes à astérisques*</abbr>.<br><br>
 
-    Les bonus quotidiens sont distribués à 00:00 UTC et donnent 10 points plus le nombre de jours consécutifs de connexion.<br>
-    Par exemple, si vous êtes connecté depuis 24 jours consécutifs, votre bonus quotidien s'élève à 10 + 24 = 34 points.<br>
-    Si vous n'allez pas sur le site pendant une période 00:00-24:00 UTC, votre bonus quotidien retombe à 10 points et vous ne recevez pas votre bonus ce jour-là.<br><br>
+    Les bonus quotidiens sont comptabilisés à 00:00 UTC<span id="localTime"></span>. À cette heure, 2 cas de figure sont possibles :<br>
+    Si vous vous êtes connectés il y a moins de 24 heures, vous continuez votre série de connexion.<br>
+    Vous gagnez alors 10 points bonus le 1<sup>er</sup> jour, 11 points le 2<sup>e</sup> jour, etc. Votre bonus augmente d'un point à chaque jour de connexion consécutif supplémentaire.<br><br>
+    Si vous ne vous êtes pas connectés depuis plus de 24 heures, votre série de connexion se réinitialise, et vous ne gagnez pas de points bonus.
 </p>
 <hr>
 <h2>Notes pour les traducteurs</h2>
@@ -158,5 +160,7 @@ v1.1 (mai 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.0 (juin 2023) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 v2.1 (septembre 2024) par <a href="https://www.marioswitch.fr/">MarioSwitch</a><br>
 <br>
-<i>Version 2.1.55 du 12 octobre 2024</i>
+<i>Version 2.1.56 du 14 octobre 2024</i>
 </p>
+<?php include_once "time.js.php"; ?>
+<script>document.getElementById("localTime").innerHTML = " (" + displayTime(0, 0) + " selon votre fuseau horaire)";</script>
