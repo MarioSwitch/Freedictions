@@ -13,9 +13,9 @@ function displayInviteShowProgress(){
  * @param string $key String key
  * @return void
  */
-function displayExtraBadge(string $key){
+function displayExtraBadge(string $key, bool $value){
     echo "
-        <tr>
+        <tr" . ($value ? " class=\"green\"" : "") . ">
             <td><img src=\"svg/$key.svg\" alt=\"" . getString($key) . "\" title=\"" . getString($key) . "\"></td>
             <td>" . getString($key) . "</td>
         </tr>
@@ -157,19 +157,6 @@ function getNextBadgeLevel(int $stat, array $tab, string $unit){
 }
 
 /**
- * Apply background color to a badge cell
- * @param int $value Current value
- * @param array $goals Array of goals
- * @param int $i Index of the goal
- * @return string Class attribute
- */
-function applyBackgroundColor(int $value, array $goals, int $i){
-    if(!isConnected()) return "";
-    if($value >= $goals[$i]) return " class=\"green\"";
-    return "";
-}
-
-/**
  * Display full static badge row
  * @param string $title String key for the title
  * @param int $value Current value
@@ -181,14 +168,14 @@ function applyBackgroundColor(int $value, array $goals, int $i){
  * @return void
  */
 function fullStaticBadgeRow(string $title, int $value, string $svg, array $goals, string $unit_string_key, string $currentLevel, string $nextLevel){
-    echo "<tr><td" . applyBackgroundColor($value, $goals, 0) . ">" . getString($title) . "</td>";
-    echo "<td" . applyBackgroundColor($value, $goals, 0) . "><img src='svg/badges/" . $svg . "Bronze.svg' alt='" . getString("badges_bronze") . "' title='" . getString("badges_bronze") . "'><br>" . displayInt($goals[0]) . " " . getString($unit_string_key) . "</td>";
-    echo "<td" . applyBackgroundColor($value, $goals, 1) . "><img src='svg/badges/" . $svg . "Silver.svg' alt='" . getString("badges_silver") . "' title='" . getString("badges_silver") . "'><br>" . displayInt($goals[1]) . " " . getString($unit_string_key) . "</td>";
-    echo "<td" . applyBackgroundColor($value, $goals, 2) . "><img src='svg/badges/" . $svg . "Gold.svg' alt='" . getString("badges_gold") . "' title='" . getString("badges_gold") . "'><br>" . displayInt($goals[2]) . " " . getString($unit_string_key) . "</td>";
-    echo "<td" . applyBackgroundColor($value, $goals, 3) . "><img src='svg/badges/" . $svg . "Diamond.svg' alt='" . getString("badges_diamond") . "' title='" . getString("badges_diamond") . "'><br>" . displayInt($goals[3]) . " " . getString($unit_string_key) . "</td>";
+    echo "<tr><td" . ($value >= $goals[0] ? " class=\"green\"" : "") . ">" . getString($title) . "</td>";
+    echo "<td" . ($value >= $goals[0] ? " class=\"green\"" : "") . "><img src='svg/badges/" . $svg . "Bronze.svg' alt='" . getString("badges_bronze") . "' title='" . getString("badges_bronze") . "'><br>" . displayInt($goals[0]) . " " . getString($unit_string_key) . "</td>";
+    echo "<td" . ($value >= $goals[1] ? " class=\"green\"" : "") . "><img src='svg/badges/" . $svg . "Silver.svg' alt='" . getString("badges_silver") . "' title='" . getString("badges_silver") . "'><br>" . displayInt($goals[1]) . " " . getString($unit_string_key) . "</td>";
+    echo "<td" . ($value >= $goals[2] ? " class=\"green\"" : "") . "><img src='svg/badges/" . $svg . "Gold.svg' alt='" . getString("badges_gold") . "' title='" . getString("badges_gold") . "'><br>" . displayInt($goals[2]) . " " . getString($unit_string_key) . "</td>";
+    echo "<td" . ($value >= $goals[3] ? " class=\"green\"" : "") . "><img src='svg/badges/" . $svg . "Diamond.svg' alt='" . getString("badges_diamond") . "' title='" . getString("badges_diamond") . "'><br>" . displayInt($goals[3]) . " " . getString($unit_string_key) . "</td>";
     if(isConnected()){
-        echo "<td" . applyBackgroundColor($value, $goals, 3) . ">" . $currentLevel . "</td>";
-        echo "<td" . applyBackgroundColor($value, $goals, 3) . ">" . $nextLevel . "</td>";
+        echo "<td" . ($value >= $goals[3] ? " class=\"green\"" : "") . ">" . $currentLevel . "</td>";
+        echo "<td" . ($value >= $goals[3] ? " class=\"green\"" : "") . ">" . $nextLevel . "</td>";
     } else {
         displayInviteShowProgress();
     }
@@ -208,14 +195,14 @@ function fullStaticBadgeRow(string $title, int $value, string $svg, array $goals
  * @return void
  */
 function fullDynamicBadgeRow(string $title, int $value, string $svg, array $top, array $goals, string $unit_string_key, string $currentLevel, string $nextLevel){
-    echo "<tr><td" . applyBackgroundColor($value, $goals, 0) . ">" . getString($title) . "</td>";
-    echo "<td" . applyBackgroundColor($value, $goals, 0) . "><img src='svg/badges/" . $svg . "Bronze.svg' alt='" . getString("badges_bronze") . "' title='" . getString("badges_bronze") . "'><br>" . getString("percentage_top", [displayFloat($top[0])]) . "<br><small>" . displayInt($goals[0]) . " " . getString($unit_string_key) . "</small></td>";
-    echo "<td" . applyBackgroundColor($value, $goals, 1) . "><img src='svg/badges/" . $svg . "Silver.svg' alt='" . getString("badges_silver") . "' title='" . getString("badges_silver") . "'><br>" . getString("percentage_top", [displayFloat($top[1])]) . "<br><small>" . displayInt($goals[1]) . " " . getString($unit_string_key) . "</small></td>";
-    echo "<td" . applyBackgroundColor($value, $goals, 2) . "><img src='svg/badges/" . $svg . "Gold.svg' alt='" . getString("badges_gold") . "' title='" . getString("badges_gold") . "'><br>" . getString("percentage_top", [displayFloat($top[2])]) . "<br><small>" . displayInt($goals[2]) . " " . getString($unit_string_key) . "</small></td>";
-    echo "<td" . applyBackgroundColor($value, $goals, 3) . "><img src='svg/badges/" . $svg . "Diamond.svg' alt='" . getString("badges_diamond") . "' title='" . getString("badges_diamond") . "'><br>" . getString("percentage_top", [displayFloat($top[3])]) . "<br><small>" . displayInt($goals[3]) . " " . getString($unit_string_key) . "</small></td>";
+    echo "<tr><td" . ($value >= $goals[0] ? " class=\"green\"" : "") . ">" . getString($title) . "</td>";
+    echo "<td" . ($value >= $goals[0] ? " class=\"green\"" : "") . "><img src='svg/badges/" . $svg . "Bronze.svg' alt='" . getString("badges_bronze") . "' title='" . getString("badges_bronze") . "'><br>" . getString("percentage_top", [displayFloat($top[0])]) . "<br><small>" . displayInt($goals[0]) . " " . getString($unit_string_key) . "</small></td>";
+    echo "<td" . ($value >= $goals[1] ? " class=\"green\"" : "") . "><img src='svg/badges/" . $svg . "Silver.svg' alt='" . getString("badges_silver") . "' title='" . getString("badges_silver") . "'><br>" . getString("percentage_top", [displayFloat($top[1])]) . "<br><small>" . displayInt($goals[1]) . " " . getString($unit_string_key) . "</small></td>";
+    echo "<td" . ($value >= $goals[2] ? " class=\"green\"" : "") . "><img src='svg/badges/" . $svg . "Gold.svg' alt='" . getString("badges_gold") . "' title='" . getString("badges_gold") . "'><br>" . getString("percentage_top", [displayFloat($top[2])]) . "<br><small>" . displayInt($goals[2]) . " " . getString($unit_string_key) . "</small></td>";
+    echo "<td" . ($value >= $goals[3] ? " class=\"green\"" : "") . "><img src='svg/badges/" . $svg . "Diamond.svg' alt='" . getString("badges_diamond") . "' title='" . getString("badges_diamond") . "'><br>" . getString("percentage_top", [displayFloat($top[3])]) . "<br><small>" . displayInt($goals[3]) . " " . getString($unit_string_key) . "</small></td>";
     if(isConnected()){
-        echo "<td" . applyBackgroundColor($value, $goals, 3) . ">" . $currentLevel . "</td>";
-        echo "<td" . applyBackgroundColor($value, $goals, 3) . ">" . $nextLevel . "</td>";
+        echo "<td" . ($value >= $goals[3] ? " class=\"green\"" : "") . ">" . $currentLevel . "</td>";
+        echo "<td" . ($value >= $goals[3] ? " class=\"green\"" : "") . ">" . $nextLevel . "</td>";
     } else {
         displayInviteShowProgress();
     }

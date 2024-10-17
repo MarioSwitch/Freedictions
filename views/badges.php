@@ -31,9 +31,9 @@ echo "
         <th>" . getString("badges_badge") . "</th>
         <th>" . getString("badges_role") . "</th>
     </tr>";
-displayExtraBadge("verified");
-displayExtraBadge("mod");
-displayExtraBadge("developer");
-displayExtraBadge("translator");
+displayExtraBadge("verified", isExtra("verified"));
+displayExtraBadge("mod", isMod());
+displayExtraBadge("developer", isExtra("developer"));
+displayExtraBadge("translator", isExtra("translator"));
 echo "</table>";
 ob_end_flush();

@@ -215,19 +215,27 @@ function isMod($user = NULL){
 }
 
 /**
+ * Checks if a user has extra badge
+ * @param string $type Type of extra badge
+ * @param string $user Username to check. If empty, checks the current user
+ * @return bool true if the user has the extra badge, false otherwise
+ */
+function isExtra(string $type, string $user = NULL){
+    if($user == NULL){ // Current user
+        if(!isConnected()) return false;
+        $user = $_COOKIE["username"];
+    }
+    $extra = stringSQL("SELECT `extra` FROM `users` WHERE `username` = ?;", [$user]);
+    return preg_match("/$type/", $extra) == 1;
+}
+
+/**
  * Displays the username with an emoji if necessary
  * @param string $username the username
  * @return string the modified username
  */
 function displayUsername($username){
     //Variables
-    $mod = intSQL("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username]);
-
-    $extra = stringSQL("SELECT `extra` FROM `users` WHERE `username` = ?;", [$username]);
-    $verified = preg_match("/verified/", $extra);
-    $translator = preg_match("/translator/", $extra);
-    $developer = preg_match("/developer/", $extra);
-
     $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$username]);
     $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$username]);
     $predictionsCreated = intSQL("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$username]);
@@ -247,10 +255,10 @@ function displayUsername($username){
     global $betsWon_badges;
     //Code
     $icons = "";
-    if($verified){$icons .= "<abbr title='" . getString("verified") . "'><img class='user-icon' src='svg/verified.svg'></abbr>";}
-    if($mod){$icons .= "<abbr title='" . getString("mod") . "'><img class='user-icon' src='svg/mod.svg'></abbr>";}
-    if($developer){$icons .= "<abbr title='" . getString("developer") . "'><img class='user-icon' src='svg/developer.svg'></abbr>";}
-    if($translator){$icons .= "<abbr title='" . getString("translator") . "'><img class='user-icon' src='svg/translator.svg'></abbr>";}
+    if(isExtra("verified", $username)){$icons .= "<abbr title='" . getString("verified") . "'><img class='user-icon' src='svg/verified.svg'></abbr>";}
+    if(isMod($username)){$icons .= "<abbr title='" . getString("mod") . "'><img class='user-icon' src='svg/mod.svg'></abbr>";}
+    if(isExtra("developer", $username)){$icons .= "<abbr title='" . getString("developer") . "'><img class='user-icon' src='svg/developer.svg'></abbr>";}
+    if(isExtra("translator", $username)){$icons .= "<abbr title='" . getString("translator") . "'><img class='user-icon' src='svg/translator.svg'></abbr>";}
     $icons .= checkStaticBadge($streak, $streak_badges, "calendar", getString("streak"));
     $icons .= checkDynamicBadge($points, $points_top, $points_badges, "points", getString("points"));
     $icons .= checkDynamicBadge($predictionsCreated, $predictionsCreated_top, $predictionsCreated_badges, "predictionsCreated", getString("predictions_created"));
