@@ -1,4 +1,27 @@
 <?php
+include_once "strings/translations.php";
+/**
+ * Display the invite to show progress
+ * @return void
+ */
+function displayInviteShowProgress(){
+    echo "<td colspan='2'>" . displayInvite(getString("invite_action_show_progress")) . "</td>";
+}
+
+/**
+ * Display an extra badge
+ * @param string $key String key
+ * @return void
+ */
+function displayExtraBadge(string $key){
+    echo "
+        <tr>
+            <td><img src=\"svg/$key.svg\" alt=\"" . getString($key) . "\" title=\"" . getString($key) . "\"></td>
+            <td>" . getString($key) . "</td>
+        </tr>
+    ";
+}
+
 /**
  * Transform "Top xx%" into a value
  * @param float $percentage the percentage to check (ex. 10 for Top 10%)
@@ -48,13 +71,41 @@ foreach($betsWon_top as $top){
     array_push($betsWon_badges, topPercentToValue($top, $betsWon_sql));
 }
 
+//User progress
+if(isConnected()){
+    //Streak
+    $streak = intSQL("SELECT `streak` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
+    $streakCurrentBadgeLevel = getCurrentBadgeLevel($streak, $streak_badges, getString("streak_unit"));
+    $streakNextBadgeLevel = getNextBadgeLevel($streak, $streak_badges, getString("streak_unit"));
+    //Points
+    $points = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
+    $pointsCurrentBadgeLevel = getCurrentBadgeLevel($points, $points_badges, getString("points_unit"));
+    $pointsNextBadgeLevel = getNextBadgeLevel($points, $points_badges, getString("points_unit"));
+    //Predictions created
+    $predictionsCreated = intSQL("SELECT `predictionsCreated` FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `predictionsCreated` FROM `predictions` GROUP BY `user`) `predictions2` ON `users`.`username` = `predictions2`.`user` WHERE `username` = ?;", [$_COOKIE["username"]]);
+    $predictionsCreatedCurrentBadgeLevel = getCurrentBadgeLevel($predictionsCreated, $predictionsCreated_badges, getString("predictions_unit"));
+    $predictionsCreatedNextBadgeLevel = getNextBadgeLevel($predictionsCreated, $predictionsCreated_badges, getString("predictions_unit"));
+    //Bets
+    $bets = intSQL("SELECT `bets` FROM `users` LEFT JOIN (SELECT `user`, COUNT(*) AS `bets` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `username` = ?;", [$_COOKIE["username"]]);
+    $betsCurrentBadgeLevel = getCurrentBadgeLevel($bets, $bets_badges, getString("bets_unit"));
+    $betsNextBadgeLevel = getNextBadgeLevel($bets, $bets_badges, getString("bets_unit"));
+    //Points spent
+    $pointsSpent = intSQL("SELECT `pointsSpent` FROM `users` LEFT JOIN (SELECT `user`, SUM(`points`) AS `pointsSpent` FROM `votes` GROUP BY `user`) `votes2` ON `users`.`username` = `votes2`.`user` WHERE `username` = ?;", [$_COOKIE["username"]]);
+    $pointsSpentCurrentBadgeLevel = getCurrentBadgeLevel($pointsSpent, $pointsSpent_badges, getString("points_unit"));
+    $pointsSpentNextBadgeLevel = getNextBadgeLevel($pointsSpent, $pointsSpent_badges, getString("points_unit"));
+    //Bets won
+    $betsWon = intSQL("SELECT `correct_vote_count` FROM `users` LEFT JOIN (SELECT votes.user, COUNT(*) AS correct_vote_count FROM votes JOIN predictions ON votes.prediction = predictions.id WHERE votes.choice = predictions.answer GROUP BY votes.user) correct_votes ON users.username = correct_votes.user WHERE `username` = ?;", [$_COOKIE["username"]]);
+    $betsWonCurrentBadgeLevel = getCurrentBadgeLevel($betsWon, $betsWon_badges, getString("bets_unit"));
+    $betsWonNextBadgeLevel = getNextBadgeLevel($betsWon, $betsWon_badges, getString("bets_unit"));
+}
+
 //Functions
 /** Get current badge level
  * @param int $stat the stat to check
  * @param array $tab the array of badges
  * @param string $unit the unit of the stat
  * @return string the current badge level
-*/
+ */
 function getCurrentBadgeLevel(int $stat, array $tab, string $unit){
     if($stat < $tab[0]) return getString("badges_none");
     if($stat < $tab[1]) return getString("badges_bronze") . "<br><small>" . displayInt($stat) . " / " . displayInt($tab[0]) . " " . $unit . "</small>";
@@ -81,36 +132,54 @@ function getNextBadgeLevel(int $stat, array $tab, string $unit){
 }
 
 /**
- * Generate badge row for static badges
- * @param string $svg the SVG keyword (ex. "calendar" for "svg/badges/calendarBronze.svg")
- * @param array $goals the array of goals
- * @param string $unit the unit of the stat
+ * Display full static badge row
+ * @param string $title String key for the title
+ * @param string $svg SVG keyword (ex. "calendar" for "svg/badges/calendarBronze.svg")
+ * @param array $goals Array of goals
+ * @param string $unit_string_key String key for the unit
+ * @param string $currentLevel String which fills the current level column
+ * @param string $nextLevel String which fills the next level column
  * @return void
  */
-function generateStaticBadgeRow(string $svg, array $goals, string $unit){
-    echo "
-        <td><img src='svg/badges/" . $svg . "Bronze.svg' alt='" . getString("badges_bronze") . "' title='" . getString("badges_bronze") . "'><br>" . displayInt($goals[0]) . " " . $unit . "</td>
-        <td><img src='svg/badges/" . $svg . "Silver.svg' alt='" . getString("badges_silver") . "' title='" . getString("badges_silver") . "'><br>" . displayInt($goals[1]) . " " . $unit . "</td>
-        <td><img src='svg/badges/" . $svg . "Gold.svg' alt='" . getString("badges_gold") . "' title='" . getString("badges_gold") . "'><br>" . displayInt($goals[2]) . " " . $unit . "</td>
-        <td><img src='svg/badges/" . $svg . "Diamond.svg' alt='" . getString("badges_diamond") . "' title='" . getString("badges_diamond") . "'><br>" . displayInt($goals[3]) . " " . $unit . "</td>
-    ";
+function fullStaticBadgeRow(string $title, string $svg, array $goals, string $unit_string_key, string $currentLevel, string $nextLevel){
+    echo "<tr><td>" . getString($title) . "</td>";
+    echo "<td><img src='svg/badges/" . $svg . "Bronze.svg' alt='" . getString("badges_bronze") . "' title='" . getString("badges_bronze") . "'><br>" . displayInt($goals[0]) . " " . getString($unit_string_key) . "</td>";
+    echo "<td><img src='svg/badges/" . $svg . "Silver.svg' alt='" . getString("badges_silver") . "' title='" . getString("badges_silver") . "'><br>" . displayInt($goals[1]) . " " . getString($unit_string_key) . "</td>";
+    echo "<td><img src='svg/badges/" . $svg . "Gold.svg' alt='" . getString("badges_gold") . "' title='" . getString("badges_gold") . "'><br>" . displayInt($goals[2]) . " " . getString($unit_string_key) . "</td>";
+    echo "<td><img src='svg/badges/" . $svg . "Diamond.svg' alt='" . getString("badges_diamond") . "' title='" . getString("badges_diamond") . "'><br>" . displayInt($goals[3]) . " " . getString($unit_string_key) . "</td>";
+    if(isConnected()){
+        echo "<td>" . $currentLevel . "</td>";
+        echo "<td>" . $nextLevel . "</td>";
+    } else {
+        displayInviteShowProgress();
+    }
+    echo "</tr>";
 }
 
 /**
- * Generate badge row for dynamic badges
- * @param string $svg the SVG keyword (ex. "points" for "svg/badges/pointsBronze.svg")
- * @param array $top the array of top percentages
- * @param array $goals the array of goals
- * @param string $unit the unit of the stat
+ * Display full dynamic badge row
+ * @param string $title String key for the title
+ * @param string $svg SVG keyword (ex. "calendar" for "svg/badges/calendarBronze.svg")
+ * @param array $top Array of top percentages
+ * @param array $goals Array of goals
+ * @param string $unit_string_key String key for the unit
+ * @param string $currentLevel String which fills the current level column
+ * @param string $nextLevel String which fills the next level column
  * @return void
  */
-function generateDynamicBadgeRow(string $svg, array $top, array $goals, string $unit){
-    echo "
-        <td><img src='svg/badges/" . $svg . "Bronze.svg' alt='" . getString("badges_bronze") . "' title='" . getString("badges_bronze") . "'><br>" . getString("percentage_top", [displayFloat($top[0])]) . "<br><small>" . displayInt($goals[0]) . " " . $unit . "</small></td>
-        <td><img src='svg/badges/" . $svg . "Silver.svg' alt='" . getString("badges_silver") . "' title='" . getString("badges_silver") . "'><br>" . getString("percentage_top", [displayFloat($top[1])]) . "<br><small>" . displayInt($goals[1]) . " " . $unit . "</small></td>
-        <td><img src='svg/badges/" . $svg . "Gold.svg' alt='" . getString("badges_gold") . "' title='" . getString("badges_gold") . "'><br>" . getString("percentage_top", [displayFloat($top[2])]) . "<br><small>" . displayInt($goals[2]) . " " . $unit . "</small></td>
-        <td><img src='svg/badges/" . $svg . "Diamond.svg' alt='" . getString("badges_diamond") . "' title='" . getString("badges_diamond") . "'><br>" . getString("percentage_top", [displayFloat($top[3])]) . "<br><small>" . displayInt($goals[3]) . " " . $unit . "</small></td>
-    ";
+function fullDynamicBadgeRow(string $title, string $svg, array $top, array $goals, string $unit_string_key, string $currentLevel, string $nextLevel){
+    echo "<tr><td>" . getString($title) . "</td>";
+    echo "<td><img src='svg/badges/" . $svg . "Bronze.svg' alt='" . getString("badges_bronze") . "' title='" . getString("badges_bronze") . "'><br>" . getString("percentage_top", [displayFloat($top[0])]) . "<br><small>" . displayInt($goals[0]) . " " . getString($unit_string_key) . "</small></td>";
+    echo "<td><img src='svg/badges/" . $svg . "Silver.svg' alt='" . getString("badges_silver") . "' title='" . getString("badges_silver") . "'><br>" . getString("percentage_top", [displayFloat($top[1])]) . "<br><small>" . displayInt($goals[1]) . " " . getString($unit_string_key) . "</small></td>";
+    echo "<td><img src='svg/badges/" . $svg . "Gold.svg' alt='" . getString("badges_gold") . "' title='" . getString("badges_gold") . "'><br>" . getString("percentage_top", [displayFloat($top[2])]) . "<br><small>" . displayInt($goals[2]) . " " . getString($unit_string_key) . "</small></td>";
+    echo "<td><img src='svg/badges/" . $svg . "Diamond.svg' alt='" . getString("badges_diamond") . "' title='" . getString("badges_diamond") . "'><br>" . getString("percentage_top", [displayFloat($top[3])]) . "<br><small>" . displayInt($goals[3]) . " " . getString($unit_string_key) . "</small></td>";
+    if(isConnected()){
+        echo "<td>" . $currentLevel . "</td>";
+        echo "<td>" . $nextLevel . "</td>";
+    } else {
+        displayInviteShowProgress();
+    }
+    echo "</tr>";
 }
 
 /**
