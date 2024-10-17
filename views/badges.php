@@ -15,12 +15,12 @@ echo "<table>
         <th>" . getString("badges_level_current") . "</th>
         <th>" . getString("badges_level_next") . "</th>
     </tr>";
-fullStaticBadgeRow("streak", "calendar", $streak_badges, "streak_unit", $streakCurrentBadgeLevel, $streakNextBadgeLevel);
-fullDynamicBadgeRow("points", "points", $points_top, $points_badges, "points_unit", $pointsCurrentBadgeLevel, $pointsNextBadgeLevel);
-fullDynamicBadgeRow("predictions_created", "predictionsCreated", $predictionsCreated_top, $predictionsCreated_badges, "predictions_unit", $predictionsCreatedCurrentBadgeLevel, $predictionsCreatedNextBadgeLevel);
-fullDynamicBadgeRow("bets", "bets", $bets_top, $bets_badges, "bets_unit", $betsCurrentBadgeLevel, $betsNextBadgeLevel);
-fullDynamicBadgeRow("points_spent", "pointsSpent", $pointsSpent_top, $pointsSpent_badges, "points_unit", $pointsSpentCurrentBadgeLevel, $pointsSpentNextBadgeLevel);
-fullDynamicBadgeRow("bets_won", "betsWon", $betsWon_top, $betsWon_badges, "bets_unit", $betsWonCurrentBadgeLevel, $betsWonNextBadgeLevel);
+fullStaticBadgeRow("streak", $streak, "calendar", $streak_badges, "streak_unit", $streakCurrentBadgeLevel, $streakNextBadgeLevel);
+fullDynamicBadgeRow("points", $points, "points", $points_top, $points_badges, "points_unit", $pointsCurrentBadgeLevel, $pointsNextBadgeLevel);
+fullDynamicBadgeRow("predictions_created", $predictionsCreated, "predictionsCreated", $predictionsCreated_top, $predictionsCreated_badges, "predictions_unit", $predictionsCreatedCurrentBadgeLevel, $predictionsCreatedNextBadgeLevel);
+fullDynamicBadgeRow("bets", $bets, "bets", $bets_top, $bets_badges, "bets_unit", $betsCurrentBadgeLevel, $betsNextBadgeLevel);
+fullDynamicBadgeRow("points_spent", $pointsSpent, "pointsSpent", $pointsSpent_top, $pointsSpent_badges, "points_unit", $pointsSpentCurrentBadgeLevel, $pointsSpentNextBadgeLevel);
+fullDynamicBadgeRow("bets_won", $betsWon, "betsWon", $betsWon_top, $betsWon_badges, "bets_unit", $betsWonCurrentBadgeLevel, $betsWonNextBadgeLevel);
 echo "
     </tr>
 </table>
