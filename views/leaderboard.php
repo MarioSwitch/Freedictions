@@ -46,11 +46,11 @@ $previousTop = $tableTop - $sqlLimit;
 $previousBottom = $tableBottom - $sqlLimit;
 if($previousTop < 1) $previousTop = 1;
 if($previousBottom < 1) $previousBottom = 1;
-if($previousTop != $previousBottom) echo "<a href='?view=leaderboard&start=$previousTop&end=$previousBottom'>◄ " . getString("ranks") . " " . displayInt($previousTop, false) . " – " . displayInt($previousBottom, false) . "</a><br>";
+if($previousTop != $previousBottom) echo "<a href='?view=leaderboard&start=$previousTop&end=$previousBottom'>◄ " . getString("ranks") . " " . displayInt($previousTop, false) . " – " . displayInt($previousBottom, false) . "</a>";
 $nextTop = $tableTop + $sqlLimit;
 $nextBottom = $tableBottom + $sqlLimit;
-echo "<a href='?view=leaderboard&start=$nextTop&end=$nextBottom'>" . getString("ranks") . " " . displayInt($nextTop, false) . " – " . displayInt($nextBottom, false) . " ►</a><br>";
+echo "<a href='?view=leaderboard&start=$nextTop&end=$nextBottom'>" . getString("ranks") . " " . displayInt($nextTop, false) . " – " . displayInt($nextBottom, false) . " ►</a>";
 if(!is_null($myTableTop)){
-	echo "<a href='?view=leaderboard&start=$myTableTop&end=$myTableBottom'>" . getString("leaderboard_my_page") . " <small>(" . getString("ranks") . " " . displayInt($myTableTop, false) . " – " . displayInt($myTableBottom, false) . ")</small></a>";
+	echo "<br><a href='?view=leaderboard&start=$myTableTop&end=$myTableBottom'>" . getString("leaderboard_my_page") . " <small>(" . getString("ranks") . " " . displayInt($myTableTop, false) . " – " . displayInt($myTableBottom, false) . ")</small></a>";
 }
 echo "</td></tr></table>";

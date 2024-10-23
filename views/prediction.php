@@ -1,4 +1,5 @@
 <?php
+ob_start();
 if(array_key_exists("error",$_REQUEST)){
     echo "<p class='error'>";
     switch($_REQUEST["error"]){
@@ -120,7 +121,7 @@ for($i = 0; $i < count($prediChoices); $i++){
 }
 $dropdownMenu = $dropdownMenu . "</select>";
 
-$pointsMax = intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]);
+$pointsMax = isConnected()?intSQL("SELECT `points` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]]):0;
 $pointsField = "<input type='number' name='points' min='1' max='" . $pointsMax . "' required='required'>";
 
 //Display
@@ -219,3 +220,4 @@ echo "<script>displayDateTime(\"$prediEnd\",\"endedCountdown\");</script>";
 if($prediAnswered != NULL){
     echo "<script>displayDateTime(\"$prediAnswered\",\"answeredCountdown\");</script>";
 }
+ob_end_flush();
