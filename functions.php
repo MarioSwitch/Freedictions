@@ -92,3 +92,78 @@ function getSetting($name): string{
 		return $default;
 	}
 }
+
+const NOW = executeQuery("SELECT NOW();", [], "string");
+
+/**
+ * Réinitialise la date d'expiration des cookies
+ * @return void
+ */
+function resetCookiesExpiration(): void{
+	foreach($_COOKIE as $key => $value){
+		setcookie($key, $value, time()+CONFIG_COOKIES_EXPIRATION);
+	}
+}
+
+/**
+ * Vérifie que les cookies de connexion sont valides et retourne le statut de connexion
+ * @return bool Vrai si l'utilisateur est connecté, faux sinon
+ */
+function isConnected(): bool{
+	if(!(array_key_exists("username", $_COOKIE) && array_key_exists("password", $_COOKIE))){
+		logout();
+		return false;
+	}
+	if(executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "int") == 0){
+		logout();
+		return false;
+	}
+	$hash_saved = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "string");
+	if(!password_verify($_COOKIE["password"],$hash_saved)){
+		logout();
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Vérifie si un utilisateur est un modérateur
+ * @param string $user Utilisateur à vérifier. Si omis, vérifie l'utilisateur actuellement connecté
+ * @return bool Vrai si l'utilisateur est un modérateur, faux sinon
+ */
+function isMod($user = NULL): bool{
+	if($user == NULL){ // Utilisateur actuellement connecté
+		if(!isConnected()) return false;
+		$user = $_COOKIE["username"];
+	}else{ // Utilisateur spécifié
+		$userExists = executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$user], "int");
+		if(!$userExists) return false;
+	}
+	return executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$user], "int") == 1;
+}
+
+/**
+ * Vérifie si un utilisateur possède un rôle supplémentaire
+ * @param string $type Rôle supplémentaire à vérifier
+ * @param string $user Utilisateur à vérifier. Si omis, vérifie l'utilisateur actuellement connecté
+ * @return bool Vrai si l'utilisateur possède le rôle supplémentaire, faux sinon
+ */
+function isExtra(string $type, string $user = NULL): bool{
+	if($user == NULL){ // Utilisateur actuellement connecté
+		if(!isConnected()) return false;
+		$user = $_COOKIE["username"];
+	}else{ // Utilisateur spécifié
+		$userExists = executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$user], "int");
+		if(!$userExists) return false;
+	}
+	$extra = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$user], "string");
+	return preg_match("/$type/", $extra) == 1;
+}
+
+/**
+ * Déconnecte l'utilisateur (supprime les cookies de connexion)
+ * @return void
+ */
+function logout(): void{
+	unset($_COOKIE["username"], $_COOKIE["password"]);
+}
