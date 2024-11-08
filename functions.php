@@ -93,7 +93,7 @@ function getSetting($name): string{
 	}
 }
 
-const NOW = executeQuery("SELECT NOW();", [], "string");
+define("NOW", executeQuery("SELECT NOW();", [], "string")); // Utilisation de define(), car « const NOW = … » nécessite une valeur brute (pas de fonction, ni de variable)
 
 /**
  * Réinitialise la date d'expiration des cookies
@@ -166,4 +166,82 @@ function isExtra(string $type, string $user = NULL): bool{
  */
 function logout(): void{
 	unset($_COOKIE["username"], $_COOKIE["password"]);
+}
+
+/**
+ * Affiche un nom d'utilisateur et ses rôles supplémentaires
+ * @param string $username Nom de l'utilisateur à afficher
+ * @param bool $link Vrai pour inclure un lien vers le profil de l'utilisateur, faux sinon
+ * @return string Nom d'utilisateur formaté
+ */
+function displayUsername(string $username, bool $link = false): string{
+	$roles = ""; // TODO: Ajouter les rôles supplémentaires (isMod et isExtra)
+	$full_username = $roles . $username;
+	if($link){
+		return "<a href=\"profile/$username\">$full_username</a>";
+	}else{
+		return $full_username;
+	}
+}
+
+/**
+ * Affiche un nombre entier
+ * @param int $int Entier à afficher
+ * @param bool $shorten Vrai pour tronquer les grands nombres (ex. 3 456 789 -> 3,45 M et non 3,46 M; -3 456 789 -> -3,45 M et non -3,46 M)
+ * @param bool $force_sign Vrai pour afficher le signe « + » devant les nombres positifs, et « ± » devant 0
+ * @return string Nombre entier formaté
+ */
+function displayInt(int $int, bool $shorten = true, bool $force_sign = false): string{
+	// Détermination du signe
+	$sign = "";
+	if($int < 0) $sign = "-";
+	if($force_sign && $int > 0) $sign = "+";
+	if($force_sign && $int == 0) $sign = "±";
+
+	// Retrait du signe pour le traitement
+	// À partir d'ici, « nombre » signifie la valeur absolue.
+	$int = abs($int);
+
+	// PHP_INT_MAX vaut 9 223 372 036 854 775 807, soit environ 9,22e18.
+	// Les nombres supérieurs à 1 000 000 000 000 000 000 (1e18) sont masqués.
+	if($int >= 1e18) return "–";
+
+	// Insertion des séparateurs de milliers
+	$full_int = number_format($int, 0, getString("decimal_separator"), getString("thousands_separator"));
+
+	// Le nombre est TOUJOURS affiché en entier si :
+	// - L'option $shorten est désactivée (on force l'affichage complet pour un cas précis, comme l'affichage des rangs)
+	// - Le nombre est inférieur à 1 million (pas besoin de raccourcir)
+	// - L'utilisateur a désactivé le raccourcissement des grands nombres dans les paramètres
+	if(!$shorten || $int < 1e6 || getSetting("shorten_large_numbers") == "no") return $sign . $full_int;
+
+	// Calcul du nombre de chiffres
+	$digits = strlen($int);
+
+	// Sélection du préfixe adapté
+	$suffix = match($digits){
+		7, 8, 9 => getString("abbr_million"),
+		10, 11, 12 => getString("abbr_billion"),
+		13, 14, 15 => getString("abbr_trillion"),
+		16, 17, 18 => getString("abbr_quadrillion"),
+		default => ""
+	};
+
+	// Extraction des 3 premiers chiffres (d'où le fait que le résultat est tronqué et non arrondi)
+	$formatted_int = intval(substr($int, 0, 3));
+
+	// Calcul du nombre de décimales à afficher
+	//   1 234 567 -> 1,23 M -> 2 décimales (7 chiffres, 7%3 = 1, 3-1 = 2, 2%3 = 2)
+	//  12 345 678 -> 12,3 M -> 1 décimale (8 chiffres, 8%3 = 2, 3-2 = 1, 1%3 = 1)
+	// 123 456 789 -> 123 M -> 0 décimales (9 chiffres, 9%3 = 0, 3-0 = 3, 3%3 = 0)
+	$digits_decimals = (3 - $digits%3) % 3;
+
+	// Division du nombre pour placer le séparateur de décimales au bon endroit
+	$formatted_int = $formatted_int / pow(10, $digits_decimals);
+
+	// Application du bon nombre de décimales et du séparateur de décimales
+	$formatted_int = number_format($formatted_int, $digits_decimals, getString("decimal_separator"), getString("thousands_separator"));
+
+	// Retourne le nombre raccourci avec le nombre complet en infobulle
+	return "<abbr title=\"" . $sign . $full_int . "\">" . $sign . $formatted_int . $suffix . "</abbr>";
 }
