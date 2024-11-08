@@ -1,0 +1,8 @@
+{
+    "decimal_separator": ",",
+    "thousands_separator": " ",
+    "abbr_million": " M",
+    "abbr_billion": " Md.",
+    "abbr_trillion": " Bi.",
+    "abbr_quadrillion": " Bd."
+}
