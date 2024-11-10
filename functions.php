@@ -169,16 +169,16 @@ function logout(): void{
 }
 
 /**
- * Affiche un nom d'utilisateur et ses rôles supplémentaires
+ * Affiche un utilisateur (nom d'utilisateur et rôles supplémentaires)
  * @param string $username Nom de l'utilisateur à afficher
- * @param bool $link Vrai pour inclure un lien vers le profil de l'utilisateur, faux sinon
- * @return string Nom d'utilisateur formaté
+ * @param bool $link Vrai pour inclure un lien vers la page de l'utilisateur, faux sinon
+ * @return string Nom d'utilisateur et rôles supplémentaires
  */
-function displayUsername(string $username, bool $link = false): string{
+function displayUser(string $username, bool $link = false): string{
 	$roles = ""; // TODO: Ajouter les rôles supplémentaires (isMod et isExtra)
 	$full_username = $roles . $username;
 	if($link){
-		return "<a href=\"profile/$username\">$full_username</a>";
+		return "<a href=\"user/$username\">$full_username</a>";
 	}else{
 		return $full_username;
 	}
