@@ -1,11 +1,11 @@
 RewriteEngine On
 RewriteBase /v3/
 
-# Rewrite /prediction/xxx to /?view=prediction&id=xxx
+# Rewrite prediction/xxx to index.php?view=prediction&id=xxx
 RewriteRule ^prediction/(.+)$ index.php?view=prediction&id=$1 [L,QSA]
 
-# Rewrite /profile/xxx to /?view=profile&user=xxx
-RewriteRule ^profile/(.+)$ index.php?view=profile&user=$1 [L,QSA]
+# Rewrite user/xxx to index.php?view=user&user=xxx
+RewriteRule ^user/(.+)$ index.php?view=user&user=$1 [L,QSA]
 
-# Rewrite /xxx to /?view=xxx
+# Rewrite xxx to index.php?view=xxx
 RewriteRule ^(.+)$ index.php?view=$1 [L,QSA]
