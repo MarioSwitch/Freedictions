@@ -1,23 +1,24 @@
 {
-    "decimal_separator":",",
-    "thousands_separator":" ",
+	"decimal_separator":",",
+	"thousands_separator":" ",
+	"percentage":"[TBR] %",
 
-    "abbr_million":" M",
-    "abbr_billion":" Md.",
-    "abbr_trillion":" Bi.",
-    "abbr_quadrillion":" Bd.",
+	"abbr_million":" M",
+	"abbr_billion":" Md.",
+	"abbr_trillion":" Bi.",
+	"abbr_quadrillion":" Bd.",
 
-    "time_year":" an(s)",
-    "time_month":" mois",
-    "time_day":" jour(s)",
-    "time_hour":" heure(s)",
-    "time_minute":" minute(s)",
-    "time_second":" seconde(s)",
+	"time_year":" an(s)",
+	"time_month":" mois",
+	"time_day":" jour(s)",
+	"time_hour":" heure(s)",
+	"time_minute":" minute(s)",
+	"time_second":" seconde(s)",
 
-    "time_year_short":"a",
-    "time_month_short":"mo",
-    "time_day_short":"j",
-    "time_hour_short":"h",
-    "time_minute_short":"m",
-    "time_second_short":"s"
+	"time_year_short":"a",
+	"time_month_short":"mo",
+	"time_day_short":"j",
+	"time_hour_short":"h",
+	"time_minute_short":"m",
+	"time_second_short":"s"
 }

@@ -46,6 +46,16 @@ function executeQuery(string $query, array $args = [], string $result_type = "ar
 }
 
 /**
+ * Redirige vers une autre page
+ * @param string $link URL de destination
+ * @return void
+ */
+function redirect(string $link): void{
+	header("Location: $link");
+	die("");
+}
+
+/**
  * Récupère une chaîne de caractères dans le fichier de langue
  * @param string $key Clé (identifiant) de la chaîne
  * @param array $args Tableau d'arguments à remplacer dans la chaîne
@@ -111,17 +121,14 @@ function resetCookiesExpiration(): void{
  */
 function isConnected(): bool{
 	if(!(array_key_exists("username", $_COOKIE) && array_key_exists("password", $_COOKIE))){
-		logout();
-		return false;
+		redirect("controller.php?action=logout");
 	}
 	if(executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "int") == 0){
-		logout();
-		return false;
+		redirect("controller.php?action=logout");
 	}
 	$hash_saved = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "string");
 	if(!password_verify($_COOKIE["password"],$hash_saved)){
-		logout();
-		return false;
+		redirect("controller.php?action=logout");
 	}
 	return true;
 }
@@ -158,14 +165,6 @@ function isExtra(string $type, string $user = NULL): bool{
 	}
 	$extra = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$user], "string");
 	return preg_match("/$type/", $extra) == 1;
-}
-
-/**
- * Déconnecte l'utilisateur (supprime les cookies de connexion)
- * @return void
- */
-function logout(): void{
-	unset($_COOKIE["username"], $_COOKIE["password"]);
 }
 
 /**
@@ -244,4 +243,39 @@ function displayInt(int $int, bool $shorten = true, bool $force_sign = false): s
 
 	// Retourne le nombre raccourci avec le nombre complet en infobulle
 	return "<abbr title=\"" . $sign . $full_int . "\">" . $sign . $formatted_int . $suffix . "</abbr>";
+}
+
+/**
+ * Affiche un rang (nombre ordinal)
+ * @param int $rank Rang à afficher
+ * @return string Rang formaté
+ */
+function displayRank(int $rank): string{
+	if($rank <= 0) return "–"; // Rangs impossibles
+	$suffix = "";
+	switch(getSetting("language")){
+		case "fr":
+			if($rank == 1) $suffix = "<sup>er</sup>";
+			if($rank >= 2) $suffix = "<sup>e</sup>";
+			break;
+	}
+	return displayInt($rank, false) . $suffix;
+}
+
+/**
+ * Affiche un nombre décimal (flottant)
+ * @param float $float Nombre décimal à afficher
+ * @param bool $percentage Vrai pour afficher le nombre comme un pourcentage
+ * @return string Nombre décimal formaté
+ */
+function displayFloat(float $float, bool $percentage = false): string{
+	// Si le nombre est en dehors de la plage des pourcentages (0-100), affichage de la partie entière avec displayInt()
+	if($float > 100) return displayInt(floor($float));
+	if($float < 0) return displayInt(ceil($float));
+	
+	// Formatage avec 2 décimales
+	$number = number_format($float, 2, getString("decimal_separator"), getString("thousands_separator"));
+	
+	// Si le nombre est un pourcentage, ajout du symbole
+	return $percentage ? getString("percentage", [$number]) : $number;
 }
