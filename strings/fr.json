@@ -1,7 +1,10 @@
 {
 	"site_name":"Nom du site",
 	"site_desc":"Description du site",
+
 	"title_home":"Accueil",
+
+	"predictions_opened":"Prédictions ouvertes",
 
 	"notification_daily_increment":"Bonus quotidien : Vous avez gagné [TBR]",
 	"notification_daily_reset":"Vous avez oublié de vous connecter hier, votre série de connexion a été réinitialisée.",
