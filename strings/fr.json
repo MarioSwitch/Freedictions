@@ -20,5 +20,13 @@
 	"time_day_short":"j",
 	"time_hour_short":"h",
 	"time_minute_short":"m",
-	"time_second_short":"s"
+	"time_second_short":"s",
+
+	"time_format_s":"[TBR]\"",
+	"time_format_ms":"[TBR]' [TBR]\"",
+	"time_format_hms":"[TBR]:[TBR]:[TBR]",
+	"time_format_dh":"[TBR] jour(s) [TBR] heure(s)",
+
+	"notification_daily_increment":"Bonus quotidien : Vous avez gagné [TBR]",
+	"notification_daily_reset":"Vous avez oublié de vous connecter hier, votre série de connexion a été réinitialisée."
 }
