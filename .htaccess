@@ -1,11 +1,19 @@
 RewriteEngine On
 RewriteBase /v3/
 
+# Rewrite exceptions (notice there is no "^" at the beginning of the pattern)
+RewriteRule style.css$ style.css [L,QSA]
+RewriteRule FiraSans.ttf$ FiraSans.ttf [L,QSA]
+RewriteRule controller.php$ controller.php [L,QSA]
+
 # Rewrite prediction/xxx to index.php?view=prediction&id=xxx
 RewriteRule ^prediction/(.+)$ index.php?view=prediction&id=$1 [L,QSA]
 
 # Rewrite user/xxx to index.php?view=user&user=xxx
 RewriteRule ^user/(.+)$ index.php?view=user&user=$1 [L,QSA]
+
+# Rewrite root to index.php?view=home
+RewriteRule ^$ index.php?view=home [L,QSA]
 
 # Rewrite xxx to index.php?view=xxx
 RewriteRule ^(.+)$ index.php?view=$1 [L,QSA]
