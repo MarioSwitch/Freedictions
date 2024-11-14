@@ -8,6 +8,11 @@
 	"title_signin":"Connexion",
 
 	"predictions_opened":"Prédictions ouvertes",
+	"predictions_none":"Aucune prédiction",
+
+	"view_all_choices":"Voir les [TBR] choix ►",
+
+	"chips_bet":"Jetons misés",
 
 	"notification_daily_increment":"Bonus quotidien : Vous avez gagné [TBR]",
 	"notification_daily_reset":"Vous avez oublié de vous connecter hier, votre série de connexion a été réinitialisée.",
@@ -38,5 +43,7 @@
 	"time_format_s":"[TBR]\"",
 	"time_format_ms":"[TBR]' [TBR]\"",
 	"time_format_hms":"[TBR]:[TBR]:[TBR]",
-	"time_format_dh":"[TBR] jour(s) [TBR] heure(s)"
+	"time_format_dh":"[TBR] jour(s) [TBR] heure(s)",
+
+	"time_left":"Temps restant"
 }
