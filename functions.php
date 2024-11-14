@@ -121,14 +121,17 @@ function resetCookiesExpiration(): void{
  */
 function isConnected(): bool{
 	if(!(array_key_exists("username", $_COOKIE) && array_key_exists("password", $_COOKIE))){
-		redirect("controller.php?action=logout");
+		unset($_COOKIE["username"], $_COOKIE["password"]);
+		return false;
 	}
 	if(executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "int") == 0){
-		redirect("controller.php?action=logout");
+		unset($_COOKIE["username"], $_COOKIE["password"]);
+		return false;
 	}
 	$hash_saved = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "string");
 	if(!password_verify($_COOKIE["password"],$hash_saved)){
-		redirect("controller.php?action=logout");
+		unset($_COOKIE["username"], $_COOKIE["password"]);
+		return false;
 	}
 	return true;
 }
