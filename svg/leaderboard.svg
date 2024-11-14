@@ -4,12 +4,12 @@
 	<path
 		d="M9.7615625 12.7769375h-4.523125V4.9369375c0 -0.2498125 0.2025 -0.4523125 0.4523125 -0.4523125h3.6185c0.2498125 0 0.4523125 0.2025 0.4523125 0.4523125v7.84Z"
 		stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path>
-	<path d="M9.7615625 2.2230625h-4.523125" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"
+	<path d="M9.7615625 2.2230625h-4.523125" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"
 		stroke-width="1"></path>
 	<path
 		d="M13.832312499999999 12.7769375h-4.07075v-2.94c0 -0.2498125 0.20243750000000002 -0.4523125 0.4523125 -0.4523125h3.6184375c0.2498125 0 0.4523125 0.2025 0.4523125 0.4523125v2.4876875000000003c0 0.2498125 -0.2025 0.4523125 -0.4523125 0.4523125Z"
-		stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path>
+		stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path>
 	<path
 		d="M5.238437500000001 12.7769375v-4.4476875c0 -0.24987499999999999 -0.2025 -0.4523125 -0.4523125 -0.4523125H1.1676875c-0.2498125 0 -0.4523125 0.20243750000000002 -0.4523125 0.4523125v3.995375c0 0.2498125 0.2025 0.4523125 0.4523125 0.4523125h4.07075Z"
-		stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path>
+		stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path>
 </svg>
