@@ -46,12 +46,12 @@ function executeQuery(string $query, array $args = [], string $result_type = "ar
 }
 
 /**
- * Redirige vers une autre page
- * @param string $link URL de destination
+ * Redirige vers une autre page du site
+ * @param string $link Page de destination (ex. « home » ou « user/MarioSwitch »)
  * @return void
  */
 function redirect(string $link): void{
-	header("Location: $link");
+	header("Location: " . CONFIG_PATH . "/$link");
 	die("");
 }
 
@@ -102,8 +102,6 @@ function getSetting($name): string{
 		return $default;
 	}
 }
-
-define("NOW", executeQuery("SELECT NOW();", [], "string")); // Utilisation de define(), car « const NOW = … » nécessite une valeur brute (pas de fonction, ni de variable)
 
 /**
  * Réinitialise la date d'expiration des cookies

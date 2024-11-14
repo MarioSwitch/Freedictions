@@ -27,7 +27,9 @@ function getTitle(): string{
 	<body>
 		<?php
 		include "header.php";
-		include "views/" . $_REQUEST["view"] . ".php";
+		$view = "views/" . $_REQUEST["view"] . ".php";
+		if(!file_exists($view)) redirect("home");
+		include $view;
 		?>
 	</body>
 </html>
