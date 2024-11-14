@@ -3,6 +3,9 @@
 	"site_desc":"Description du site",
 
 	"title_home":"Accueil",
+	"title_leaderboard":"Classement",
+	"title_signup":"Inscription",
+	"title_signin":"Connexion",
 
 	"predictions_opened":"Prédictions ouvertes",
 

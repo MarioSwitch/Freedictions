@@ -5,6 +5,7 @@ RewriteBase /v3/
 RewriteRule style.css$ style.css [L,QSA]
 RewriteRule FiraSans.ttf$ FiraSans.ttf [L,QSA]
 RewriteRule controller.php$ controller.php [L,QSA]
+RewriteRule svg/(.+)$ svg/$1 [L,QSA]
 
 # Rewrite prediction/xxx to index.php?view=prediction&id=xxx
 RewriteRule ^prediction/(.+)$ index.php?view=prediction&id=$1 [L,QSA]
