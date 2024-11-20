@@ -36,8 +36,26 @@ a{
 }
 
 abbr{
+	text-decoration: none;
 	cursor: help;
 }
+
+table{
+	font-size: var(--font-size);
+}
+
+/* ---------- By class ---------- */
+
+table.predictions_list{
+	display: inline-block;
+	text-align: center;
+}
+
+table.predictions_list > tbody > tr > th, table.predictions_list > tbody > tr > td{
+	padding: calc(var(--font-size) * 0.5);
+}
+
+/* ---------- By ID ---------- */
 
 #header{
 	position: sticky;

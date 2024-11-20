@@ -6,15 +6,24 @@ echo "<h1>" . getString("predictions_opened") . " (" . $count . ")</h1>";
 if($count == 0){
 	echo "<p>" . getString("predictions_none") . "</p>";
 }else{
+	echo "<table class=\"predictions_list\">
+		<tr>
+			<th>" . getString("prediction") . "</th>
+			<th>" . getString("chips_bet") . "</th>
+			<th>" . getString("time_left") . "</th>
+		</tr>";
 	foreach($opened as $prediction){
-		echo "<a href=\"" . CONFIG_PATH . "/prediction/" . $prediction["id"] . "\">" . $prediction["title"] . "</a><br>";
+		$id = $prediction["id"];
+		$title = $prediction["title"];
+		$ended = $prediction["ended"];
 		$volume = executeQuery("SELECT SUM(`points`) FROM `bets` WHERE `prediction` = ?;", [$prediction["id"]], "int");
-		echo "<abbr title=\"" . getString("chips_bet") . "\"><img style=\"width: 20; height: 20; vertical-align: bottom;\" src=\"svg/chips.svg\" alt=\"" . getString("chips_bet") . "\"></abbr>";
-		echo "<small>" . displayInt($volume) . "</small>";
-		echo "<abbr title=\"" . getString("time_left") . "\"><img style=\"width: 20; height: 20; margin-left: 15px; vertical-align: bottom;\" src=\"svg/clock.svg\" alt=\"" . getString("time_left") . "\"></abbr>";
-		echo "<small id=\"end_" . $prediction["id"] . "\">" . $prediction["ended"] . "</small>";
-		echo "<br><br>";
-		echo "<script>display(\"" . $prediction["ended"] . "\", \"end_" . $prediction["id"] . "\");</script>";
-	}
-}
 
+		echo "<tr>";
+		echo "<td><a href=\"" . CONFIG_PATH . "/prediction/$id\">$title</a></td>";
+		echo "<td>" . displayInt($volume) . "</td>";
+		echo "<td><abbr id=\"end_$id\">$ended</abbr></td>";
+		echo "<script>display(\"" . $prediction["ended"] . "\", \"end_" . $prediction["id"] . "\");</script>";
+		echo "</tr>";
+	}
+	echo "</table>";
+}

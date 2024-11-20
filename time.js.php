@@ -15,11 +15,11 @@ function getTimeLeft(date){
 	var gap = Math.abs(goalDate - nowDate);
 	//Formatting count
 	if(gap>=year){
-		var countString = Math.floor(gap/year)+\" \"+\"" . getString("time_year") . "\"+\" \"+Math.floor((gap%year)/month)+\" \"+\"" . getString("time_month") . "\";
+		var countString = Math.floor(gap/year)+\"" . getString("time_year_short") . "\"+\" \"+Math.floor((gap%year)/month)+\"" . getString("time_month_short") . "\";
 	}else if(gap>=month){
-		var countString = Math.floor(gap/month)+\" \"+\"" . getString("time_month") . "\"+\" \"+Math.floor((gap%month)/day)+\" \"+\"" . getString("time_day") . "\";
+		var countString = Math.floor(gap/month)+\"" . getString("time_month_short") . "\"+\" \"+Math.floor((gap%month)/day)+\"" . getString("time_day_short") . "\";
 	}else if(gap>=day){
-		var countString = Math.floor(gap/day)+\" \"+\"" . getString("time_day") . "\"+\" \"+Math.floor((gap%day)/hour)+\" \"+\"" . getString("time_hour") . "\";
+		var countString = Math.floor(gap/day)+\"" . getString("time_day_short") . "\"+\" \"+Math.floor((gap%day)/hour)+\"" . getString("time_hour_short") . "\";
 	}else if(gap>=hour){
 		var countString = Math.floor(gap/hour)+\":\"+(\"0\"+Math.floor((gap%hour)/minute)).slice(-2)+\":\"+(\"0\"+Math.floor((gap%minute)/second)).slice(-2);
 	}else if(gap>=minute){
@@ -30,10 +30,24 @@ function getTimeLeft(date){
 	return countString;
 }
 
+function getLocalTime(UTCString){ // UTCString: \"YYYY-MM-DD HH:MM:SS\"
+	var year = parseInt(UTCString.substring(0, 4));
+	var month = parseInt(UTCString.substring(5, 7));
+	var day = parseInt(UTCString.substring(8, 10));
+	var hour = parseInt(UTCString.substring(11, 13));
+	var minute = parseInt(UTCString.substring(14, 16));
+	var second = parseInt(UTCString.substring(17, 19));
+
+	var convertedDate = new Date(Date.UTC(year, month-1, day, hour, minute, second));
+
+	return convertedDate.toLocaleString();
+}
+
 function display(date, abbrID){
 	abbr = document.getElementById(abbrID);
 
 	abbr.innerText = getTimeLeft(date);
+	abbr.title = getLocalTime(date);
 
 	setTimeout(display, second, date, abbrID);
 }
