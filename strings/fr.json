@@ -43,7 +43,6 @@
 	"time_format_s":"[TBR]\"",
 	"time_format_ms":"[TBR]' [TBR]\"",
 	"time_format_hms":"[TBR]:[TBR]:[TBR]",
-	"time_format_dh":"[TBR] jour(s) [TBR] heure(s)",
 
 	"time_left":"Temps restant"
 }
