@@ -7,6 +7,10 @@
 	"title_signup":"Inscription",
 	"title_signin":"Connexion",
 
+	"username":"Nom d'utilisateur",
+	"password":"Mot de passe",
+	"signin":"Se connecter",
+
 	"prediction":"Prédiction",
 	"predictions_opened":"Prédictions ouvertes",
 	"predictions_none":"Aucune prédiction",
@@ -17,6 +21,11 @@
 
 	"notification_daily_increment":"Bonus quotidien : Vous avez gagné [TBR]",
 	"notification_daily_reset":"Vous avez oublié de vous connecter hier, votre série de connexion a été réinitialisée.",
+
+	"error_fields":"Tous les champs ne sont pas correctement renseignés.",
+	"error_unknown":"Cet utilisateur n'existe pas.",
+	"error_password":"Le mot de passe est incorrect.",
+	"error_retry":"Veuillez réessayer.",
 
 	"decimal_separator":",",
 	"thousands_separator":" ",

@@ -15,8 +15,15 @@ echo "
 		<a href=" . CONFIG_PATH . "/signin><img src=\"svg/signin.svg\"></a>";
 	}else{
 		$user = $_COOKIE["username"];
+		$chips = executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?;", [$user], "int");
 		echo "
+		$user
+		<small>(" . displayInt($chips) . ")</small>
 		<a href=" . CONFIG_PATH . "/user/$user><img src=\"svg/user.svg\"></a>
-		<a href=" . CONFIG_PATH . "/logout><img src=\"svg/logout.svg\"></a>";
+		<a href=" . CONFIG_PATH . "/signout><img src=\"svg/signout.svg\"></a>";
 	}
 echo "</div></div>";
+
+if(!empty($_REQUEST["error"])){
+	echo "<h1>" . getString("error_" . $_REQUEST["error"]) . "<br>" . getString("error_retry") . "</h1>";
+}

@@ -4,7 +4,7 @@ CREATE TABLE `users` (
 	`created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`streak` int NOT NULL DEFAULT 0,
-	`points` bigint NOT NULL DEFAULT 100,
+	`chips` bigint NOT NULL DEFAULT 100,
 	`mod` tinyint(1) NOT NULL DEFAULT 0,
 	`extra` varchar(1000) DEFAULT NULL,
 	PRIMARY KEY (`username`)
@@ -35,7 +35,7 @@ CREATE TABLE `bets` (
 	`user` varchar(20) NOT NULL,
 	`prediction` int NOT NULL,
 	`choice` int NOT NULL,
-	`points` bigint NOT NULL,
+	`chips` bigint NOT NULL,
 	PRIMARY KEY (`user`, `prediction`),
 	CONSTRAINT `bet_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`),
 	CONSTRAINT `bet_prediction` FOREIGN KEY (`prediction`) REFERENCES `predictions` (`id`),
@@ -59,7 +59,7 @@ ALTER TABLE `predictions`
 DELIMITER $$
 CREATE EVENT `daily_update` ON SCHEDULE EVERY 1 DAY STARTS '2024-11-14 00:00:00' ON COMPLETION PRESERVE ENABLE DO
 	BEGIN
-		UPDATE `users` SET `points` = (points + 10 + streak) WHERE `updated` >= NOW() - INTERVAL 1 DAY;
+		UPDATE `users` SET `chips` = (chips + 10 + streak) WHERE `updated` >= NOW() - INTERVAL 1 DAY;
 		UPDATE `users` SET `streak` = streak + 1 WHERE `updated` >= NOW() - INTERVAL 1 DAY;
 		UPDATE `users` SET `streak` = 0 WHERE `updated` < NOW() - INTERVAL 1 DAY;
 	END $$

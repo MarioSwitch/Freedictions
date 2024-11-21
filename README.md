@@ -4,7 +4,7 @@
 Pour que votre installation soit fonctionnelle, vous devez déclarer un certain nombre de constantes de configuration dans un fichier nommé ``config.php`` situé à la racine du projet.
 
 - Toutes les constantes commençant par ``CONFIG_DATABASE`` servent à la connexion à la base de données. Modifiez ces paramètres afin de les faire correspondre à votre installation.
-- Toutes les constantes commençant par ``CONFIG_CREATE_PREDICTIONS`` définissent des seuils à atteindre par les utilisateurs pour qu'ils puissent créer des prédictions. Suivant le fichier type fourni ci-dessous, seuls les utilisateurs ayant dépensé plus de 200 points peuvent créer des prédictions. Si vous souhaitez que tous les utilisateurs puissent créer des prédictions (pour des installations privées, par exemple), définissez toutes ces constantes à 0.
+- Toutes les constantes commençant par ``CONFIG_CREATE_PREDICTIONS`` définissent des seuils à atteindre par les utilisateurs pour qu'ils puissent créer des prédictions. Suivant le fichier type fourni ci-dessous, seuls les utilisateurs ayant dépensé plus de 200 jetons peuvent créer des prédictions. Si vous souhaitez que tous les utilisateurs puissent créer des prédictions (pour des installations privées, par exemple), définissez toutes ces constantes à 0.
 
 Voici un exemple type de fichier :
 ```php

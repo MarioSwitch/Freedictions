@@ -48,10 +48,11 @@ function executeQuery(string $query, array $args = [], string $result_type = "ar
 /**
  * Redirige vers une autre page du site
  * @param string $link Page de destination (ex. « home » ou « user/MarioSwitch »)
+ * @param string $error Code d'erreur à afficher
  * @return void
  */
-function redirect(string $link): void{
-	header("Location: " . CONFIG_PATH . "/$link");
+function redirect(string $link, string $error = ""): void{
+	header("Location: " . CONFIG_PATH . "/$link" . ($error ? "?error=$error" : ""));
 	die("");
 }
 
