@@ -16,7 +16,7 @@ if($count == 0){
 		$id = $prediction["id"];
 		$title = $prediction["title"];
 		$ended = $prediction["ended"];
-		$volume = executeQuery("SELECT SUM(`points`) FROM `bets` WHERE `prediction` = ?;", [$prediction["id"]], "int");
+		$volume = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `prediction` = ?;", [$prediction["id"]], "int");
 
 		echo "<tr>";
 		echo "<td><a href=\"" . CONFIG_PATH . "/prediction/$id\">$title</a></td>";
