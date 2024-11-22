@@ -69,7 +69,8 @@ function insertTextIcon(string $icon, string $align, float $scale): string{
 		"right" => "margin-left:calc(var(--font-size) * 0.1);",
 		default => ""
 	};
-	return "<img src=\"svg/$icon.svg\" style=\"width:calc(var(--font-size) * $scale); height:calc(var(--font-size) * $scale); vertical-align:bottom; $align\">";
+	$alt = getString("icon_" . $icon);
+	return "<img src=\"svg/$icon.svg\" title=\"$alt\" alt=\"$alt\" style=\"width:calc(var(--font-size) * $scale); height:calc(var(--font-size) * $scale); vertical-align:bottom; $align\">";
 }
 
 /**
