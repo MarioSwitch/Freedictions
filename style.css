@@ -110,7 +110,7 @@ table.predictions_list > tbody > tr > th, table.predictions_list > tbody > tr > 
 
 #footer > p{
 	background: var(--color-background-header);
-	width: calc(100% / 3);
+	width: calc(100% / 4);
 	float: left;
 	margin: 0;
 }

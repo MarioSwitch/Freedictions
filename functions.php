@@ -57,6 +57,22 @@ function redirect(string $link, string $error = ""): void{
 }
 
 /**
+ * Insère une icône SVG dans le texte
+ * @param mixed $icon Nom du fichier SVG (sans l'extension)
+ * @param mixed $align Position de l'icône par rapport au texte (« left » ou « right »)
+ * @param mixed $scale Échelle de taille (facteur multiplicatif de la taille de la police)
+ * @return string Icône SVG
+ */
+function insertTextIcon(string $icon, string $align, float $scale): string{
+	$align = match($align){
+		"left" => "margin-right:calc(var(--font-size) * 0.1);",
+		"right" => "margin-left:calc(var(--font-size) * 0.1);",
+		default => ""
+	};
+	return "<img src=\"svg/$icon.svg\" style=\"width:calc(var(--font-size) * $scale); height:calc(var(--font-size) * $scale); vertical-align:bottom; $align\">";
+}
+
+/**
  * Récupère une chaîne de caractères dans le fichier de langue
  * @param string $key Clé (identifiant) de la chaîne
  * @param array $args Tableau d'arguments à remplacer dans la chaîne

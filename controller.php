@@ -34,6 +34,7 @@ switch($_REQUEST["action"]){
 		redirect("home");
 
 	case "signout":
-		unset($_COOKIE["username"], $_COOKIE["password"]);
+		setcookie("username", "", time() + CONFIG_COOKIES_EXPIRATION);
+		setcookie("password", "", time() + CONFIG_COOKIES_EXPIRATION);
 		redirect("home");
 }
