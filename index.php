@@ -7,12 +7,8 @@ include_once "functions.php";
  */
 function getTitle(): string{
 	switch($_REQUEST["view"]){
-		case "index.php":
-		case "home":
-			$title = getString("title_home");
-			break;
 		default:
-			$title = $_REQUEST["view"];
+			$title = getString("title_" . $_REQUEST["view"]);
 			break;
 	}
 	return $title . " – " . getString("site_name");
@@ -21,7 +17,7 @@ function getTitle(): string{
 
 <html>
 	<head>
-		<title><?php echo getTitle() ?></title>
+		<title><?= getTitle() ?></title>
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>

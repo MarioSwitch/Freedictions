@@ -69,6 +69,11 @@ button:hover{
 	cursor: pointer;
 }
 
+form > p{
+	margin: 0;
+	font-size: calc(var(--font-size) * 0.8);
+}
+
 /* ---------- By class ---------- */
 table.predictions_list{
 	display: inline-block;
