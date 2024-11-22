@@ -6,24 +6,21 @@ echo "<h1>" . getString("predictions_opened") . " (" . $count . ")</h1>";
 if($count == 0){
 	echo "<p>" . getString("predictions_none") . "</p>";
 }else{
-	echo "<table class=\"predictions_list\">
-		<tr>
-			<th>" . getString("prediction") . "</th>
-			<th>" . getString("chips_bet") . "</th>
-			<th>" . getString("time_left") . "</th>
-		</tr>";
 	foreach($opened as $prediction){
 		$id = $prediction["id"];
 		$title = $prediction["title"];
 		$ended = $prediction["ended"];
 		$volume = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `prediction` = ?;", [$prediction["id"]], "int");
 
-		echo "<tr>";
-		echo "<td><a href=\"" . CONFIG_PATH . "/prediction/$id\">$title</a></td>";
-		echo "<td>" . displayInt($volume) . "</td>";
-		echo "<td><abbr id=\"end_$id\">$ended</abbr></td>";
+		echo "<a href=\"" . CONFIG_PATH . "/prediction/$id\">";
+			echo "<p style=\"font-size:calc(var(--font-size) * 1.5); margin:0;\">$title</p>";
+			echo "<div style=\"width:calc(var(--font-size) * 12); display:inline-block;\">";
+				echo "<p style=\"margin:0; text-align:left; float:left;\">" . insertTextIcon("chips", "left", 1.2) . displayInt($volume) . "</p>";
+				echo "<p style=\"margin:0; text-align:right;\"><span id=\"end_$id\">$ended</span>" . insertTextIcon("sandglass", "right", 1.2) . "</p>";
+			echo "</div>";
 		echo "<script>display(\"" . $prediction["ended"] . "\", \"end_" . $prediction["id"] . "\");</script>";
-		echo "</tr>";
+		echo "</a>";
+		echo "<br>";
+		echo "<hr class=\"mini\">";
 	}
-	echo "</table>";
 }

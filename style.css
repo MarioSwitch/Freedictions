@@ -40,6 +40,20 @@ abbr{
 	cursor: help;
 }
 
+hr{
+	display: inline-block;
+
+	margin: calc(var(--font-size) * 2);
+	border: 2px solid var(--color-text);
+	width: calc(var(--font-size) * 50);
+}
+
+hr.mini{
+	margin: calc(var(--font-size) * 1.5);
+	border: 1px solid var(--color-text);
+	width: calc(var(--font-size) * 20);
+}
+
 table{
 	font-size: var(--font-size);
 }
@@ -75,14 +89,6 @@ form > p{
 }
 
 /* ---------- By class ---------- */
-table.predictions_list{
-	display: inline-block;
-	text-align: center;
-}
-
-table.predictions_list > tbody > tr > th, table.predictions_list > tbody > tr > td{
-	padding: calc(var(--font-size) * 0.5);
-}
 
 /* ---------- By ID ---------- */
 #header{
