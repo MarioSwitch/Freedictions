@@ -3,12 +3,17 @@ if(isConnected()) executeQuery("UPDATE `users` SET `updated` = NOW() WHERE `user
 
 echo "
 <div id=\"header\">
-	<div style=\"width:calc((100% - 10px) / 2); float:left; text-align:left; margin-left: 5px\">
-		
-		<a href=" . CONFIG_PATH . "/home><img src=\"svg/favicon.svg\">" . getString("site_name") . "</a>
+	<div style=\"width:calc((100% - 10px) / 2); float:left; text-align:left;\">
+		<a href=\"" . CONFIG_PATH . "/home\" style=\"float:left; margin-left:calc(var(--font-size) * 0.2); margin-right:calc(var(--font-size) * 0.5);\">
+			<img src=\"svg/favicon.svg\" style=\"float:left;\">
+			<div style=\"display:inline-block; margin-left:calc(var(--font-size) * 0.2); text-align:center;\">
+				<p style=\"font-size:calc(var(--font-size) * 0.5); margin:0;\">" . getString("site_name") . "</p>
+				<p style=\"font-size:calc(var(--font-size) * 0.3); margin:0;\"><i>" . getString("site_desc") . "</i></p>
+			</div>
+		</a>
 		<a href=" . CONFIG_PATH . "/leaderboard><img src=\"svg/leaderboard.svg\"></a>
 	</div>
-	<div style=\"width:calc((100% - 10px) / 2); float:left; text-align:right; margin-right: 5px\">";
+	<div style=\"width:calc((100% - 10px) / 2); float:left; text-align:right; margin-right:5px\">";
 	if(!isConnected()){
 		echo "
 		<a href=" . CONFIG_PATH . "/signup><img src=\"svg/signup.svg\"></a>

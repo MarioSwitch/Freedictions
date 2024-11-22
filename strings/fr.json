@@ -1,6 +1,6 @@
 {
-	"site_name":"Nom du site",
-	"site_desc":"Description du site",
+	"site_name":"Freedictions",
+	"site_desc":"Pariez, c'est gratuit !",
 
 	"title_home":"Accueil",
 	"title_leaderboard":"Classement",
@@ -8,14 +8,15 @@
 	"title_signin":"Connexion",
 
 	"username":"Nom d'utilisateur",
+	"username_format":"Doit contenir 4 à 20 caractères alphanumériques",
 	"password":"Mot de passe",
+	"password_confirm":"Confirmer le mot de passe",
+	"signup":"S'inscrire",
 	"signin":"Se connecter",
 
 	"prediction":"Prédiction",
 	"predictions_opened":"Prédictions ouvertes",
 	"predictions_none":"Aucune prédiction",
-
-	"view_all_choices":"Voir les [TBR] choix ►",
 
 	"chips_bet":"Jetons misés",
 
@@ -23,8 +24,10 @@
 	"notification_daily_reset":"Vous avez oublié de vous connecter hier, votre série de connexion a été réinitialisée.",
 
 	"error_fields":"Tous les champs ne sont pas correctement renseignés.",
-	"error_unknown":"Cet utilisateur n'existe pas.",
+	"error_username_unknown":"Ce nom d'utilisateur n'existe pas.",
+	"error_username_taken":"Le nom d'utilisateur est déjà pris.",
 	"error_password":"Le mot de passe est incorrect.",
+	"error_password_confirm":"Les mots de passe ne correspondent pas.",
 	"error_retry":"Veuillez réessayer.",
 
 	"decimal_separator":",",
@@ -49,10 +52,6 @@
 	"time_hour_short":"h",
 	"time_minute_short":"m",
 	"time_second_short":"s",
-
-	"time_format_s":"[TBR]\"",
-	"time_format_ms":"[TBR]' [TBR]\"",
-	"time_format_hms":"[TBR]:[TBR]:[TBR]",
 
 	"time_left":"Temps restant"
 }
