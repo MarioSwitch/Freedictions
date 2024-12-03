@@ -23,6 +23,10 @@
 	"icon_chips":"Jetons",
 	"icon_sandglass":"Temps restant",
 
+	"footer_1":"Initialement créé par [TBR] et [TBR]",
+	"footer_2":"Code disponible sur [TBR]",
+	"footer_3":"Rejoindre le [TBR]serveur Discord[TBR]",
+
 	"notification_daily_increment":"Bonus quotidien : Vous avez gagné [TBR]",
 	"notification_daily_reset":"Vous avez oublié de vous connecter hier, votre série de connexion a été réinitialisée.",
 

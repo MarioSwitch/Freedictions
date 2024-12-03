@@ -33,5 +33,5 @@ echo "
 echo "</div></div>";
 
 if(!empty($_REQUEST["error"])){
-	echo "<h1>" . getString("error_" . $_REQUEST["error"]) . "<br>" . getString("error_retry") . "</h1>";
+	echo "<h1 class=\"error\">" . getString("error_" . $_REQUEST["error"]) . "<br>" . getString("error_retry") . "</h1>";
 }
