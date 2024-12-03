@@ -38,6 +38,59 @@ function displayUserBox(string $info): string{
 	}
 	return $html;
 }
+
+$predictions_created = executeQuery("SELECT * FROM `predictions` WHERE `user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
+$predictions_participated = executeQuery("SELECT * FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `bets`.`user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
+
+/**
+ * Génère le code HTML pour afficher une liste de prédictions
+ * @param string $type Type de prédictions à afficher (« created » ou « participated »)
+ * @param array $predictions Prédictions à afficher
+ * @return string Code HTML
+ */
+function displayPredictionsList(string $type, array $predictions): string{
+	global $username;
+	$now = executeQuery("SELECT NOW();", [], "string");
+	$count = count($predictions);
+	$html = "<h2>" . getString("profile_predictions_$type", [$count]) . "</h2>";
+	if($count == 0){
+		$html .= "<p>" . getString("profile_predictions_" . $type . "_none", [$username]) . "</p>";
+	}
+	if($count > 0){
+		$html .= "
+		<table style=\"display:inline-block; text-align:right;\">
+			<thead>
+				<tr>
+					<th>" . getString("profile_predictions_table_question") . "</th>";
+					$html .= ($type == "participated") ? "<th>" . getString("profile_predictions_table_bet") . "</th>" : "";
+					$html .= "<th>" . getString("profile_predictions_table_ended") . "</th>
+				</tr>
+			</thead>
+			<tbody>";
+		foreach($predictions as $prediction){
+			$id = $prediction["id"];
+			$question = $prediction["title"];
+			$ended = $prediction["ended"];
+			$ended_td = ($ended > $now) ? "<td id=\"ended_$id\">$ended</td><script>display(\"$ended\",\"ended_$id\")</script>" : "<td>" . getString("profile_predictions_table_ended_already") . "</td>";
+			$bet_td = "";
+			if($type == "participated"){
+				$bet_choice = $prediction["name"];
+				$bet_chips = $prediction["chips"];
+				$bet_td = "<td>$bet_choice<br>$bet_chips" . insertTextIcon("chips", "right", 1) . "</td>";
+			}
+			$html .= "
+				<tr>
+					<td><a href=\"../prediction/$id\">$question</a></td>";
+					$html .= $bet_td;
+					$html .= "$ended_td
+				</tr>";
+		}
+		$html .= "
+			</tbody>
+		</table>";
+	}
+	return $html;
+}
 ?>
 <h1><?= $username ?></h1>
 <div>
@@ -46,3 +99,5 @@ function displayUserBox(string $info): string{
 	<?= displayUserBox("streak") ?>
 	<?= displayUserBox("chips") ?>
 </div>
+<?= displayPredictionsList("created", $predictions_created) ?>
+<?= displayPredictionsList("participated", $predictions_participated) ?>
