@@ -89,6 +89,20 @@ form > p{
 }
 
 /* ---------- By class ---------- */
+table.predictions_list{
+	display: inline-block;
+	text-align: center;
+}
+
+table.predictions_list > thead > tr > th{
+	padding: calc(var(--font-size) * 0.5) calc(var(--font-size) * 1);
+	border-bottom: 1px solid var(--color-text);
+}
+
+table.predictions_list > tbody > tr > td{
+	padding: calc(var(--font-size) * 0.5) calc(var(--font-size) * 1);
+	border-bottom: 1px solid lightgray;
+}
 
 /* ---------- By ID ---------- */
 #header{
