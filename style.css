@@ -89,9 +89,6 @@ form > p{
 }
 
 /* ---------- By class ---------- */
-.error{
-	color: darkred;
-}
 
 /* ---------- By ID ---------- */
 #header{
