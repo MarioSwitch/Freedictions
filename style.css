@@ -3,9 +3,9 @@
 	--font-name: FiraSans;
 	--font-size: 20px;
 
-	--color-text: rgb(10%, 10%, 10%);
-	--color-background: rgb(95%, 95%, 95%);
-	--color-background-header: rgb(90%, 90%, 90%);
+	--color-text: black;
+	--color-background: white;
+	--color-background-header: var(--color-background);
 }
 
 /* ---------- General ---------- */
@@ -89,6 +89,9 @@ form > p{
 }
 
 /* ---------- By class ---------- */
+.error{
+	color: darkred;
+}
 
 /* ---------- By ID ---------- */
 #header{
@@ -98,6 +101,7 @@ form > p{
 
 	background: var(--color-background-header);
 	border-bottom: 1px solid var(--color-text);
+	box-shadow: 0 0 var(--font-size) lightgray;
 }
 
 #header > *{
@@ -107,6 +111,7 @@ form > p{
 #footer{
 	border-top: 1px solid var(--color-text);
 	margin-top: var(--font-size);
+	box-shadow: 0 0 var(--font-size) calc(var(--font-size) * 0.2) lightgray;
 
 	font-size: calc(var(--font-size) * 0.8);
 

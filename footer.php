@@ -1,9 +1,6 @@
-<?php
-echo "
-	<div id=\"footer\">
-		<p>Initialement créé par <b><a href=\"https://github.com/MarioSwitch\">MarioSwitch</a></b> et <b><a href=\"https://github.com/yoshakami\">yoshakami</b></a></p>
-		<p>Code disponible sur <b><a href=\"https://github.com/MarioSwitch/BetterTwitchPredictions\">GitHub</a></b></p>
-		<p>Rejoindre le <b><a href=\"https://discord.gg/PCKx4qf9XZ\">serveur Discord</a></b></p>
-		<p>v3.0.0-alpha19 du 22 nov. 2024</p>
-	</div>
-";
+<div id="footer">
+	<p><?= getString("footer_1", ["<b><a href=\"https://github.com/MarioSwitch\">MarioSwitch</a></b>", "<b><a href=\"https://github.com/yoshakami\">yoshakami</a></b>"]) ?></p>
+	<p><?= getString("footer_2", ["<b><a href=\"https://github.com/MarioSwitch/BetterTwitchPredictions\">GitHub</a></b>"]) ?></p>
+	<p><?= getString("footer_3", ["<b><a href=\"https://discord.gg/PCKx4qf9XZ\">", "</a></b>"]) ?></p>
+	<p>Build 3.0-a20 (2024-12-03)</p>
+</div>
