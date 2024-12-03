@@ -52,31 +52,32 @@ function displayPredictionsList(string $type, array $predictions): string{
 	global $username;
 	$now = executeQuery("SELECT NOW();", [], "string");
 	$count = count($predictions);
-	$html = "<h2>" . getString("profile_predictions_$type", [$count]) . "</h2>";
+	$html = "<h2>" . getString("profile_predictions_$type") . " (" . displayInt($count) . ")</h2>";
 	if($count == 0){
 		$html .= "<p>" . getString("profile_predictions_" . $type . "_none", [$username]) . "</p>";
 	}
 	if($count > 0){
 		$html .= "
-		<table style=\"display:inline-block; text-align:right;\">
+		<table class=\"predictions_list\">
 			<thead>
 				<tr>
-					<th>" . getString("profile_predictions_table_question") . "</th>";
-					$html .= ($type == "participated") ? "<th>" . getString("profile_predictions_table_bet") . "</th>" : "";
-					$html .= "<th>" . getString("profile_predictions_table_ended") . "</th>
+					<th>" . getString("predictions_table_question") . "</th>";
+					$html .= ($type == "participated") ? "<th>" . getString("predictions_table_bet") . "</th>" : "";
+					$html .= "<th>" . getString("predictions_table_ended") . "</th>
 				</tr>
 			</thead>
 			<tbody>";
 		foreach($predictions as $prediction){
-			$id = $prediction["id"];
+			$id = $type == "created" ? $prediction["id"] : $prediction["prediction"];
+			$id_countdown = $type . "_" . $id;
 			$question = $prediction["title"];
 			$ended = $prediction["ended"];
-			$ended_td = ($ended > $now) ? "<td id=\"ended_$id\">$ended</td><script>display(\"$ended\",\"ended_$id\")</script>" : "<td>" . getString("profile_predictions_table_ended_already") . "</td>";
+			$ended_td = ($ended > $now) ? "<td id=\"$id_countdown\">$ended</td><script>display(\"$ended\",\"$id_countdown\")</script>" : "<td>" . getString("predictions_table_ended_already") . "</td>";
 			$bet_td = "";
 			if($type == "participated"){
 				$bet_choice = $prediction["name"];
 				$bet_chips = $prediction["chips"];
-				$bet_td = "<td>$bet_choice<br>$bet_chips" . insertTextIcon("chips", "right", 1) . "</td>";
+				$bet_td = "<td>$bet_choice<br>" . displayInt($bet_chips) . insertTextIcon("chips", "right", 1) . "</td>";
 			}
 			$html .= "
 				<tr>
@@ -99,5 +100,7 @@ function displayPredictionsList(string $type, array $predictions): string{
 	<?= displayUserBox("streak") ?>
 	<?= displayUserBox("chips") ?>
 </div>
+<br>
 <?= displayPredictionsList("created", $predictions_created) ?>
+<br><br>
 <?= displayPredictionsList("participated", $predictions_participated) ?>
