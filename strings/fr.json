@@ -23,6 +23,11 @@
 	"icon_chips":"Jetons",
 	"icon_sandglass":"Temps restant",
 
+	"profile_created":"Création du compte",
+	"profile_updated":"Dernière connexion",
+	"profile_streak":"Série de connexion",
+	"profile_chips":"Jetons possédés",
+
 	"footer_1":"Initialement créé par [TBR] et [TBR]",
 	"footer_2":"Code disponible sur [TBR]",
 	"footer_3":"Rejoindre le [TBR]serveur Discord[TBR]",

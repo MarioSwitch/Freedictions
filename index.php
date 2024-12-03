@@ -7,6 +7,9 @@ include_once "functions.php";
  */
 function getTitle(): string{
 	switch($_REQUEST["view"]){
+		case "user":
+			$title = $_REQUEST["user"];
+			break;
 		default:
 			$title = getString("title_" . $_REQUEST["view"]);
 			break;

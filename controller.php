@@ -29,7 +29,9 @@ switch($_REQUEST["action"]){
 		$hash_saved = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username], "string");
 		if(!password_verify($password, $hash_saved)) redirect("signin", "password");
 
-		setcookie("username", $username, time() + CONFIG_COOKIES_EXPIRATION);
+		$username_capitalization = executeQuery("SELECT `username` FROM `users` WHERE `username` = ?;", [$username], "string");
+
+		setcookie("username", $username_capitalization, time() + CONFIG_COOKIES_EXPIRATION);
 		setcookie("password", $password, time() + CONFIG_COOKIES_EXPIRATION);
 		redirect("home");
 
