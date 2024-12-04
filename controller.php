@@ -39,4 +39,21 @@ switch($_REQUEST["action"]){
 		setcookie("username", "", time() + CONFIG_COOKIES_EXPIRATION);
 		setcookie("password", "", time() + CONFIG_COOKIES_EXPIRATION);
 		redirect("home");
+
+	case "modqueue_approve":
+		if(!isMod()) redirect("home", "mod_perms");
+
+		$prediction_id = $_REQUEST["id"];
+		if(empty($prediction_id)) redirect("modqueue", "fields");
+
+		executeQuery("UPDATE `predictions` SET `approved` = 1 WHERE `id` = ?;", [$prediction_id]);
+		redirect("modqueue");
+
+	case "modqueue_reject":
+		if(!isMod()) redirect("home", "mod_perms");
+
+		$prediction_id = $_REQUEST["id"];
+		if(empty($prediction_id)) redirect("modqueue", "fields");
+
+		redirect("controller.php?action=prediction_delete&id=$prediction_id");
 }

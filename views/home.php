@@ -13,7 +13,7 @@ function displayPredictionsList(array $predictions): string{
 				<th>" . getString("predictions_table_question") . "</th>
 				<th>" . getString("predictions_table_participation") . "</th>";
 				$html .= $already_bet ? "<th>" . getString("predictions_table_bet") . "</th>" : "";
-				$html .= "<th>" . getString("predictions_table_ended") . "</th>
+				$html .= "<th>" . getString("predictions_table_end_future") . "</th>
 			</tr>
 		</thead>
 		<tbody>";
