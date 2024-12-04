@@ -39,8 +39,10 @@ function displayUserBox(string $info): string{
 	return $html;
 }
 
-$predictions_created = executeQuery("SELECT * FROM `predictions` WHERE `user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
-$predictions_participated = executeQuery("SELECT * FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `bets`.`user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
+$predictions_created_approved = executeQuery("SELECT * FROM `predictions` WHERE `approved` = 1 AND `user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
+$predictions_created_waiting_approval = executeQuery("SELECT * FROM `predictions` WHERE `approved` = 0 AND `user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
+$predictions_created = array_merge($predictions_created_approved, $predictions_created_waiting_approval);
+$predictions_participated = executeQuery("SELECT * FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `predictions`.`approved` = 1 AND `bets`.`user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
 
 /**
  * Génère le code HTML pour afficher une liste de prédictions
@@ -72,7 +74,9 @@ function displayPredictionsList(string $type, array $predictions): string{
 			$id_countdown = $type . "_" . $id;
 			$question = $prediction["title"];
 			$ended = $prediction["ended"];
-			$ended_td = ($ended > $now) ? "<td id=\"$id_countdown\">$ended</td><script>display(\"$ended\",\"$id_countdown\")</script>" : "<td>" . getString("predictions_table_ended_already") . "</td>";
+			$ended_td = "<td>" . getString("predictions_table_waiting_answer") . "</td>";
+			if($ended > $now) $ended_td = "<td id=\"$id_countdown\">$ended</td><script>display(\"$ended\",\"$id_countdown\")</script>";
+			if(!$prediction["approved"]) $ended_td = "<td>" . getString("predictions_table_waiting_approval") . "</td>";
 			$bet_td = "";
 			if($type == "participated"){
 				$bet_choice = $prediction["name"];

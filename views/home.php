@@ -28,7 +28,7 @@ function displayPredictionsList(array $predictions): string{
 
 			$html .= "
 			<tr>
-				<td><a href=\"../prediction/$id\">$title</a></td>
+				<td><a href=\"prediction/$id\">$title</a></td>
 				<td>" . displayInt($users) . insertTextIcon("users", "right", 1) . "<br>" . displayInt($volume) . insertTextIcon("chips", "right", 1) . "</td>";
 				$html .= $already_bet ? "<td>$bet_name<br>" . displayInt($bet_chips) . insertTextIcon("chips", "right", 1) . "</td>" : "";
 				$html .= "<td id=\"ended_$id\">$ended</td>
@@ -42,7 +42,7 @@ function displayPredictionsList(array $predictions): string{
 	return $html;
 }
 
-$opened = executeQuery("SELECT `id`, `title`, `ended` FROM `predictions` WHERE `ended` > NOW() ORDER BY `ended` ASC;");
+$opened = executeQuery("SELECT `id`, `title`, `ended` FROM `predictions` WHERE `approved` = 1 AND `ended` > NOW() ORDER BY `ended` ASC;");
 $count = count($opened);
 include_once "time.js.php";
 echo "<h1>" . getString("predictions_opened") . " (" . displayInt($count) . ")</h1>";
@@ -50,7 +50,7 @@ if($count == 0) echo "<p>" . getString("predictions_none") . "</p>";
 if($count > 0){
 	if(!isConnected()) echo displayPredictionsList($opened);
 	if(isConnected()){
-		$not_bet = executeQuery("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`ended` FROM `predictions` WHERE `predictions`.`ended` > NOW() AND `predictions`.`id` NOT IN (SELECT `predictions`.`id` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `bets`.`user` = ? AND `answer` IS NULL) ORDER BY `predictions`.`ended` ASC;", [$_COOKIE["username"]]);
+		$not_bet = executeQuery("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`ended` FROM `predictions` WHERE `predictions`.`approved` = 1 AND `predictions`.`ended` > NOW() AND `predictions`.`id` NOT IN (SELECT `predictions`.`id` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `bets`.`user` = ? AND `answer` IS NULL) ORDER BY `predictions`.`ended` ASC;", [$_COOKIE["username"]]);
 		$not_bet_count = count($not_bet);
 		echo "<h2>" . getString("predictions_opened_bet_none") . " (" . displayInt($not_bet_count) . ")</h2>";
 		if($not_bet_count == 0) echo "<p>" . getString("predictions_none") . "</p>";
@@ -58,7 +58,7 @@ if($count > 0){
 
 		echo "<br><br>";
 
-		$already_bet = executeQuery("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`ended`, `choices`.`name`, `bets`.`chips` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `bets`.`user` = ? AND NOW() < `ended` AND `answer` IS NULL ORDER BY `predictions`.`ended` ASC;", [$_COOKIE["username"]]);
+		$already_bet = executeQuery("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`ended`, `choices`.`name`, `bets`.`chips` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `predictions`.`approved` = 1 AND `bets`.`user` = ? AND NOW() < `ended` AND `answer` IS NULL ORDER BY `predictions`.`ended` ASC;", [$_COOKIE["username"]]);
 		$already_bet_count = count($already_bet);
 		echo "<h2>" . getString("predictions_opened_bet_already") . " (" . displayInt($already_bet_count) . ")</h2>";
 		if($already_bet_count == 0) echo "<p>" . getString("predictions_none") . "</p>";

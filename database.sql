@@ -17,6 +17,7 @@ CREATE TABLE `predictions` (
 	`user` varchar(20) NOT NULL,
 	`created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`ended` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`approved` tinyint(1) NOT NULL DEFAULT 0,
 	`answered` timestamp NULL,
 	`answer` int NULL,
 	PRIMARY KEY (`id`),
