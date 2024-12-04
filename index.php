@@ -7,6 +7,14 @@ include_once "functions.php";
  */
 function getTitle(): string{
 	switch($_REQUEST["view"]){
+		case "prediction":
+			if(empty($_REQUEST["id"])) redirect("home", "fields");
+
+			$exists = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `id` = ?;", [$_REQUEST["id"]], "int");
+			if(!$exists) redirect("home", "prediction_unknown");
+
+			$title = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$_REQUEST["id"]], "string");
+			break;
 		case "user":
 			$title = $_REQUEST["user"];
 			break;
