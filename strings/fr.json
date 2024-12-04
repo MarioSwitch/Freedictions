@@ -4,6 +4,7 @@
 
 	"title_home":"Accueil",
 	"title_leaderboard":"Classement",
+	"title_modqueue":"File d'attente (modération)",
 	"title_signup":"Inscription",
 	"title_signin":"Connexion",
 
@@ -18,13 +19,27 @@
 	"predictions_opened":"Prédictions ouvertes",
 	"predictions_opened_bet_none":"Pas encore parié",
 	"predictions_opened_bet_already":"Déjà parié",
+	"predictions_waiting_answer":"Prédictions en attente de résultat",
+	"predictions_waiting_approval":"Prédictions en attente d'approbation",
 	
 	"predictions_table_question":"Prédiction",
+	"predictions_table_choices":"Choix",
+	"predictions_table_proposed":"Proposé",
+	"predictions_table_created":"Créé",
 	"predictions_table_participation":"Participation",
 	"predictions_table_bet":"Pari",
-	"predictions_table_ended":"Temps restant",
+	"predictions_table_end_future":"Temps restant",
+	"predictions_table_end_past":"En attente depuis",
+	"predictions_table_result":"Résultat",
+	"predictions_table_actions":"Actions",
+	"predictions_table_actions_approve":"Approuver",
+	"predictions_table_actions_reject":"Rejeter",
+	"predictions_table_actions_edit":"Modifier",
 	"predictions_table_waiting_answer":"En attente du résultat",
 	"predictions_table_waiting_approval":"En attente d'approbation",
+
+	"prediction_result_select":"Sélectionnez…",
+	"prediction_resolve":"Valider le résultat",
 
 	"chips_bet":"Jetons misés",
 
@@ -52,6 +67,7 @@
 	"error_username_taken":"Le nom d'utilisateur est déjà pris.",
 	"error_password":"Le mot de passe est incorrect.",
 	"error_password_confirm":"Les mots de passe ne correspondent pas.",
+	"error_mod_perms":"Vous devez être modérateur pour effectuer cette action.",
 	"error_retry":"Veuillez réessayer.",
 
 	"decimal_separator":",",
