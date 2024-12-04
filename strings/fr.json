@@ -23,7 +23,8 @@
 	"predictions_table_participation":"Participation",
 	"predictions_table_bet":"Pari",
 	"predictions_table_ended":"Temps restant",
-	"predictions_table_ended_already":"Paris fermés",
+	"predictions_table_waiting_answer":"En attente du résultat",
+	"predictions_table_waiting_approval":"En attente d'approbation",
 
 	"chips_bet":"Jetons misés",
 
