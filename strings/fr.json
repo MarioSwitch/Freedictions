@@ -4,6 +4,7 @@
 
 	"title_home":"Accueil",
 	"title_leaderboard":"Classement",
+	"title_create":"Nouvelle prédiction",
 	"title_modqueue":"File d'attente (modération)",
 	"title_signup":"Inscription",
 	"title_signin":"Connexion",
@@ -41,10 +42,24 @@
 	"prediction_result_select":"Sélectionnez…",
 	"prediction_resolve":"Valider le résultat",
 
+	"create_question":"Question",
+	"create_details":"Précisions",
+	"create_details_desc":"Vous pouvez saisir des détails supplémentaires concernant la prédiction (acronymes, cas spéciaux, etc.).<br>Ce champ est facultatif.",
+	"create_end":"Fin des paris",
+	"create_end_desc":"Date et heure à laquelle les paris seront automatiquement figés (heure locale).<br>Vous pouvez toujours figer manuellement les paris avant cette date.",
+	"create_choices":"Choix",
+	"create_note":"Note :",
+	"create_note_user":"Votre prédiction devra être approuvée par un modérateur avant d'être ouverte aux paris.<br>Vous recevrez une notification dès que l'approbation sera effectuée.",
+	"create_note_mod":"Étant modérateur, votre prédiction sera immédiatement ouverte aux paris.",
+	"create_submit":"Soumettre",
+	"create_create":"Créer",
+
 	"chips_bet":"Jetons misés",
 
 	"icon_users":"Utilisateurs",
 	"icon_chips":"Jetons",
+	"icon_choice_add":"Ajouter un choix",
+	"icon_choice_delete":"Supprimer ce choix",
 
 	"profile_created":"Création du compte",
 	"profile_updated":"Dernière connexion",

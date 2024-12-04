@@ -19,6 +19,7 @@ echo "
 		<a href=" . CONFIG_PATH . "/signup><img src=\"svg/signup.svg\"></a>
 		<a href=" . CONFIG_PATH . "/signin><img src=\"svg/signin.svg\"></a>";
 	}else{
+		echo "<a href=\"" . CONFIG_PATH . "/create\" style=\"margin-right:calc(var(--font-size) * 0.5);\"><img src=\"svg/create.svg\"></a>";
 		if(isMod()){
 			$waiting_approval = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `approved` = 0;", [], "int");
 			$waiting_answer = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `approved` = 1 AND NOW() >= `ended` AND `answer` IS NULL;", [], "int");

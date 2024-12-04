@@ -104,6 +104,16 @@ table.predictions_list > tbody > tr > td{
 	border-bottom: 1px solid lightgray;
 }
 
+img.delete_choice, img.add_choice{
+	width: calc(var(--font-size) * 1.5);
+	height: calc(var(--font-size) * 1.5);
+	vertical-align: sub;
+}
+
+img.delete_choice:hover, img.add_choice:hover{
+	cursor: pointer;
+}
+
 /* ---------- By ID ---------- */
 #header{
 	position: sticky;
