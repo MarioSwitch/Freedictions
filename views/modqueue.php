@@ -1,5 +1,5 @@
 <?php
-if(!isMod()) redirect("home", "mod_perms");
+if(!isMod()) redirect("home", "perms_mod");
 
 include_once "time.js.php";
 
@@ -50,7 +50,7 @@ function displayWaitingApproval(array $predictions): string{
 			<tr>
 				<form role=\"form\" action=\"controller.php\">
 					<input type=\"hidden\" name=\"id\" value=\"$id\">
-					<td>$title</td>
+					<td><a href=\"prediction/$id\">$title</a></td>
 					<td>$choices</td>
 					<td>$proposed</td>
 					<td>$ended</td>
@@ -106,7 +106,7 @@ function displayWaitingAnswer(array $predictions): string{
 			<tr>
 				<form role=\"form\" action=\"controller.php\">
 					<input type=\"hidden\" name=\"id\" value=\"$id\">
-					<td>$title</td>
+					<td><a href=\"prediction/$id\">$title</a></td>
 					<td>$created</td>
 					<td>$ended</td>
 					<td>$result</td>

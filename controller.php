@@ -41,7 +41,7 @@ switch($_REQUEST["action"]){
 		redirect("home");
 
 	case "modqueue_approve":
-		if(!isMod()) redirect("home", "mod_perms");
+		if(!isMod()) redirect("home", "perms_mod");
 
 		$prediction_id = $_REQUEST["id"];
 		if(empty($prediction_id)) redirect("modqueue", "fields");
@@ -50,10 +50,40 @@ switch($_REQUEST["action"]){
 		redirect("modqueue");
 
 	case "modqueue_reject":
-		if(!isMod()) redirect("home", "mod_perms");
+		if(!isMod()) redirect("home", "perms_mod");
 
 		$prediction_id = $_REQUEST["id"];
 		if(empty($prediction_id)) redirect("modqueue", "fields");
 
 		redirect("controller.php?action=prediction_delete&id=$prediction_id");
+
+	case "prediction_create":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$question = $_REQUEST["question"];
+		$details = $_REQUEST["details"];
+		$end = $_REQUEST["end"];
+		$choices = $_REQUEST["choices"];
+		if(empty($question) || empty($details) || empty($end) || empty($choices) || !array_key_exists("offset", $_REQUEST)) redirect("create", "fields");
+
+		$offset = $_REQUEST["offset"]; // offset peut valoir 0 (évalué comme false), utilisation de array_key_exists() au lieu de empty() pour vérifier
+
+		if(count($choices) < 2) redirect("create", "fields");
+
+		$question = htmlspecialchars($question);
+		$details = htmlspecialchars($details);
+
+		$approved = isMod() ? 1 : 0;
+
+		date_default_timezone_set("UTC");
+		$endUTC = date("Y-m-d\TH:i", strtotime($end) - $offset*60);
+
+		executeQuery("INSERT INTO `predictions` VALUES (DEFAULT, ?, ?, ?, DEFAULT, ?, ?, DEFAULT, DEFAULT);", [$question, $details, $_COOKIE["username"], $endUTC, $approved]);
+		$id = executeQuery("SELECT `id` FROM `predictions` ORDER BY `created` DESC LIMIT 1;", [], "int");
+		foreach($choices as $choice){
+			$choice = htmlspecialchars($choice);
+			executeQuery("INSERT INTO `choices` VALUES (DEFAULT, ?, ?);", [$id, $choice]);
+		}
+
+		redirect("prediction/$id");
 }
