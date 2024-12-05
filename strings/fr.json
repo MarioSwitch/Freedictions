@@ -39,6 +39,16 @@
 	"predictions_table_waiting_answer":"En attente du résultat",
 	"predictions_table_waiting_approval":"En attente d'approbation",
 
+	"prediction_created_time":"Création de la prédiction",
+	"prediction_created_user":"Création de la prédiction",
+	"prediction_ended":"Fin des paris",
+	"prediction_participation":"Participation",
+	"prediction_details":"Précisions fournies par le créateur",
+	"prediction_choices":"Réponses possibles",
+	"prediction_choice":"Réponse",
+	"prediction_percentage":"Pourcentage",
+	"prediction_ratio":"En cas de victoire",
+	"prediction_top":"Plus gros parieur(s)",
 	"prediction_result_select":"Sélectionnez…",
 	"prediction_resolve":"Valider le résultat",
 
