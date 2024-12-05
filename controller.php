@@ -61,11 +61,11 @@ switch($_REQUEST["action"]){
 		if(!isConnected()) redirect("home", "perms_connected");
 
 		$question = $_REQUEST["question"];
-		$details = $_REQUEST["details"];
 		$end = $_REQUEST["end"];
 		$choices = $_REQUEST["choices"];
-		if(empty($question) || empty($details) || empty($end) || empty($choices) || !array_key_exists("offset", $_REQUEST)) redirect("create", "fields");
+		if(empty($question) || empty($end) || empty($choices) || !array_key_exists("details", $_REQUEST) || !array_key_exists("offset", $_REQUEST)) redirect("create", "fields");
 
+		$details = $_REQUEST["details"]; // details peut valoir "" (évalué comme false), utilisation de array_key_exists() au lieu de empty() pour vérifier
 		$offset = $_REQUEST["offset"]; // offset peut valoir 0 (évalué comme false), utilisation de array_key_exists() au lieu de empty() pour vérifier
 
 		if(count($choices) < 2) redirect("create", "fields");

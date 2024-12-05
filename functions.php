@@ -38,7 +38,7 @@ function executeQuery(string $query, array $args = [], string $result_type = "ar
 
 	// Retourne le résultat
 	return match($result_type){
-		"string" => $result[0][0],
+		"string" => strval($result[0][0]),
 		"int" => intval($result[0][0]),
 		"float" => floatval($result[0][0]),
 		default => $result
@@ -297,4 +297,14 @@ function displayFloat(float $float, bool $percentage = false): string{
 	
 	// Si le nombre est un pourcentage, ajout du symbole
 	return $percentage ? getString("percentage", [$number]) : $number;
+}
+
+/**
+ * Affiche un ratio (changement en cas de victoire)
+ * @param float $ratio Ratio à afficher
+ * @return string Ratio formaté
+ */
+function displayRatio(float $ratio): string{
+	if($ratio < 2) return "+" . displayFloat(($ratio - 1) * 100, true);
+	return "×" . displayFloat($ratio);
 }

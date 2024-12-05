@@ -13,6 +13,7 @@ $streak = executeQuery("SELECT `streak` FROM `users` WHERE `username` = ?", [$us
 $chips = executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?", [$username], "int");
 
 include_once "time.js.php";
+
 /**
  * Génère le code HTML pour afficher une boîte d'information utilisateur
  * @param string $info Information à afficher (« created », « updated », « streak » ou « chips »)
