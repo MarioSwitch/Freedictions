@@ -46,14 +46,23 @@ switch($_REQUEST["action"]){
 		$prediction_id = $_REQUEST["id"];
 		if(empty($prediction_id)) redirect("modqueue", "fields");
 
+		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+
 		executeQuery("UPDATE `predictions` SET `approved` = 1 WHERE `id` = ?;", [$prediction_id]);
-		redirect("modqueue");
+		executeQuery("UPDATE `predictions` SET `created` = NOW() WHERE `id` = ?;", [$prediction_id]);
+		executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$prediction_creator, "APPROVED:$prediction_id"]);
+
+		redirect("prediction/$prediction_id");
 
 	case "modqueue_reject":
 		if(!isMod()) redirect("home", "perms_mod");
 
 		$prediction_id = $_REQUEST["id"];
 		if(empty($prediction_id)) redirect("modqueue", "fields");
+
+		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+
+		executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$prediction_creator, "REJECTED:$prediction_id"]);
 
 		redirect("controller.php?action=prediction_delete&id=$prediction_id");
 

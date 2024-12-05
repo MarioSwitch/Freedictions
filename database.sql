@@ -44,12 +44,10 @@ CREATE TABLE `bets` (
 );
 
 CREATE TABLE `notifications` (
-	`id` int NOT NULL AUTO_INCREMENT,
 	`user` varchar(20) NOT NULL,
 	`text` varchar(1000) NOT NULL,
 	`sent` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`read` tinyint(1) NOT NULL DEFAULT 0,
-	PRIMARY KEY (`id`),
 	CONSTRAINT `notification_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`)
 );
 

@@ -39,8 +39,9 @@
 	"predictions_table_waiting_answer":"En attente du résultat",
 	"predictions_table_waiting_approval":"En attente d'approbation",
 
-	"prediction_created_time":"Création de la prédiction",
-	"prediction_created_user":"Création de la prédiction",
+	"prediction_not_approved":"Cette prédiction n'a pas encore été approuvée par un modérateur.<br>Revenez lorsqu'elle le sera pour parier.",
+	"prediction_created_time":"Ouverture de la prédiction",
+	"prediction_created_user":"Proposition de la prédiction",
 	"prediction_ended":"Fin des paris",
 	"prediction_participation":"Participation",
 	"prediction_details":"Précisions fournies par le créateur",
