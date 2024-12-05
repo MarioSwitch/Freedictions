@@ -2,6 +2,7 @@
 include_once "time.js.php";
 
 $id = $_REQUEST["id"];
+$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$id], "int");
 $question = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $created_user = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $created_time = executeQuery("SELECT `created` FROM `predictions` WHERE `id` = ?;", [$id], "string");
@@ -23,11 +24,13 @@ foreach($choices as $choice){
 	$choice_id = $choice["id"];
 	// Format : [ID du choix => [nombre de jetons misés]]
 	$choices_bets[$choice_id] = array(
-		"chips" => executeQuery("SELECT COUNT(*) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int"),
+		"chips" => executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int"),
 		"users" => executeQuery("SELECT COUNT(`user`) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int")
 	);
 	$choices_bets[$choice_id]["percentage"] = $volume_chips ? $choices_bets[$choice_id]["chips"] / $volume_chips * 100 : 0;
 	$choices_bets[$choice_id]["ratio"] = $choices_bets[$choice_id]["chips"] ? $volume_chips / $choices_bets[$choice_id]["chips"] : 0;
+	$choices_bets[$choice_id]["top_chips"] = executeQuery("SELECT MAX(`chips`) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int");
+	$choices_bets[$choice_id]["top_users"] = executeQuery("SELECT `user` FROM `bets` WHERE `choice` = ? AND `chips` = ?;", [$choice_id, $choices_bets[$choice_id]["top_chips"]]);
 }
 usort($choices, function($a, $b){
 	global $choices_contains_numbers, $choices_bets;
@@ -53,6 +56,16 @@ $choices_table = "
 		$percentage = $choices_bets[$id]["percentage"];
 		$users = $choices_bets[$id]["users"];
 		$ratio = $choices_bets[$id]["ratio"];
+		$top_chips = $choices_bets[$id]["top_chips"];
+		$top_users = $choices_bets[$id]["top_users"];
+		$top = "–";
+		if($top_chips){
+			$top = displayInt($top_chips) . insertTextIcon("chips", "right", 1);
+			foreach($top_users as $user){
+				$user = $user[0];
+				$top .= "<br><a href=\"../user/$user\">$user</a>";
+			}
+		}
 		$choices_table .= "
 		<tr>
 			<td>$name</td>
@@ -62,7 +75,7 @@ $choices_table = "
 				" . displayInt($users) . insertTextIcon("users", "right", 1) . "
 			</td>
 			<td>" . ($ratio ? displayRatio($ratio) : "–") . "</td>
-			<td></td>
+			<td>$top</td>
 		</tr>";
 	}
 $choices_table .= "
@@ -94,12 +107,23 @@ function displayPredictionBox(string $info): string{
 	}
 	return $html;
 }
-?>
-<h1><?= $question ?></h1>
-<?= displayPredictionBox("created_time") ?>
-<?= displayPredictionBox("created_user") ?>
-<?= displayPredictionBox("ended") ?>
-<?= displayPredictionBox("participation") ?>
-<?= $details_text ?>
-<h2><?= getString("prediction_choices") . " ($choices_count)" ?></h2>
-<?= $choices_table ?>
+
+echo "<h1>$question</h1>";
+
+if(!$approved){
+	echo "<p>" . getString("prediction_not_approved") . "</p>";
+}
+if($approved || isMod()){
+	echo 
+	"<div>" .
+		displayPredictionBox("created_time") .
+		displayPredictionBox("created_user") .
+		displayPredictionBox("ended") .
+		displayPredictionBox("participation") .
+	"</div>";
+	echo "
+	<br>
+	$details_text
+	<h2>" . getString("prediction_choices") . " ($choices_count)" . "</h2>
+	$choices_table";
+}
