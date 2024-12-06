@@ -28,6 +28,16 @@ function displayPredictionBox(string $info): string{
 	return $html;
 }
 
+/**
+ * Détermine si l'utilisateur actuel est le créateur de la prédiction
+ * @return bool Vrai si l'utilisateur actuel est le créateur de la prédiction
+ */
+function isCreator(): bool{
+	global $created_user;
+	if(!isConnected()) return false;
+	return $_COOKIE["username"] == $created_user;
+}
+
 $id = $_REQUEST["id"];
 $approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$id], "int");
 $question = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$id], "string");
@@ -125,6 +135,7 @@ foreach($choices as $choice){
 	$choices_select .= "<option value=\"$choice_id\">$choice_name</option>";
 }
 $choices_select .= "</select>";
+$choices_select_full = $choices_select;
 if($already_bet) $choices_select = "
 	<select name=\"choice\" required=\"required\">
 		<option value=\"$already_bet_choice_id\" selected=\"selected\">$already_bet_choice_name</option>
@@ -170,6 +181,25 @@ if($now >= $ended){
 	$bet_html = "<p>" . getString("prediction_closed", ["<span id=\"ended\">$ended</span>"]) . "<script>display(\"$ended\", \"ended\");</script></p>";
 }
 
+$manage_html = "
+<form role=\"form\" action=\"controller.php\">
+	<input type=\"hidden\" name=\"prediction\" value=\"$id\">";
+	if($now < $ended){
+		$manage_html .= "<button type=\"submit\" name=\"action\" value=\"prediction_close\">" . getString("prediction_manage_close") . "</button>";
+	}else{
+		$manage_html .= $choices_select_full . "<br>";
+		$manage_html .= "<button type=\"submit\" name=\"action\" value=\"prediction_resolve\">" . getString("prediction_manage_resolve") . "</button>";
+		$manage_html .= "<p>" . getString("prediction_manage_resolve_desc") . "</p>";
+	}
+	$manage_html .= "
+</form>
+<br>
+<form role=\"form\" action=\"controller.php\">
+	<input type=\"hidden\" name=\"prediction\" value=\"$id\">
+	<button type=\"submit\" name=\"action\" value=\"prediction_delete\">" . getString("prediction_manage_delete") . "</button>
+	<p>" . getString("prediction_manage_delete_desc") . "</p>
+</form>";
+
 // Affichage
 echo "<h1>$question</h1>";
 if(!$approved){
@@ -191,4 +221,10 @@ if($approved || isMod()){
 	<br><br>
 	<h2>" . getString("prediction_bet") . "</h2>
 	$bet_html";
+	if(isCreator() || (isMod() && !isMod($created_user))){
+		echo "
+		<br>
+		<h2>" . getString("prediction_manage") . "</h2>
+		$manage_html";
+	}
 }

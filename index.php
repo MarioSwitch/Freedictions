@@ -38,6 +38,7 @@ function getTitle(): string{
 		$view = "views/" . $_REQUEST["view"] . ".php";
 		if(!file_exists($view)) redirect("home");
 		include $view;
+		echo "<br>";
 
 		include "footer.php";
 		?>
