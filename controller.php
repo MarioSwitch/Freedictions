@@ -57,14 +57,14 @@ switch($_REQUEST["action"]){
 	case "modqueue_reject":
 		if(!isMod()) redirect("home", "perms_mod");
 
-		$prediction_id = $_REQUEST["id"];
+		$prediction_id = $_REQUEST["prediction"];
 		if(empty($prediction_id)) redirect("modqueue", "fields");
 
 		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
 
 		executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$prediction_creator, "REJECTED:$prediction_id"]);
 
-		redirect("controller.php?action=prediction_delete&id=$prediction_id");
+		redirect("controller.php?action=prediction_delete&prediction=$prediction_id");
 
 	case "prediction_create":
 		if(!isConnected()) redirect("home", "perms_connected");
@@ -108,6 +108,12 @@ switch($_REQUEST["action"]){
 		$chips_total = executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "int");
 		if($chips > $chips_total || $chips < 1) redirect("prediction/$prediction_id", "fields");
 
+		$choice_prediction = executeQuery("SELECT `prediction` FROM `choices` WHERE `id` = ?;", [$choice_id], "int");
+		if($choice_prediction != $prediction_id) redirect("prediction/$prediction_id", "fields");
+
+		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
+		if(!$approved) redirect("prediction/$prediction_id", "prediction_not_approved");
+
 		$prediction_ended = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
 		if(NOW >= $prediction_ended) redirect("prediction/$prediction_id", "prediction_closed");
 
@@ -126,13 +132,63 @@ switch($_REQUEST["action"]){
 		if(!isConnected()) redirect("home", "perms_connected");
 
 		$prediction_id = $_REQUEST["prediction"];
-		if(empty($prediction_id)) redirect("home", "fields");
+		if(empty($prediction_id)) redirect("prediction/$prediction_id", "fields");
 
 		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
 		$perms = ($_COOKIE["username"] == $prediction_creator) || (isMod() && !isMod($prediction_creator));
-		if(!$perms) redirect("home", "perms");
+		if(!$perms) redirect("prediction/$prediction_id", "perms");
+
+		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
+		if(!$approved) redirect("prediction/$prediction_id", "prediction_not_approved");
 
 		executeQuery("UPDATE `predictions` SET `ended` = NOW() WHERE `id` = ?;", [$prediction_id]);
+
+		redirect("prediction/$prediction_id");
+
+	case "prediction_resolve":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$prediction_id = $_REQUEST["prediction"];
+		$choice_id = $_REQUEST["choice"];
+		if(empty($prediction_id) || empty($choice_id)) redirect("prediction/$prediction_id", "fields");
+
+		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+		$perms = ($_COOKIE["username"] == $prediction_creator) || (isMod() && !isMod($prediction_creator));
+		if(!$perms) redirect("prediction/$prediction_id", "perms");
+
+		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
+		if(!$approved) redirect("prediction/$prediction_id", "prediction_not_approved");
+
+		$resolved = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
+		if($resolved) redirect("prediction/$prediction_id", "prediction_resolved");
+
+		$choice_prediction = executeQuery("SELECT `prediction` FROM `choices` WHERE `id` = ?;", [$choice_id], "int");
+		if($choice_prediction != $prediction_id) redirect("prediction/$prediction_id", "fields");
+
+		$prediction_ended = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+		if(NOW < $prediction_ended) redirect("prediction/$prediction_id", "prediction_opened");
+
+		executeQuery("UPDATE `predictions` SET `answer` = ? WHERE `id` = ?;", [$choice_id, $prediction_id]);
+		executeQuery("UPDATE `predictions` SET `answered` = NOW() WHERE `id` = ?;", [$prediction_id]);
+
+		$chips_total = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `prediction` = ?;", [$prediction_id], "int");
+		$chips_win = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int");
+		if($chips_win){
+			$ratio = $chips_total / $chips_win;
+			$winners = executeQuery("SELECT `user`, `chips` FROM `bets` WHERE `prediction` = ? AND `choice` = ?;", [$prediction_id, $choice_id]);
+			foreach($winners as $winner){
+				$chips_won = floor($winner["chips"] * $ratio);
+				executeQuery("UPDATE `users` SET `chips` = `chips` + ? WHERE `username` = ?;", [$chips_won, $winner["user"]]);
+				executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$winner["user"], "RESOLVED:$prediction_id,ANSWER:$choice_id,WON:$chips_won"]);
+			}
+		}
+
+		$losers = executeQuery("SELECT `user`, `chips`, `choice` FROM `bets` WHERE `prediction` = ? AND `choice` != ?;", [$prediction_id, $choice_id]);
+		foreach($losers as $loser){
+			$wrong_choice_id = $loser["choice"];
+			$chips_lost = $loser["chips"];
+			executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$loser["user"], "RESOLVED:$prediction_id,ANSWER:$choice_id,YOUR_ANSWER:$wrong_choice_id,LOST:$chips_lost"]);
+		}
 
 		redirect("prediction/$prediction_id");
 
@@ -140,11 +196,14 @@ switch($_REQUEST["action"]){
 		if(!isConnected()) redirect("home", "perms_connected");
 
 		$prediction_id = $_REQUEST["prediction"];
-		if(empty($prediction_id)) redirect("home", "fields");
+		if(empty($prediction_id)) redirect("prediction/$prediction_id", "fields");
 
 		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
 		$perms = ($_COOKIE["username"] == $prediction_creator) || (isMod() && !isMod($prediction_creator));
-		if(!$perms) redirect("home", "perms");
+		if(!$perms) redirect("prediction/$prediction_id", "perms");
+
+		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
+		if(!$approved && !isMod()) redirect("prediction/$prediction_id", "prediction_not_approved");
 
 		$resolved = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
 		if(!$resolved){

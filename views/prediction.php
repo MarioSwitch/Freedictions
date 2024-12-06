@@ -7,22 +7,22 @@ include_once "time.js.php";
  * @return string Code HTML
  */
 function displayPredictionBox(string $info): string{
-	global $created_user, $created_time, $ended, $now, $volume_chips, $volume_users;
-	$already_ended = $now >= $ended;
+	global $created_user, $created_time, $ended, $answer, $volume_chips, $volume_users;
 	$value = match($info){
 		"created_time" => $created_time,
 		"created_user" => "<a href=\"../user/$created_user\">$created_user</a>",
-		"ended" => $already_ended ? getString("prediction_closed_short") : $ended,
+		"ended" => $ended,
+		"answer" => $answer ? executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$answer], "string") : getString("prediction_answer_waiting"),
 		"participation" => displayInt($volume_chips) . insertTextIcon("chips", "right", 2) . ", " . displayInt($volume_users) . insertTextIcon("users", "right", 2),
 	};
 	$caption = getString("prediction_$info");
-	$id = ($info == "created_time" || ($info == "ended" && !$already_ended)) ? "id=\"$info\"" : "";
+	$id = ($info == "created_time" || $info == "ended") ? " id=\"$info\"" : "";
 	$html = "
 	<div style=\"display:inline-block; border:1px solid var(--color-text); border-radius: 10px; width:15%; min-width:250px; max-width:400px;\">
-		<p style=\"font-size:calc(var(--font-size) * 2.0); margin:calc(var(--font-size) * 0.5);\" $id>$value</p>
+		<p style=\"font-size:calc(var(--font-size) * 2.0); margin:calc(var(--font-size) * 0.5);\"$id>$value</p>
 		<p style=\"font-size:calc(var(--font-size) * 0.8); margin:calc(var(--font-size) * 0.5);\">$caption</p>
 	</div>";
-	if($info == "created_time" || ($info == "ended" && !$already_ended)){
+	if($info == "created_time" || $info == "ended"){
 		$html .= "<script>display(\"$value\", \"$info\");</script>";
 	}
 	return $html;
@@ -44,6 +44,8 @@ $question = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$
 $created_user = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $created_time = executeQuery("SELECT `created` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $ended = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$id], "string");
+$answer = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$id], "string");
+$answered = executeQuery("SELECT `answered` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $now = executeQuery("SELECT NOW();", [], "string");
 
 $details = executeQuery("SELECT `description` FROM `predictions` WHERE `id` = ?;", [$id], "string");
@@ -179,26 +181,36 @@ if(!isConnected()){
 }
 if($now >= $ended){
 	$bet_html = "<p>" . getString("prediction_closed", ["<span id=\"ended\">$ended</span>"]) . "<script>display(\"$ended\", \"ended\");</script></p>";
+	if($answer) $bet_html .= "<p>" . getString("prediction_resolved", ["<span id=\"answered\">$answered</span>"]) . "<script>display(\"$answered\", \"answered\");</script></p>";
 }
 
-$manage_html = "
+$manage_close = "
 <form role=\"form\" action=\"controller.php\">
-	<input type=\"hidden\" name=\"prediction\" value=\"$id\">";
-	if($now < $ended){
-		$manage_html .= "<button type=\"submit\" name=\"action\" value=\"prediction_close\">" . getString("prediction_manage_close") . "</button>";
-	}else{
-		$manage_html .= $choices_select_full . "<br>";
-		$manage_html .= "<button type=\"submit\" name=\"action\" value=\"prediction_resolve\">" . getString("prediction_manage_resolve") . "</button>";
-		$manage_html .= "<p>" . getString("prediction_manage_resolve_desc") . "</p>";
-	}
-	$manage_html .= "
-</form>
-<br>
+	<input type=\"hidden\" name=\"prediction\" value=\"$id\">
+	<button type=\"submit\" name=\"action\" value=\"prediction_close\">" . getString("prediction_manage_close") . "</button>
+</form>";
+
+$manage_resolve = "
+<form role=\"form\" action=\"controller.php\">
+	$choices_select_full<br>
+	<button type=\"submit\" name=\"action\" value=\"prediction_resolve\">" . getString("prediction_manage_resolve") . "</button>
+	<p>" . getString("prediction_manage_resolve_desc") . "<br>" . getString("prediction_manage_cant_be_undone") . "</p>
+</form>";
+
+$manage_delete = "
 <form role=\"form\" action=\"controller.php\">
 	<input type=\"hidden\" name=\"prediction\" value=\"$id\">
 	<button type=\"submit\" name=\"action\" value=\"prediction_delete\">" . getString("prediction_manage_delete") . "</button>
-	<p>" . getString("prediction_manage_delete_desc") . "</p>
+	<p>" . ($answer ? "" : (getString("prediction_manage_delete_desc") . "<br>")) . getString("prediction_manage_cant_be_undone") . "</p>
 </form>";
+
+if($now < $ended){
+	$manage_html = $manage_close . "<br>" . $manage_delete;
+}else if(!$answer){
+	$manage_html = $manage_resolve . "<br>" . $manage_delete;
+}else{
+	$manage_html = $manage_delete;
+}
 
 // Affichage
 echo "<h1>$question</h1>";
@@ -210,7 +222,7 @@ if($approved || isMod()){
 	"<div>" .
 		displayPredictionBox("created_time") .
 		displayPredictionBox("created_user") .
-		displayPredictionBox("ended") .
+		displayPredictionBox(($now >= $ended) ? "answer" : "ended") .
 		displayPredictionBox("participation") .
 	"</div>";
 	echo "
