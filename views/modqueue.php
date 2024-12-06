@@ -49,7 +49,7 @@ function displayWaitingApproval(array $predictions): string{
 			$html .= "
 			<tr>
 				<form role=\"form\" action=\"controller.php\">
-					<input type=\"hidden\" name=\"id\" value=\"$id\">
+					<input type=\"hidden\" name=\"prediction\" value=\"$id\">
 					<td><a href=\"prediction/$id\">$title</a></td>
 					<td>$choices</td>
 					<td>$proposed</td>
