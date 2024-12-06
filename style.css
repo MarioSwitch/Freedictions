@@ -108,6 +108,25 @@ table.choices_list > tbody > tr > td:nth-child(1), table.choices_list > tbody > 
 	font-size: calc(var(--font-size) * 1.5);
 }
 
+table.hidden{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+table.hidden > tbody > tr > td{
+	width: calc(var(--font-size) * 15);
+}
+
+table.hidden > tbody > tr > td:nth-child(1){
+	padding: calc(var(--font-size) * 0.3) calc(var(--font-size) * 0.5);
+	text-align: right;
+}
+
+table.hidden > tbody > tr > td:nth-child(2){
+	padding: calc(var(--font-size) * 0.3) calc(var(--font-size) * 0.5);
+	text-align: left;
+}
+
 img.delete_choice, img.add_choice{
 	width: calc(var(--font-size) * 1.5);
 	height: calc(var(--font-size) * 1.5);

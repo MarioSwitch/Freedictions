@@ -1,12 +1,40 @@
 <?php
 include_once "time.js.php";
 
+/**
+ * Génère le code HTML pour afficher une boîte d'information prédiction
+ * @param string $info Information à afficher (« created_time », « created_user », « ended » ou « participation »)
+ * @return string Code HTML
+ */
+function displayPredictionBox(string $info): string{
+	global $created_user, $created_time, $ended, $now, $volume_chips, $volume_users;
+	$already_ended = $now >= $ended;
+	$value = match($info){
+		"created_time" => $created_time,
+		"created_user" => "<a href=\"../user/$created_user\">$created_user</a>",
+		"ended" => $already_ended ? getString("prediction_closed_short") : $ended,
+		"participation" => displayInt($volume_chips) . insertTextIcon("chips", "right", 2) . ", " . displayInt($volume_users) . insertTextIcon("users", "right", 2),
+	};
+	$caption = getString("prediction_$info");
+	$id = ($info == "created_time" || ($info == "ended" && !$already_ended)) ? "id=\"$info\"" : "";
+	$html = "
+	<div style=\"display:inline-block; border:1px solid var(--color-text); border-radius: 10px; width:15%; min-width:250px; max-width:400px;\">
+		<p style=\"font-size:calc(var(--font-size) * 2.0); margin:calc(var(--font-size) * 0.5);\" $id>$value</p>
+		<p style=\"font-size:calc(var(--font-size) * 0.8); margin:calc(var(--font-size) * 0.5);\">$caption</p>
+	</div>";
+	if($info == "created_time" || ($info == "ended" && !$already_ended)){
+		$html .= "<script>display(\"$value\", \"$info\");</script>";
+	}
+	return $html;
+}
+
 $id = $_REQUEST["id"];
 $approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$id], "int");
 $question = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $created_user = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $created_time = executeQuery("SELECT `created` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $ended = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$id], "string");
+$now = executeQuery("SELECT NOW();", [], "string");
 
 $details = executeQuery("SELECT `description` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $details_text = $details ? "<h2>" . getString("prediction_details") . "</h2><p>$details</p><br>" : "";
@@ -22,7 +50,6 @@ $volume_users = executeQuery("SELECT COUNT(`user`) FROM `bets` WHERE `prediction
 $choices_bets = [];
 foreach($choices as $choice){
 	$choice_id = $choice["id"];
-	// Format : [ID du choix => [nombre de jetons misés]]
 	$choices_bets[$choice_id] = array(
 		"chips" => executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int"),
 		"users" => executeQuery("SELECT COUNT(`user`) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int")
@@ -50,66 +77,101 @@ $choices_table = "
 	</thead>
 	<tbody>";
 	foreach($choices as $choice){
-		$id = $choice["id"];
-		$name = $choice["name"];
-		$chips = $choices_bets[$id]["chips"];
-		$percentage = $choices_bets[$id]["percentage"];
-		$users = $choices_bets[$id]["users"];
-		$ratio = $choices_bets[$id]["ratio"];
-		$top_chips = $choices_bets[$id]["top_chips"];
-		$top_users = $choices_bets[$id]["top_users"];
-		$top = "–";
-		if($top_chips){
-			$top = displayInt($top_chips) . insertTextIcon("chips", "right", 1);
-			foreach($top_users as $user){
-				$user = $user[0];
-				$top .= "<br><a href=\"../user/$user\">$user</a>";
+		$choice_id = $choice["id"];
+		$choice_name = $choice["name"];
+		$choice_chips = $choices_bets[$choice_id]["chips"];
+		$choice_percentage = $choices_bets[$choice_id]["percentage"];
+		$choice_users = $choices_bets[$choice_id]["users"];
+		$choice_ratio = $choices_bets[$choice_id]["ratio"];
+		$choice_top_chips = $choices_bets[$choice_id]["top_chips"];
+		$choice_top_users = $choices_bets[$choice_id]["top_users"];
+		$choice_top = "–";
+		if($choice_top_chips){
+			$choice_top = displayInt($choice_top_chips) . insertTextIcon("chips", "right", 1);
+			foreach($choice_top_users as $choice_user){
+				$choice_user = $choice_user[0];
+				$choice_top .= "<br><a href=\"../user/$choice_user\">$choice_user</a>";
 			}
 		}
 		$choices_table .= "
 		<tr>
-			<td>$name</td>
-			<td>" . displayFloat($percentage, true) . "</td>
+			<td>$choice_name</td>
+			<td>" . displayFloat($choice_percentage, true) . "</td>
 			<td>
-				" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "<br>
-				" . displayInt($users) . insertTextIcon("users", "right", 1) . "
+				" . displayInt($choice_chips) . insertTextIcon("chips", "right", 1) . "<br>
+				" . displayInt($choice_users) . insertTextIcon("users", "right", 1) . "
 			</td>
-			<td>" . ($ratio ? displayRatio($ratio) : "–") . "</td>
-			<td>$top</td>
+			<td>" . ($choice_ratio ? displayRatio($choice_ratio) : "–") . "</td>
+			<td>$choice_top</td>
 		</tr>";
 	}
 $choices_table .= "
 	</tbody>
 </table>";
 
-/**
- * Génère le code HTML pour afficher une boîte d'information prédiction
- * @param string $info Information à afficher (« created_time », « created_user », « ended » ou « participation »)
- * @return string Code HTML
- */
-function displayPredictionBox(string $info): string{
-	global $created_user, $created_time, $ended, $volume_chips, $volume_users;
-	$value = match($info){
-		"created_time" => $created_time,
-		"created_user" => "<a href=\"../user/$created_user\">$created_user</a>",
-		"ended" => $ended,
-		"participation" => displayInt($volume_chips) . insertTextIcon("chips", "right", 2) . ", " . displayInt($volume_users) . insertTextIcon("users", "right", 2),
-	};
-	$caption = getString("prediction_$info");
-	$id = ($info == "created_time" || $info == "ended") ? "id=\"$info\"" : "";
-	$html = "
-	<div style=\"display:inline-block; border:1px solid var(--color-text); border-radius: 10px; width:15%; min-width:250px; max-width:400px;\">
-		<p style=\"font-size:calc(var(--font-size) * 2.0); margin:calc(var(--font-size) * 0.5);\" $id>$value</p>
-		<p style=\"font-size:calc(var(--font-size) * 0.8); margin:calc(var(--font-size) * 0.5);\">$caption</p>
-	</div>";
-	if($info == "created_time" || $info == "ended"){
-		$html .= "<script>display(\"$value\", \"$info\");</script>";
-	}
-	return $html;
+$already_bet = isConnected() ? executeQuery("SELECT COUNT(*) FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $id], "int") : false;
+if($already_bet){
+	$already_bet_choice_id = executeQuery("SELECT `choice` FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $id], "int");
+	$already_bet_choice_name = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$already_bet_choice_id], "string");
+	$already_bet_chips = executeQuery("SELECT `chips` FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $id], "int");
 }
 
-echo "<h1>$question</h1>";
+$choices_select = "
+<select name=\"choice\" required=\"required\">
+	<option value=\"\" disabled=\"disabled\" selected=\"selected\">" . getString("prediction_result_select") . "</option>";
+foreach($choices as $choice){
+	$choice_id = $choice["id"];
+	$choice_name = $choice["name"];
+	$choices_select .= "<option value=\"$choice_id\">$choice_name</option>";
+}
+$choices_select .= "</select>";
+if($already_bet) $choices_select = "
+	<select name=\"choice\" required=\"required\">
+		<option value=\"$already_bet_choice_id\" selected=\"selected\">$already_bet_choice_name</option>
+	</select>
+";
 
+$chips_total_raw = isConnected() ? executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "int") : 0;
+$chips_total = "<span style=\"zoom:1.2;\">" . displayInt($chips_total_raw) . insertTextIcon("chips", "right", 1) . "</span>";
+
+$chips_input = "<input style=\"margin-bottom:0px;\" type=\"number\" name=\"chips\" min=\"1\" max=\"$chips_total_raw\" required=\"required\">" . insertTextIcon("chips", "right", 1.2);
+if($already_bet) $chips_input = "<span style=\"zoom:1.2;\">" . displayInt($already_bet_chips) . " + </span>" . $chips_input;
+
+$bet_html = "
+<form role=\"form\" action=\"controller.php\">
+	<table class=\"hidden\">
+		<tbody>
+			<tr>
+				<td>" . getString("prediction_choice") . "</td>
+				<td>$choices_select</td>
+			</tr>
+			<tr>
+				<td>" . getString("profile_chips") . "</td>
+				<td>$chips_total</td>
+			</tr>
+			<tr>
+				<td>" . getString("predictions_table_bet") . "</td>
+				<td>$chips_input</td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<input type=\"hidden\" name=\"prediction\" value=\"$id\">
+	<button type=\"submit\" name=\"action\" value=\"prediction_bet\">" . getString("prediction_bet") . "</button>
+</form>";
+if(!isConnected()){
+	$bet_html = "
+	<p>" . getString("error_perms_connected") . "</p>
+	<button onclick=\"location.href='../signin'\">" . getString("signin") . "</button>
+	<button onclick=\"location.href='../signup'\">" . getString("signup") . "</button>
+	";
+}
+if($now >= $ended){
+	$bet_html = "<p>" . getString("prediction_closed", ["<span id=\"ended\">$ended</span>"]) . "<script>display(\"$ended\", \"ended\");</script></p>";
+}
+
+// Affichage
+echo "<h1>$question</h1>";
 if(!$approved){
 	echo "<p>" . getString("prediction_not_approved") . "</p>";
 }
@@ -125,5 +187,8 @@ if($approved || isMod()){
 	<br>
 	$details_text
 	<h2>" . getString("prediction_choices") . " ($choices_count)" . "</h2>
-	$choices_table";
+	$choices_table
+	<br><br>
+	<h2>" . getString("prediction_bet") . "</h2>
+	$bet_html";
 }

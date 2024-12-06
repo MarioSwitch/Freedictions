@@ -50,7 +50,10 @@
 	"prediction_percentage":"Pourcentage",
 	"prediction_ratio":"En cas de victoire",
 	"prediction_top":"Plus gros parieur(s)",
+	"prediction_bet":"Parier",
 	"prediction_result_select":"Sélectionnez…",
+	"prediction_closed_short":"Paris fermés",
+	"prediction_closed":"Les paris sont fermés depuis [TBR].",
 	"prediction_resolve":"Valider le résultat",
 
 	"create_question":"Question",
@@ -96,6 +99,7 @@
 	"error_perms_connected":"Vous devez être connecté pour effectuer cette action.",
 	"error_perms_mod":"Vous devez être modérateur pour effectuer cette action.",
 	"error_prediction_unknown":"Cette prédiction n'existe pas.",
+	"error_prediction_closed":"Cette prédiction n'accepte plus les paris.",
 	"error_retry":"Veuillez réessayer.",
 
 	"decimal_separator":",",
