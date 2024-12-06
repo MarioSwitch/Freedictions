@@ -159,8 +159,9 @@ img.delete_choice:hover, img.add_choice:hover{
 
 	font-size: calc(var(--font-size) * 0.8);
 
-	top: calc(100% - var(--font-size));
-	position: sticky;
+	bottom: 0;
+	width: 100%;
+	position: fixed;
 }
 
 #footer > p{

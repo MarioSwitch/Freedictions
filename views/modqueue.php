@@ -78,25 +78,12 @@ function displayWaitingAnswer(array $predictions): string{
 				<th>" . getString("predictions_table_question") . "</th>
 				<th>" . getString("predictions_table_created") . "</th>
 				<th>" . getString("predictions_table_end_past") . "</th>
-				<th>" . getString("predictions_table_result") . "</th>
 			</tr>
 		</thead>
 		<tbody>";
 		foreach($predictions as $prediction){
 			$id = $prediction["id"];
 			$title = $prediction["title"];
-			$choices_array = executeQuery("SELECT * FROM `choices` WHERE `prediction` = ?;", [$id]);
-			$result = "
-			<select name=\"result\" required=\"required\">
-				<option selected=\"selected\" disabled=\"disabled\" value=\"\">" . getString("prediction_result_select") . "</option>";
-				foreach($choices_array as $choice){
-					$choice_id = $choice["id"];
-					$choice_name = $choice["name"];
-					$result .= "<option value=\"$choice_id\">$choice_name</option>";
-				}
-			$result .= "
-			</select>
-			<button type=\"submit\" name=\"action\" value=\"prediction_resolve\">" . getString("prediction_resolve") . "</button>";
 			$user = $prediction["user"];
 			$timestamp_created = $prediction["created"];
 			$created = "<a href=\"user/$user\">$user</a><br><span id=\"created_$id\">$timestamp_created</span><script>display(\"$timestamp_created\",\"created_$id\")</script>";
@@ -109,7 +96,6 @@ function displayWaitingAnswer(array $predictions): string{
 					<td><a href=\"prediction/$id\">$title</a></td>
 					<td>$created</td>
 					<td>$ended</td>
-					<td>$result</td>
 				</form>
 			</tr>";
 		}

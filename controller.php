@@ -121,4 +121,44 @@ switch($_REQUEST["action"]){
 		executeQuery("UPDATE `users` SET `chips` = `chips` - ? WHERE `username` = ?;", [$chips, $_COOKIE["username"]]);
 
 		redirect("prediction/$prediction_id");
+
+	case "prediction_close":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$prediction_id = $_REQUEST["prediction"];
+		if(empty($prediction_id)) redirect("home", "fields");
+
+		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+		$perms = ($_COOKIE["username"] == $prediction_creator) || (isMod() && !isMod($prediction_creator));
+		if(!$perms) redirect("home", "perms");
+
+		executeQuery("UPDATE `predictions` SET `ended` = NOW() WHERE `id` = ?;", [$prediction_id]);
+
+		redirect("prediction/$prediction_id");
+
+	case "prediction_delete":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$prediction_id = $_REQUEST["prediction"];
+		if(empty($prediction_id)) redirect("home", "fields");
+
+		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+		$perms = ($_COOKIE["username"] == $prediction_creator) || (isMod() && !isMod($prediction_creator));
+		if(!$perms) redirect("home", "perms");
+
+		$resolved = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
+		if(!$resolved){
+			$bets = executeQuery("SELECT * FROM `bets` WHERE `prediction` = ?;", [$prediction_id]);
+			foreach($bets as $bet){
+				executeQuery("UPDATE `users` SET `chips` = `chips` + ? WHERE `username` = ?;", [$bet["chips"], $bet["user"]]);
+				executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$bet["user"], "DELETED_REFUNDED:" . $bet["chips"]]);
+			}
+		}else{
+			executeQuery("UPDATE `predictions` SET `answer` = NULL WHERE `id` = ?;", [$prediction_id]);
+		}
+		executeQuery("DELETE FROM `bets` WHERE `prediction` = ?;", [$prediction_id]);
+		executeQuery("DELETE FROM `choices` WHERE `prediction` = ?;", [$prediction_id]);
+		executeQuery("DELETE FROM `predictions` WHERE `id` = ?;", [$prediction_id]);
+
+		redirect("home");
 }

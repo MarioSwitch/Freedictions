@@ -27,7 +27,7 @@ echo "
 				echo "<img src=\"svg/modqueue.svg\">";
 				echo "<div style=\"display:inline-block; margin-left:calc(var(--font-size) * 0.2); text-align:center;\">";
 					echo "<p style=\"font-size:calc(var(--font-size) * 0.45); margin:0;color:red;\">" . ($waiting_approval ? displayInt($waiting_approval) : "") . "</p>";
-					echo "<p style=\"font-size:calc(var(--font-size) * 0.35); margin:0;\">" . ($waiting_answer ? displayInt($waiting_answer) : "") . "</p>";
+					echo "<p style=\"font-size:calc(var(--font-size) * 0.35); margin:0;\">" . (($waiting_approval || $waiting_answer) ? displayInt($waiting_answer) : "") . "</p>";
 				echo "</div>";
 			echo "</a>";
 		}
