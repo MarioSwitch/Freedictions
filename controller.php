@@ -95,4 +95,30 @@ switch($_REQUEST["action"]){
 		}
 
 		redirect("prediction/$id");
+
+	case "prediction_bet":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$prediction_id = $_REQUEST["prediction"];
+		$choice_id = $_REQUEST["choice"];
+		$chips = $_REQUEST["chips"];
+		if(empty($prediction_id) || empty($choice_id) || empty($chips)) redirect("prediction/$prediction_id", "fields");
+
+		$chips = intval($chips);
+		$chips_total = executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "int");
+		if($chips > $chips_total || $chips < 1) redirect("prediction/$prediction_id", "fields");
+
+		$prediction_ended = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+		if(NOW >= $prediction_ended) redirect("prediction/$prediction_id", "prediction_closed");
+
+		$already_bet = executeQuery("SELECT COUNT(*) FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $prediction_id], "int");
+		if($already_bet){
+			$already_bet_choice_id = executeQuery("SELECT `choice` FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $prediction_id], "int");
+			executeQuery("UPDATE `bets` SET `chips` = `chips` + ? WHERE `user` = ? AND `prediction` = ?;", [$chips, $_COOKIE["username"], $prediction_id]);
+		}else{
+			executeQuery("INSERT INTO `bets` VALUES (?, ?, ?, ?);", [$_COOKIE["username"], $prediction_id, $choice_id, $chips]);
+		}
+		executeQuery("UPDATE `users` SET `chips` = `chips` - ? WHERE `username` = ?;", [$chips, $_COOKIE["username"]]);
+
+		redirect("prediction/$prediction_id");
 }
