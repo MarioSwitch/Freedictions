@@ -92,6 +92,33 @@ function getString(string $key, array $args = []): string{
 }
 
 /**
+ * Retourne la liste des langues supportées
+ * @return array Liste des langues supportées
+ */
+function getSupportedLanguages(): array{
+	$languages = [];
+	$files = scandir("strings");
+	foreach($files as $file){
+		array_push($languages, substr($file, 0, 2));
+	}
+	return $languages;
+}
+
+/**
+ * Retourne la langue préférée de l'utilisateur
+ * @return string Langue préférée de l'utilisateur
+ */
+function getPreferredLanguage(): string{
+	$raw = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
+	$array = explode(",", $raw);
+	foreach($array as $language){
+		$language_code = strtolower(substr($language, 0, 2));
+		if(file_exists("strings/$language_code.json")) return $language_code;
+	}
+	return "en";
+}
+
+/**
  * Retourne la valeur d'un paramètre utilisateur.
  * Le crée et l'assigne à sa valeur par défaut s'il n'existe pas.
  * Le réinitialise à sa valeur par défaut s'il n'est pas valide.
@@ -101,16 +128,12 @@ function getString(string $key, array $args = []): string{
 function getSetting($name): string{
 	switch($name){
 		case "language":
-			$default = "fr";
-			$supported = ["fr", "en", "de"];
+			$default = getPreferredLanguage();
+			$supported = getSupportedLanguages();
 			break;
 		case "shorten_large_numbers":
 			$default = "yes";
 			$supported = ["yes", "no"];
-			break;
-		case "time_display":
-			$default = "relative";
-			$supported = ["relative", "local", "utc"];
 			break;
 	}
 	if(array_key_exists($name, $_COOKIE)){
