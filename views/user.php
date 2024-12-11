@@ -98,7 +98,7 @@ function displayPredictionsList(string $type, array $predictions): string{
 	return $html;
 }
 ?>
-<h1><?= $username ?></h1>
+<h1><?= displayUser($username) ?></h1>
 <div>
 	<?= displayUserBox("created") ?>
 	<?= displayUserBox("updated") ?>

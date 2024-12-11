@@ -39,7 +39,7 @@ function displayWaitingApproval(array $predictions): string{
 			}
 			$user = $prediction["user"];
 			$timestamp_proposed = $prediction["created"];
-			$proposed = "<a href=\"user/$user\">$user</a><br><span id=\"proposed_$id\">$timestamp_proposed</span><script>display(\"$timestamp_proposed\",\"proposed_$id\")</script>";
+			$proposed = displayUser($user, true) . "<br><span id=\"proposed_$id\">$timestamp_proposed</span><script>display(\"$timestamp_proposed\",\"proposed_$id\")</script>";
 			$timestamp_ended = $prediction["ended"];
 			$ended = "<span id=\"ended_$id\">" . $timestamp_ended . "</span><script>display(\"$timestamp_ended\",\"ended_$id\")</script>";
 			$actions = "
@@ -86,7 +86,7 @@ function displayWaitingAnswer(array $predictions): string{
 			$title = $prediction["title"];
 			$user = $prediction["user"];
 			$timestamp_created = $prediction["created"];
-			$created = "<a href=\"user/$user\">$user</a><br><span id=\"created_$id\">$timestamp_created</span><script>display(\"$timestamp_created\",\"created_$id\")</script>";
+			$created = displayUser($user, true) . "<br><span id=\"created_$id\">$timestamp_created</span><script>display(\"$timestamp_created\",\"created_$id\")</script>";
 			$timestamp_ended = $prediction["ended"];
 			$ended = "<span id=\"ended_$id\">" . $timestamp_ended . "</span><script>display(\"$timestamp_ended\",\"ended_$id\")</script>";
 			$html .= "

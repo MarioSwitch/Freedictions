@@ -216,8 +216,22 @@ function isExtra(string $type, string $user = NULL): bool{
  * @return string Nom d'utilisateur et rôles supplémentaires
  */
 function displayUser(string $username, bool $link = false): string{
-	$roles = ""; // TODO: Ajouter les rôles supplémentaires (isMod et isExtra)
-	$full_username = $roles . $username;
+	$extras = "";
+	$extras_raw = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$username], "string");
+	$extras_array = explode(",", $extras_raw);
+	sort($extras_array);
+	foreach($extras_array as $extra){
+		$icon = "svg/extra_" . $extra . ".svg";
+		$tooltip = getString("extra_" . $extra);
+		if(file_exists($icon)){
+			$extras .= "<img src=\"$icon\" title=\"$tooltip\" alt=\"$tooltip\" style=\"width:calc(var(--font-size) * 0.8); height:calc(var(--font-size) * 0.8); vertical-align:middle;\">";
+		}else{
+			$extras .= "($extra)";
+		}
+		$extras .= " ";
+	}
+
+	$full_username = $extras . $username;
 	if($link){
 		return "<a href=\"user/$username\">$full_username</a>";
 	}else{

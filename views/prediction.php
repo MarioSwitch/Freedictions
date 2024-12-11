@@ -10,7 +10,7 @@ function displayPredictionBox(string $info): string{
 	global $created_user, $created_time, $ended, $answer, $volume_chips, $volume_users;
 	$value = match($info){
 		"created_time" => $created_time,
-		"created_user" => "<a href=\"../user/$created_user\">$created_user</a>",
+		"created_user" => "<a href=\"../user/$created_user\">" . displayUser($created_user) . "</a>",
 		"ended" => $ended,
 		"answer" => $answer ? executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$answer], "string") : getString("prediction_answer_waiting"),
 		"participation" => displayInt($volume_chips) . insertTextIcon("chips", "right", 2) . ", " . displayInt($volume_users) . insertTextIcon("users", "right", 2),
@@ -102,7 +102,7 @@ $choices_table = "
 			$choice_top = displayInt($choice_top_chips) . insertTextIcon("chips", "right", 1);
 			foreach($choice_top_users as $choice_user){
 				$choice_user = $choice_user[0];
-				$choice_top .= "<br><a href=\"../user/$choice_user\">$choice_user</a>";
+				$choice_top .= "<br><a href=\"../user/$choice_user\">" . displayUser($choice_user) . "</a>";
 			}
 		}
 		$choices_table .= "
