@@ -82,7 +82,7 @@ function displayPredictionsList(string $type, array $predictions): string{
 			if($type == "participated"){
 				$bet_choice = $prediction["name"];
 				$bet_chips = $prediction["chips"];
-				$bet_td = "<td>$bet_choice<br>" . displayInt($bet_chips) . insertTextIcon("chips", "right", 1) . "</td>";
+				$bet_td = "<td>" . displayInt($bet_chips) . insertTextIcon("chips", "right", 1) . "<br>$bet_choice</td>";
 			}
 			$html .= "
 				<tr>
