@@ -43,7 +43,7 @@ switch($_REQUEST["action"]){
 	case "modqueue_approve":
 		if(!isMod()) redirect("home", "perms_mod");
 
-		$prediction_id = $_REQUEST["id"];
+		$prediction_id = $_REQUEST["prediction"];
 		if(empty($prediction_id)) redirect("modqueue", "fields");
 
 		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
@@ -69,18 +69,16 @@ switch($_REQUEST["action"]){
 	case "prediction_create":
 		if(!isConnected()) redirect("home", "perms_connected");
 
-		$question = $_REQUEST["question"];
+		$question = trim(htmlspecialchars($_REQUEST["question"]));
 		$end = $_REQUEST["end"];
 		$choices = $_REQUEST["choices"];
+		foreach($choices as $choice) $choice = trim(htmlspecialchars($choice));
 		if(empty($question) || empty($end) || empty($choices) || !array_key_exists("details", $_REQUEST) || !array_key_exists("offset", $_REQUEST)) redirect("create", "fields");
 
-		$details = $_REQUEST["details"]; // details peut valoir "" (évalué comme false), utilisation de array_key_exists() au lieu de empty() pour vérifier
+		$details = trim(htmlspecialchars($_REQUEST["details"])); // details peut valoir "" (évalué comme false), utilisation de array_key_exists() au lieu de empty() pour vérifier
 		$offset = $_REQUEST["offset"]; // offset peut valoir 0 (évalué comme false), utilisation de array_key_exists() au lieu de empty() pour vérifier
 
 		if(count($choices) < 2) redirect("create", "fields");
-
-		$question = htmlspecialchars($question);
-		$details = htmlspecialchars($details);
 
 		$approved = isMod() ? 1 : 0;
 
@@ -89,10 +87,7 @@ switch($_REQUEST["action"]){
 
 		executeQuery("INSERT INTO `predictions` VALUES (DEFAULT, ?, ?, ?, DEFAULT, ?, ?, DEFAULT, DEFAULT);", [$question, $details, $_COOKIE["username"], $endUTC, $approved]);
 		$id = executeQuery("SELECT `id` FROM `predictions` ORDER BY `created` DESC LIMIT 1;", [], "int");
-		foreach($choices as $choice){
-			$choice = htmlspecialchars($choice);
-			executeQuery("INSERT INTO `choices` VALUES (DEFAULT, ?, ?);", [$id, $choice]);
-		}
+		foreach($choices as $choice) executeQuery("INSERT INTO `choices` VALUES (DEFAULT, ?, ?);", [$id, $choice]);
 
 		redirect("prediction/$id");
 

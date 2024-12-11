@@ -36,7 +36,7 @@ echo "
 		echo "<a href=\"" . CONFIG_PATH . "/user/$user\" style=\"margin-right:calc(var(--font-size) * 0.5);\">";
 			echo "<img src=\"svg/user.svg\">";
 			echo "<div style=\"display:inline-block; margin-left:calc(var(--font-size) * 0.2); text-align:center;\">";
-				echo "<p style=\"font-size:calc(var(--font-size) * 0.45); margin:0;\">$user</p>";
+				echo "<p style=\"font-size:calc(var(--font-size) * 0.45); margin:0;\">" . displayUser($user) . "</p>";
 				echo "<p style=\"font-size:calc(var(--font-size) * 0.35); margin:0;\">" . displayInt($chips) . insertTextIcon("chips", "right", 0.4) . "</p>";
 			echo "</div>";
 		echo "</a>";
