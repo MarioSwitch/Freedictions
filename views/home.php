@@ -29,8 +29,8 @@ function displayPredictionsList(array $predictions): string{
 			$html .= "
 			<tr>
 				<td><a href=\"prediction/$id\">$title</a></td>
-				<td>" . displayInt($users) . insertTextIcon("users", "right", 1) . "<br>" . displayInt($volume) . insertTextIcon("chips", "right", 1) . "</td>";
-				$html .= $already_bet ? "<td>$bet_name<br>" . displayInt($bet_chips) . insertTextIcon("chips", "right", 1) . "</td>" : "";
+				<td>" . displayInt($volume) . insertTextIcon("chips", "right", 1) . "<br>" . displayInt($users) . insertTextIcon("users", "right", 1) . "</td>";
+				$html .= $already_bet ? "<td>" . displayInt($bet_chips) . insertTextIcon("chips", "right", 1) . "<br>$bet_name</td>" : "";
 				$html .= "<td id=\"ended_$id\">$ended</td>
 				<script>display(\"$ended\",\"ended_$id\")</script>
 			</tr>
