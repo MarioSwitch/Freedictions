@@ -218,7 +218,7 @@ function isExtra(string $type, string $user = NULL): bool{
 function displayUser(string $username, bool $link = false): string{
 	$extras = "";
 	$extras_raw = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$username], "string");
-	$extras_array = explode(",", $extras_raw);
+	$extras_array = $extras_raw ? explode(",", $extras_raw) : [];
 	sort($extras_array);
 	foreach($extras_array as $extra){
 		$icon = "svg/extra_" . $extra . ".svg";
@@ -310,6 +310,12 @@ function displayRank(int $rank): string{
 	if($rank <= 0) return "–"; // Rangs impossibles
 	$suffix = "";
 	switch(getSetting("language")){
+		case "en":
+			if($rank % 10 == 1 && !in_array($rank % 100, [11, 12, 13])) $suffix = "<sup>st</sup>";
+			if($rank % 10 == 2 && !in_array($rank % 100, [11, 12, 13])) $suffix = "<sup>nd</sup>";
+			if($rank % 10 == 3 && !in_array($rank % 100, [11, 12, 13])) $suffix = "<sup>rd</sup>";
+			if(!in_array($rank % 10, [1, 2, 3]) || in_array($rank % 100, [11, 12, 13])) $suffix = "<sup>th</sup>";
+			break;
 		case "fr":
 			if($rank == 1) $suffix = "<sup>er</sup>";
 			if($rank >= 2) $suffix = "<sup>e</sup>";
