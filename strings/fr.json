@@ -16,13 +16,15 @@
 	"signup":"S'inscrire",
 	"signin":"Se connecter",
 
+	"users_none":"Aucun utilisateur",
+
 	"predictions_none":"Aucune prédiction",
 	"predictions_opened":"Prédictions ouvertes",
 	"predictions_opened_bet_none":"Pas encore parié",
 	"predictions_opened_bet_already":"Déjà parié",
 	"predictions_waiting_answer":"Prédictions en attente de résultat",
 	"predictions_waiting_approval":"Prédictions en attente d'approbation",
-	
+
 	"predictions_table_question":"Prédiction",
 	"predictions_table_choices":"Choix",
 	"predictions_table_proposed":"Proposé",
@@ -81,6 +83,12 @@
 	"icon_chips":"Jetons",
 	"icon_choice_add":"Ajouter un choix",
 	"icon_choice_delete":"Supprimer ce choix",
+
+	"leaderboard_desc":"Vous êtes [TBR] sur [TBR] joueurs, soit dans le top [TBR].",
+	"leaderboard_rank":"Rang",
+	"leaderboard_user":"Utilisateur",
+	"leaderboard_chips":"Jetons",
+	"leaderboard_my_page":"Aller à ma page ([TBR])",
 
 	"profile_created":"Création du compte",
 	"profile_updated":"Dernière connexion",

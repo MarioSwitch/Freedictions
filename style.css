@@ -89,17 +89,17 @@ form > p{
 }
 
 /* ---------- By class ---------- */
-table.predictions_list, table.choices_list{
+table.predictions_list, table.choices_list, table.users_list{
 	display: inline-block;
 	text-align: center;
 }
 
-table.predictions_list > thead > tr > th, table.choices_list > thead > tr > th{
+table.predictions_list > thead > tr > th, table.choices_list > thead > tr > th, table.users_list > thead > tr > th{
 	padding: calc(var(--font-size) * 0.5) calc(var(--font-size) * 1);
 	border-bottom: 1px solid var(--color-text);
 }
 
-table.predictions_list > tbody > tr > td, table.choices_list > tbody > tr > td{
+table.predictions_list > tbody > tr > td, table.choices_list > tbody > tr > td, table.users_list > tbody > tr > td{
 	padding: calc(var(--font-size) * 0.5) calc(var(--font-size) * 1);
 	border-bottom: 1px solid lightgray;
 }
