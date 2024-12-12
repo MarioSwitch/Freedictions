@@ -44,10 +44,11 @@ function getLocalTime(UTCString){ // UTCString: \"YYYY-MM-DD HH:MM:SS\"
 }
 
 function display(date, abbrID){
-	abbr = document.getElementById(abbrID);
+	var date_t_time_z = date.substring(0, 10) + \"T\" + date.substring(11, 19) + \"Z\";
 
-	abbr.innerText = getTimeLeft(date);
+	abbr = document.getElementById(abbrID);
 	abbr.title = getLocalTime(date);
+	abbr.innerText = getTimeLeft(date_t_time_z);
 
 	setTimeout(display, second, date, abbrID);
 }
