@@ -1,4 +1,10 @@
 # Freedictions
+*Freedictions* est un moteur web sur lequel les utilisateurs peuvent proposer des prédictions (écrire une question, les différentes réponses possibles, ainsi qu'une date de fin) et parier sur elles avec des jetons virtuels.
+
+Lorsqu'une prédiction atteint sa date et son heure de fin, le créateur (ou un modérateur) peut définir quel résultat est correct. Les utilisateurs ayant parié sur cette réponse se partagent alors les jetons misés des perdants (en plus de récupérer leur mise initiale).
+
+> [!NOTE]
+> Ce système ne propose AUCUN moyen de dépenser de l'argent réel.
 
 ## Licence
 *Freedictions* est publié sous licence libre [Creative Commons Attribution ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
@@ -19,3 +25,6 @@ Les langues listées ci-dessous sont ouvertes à la traduction. Si vous souhaite
 <a href="https://hosted.weblate.org/engage/freedictions/">
 	<img src="https://hosted.weblate.org/widget/freedictions/multi-auto.svg" alt="État de la traduction" />
 </a>
+
+## En savoir plus
+Accédez au Wiki pour plus d'informations sur le projet, comme la procédure d'installation sur votre serveur, ou encore l'historique des versions.
