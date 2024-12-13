@@ -103,6 +103,13 @@
 	"footer_2":"Code disponible sur [TBR]",
 	"footer_3":"Rejoindre le [TBR]serveur Discord[TBR]",
 
+	"tooltip_mod":"Modérateur",
+	"tooltip_alpha":"Alpha-testeur",
+	"tooltip_beta":"Bêta-testeur",
+	"tooltip_developer":"Développeur",
+	"tooltip_translator":"Traducteur",
+	"tooltip_verified":"Vérifié",
+
 	"notification_daily_increment":"Bonus quotidien : Vous avez gagné [TBR]",
 	"notification_daily_reset":"Vous avez oublié de vous connecter hier, votre série de connexion a été réinitialisée.",
 

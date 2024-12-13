@@ -216,19 +216,26 @@ function isExtra(string $type, string $user = NULL): bool{
  * @return string Nom d'utilisateur et rôles supplémentaires
  */
 function displayUser(string $username, bool $link = false): string{
+	$icons = [
+		"mod" => "👑",
+
+		"alpha" => "🥇",
+		"beta" => "🥈",
+
+		"developer" => "💻",
+		"translator" => "🌍",
+
+		"verified" => "⭐",
+	];
+
 	$extras = "";
 	$extras_raw = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$username], "string");
 	$extras_array = $extras_raw ? explode(",", $extras_raw) : [];
-	sort($extras_array);
+	if(isMod($username)) array_unshift($extras_array, "mod");
 	foreach($extras_array as $extra){
-		$icon = "svg/extra_" . $extra . ".svg";
-		$tooltip = getString("extra_" . $extra);
-		if(file_exists($icon)){
-			$extras .= "<img src=\"$icon\" title=\"$tooltip\" alt=\"$tooltip\" style=\"width:calc(var(--font-size) * 0.8); height:calc(var(--font-size) * 0.8); vertical-align:middle;\">";
-		}else{
-			$extras .= "($extra)";
-		}
-		$extras .= " ";
+		$icon = $icons[$extra];
+		$tooltip = getString("tooltip_" . $extra);
+		$extras .= "<span title=\"$tooltip\">$icon</span>";
 	}
 
 	$full_username = $extras . $username;
