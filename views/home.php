@@ -10,10 +10,10 @@ function displayPredictionsList(array $predictions): string{
 	<table class=\"predictions_list\">
 		<thead>
 			<tr>
-				<th>" . getString("predictions_table_question") . "</th>
-				<th>" . getString("predictions_table_participation") . "</th>";
-				$html .= $already_bet ? "<th>" . getString("predictions_table_bet") . "</th>" : "";
-				$html .= "<th>" . getString("predictions_table_end_future") . "</th>
+				<th>" . getString("prediction_question") . "</th>
+				<th>" . getString("prediction_volume") . "</th>";
+				$html .= $already_bet ? "<th>" . getString("prediction_bet_noun") . "</th>" : "";
+				$html .= "<th>" . getString("prediction_time_remaining") . "</th>
 			</tr>
 		</thead>
 		<tbody>";

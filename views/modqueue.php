@@ -20,11 +20,11 @@ function displayWaitingApproval(array $predictions): string{
 	<table class=\"predictions_list\">
 		<thead>
 			<tr>
-				<th>" . getString("predictions_table_question") . "</th>
-				<th>" . getString("predictions_table_choices") . "</th>
-				<th>" . getString("predictions_table_proposed") . "</th>
-				<th>" . getString("predictions_table_end_future") . "</th>
-				<th>" . getString("predictions_table_actions") . "</th>
+				<th>" . getString("prediction_question") . "</th>
+				<th>" . getString("prediction_outcomes") . "</th>
+				<th>" . getString("prediction_proposed") . "</th>
+				<th>" . getString("prediction_time_remaining") . "</th>
+				<th>" . getString("modqueue_actions") . "</th>
 			</tr>
 		</thead>
 		<tbody>";
@@ -43,9 +43,9 @@ function displayWaitingApproval(array $predictions): string{
 			$timestamp_ended = $prediction["ended"];
 			$ended = "<span id=\"ended_$id\">" . $timestamp_ended . "</span><script>display(\"$timestamp_ended\",\"ended_$id\")</script>";
 			$actions = "
-				<button type=\"submit\" name=\"action\" value=\"modqueue_approve\">" . getString("predictions_table_actions_approve") . "</button>
-				<button type=\"submit\" name=\"action\" value=\"modqueue_reject\">" . getString("predictions_table_actions_reject") . "</button>
-				<button disabled=\"disabled\">" . getString("predictions_table_actions_edit") . "</button>";
+				<button type=\"submit\" name=\"action\" value=\"modqueue_approve\">" . getString("modqueue_actions_approve") . "</button>
+				<button type=\"submit\" name=\"action\" value=\"modqueue_reject\">" . getString("modqueue_actions_reject") . "</button>
+				<button disabled=\"disabled\">" . getString("modqueue_actions_edit") . "</button>";
 			$html .= "
 			<tr>
 				<form role=\"form\" action=\"controller.php\">
@@ -75,9 +75,9 @@ function displayWaitingAnswer(array $predictions): string{
 	<table class=\"predictions_list\">
 		<thead>
 			<tr>
-				<th>" . getString("predictions_table_question") . "</th>
-				<th>" . getString("predictions_table_created") . "</th>
-				<th>" . getString("predictions_table_end_past") . "</th>
+				<th>" . getString("prediction_question") . "</th>
+				<th>" . getString("prediction_created") . "</th>
+				<th>" . getString("prediction_time_elapsed") . "</th>
 			</tr>
 		</thead>
 		<tbody>";
@@ -109,5 +109,5 @@ function displayWaitingAnswer(array $predictions): string{
 <h2><?= getString("predictions_waiting_approval") . " (" . displayInt($waiting_approval_count) . ")" ?></h2>
 <?= displayWaitingApproval($waiting_approval) ?>
 <br><br>
-<h2><?= getString("predictions_waiting_answer") . " (" . displayInt($waiting_answer_count) . ")" ?></h2>
+<h2><?= getString("predictions_waiting_outcome") . " (" . displayInt($waiting_answer_count) . ")" ?></h2>
 <?= displayWaitingAnswer($waiting_answer) ?>

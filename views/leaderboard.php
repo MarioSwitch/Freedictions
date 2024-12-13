@@ -24,14 +24,14 @@ if(isConnected()){
 <table class="users_list">
 	<thead>
 		<tr>
-			<th><?= getString("leaderboard_rank") . "<br><small>" . displayInt($table_top, false) . " – " . displayInt($table_top + count($leaderboard) - 1) . "</small>" ?></th>
-			<th><?= getString("leaderboard_user") ?></th>
-			<th><?= getString("leaderboard_chips") ?></th>
+			<th><?= getString("general_rank") . "<br><small>" . displayInt($table_top, false) . " – " . displayInt($table_top + count($leaderboard) - 1) . "</small>" ?></th>
+			<th><?= getString("general_user") ?></th>
+			<th><?= getString("general_chips") ?></th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php
-		if(!$leaderboard) echo "<tr><td colspan='3'>" . getString("users_none") . "</td></tr>";
+		if(!$leaderboard) echo "<tr><td colspan='3'>" . getString("general_user_none") . "</td></tr>";
 		else{
 			foreach($leaderboard as $user){
 				$username = $user["username"];
@@ -53,7 +53,7 @@ if(isConnected()){
 			</td>
 			<td>
 				<?php
-				if(isConnected()) echo "<a href=\"leaderboard?results=$results_per_page&page=$my_page\">" . getString("leaderboard_my_page", [$my_page]) . "</a>";
+				if(isConnected()) echo "<a href=\"leaderboard?results=$results_per_page&page=$my_page\">" . getString("leaderboard_page", [$my_page]) . "</a>";
 				?>
 			</td>
 			<td>
