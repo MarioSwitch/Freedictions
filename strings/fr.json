@@ -4,6 +4,7 @@
 
 	"title_home":"Accueil",
 	"title_leaderboard":"Classement",
+	"title_settings":"Paramètres",
 	"title_create":"Nouvelle prédiction",
 	"title_modqueue":"File d'attente (modération)",
 	"title_signup":"Inscription",
@@ -17,6 +18,9 @@
 	"general_chips":"Jetons",
 	"general_select":"Sélectionnez…",
 	"general_note":"Note :",
+	"general_save":"Sauvegarder",
+	"general_yes":"Oui",
+	"general_no":"Non",
 
 	"signup_username_format":"Doit contenir 4 à 20 caractères alphanumériques",
 	"signup_password_confirm":"Confirmer le mot de passe",
@@ -73,6 +77,9 @@
 
 	"leaderboard_desc":"Vous êtes [TBR] sur [TBR] joueurs, soit dans le top [TBR].",
 	"leaderboard_page":"Aller à ma page ([TBR])",
+
+	"settings_language":"Langue",
+	"settings_shorten_large_numbers":"Raccourcir les grands nombres",
 
 	"user_created":"Utilisateur créé",
 	"user_updated":"Dernière connexion",

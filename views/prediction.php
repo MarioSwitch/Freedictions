@@ -193,7 +193,8 @@ $manage_close = "
 
 $manage_resolve = "
 <form role=\"form\" action=\"controller.php\">
-	$choices_select_full<br>
+	<input type=\"hidden\" name=\"prediction\" value=\"$id\">
+	$choices_select_full
 	<button type=\"submit\" name=\"action\" value=\"prediction_resolve\">" . getString("prediction_manage_resolve") . "</button>
 	<p>" . getString("prediction_manage_resolve_desc") . "<br>" . getString("prediction_manage_cant_be_undone") . "</p>
 </form>";

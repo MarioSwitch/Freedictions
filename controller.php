@@ -215,4 +215,14 @@ switch($_REQUEST["action"]){
 		executeQuery("DELETE FROM `predictions` WHERE `id` = ?;", [$prediction_id]);
 
 		redirect("home");
+
+	case "settings":
+		$language = $_REQUEST["language"];
+		$shorten_large_numbers = $_REQUEST["shorten_large_numbers"];
+		if(empty($language) || empty($shorten_large_numbers)) redirect("settings", "fields");
+
+		setcookie("language", $language, time() + CONFIG_COOKIES_EXPIRATION);
+		setcookie("shorten_large_numbers", $shorten_large_numbers, time() + CONFIG_COOKIES_EXPIRATION);
+
+		redirect("settings");
 }

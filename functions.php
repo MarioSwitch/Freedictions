@@ -97,7 +97,7 @@ function getString(string $key, array $args = []): string{
  */
 function getSupportedLanguages(): array{
 	$languages = [];
-	$files = scandir("strings");
+	$files = array_diff(scandir("strings"), [".", ".."]);
 	foreach($files as $file){
 		array_push($languages, substr($file, 0, 2));
 	}
