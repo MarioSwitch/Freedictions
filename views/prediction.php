@@ -7,22 +7,22 @@ include_once "time.js.php";
  * @return string Code HTML
  */
 function displayPredictionBox(string $info): string{
-	global $created_user, $created_time, $ended, $answer, $volume_chips, $volume_users;
+	global $created_user, $created_time, $ended, $answer, $answer_name, $volume_chips, $volume_users;
 	$value = match($info){
-		"created_time" => $created_time,
-		"created_user" => "<a href=\"../user/$created_user\">" . displayUser($created_user) . "</a>",
-		"ended" => $ended,
-		"answer" => $answer ? executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$answer], "string") : getString("prediction_answer_waiting"),
-		"participation" => displayInt($volume_chips) . insertTextIcon("chips", "right", 2) . ", " . displayInt($volume_users) . insertTextIcon("users", "right", 2),
+		"created" => $created_time,
+		"proposed" => "<a href=\"../user/$created_user\">" . displayUser($created_user) . "</a>",
+		"time_remaining" => $ended,
+		"outcome" => $answer ? $answer_name : getString("prediction_waiting_outcome"),
+		"volume" => displayInt($volume_chips) . insertTextIcon("chips", "right", 2) . ", " . displayInt($volume_users) . insertTextIcon("users", "right", 2),
 	};
 	$caption = getString("prediction_$info");
-	$id = ($info == "created_time" || $info == "ended") ? " id=\"$info\"" : "";
+	$id = ($info == "created" || $info == "time_remaining") ? " id=\"$info\"" : "";
 	$html = "
 	<div style=\"display:inline-block; border:1px solid var(--color-text); border-radius: 10px; width:15%; min-width:250px; max-width:400px;\">
 		<p style=\"font-size:calc(var(--font-size) * 2.0); margin:calc(var(--font-size) * 0.5);\"$id>$value</p>
 		<p style=\"font-size:calc(var(--font-size) * 0.8); margin:calc(var(--font-size) * 0.5);\">$caption</p>
 	</div>";
-	if($info == "created_time" || $info == "ended"){
+	if($info == "created" || $info == "time_remaining"){
 		$html .= "<script>display(\"$value\", \"$info\");</script>";
 	}
 	return $html;
@@ -45,6 +45,7 @@ $created_user = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;",
 $created_time = executeQuery("SELECT `created` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $ended = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $answer = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$id], "string");
+$answer_name = $answer ? executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$answer], "string") : "";
 $answered = executeQuery("SELECT `answered` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $now = executeQuery("SELECT NOW();", [], "string");
 
@@ -80,10 +81,10 @@ $choices_table = "
 <table class=\"choices_list\">
 	<thead>
 		<tr>
-			<th>" . getString("prediction_choice") . "</th>
-			<th>" . getString("prediction_percentage") . "</th>
-			<th>" . getString("prediction_participation") . "</th>
-			<th>" . getString("prediction_ratio") . "</th>
+			<th>" . getString("prediction_outcome") . "</th>
+			<th>" . getString("prediction_probability") . "</th>
+			<th>" . getString("prediction_volume") . "</th>
+			<th>" . getString("prediction_to_win") . "</th>
 			<th>" . getString("prediction_top") . "</th>
 		</tr>
 	</thead>
@@ -130,7 +131,7 @@ if($already_bet){
 
 $choices_select = "
 <select name=\"choice\" required=\"required\">
-	<option value=\"\" disabled=\"disabled\" selected=\"selected\">" . getString("prediction_result_select") . "</option>";
+	<option value=\"\" disabled=\"disabled\" selected=\"selected\">" . getString("general_select") . "</option>";
 foreach($choices as $choice){
 	$choice_id = $choice["id"];
 	$choice_name = $choice["name"];
@@ -155,7 +156,7 @@ $bet_html = "
 	<table class=\"hidden\">
 		<tbody>
 			<tr>
-				<td>" . getString("prediction_choice") . "</td>
+				<td>" . getString("prediction_outcome") . "</td>
 				<td>$choices_select</td>
 			</tr>
 			<tr>
@@ -163,7 +164,7 @@ $bet_html = "
 				<td>$chips_total</td>
 			</tr>
 			<tr>
-				<td>" . getString("predictions_table_bet") . "</td>
+				<td>" . getString("prediction_bet_noun") . "</td>
 				<td>$chips_input</td>
 			</tr>
 		</tbody>
@@ -175,13 +176,13 @@ $bet_html = "
 if(!isConnected()){
 	$bet_html = "
 	<p>" . getString("error_perms_connected") . "</p>
-	<button onclick=\"location.href='../signin'\">" . getString("signin") . "</button>
-	<button onclick=\"location.href='../signup'\">" . getString("signup") . "</button>
+	<button onclick=\"location.href='../signin'\">" . getString("signin_button") . "</button>
+	<button onclick=\"location.href='../signup'\">" . getString("signup_button") . "</button>
 	";
 }
 if($now >= $ended){
-	$bet_html = "<p>" . getString("prediction_closed", ["<span id=\"ended\">$ended</span>"]) . "<script>display(\"$ended\", \"ended\");</script></p>";
-	if($answer) $bet_html .= "<p>" . getString("prediction_resolved", ["<span id=\"answered\">$answered</span>"]) . "<script>display(\"$answered\", \"answered\");</script></p>";
+	$bet_html = "<p>" . getString("prediction_sentence_closed", ["<span id=\"ended\">$ended</span>"]) . "<script>display(\"$ended\", \"ended\");</script></p>";
+	if($answer) $bet_html .= "<p>" . getString("prediction_sentence_resolved", [$answer_name, "<span id=\"answered\">$answered</span>"]) . "<script>display(\"$answered\", \"answered\");</script></p>";
 }
 
 $manage_close = "
@@ -215,23 +216,23 @@ if($now < $ended){
 // Affichage
 echo "<h1>$question</h1>";
 if(!$approved){
-	echo "<p>" . getString("prediction_not_approved") . "</p>";
+	echo "<p>" . getString("prediction_waiting_approval") . "</p>";
 }
 if($approved || isMod()){
 	echo 
 	"<div>" .
-		displayPredictionBox("created_time") .
-		displayPredictionBox("created_user") .
-		displayPredictionBox(($now >= $ended) ? "answer" : "ended") .
-		displayPredictionBox("participation") .
+		displayPredictionBox("created") .
+		displayPredictionBox("proposed") .
+		displayPredictionBox(($now >= $ended) ? "outcome" : "time_remaining") .
+		displayPredictionBox("volume") .
 	"</div>";
 	echo "
 	<br>
 	$details_text
-	<h2>" . getString("prediction_choices") . " ($choices_count)" . "</h2>
+	<h2>" . getString("prediction_outcomes") . " ($choices_count)" . "</h2>
 	$choices_table
 	<br><br>
-	<h2>" . getString("prediction_bet") . "</h2>
+	<h2>" . getString("prediction_bet_verb") . "</h2>
 	$bet_html";
 	if(isCreator() || (isMod() && !isMod($created_user))){
 		echo "

@@ -27,7 +27,7 @@ function displayUserBox(string $info): string{
 		"streak" => displayInt($streak),
 		"chips" => displayInt($chips),
 	};
-	$caption = getString("profile_$info");
+	$caption = getString("user_$info");
 	$id = ($info == "created" || $info == "updated") ? "id=\"$info\"" : "";
 	$html = "
 	<div style=\"display:inline-block; border:1px solid var(--color-text); border-radius: 10px; width:15%; min-width:250px; max-width:400px;\">
@@ -55,18 +55,18 @@ function displayPredictionsList(string $type, array $predictions): string{
 	global $username;
 	$now = executeQuery("SELECT NOW();", [], "string");
 	$count = count($predictions);
-	$html = "<h2>" . getString("profile_predictions_$type") . " (" . displayInt($count) . ")</h2>";
+	$html = "<h2>" . getString("predictions_$type") . " (" . displayInt($count) . ")</h2>";
 	if($count == 0){
-		$html .= "<p>" . getString("profile_predictions_" . $type . "_none", [$username]) . "</p>";
+		$html .= "<p>" . getString("predictions_none", [$username]) . "</p>";
 	}
 	if($count > 0){
 		$html .= "
 		<table class=\"predictions_list\">
 			<thead>
 				<tr>
-					<th>" . getString("predictions_table_question") . "</th>";
-					$html .= ($type == "participated") ? "<th>" . getString("predictions_table_bet") . "</th>" : "";
-					$html .= "<th>" . getString("predictions_table_end_future") . "</th>
+					<th>" . getString("prediction_question") . "</th>";
+					$html .= ($type == "participated") ? "<th>" . getString("prediction_bet_noun") . "</th>" : "";
+					$html .= "<th>" . getString("prediction_time_remaining") . "</th>
 				</tr>
 			</thead>
 			<tbody>";
@@ -75,9 +75,9 @@ function displayPredictionsList(string $type, array $predictions): string{
 			$id_countdown = $type . "_" . $id;
 			$question = $prediction["title"];
 			$ended = $prediction["ended"];
-			$ended_td = "<td>" . getString("predictions_table_waiting_answer") . "</td>";
+			$ended_td = "<td>" . getString("prediction_waiting_outcome") . "</td>";
 			if($ended > $now) $ended_td = "<td id=\"$id_countdown\">$ended</td><script>display(\"$ended\",\"$id_countdown\")</script>";
-			if(!$prediction["approved"]) $ended_td = "<td>" . getString("predictions_table_waiting_approval") . "</td>";
+			if(!$prediction["approved"]) $ended_td = "<td>" . getString("prediction_waiting_approval") . "</td>";
 			$bet_td = "";
 			if($type == "participated"){
 				$bet_choice = $prediction["name"];
