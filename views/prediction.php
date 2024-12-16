@@ -160,7 +160,7 @@ $bet_html = "
 				<td>$choices_select</td>
 			</tr>
 			<tr>
-				<td>" . getString("profile_chips") . "</td>
+				<td>" . getString("user_chips") . "</td>
 				<td>$chips_total</td>
 			</tr>
 			<tr>
@@ -171,7 +171,7 @@ $bet_html = "
 	</table>
 	<br>
 	<input type=\"hidden\" name=\"prediction\" value=\"$id\">
-	<button type=\"submit\" name=\"action\" value=\"prediction_bet\">" . getString("prediction_bet") . "</button>
+	<button type=\"submit\" name=\"action\" value=\"prediction_bet\">" . getString("prediction_bet_verb") . "</button>
 </form>";
 if(!isConnected()){
 	$bet_html = "
