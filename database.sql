@@ -61,16 +61,16 @@ CREATE EVENT `daily_update` ON SCHEDULE EVERY 1 DAY STARTS '2024-11-14 00:00:00'
 		UPDATE `users` SET `chips` = (chips + 10 + streak) WHERE `updated` >= NOW() - INTERVAL 1 DAY;
 		UPDATE `users` SET `streak` = streak + 1 WHERE `updated` >= NOW() - INTERVAL 1 DAY;
 		UPDATE `users` SET `streak` = 0 WHERE `updated` < NOW() - INTERVAL 1 DAY;
-	END $$
-	
-	INSERT INTO `notifications` (`user`, `text`)
-		SELECT `username`, CONCAT('DAILY:', `streak`)
-		FROM `users`
-		WHERE `updated` >= NOW() - INTERVAL 1 DAY $$
 
-	INSERT INTO `notifications` (`user`, `text`)
-		SELECT `username`, 'DAILY:RESET'
-		FROM `users`
-		WHERE `updated` >= NOW() - INTERVAL 2 DAY
-		AND `updated` < NOW() - INTERVAL 1 DAY $$
+		INSERT INTO `notifications` (`user`, `text`)
+			SELECT `username`, CONCAT('DAILY:', `streak`)
+			FROM `users`
+			WHERE `updated` >= NOW() - INTERVAL 1 DAY;
+
+		INSERT INTO `notifications` (`user`, `text`)
+			SELECT `username`, 'DAILY:RESET'
+			FROM `users`
+			WHERE `updated` >= NOW() - INTERVAL 2 DAY
+			AND `updated` < NOW() - INTERVAL 1 DAY;
+	END $$
 DELIMITER ;
