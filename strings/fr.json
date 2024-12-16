@@ -7,6 +7,7 @@
 	"title_settings":"Paramètres",
 	"title_create":"Nouvelle prédiction",
 	"title_modqueue":"File d'attente (modération)",
+	"title_notifications":"Notifications",
 	"title_signup":"Inscription",
 	"title_signin":"Connexion",
 
@@ -75,16 +76,33 @@
 	"modqueue_actions_reject":"Rejeter",
 	"modqueue_actions_edit":"Modifier",
 
-	"leaderboard_desc":"Vous êtes [TBR] sur [TBR] joueurs, soit dans le top [TBR].",
-	"leaderboard_page":"Aller à ma page ([TBR])",
-
-	"settings_language":"Langue",
-	"settings_shorten_large_numbers":"Raccourcir les grands nombres",
+	"notifications_unread":"Non lues",
+	"notifications_read":"Lues",
+	"notifications_mark_as_read":"Tout marquer comme lues",
+	"notifications_delete":"Supprimer les notifications lues",
+	"notifications_none":"Aucune notification",
+	"notifications_sent":"Envoyé",
+	"notifications_text":"Texte",
+	"notifications_daily_title":"Bonus quotidien",
+	"notifications_daily_desc":"Vous avez gagné [TBR].",
+	"notifications_approved":"Prédiction approuvée",
+	"notifications_rejected_title":"Prédiction rejetée",
+	"notifications_rejected_desc":"La prédiction [TBR] a été rejetée.",
+	"notifications_resolved_won":"Vous avez parié sur la bonne issue ([TBR]).<br>Vous remportez [TBR].",
+	"notifications_resolved_lost":"Vous avez parié sur [TBR], mais l'issue était [TBR].<br>Vous perdez [TBR].",
+	"notifications_deleted_title":"Prédiction supprimée",
+	"notifications_deleted_desc":"La prédiction [TBR] a été supprimée.<br>Vous avez été remboursé de [TBR].",
 
 	"user_created":"Utilisateur créé",
 	"user_updated":"Dernière connexion",
 	"user_streak":"Série de connexion",
 	"user_chips":"Jetons possédés",
+
+	"leaderboard_desc":"Vous êtes [TBR] sur [TBR] joueurs, soit dans le top [TBR].",
+	"leaderboard_page":"Aller à ma page ([TBR])",
+
+	"settings_language":"Langue",
+	"settings_shorten_large_numbers":"Raccourcir les grands nombres",
 
 	"footer_1":"Initialement créé par [TBR] et [TBR]",
 	"footer_2":"Code disponible sur [TBR]",
@@ -101,9 +119,6 @@
 	"tooltip_developer":"Développeur",
 	"tooltip_translator":"Traducteur",
 	"tooltip_verified":"Vérifié",
-
-	"notification_daily_increment":"Bonus quotidien : Vous avez gagné [TBR]",
-	"notification_daily_reset":"Vous avez oublié de vous connecter hier, votre série de connexion a été réinitialisée.",
 
 	"error_fields":"Tous les champs ne sont pas correctement renseignés.",
 	"error_username_unknown":"Ce nom d'utilisateur n'existe pas.",

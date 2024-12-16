@@ -33,6 +33,15 @@ echo "
 			echo "</a>";
 		}
 		$user = $_COOKIE["username"];
+		$notifications_total = executeQuery("SELECT COUNT(*) FROM `notifications` WHERE `user` = ?;", [$user], "int");
+		$notifications_unread = executeQuery("SELECT COUNT(*) FROM `notifications` WHERE `user` = ? AND `read` = 0;", [$user], "int");
+		echo "<a href=\"" . CONFIG_PATH . "/notifications\" style=\"margin-right:calc(var(--font-size) * 0.5);\">";
+			echo "<img src=\"svg/notifications.svg\">";
+			echo "<div style=\"display:inline-block; margin-left:calc(var(--font-size) * 0.2); text-align:center;\">";
+				echo "<p style=\"font-size:calc(var(--font-size) * 0.45); margin:0;color:red;\">" . ($notifications_unread ? displayInt($notifications_unread) : "") . "</p>";
+				echo "<p style=\"font-size:calc(var(--font-size) * 0.35); margin:0;\">" . ($notifications_total ? displayInt($notifications_total) : "") . "</p>";
+			echo "</div>";
+		echo "</a>";
 		$chips = executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?;", [$user], "int");
 		echo "<a href=\"" . CONFIG_PATH . "/user/$user\" style=\"margin-right:calc(var(--font-size) * 0.5);\">";
 			echo "<img src=\"svg/user.svg\">";
