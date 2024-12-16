@@ -204,8 +204,10 @@ switch($_REQUEST["action"]){
 		if(!$resolved){
 			$bets = executeQuery("SELECT * FROM `bets` WHERE `prediction` = ?;", [$prediction_id]);
 			foreach($bets as $bet){
-				executeQuery("UPDATE `users` SET `chips` = `chips` + ? WHERE `username` = ?;", [$bet["chips"], $bet["user"]]);
-				executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$bet["user"], "DELETED_REFUNDED:" . $bet["chips"]]);
+				$user = $bet["user"];
+				$chips = $bet["chips"];
+				executeQuery("UPDATE `users` SET `chips` = `chips` + ? WHERE `username` = ?;", [$chips, $user]);
+				executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$user, "DELETED:$prediction_id,REFUNDED:$chips"]);
 			}
 		}else{
 			executeQuery("UPDATE `predictions` SET `answer` = NULL WHERE `id` = ?;", [$prediction_id]);
@@ -215,6 +217,22 @@ switch($_REQUEST["action"]){
 		executeQuery("DELETE FROM `predictions` WHERE `id` = ?;", [$prediction_id]);
 
 		redirect("home");
+
+	case "notifications_read":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$user = $_COOKIE["username"];
+		executeQuery("UPDATE `notifications` SET `read` = 1 WHERE `user` = ?;", [$user]);
+
+		redirect("notifications");
+
+	case "notifications_delete":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$user = $_COOKIE["username"];
+		executeQuery("DELETE FROM `notifications` WHERE `user` = ? AND `read` = 1;", [$user]);
+
+		redirect("notifications");
 
 	case "settings":
 		$language = $_REQUEST["language"];
