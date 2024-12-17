@@ -6,6 +6,7 @@
 	"title_leaderboard":"Classement",
 	"title_settings":"Paramètres",
 	"title_create":"Nouvelle prédiction",
+	"title_edit":"Modifier la prédiction",
 	"title_modqueue":"File d'attente (modération)",
 	"title_notifications":"Notifications",
 	"title_signup":"Inscription",
@@ -63,7 +64,7 @@
 	"prediction_manage_delete_desc":"Supprimer la prédiction remboursera tous les paris effectués.",
 	"prediction_manage_cant_be_undone":"Cette action est irréversible.",
 
-	"create_details_desc":"Détails supplémentaires concernant la prédiction (acronymes, cas spéciaux, etc.)<br>Champ facultatif",
+	"create_details_desc":"Détails supplémentaires concernant la prédiction (acronymes, cas spéciaux, etc.)<br>Vous pouvez utiliser « \\n » pour revenir à la ligne.<br>Ce champ est facultatif.",
 	"create_end":"Fermeture des paris",
 	"create_end_desc":"Date et heure à laquelle les paris seront automatiquement fermés (heure locale)<br>Vous pouvez toujours fermer manuellement les paris avant cette date.",
 	"create_note_user":"Votre prédiction devra être approuvée par un modérateur avant d'être ouverte aux paris.<br>Vous recevrez une notification une fois la prédiction ouverte au public.",

@@ -8,6 +8,9 @@ RewriteRule svg/(.+)$ svg/$1 [L,QSA]
 RewriteRule controller.php$ controller.php [L,QSA]
 RewriteRule signout$ controller.php?action=signout [L,QSA]
 
+# Rewrite prediction/xxx/edit to index.php?view=prediction_edit&id=xxx
+RewriteRule ^prediction/(.+)/edit$ index.php?view=edit&id=$1 [L,QSA]
+
 # Rewrite prediction/xxx to index.php?view=prediction&id=xxx
 RewriteRule ^prediction/(.+)$ index.php?view=prediction&id=$1 [L,QSA]
 
