@@ -32,9 +32,14 @@ function displayNotifications($notifications): string{
 		$formatted_text = "";
 		$verb = explode(":", $text_parts[0])[0];
 		if($verb == "DAILY"){
-			$chips = explode(":", $text_parts[0])[1] + 9; // Streak à 0 : donne 10 jetons, passage du streak à 1, la notification est alors "DAILY:1" et l'utilisateur a reçu 10 jetons (1+9)
-			$chips_formatted = displayInt($chips) . insertTextIcon("chips", "right", 1);
-			$formatted_text = "<b>" . getString("notifications_daily_title") . "</b><br>" . getString("notifications_daily_desc", ["<b>" . $chips_formatted . "</b>"]);
+			$info = explode(":", $text_parts[0])[1];
+			if($info == "RESET"){
+				$formatted_text = "<b>" . getString("notifications_daily_title") . "</b><br>" . getString("notifications_daily_reset");
+			}else{
+				$chips = $info + 9; // Streak à 0 : donne 10 jetons, passage du streak à 1, la notification est alors "DAILY:1" et l'utilisateur a reçu 10 jetons (1+9)
+				$chips_formatted = displayInt($chips) . insertTextIcon("chips", "right", 1);
+				$formatted_text = "<b>" . getString("notifications_daily_title") . "</b><br>" . getString("notifications_daily_desc", ["<b>" . $chips_formatted . "</b>"]);
+			}
 		}
 		if($verb == "APPROVED"){
 			$prediction_id = explode(":", $text_parts[0])[1];

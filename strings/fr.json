@@ -85,6 +85,7 @@
 	"notifications_text":"Texte",
 	"notifications_daily_title":"Bonus quotidien",
 	"notifications_daily_desc":"Vous avez gagné [TBR].",
+	"notifications_daily_reset":"Vous ne vous êtes pas connecté hier, votre série de connexion a été réinitialisée.",
 	"notifications_approved":"Prédiction approuvée",
 	"notifications_rejected_title":"Prédiction rejetée",
 	"notifications_rejected_desc":"La prédiction [TBR] a été rejetée.",
