@@ -4,7 +4,7 @@
 	"abbr_quadrillion": " Q",
 	"abbr_trillion": " T",
 	"create_create": "Create",
-	"create_details_desc": "Additional prediction details (acronyms, special cases, etc.)<br>Optional field",
+	"create_details_desc": "Additional prediction details (acronyms, special cases, etc.)<br>You can use “\\n” for line feed.<br>This field is optional.",
 	"create_end": "Closing time for betting",
 	"create_end_desc": "Time when bets will be automatically closed (local time)<br>You can always close bets manually before this time.",
 	"create_note_mod": "As you are a moderator, your prediction will be open to betting immediately.",
