@@ -66,6 +66,54 @@ switch($_REQUEST["action"]){
 
 		redirect("controller.php?action=prediction_delete&prediction=$prediction_id");
 
+	case "modqueue_edit":
+		if(!isMod()) redirect("home", "perms_mod");
+
+		$prediction_id = $_REQUEST["prediction"];
+		if(empty($prediction_id)) redirect("modqueue", "fields");
+
+		redirect("prediction/$prediction_id/edit");
+
+	case "prediction_edit":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$prediction_id = $_REQUEST["prediction"];
+		if(empty($prediction_id)) redirect("prediction/$prediction_id", "fields");
+
+		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+		$perms = isMod() && ($_COOKIE["username"] == $prediction_creator || !isMod($prediction_creator));
+		if(!$perms) redirect("prediction/$prediction_id", "perms");
+
+		if(
+			!array_key_exists("question", $_REQUEST) ||
+			!array_key_exists("details", $_REQUEST) ||
+			!array_key_exists("user", $_REQUEST) ||
+			!array_key_exists("created", $_REQUEST) ||
+			!array_key_exists("end", $_REQUEST) ||
+			!array_key_exists("choices", $_REQUEST) ||
+			!array_key_exists("choices_id", $_REQUEST)
+		) redirect("prediction/$prediction_id/edit", "fields");
+
+		$question = trim(htmlspecialchars($_REQUEST["question"]));
+		$details = trim(htmlspecialchars($_REQUEST["details"]));
+		$user = trim(htmlspecialchars($_REQUEST["user"]));
+		$created = trim(htmlspecialchars($_REQUEST["created"]));
+		$end = trim(htmlspecialchars($_REQUEST["end"]));
+
+		$choices = $_REQUEST["choices"];
+		$choices_id = $_REQUEST["choices_id"];
+		if(count($choices) != count($choices_id)) redirect("prediction/$prediction_id/edit", "fields");
+
+		executeQuery("UPDATE `predictions` SET `title` = ?, `description` = ?, `user` = ?, `created` = ?, `ended` = ? WHERE `id` = ?;", [$question, $details, $user, $created, $end, $prediction_id]);
+
+		for($i = 0; $i < count($choices); $i++){
+			$choice = trim(htmlspecialchars($choices[$i]));
+			$choice_id = $choices_id[$i];
+			executeQuery("UPDATE `choices` SET `name` = ? WHERE `id` = ?;", [$choice, $choice_id]);
+		}
+
+		redirect("prediction/$prediction_id");
+
 	case "prediction_create":
 		if(!isConnected()) redirect("home", "perms_connected");
 

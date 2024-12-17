@@ -50,6 +50,7 @@ $answered = executeQuery("SELECT `answered` FROM `predictions` WHERE `id` = ?;",
 $now = executeQuery("SELECT NOW();", [], "string");
 
 $details = executeQuery("SELECT `description` FROM `predictions` WHERE `id` = ?;", [$id], "string");
+$details = preg_replace("/\\\\n/", "<br>", $details);
 $details_text = $details ? "<h2>" . getString("prediction_details") . "</h2><p>$details</p><br>" : "";
 
 $choices = executeQuery("SELECT * FROM `choices` WHERE `prediction` = ?;", [$id]);
@@ -240,5 +241,9 @@ if($approved || isMod()){
 		<br>
 		<h2>" . getString("prediction_manage") . "</h2>
 		$manage_html";
+	}
+	if(isMod() && (isCreator() || !isMod($created_user))){
+		echo "
+		<p><a href=\"$id/edit\">" . getString("title_edit") . "</a></p>";
 	}
 }

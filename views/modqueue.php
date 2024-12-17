@@ -45,7 +45,7 @@ function displayWaitingApproval(array $predictions): string{
 			$actions = "
 				<button type=\"submit\" name=\"action\" value=\"modqueue_approve\">" . getString("modqueue_actions_approve") . "</button>
 				<button type=\"submit\" name=\"action\" value=\"modqueue_reject\">" . getString("modqueue_actions_reject") . "</button>
-				<button disabled=\"disabled\">" . getString("modqueue_actions_edit") . "</button>";
+				<button type=\"submit\" name=\"action\" value=\"modqueue_edit\">" . getString("modqueue_actions_edit") . "</button>";
 			$html .= "
 			<tr>
 				<form role=\"form\" action=\"controller.php\">
