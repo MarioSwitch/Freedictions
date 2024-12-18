@@ -15,7 +15,7 @@ function displayPredictionBox(string $info): string{
 		"outcome" => $answer ? $answer_name : getString("prediction_waiting_outcome"),
 		"volume" => displayInt($volume_chips) . insertTextIcon("chips", "right", 2) . ", " . displayInt($volume_users) . insertTextIcon("users", "right", 2),
 	};
-	$caption = getString("prediction_$info");
+	$caption = $info == "time_remaining" ? getString("general_time_remaining") : getString("prediction_$info");
 	$id = ($info == "created" || $info == "time_remaining") ? " id=\"$info\"" : "";
 	$html = "
 	<div style=\"display:inline-block; border:1px solid var(--color-text); border-radius: 10px; width:15%; min-width:250px; max-width:400px;\">
