@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /v3/
+RewriteBase /freedictions/
 
 # Rewrite exceptions (notice there is no "^" at the beginning of the pattern)
 RewriteRule style.css$ style.css [L,QSA]
