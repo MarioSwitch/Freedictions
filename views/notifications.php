@@ -19,7 +19,7 @@ function displayNotifications($notifications): string{
 	$html = "<table class=\"notifications_list\">
 		<thead>
 			<tr>
-				<th>" . getString("notifications_sent") . "</th>
+				<th>" . getString("general_time_elapsed") . "</th>
 				<th>" . getString("notifications_text") . "</th>
 			</tr>
 		</thead>

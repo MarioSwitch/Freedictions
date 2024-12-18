@@ -66,7 +66,7 @@ function displayPredictionsList(string $type, array $predictions): string{
 				<tr>
 					<th>" . getString("prediction_question") . "</th>";
 					$html .= ($type == "participated") ? "<th>" . getString("prediction_bet_noun") . "</th>" : "";
-					$html .= "<th>" . getString("prediction_time_remaining") . "</th>
+					$html .= "<th>" . getString("general_time_remaining") . "</th>
 				</tr>
 			</thead>
 			<tbody>";
