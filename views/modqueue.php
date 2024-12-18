@@ -23,7 +23,7 @@ function displayWaitingApproval(array $predictions): string{
 				<th>" . getString("prediction_question") . "</th>
 				<th>" . getString("prediction_outcomes") . "</th>
 				<th>" . getString("prediction_proposed") . "</th>
-				<th>" . getString("prediction_time_remaining") . "</th>
+				<th>" . getString("general_time_remaining") . "</th>
 				<th>" . getString("modqueue_actions") . "</th>
 			</tr>
 		</thead>
@@ -77,7 +77,7 @@ function displayWaitingAnswer(array $predictions): string{
 			<tr>
 				<th>" . getString("prediction_question") . "</th>
 				<th>" . getString("prediction_created") . "</th>
-				<th>" . getString("prediction_time_elapsed") . "</th>
+				<th>" . getString("general_time_elapsed") . "</th>
 			</tr>
 		</thead>
 		<tbody>";
