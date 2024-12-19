@@ -84,7 +84,7 @@ function displayNotifications($notifications): string{
 					$chips = $notification[3][1];
 					$chips_sentence = getString("notifications_chips_lost", [formatChips($chips)]);
 				}
-				$notification_title = $prediction_title;
+				$notification_title = "<a href=\"prediction/$prediction_id\">$prediction_title</a>";
 				$notification_desc = 
 					getString("notifications_resolved_selected") . " <b>$selected_title</b><br>" .
 					getString("notifications_resolved_outcome") . " <b>$outcome_title</b><br>" .
