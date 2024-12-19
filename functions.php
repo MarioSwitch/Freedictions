@@ -80,10 +80,15 @@ function insertTextIcon(string $icon, string $align, float $scale): string{
  * @return string Chaîne de caractères extraite du fichier de langue, ou la clé si la chaîne n'existe pas
  */
 function getString(string $key, array $args = []): string{
+	$english_strings = json_decode(file_get_contents("strings/en.json"), true);
+	$english_string = array_key_exists($key, $english_strings) ? $english_strings[$key] : $key;
+
 	$language = getSetting("language");
-	if(!file_exists("strings/$language.json")) return $key; // Fichier de langue inexistant
+	if(!file_exists("strings/$language.json")) return $english_string; // Fichier de langue inexistant
+
 	$language_strings = json_decode(file_get_contents("strings/$language.json"), true);
-	if(!array_key_exists($key, $language_strings)) return $key; // Clé inexistante dans le fichier de langue
+	if(!array_key_exists($key, $language_strings)) return $english_string; // Clé inexistante dans le fichier de langue
+
 	$string = $language_strings[$key];
 	foreach($args as $arg){
 		$string = preg_replace("/\[TBR\]/", $arg, $string, 1);
