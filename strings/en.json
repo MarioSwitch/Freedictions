@@ -52,6 +52,7 @@
 	"modqueue_actions_edit": "Edit",
 	"modqueue_actions_reject": "Reject",
 	"notifications_approved": "Prediction approved",
+	"notifications_daily": "Daily bonus",
 	"notifications_daily_reset": "You didn't log in yesterday, your login streak has been reset.",
 	"notifications_delete": "Delete read notifications",
 	"notifications_deleted_desc": "Prediction [TBR] has been deleted.<br>You have been refunded of [TBR].",
