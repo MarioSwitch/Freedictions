@@ -9,6 +9,15 @@ $notifications_read = executeQuery("SELECT * FROM `notifications` WHERE `user` =
 $i = 0;
 
 /**
+ * Retourne le nombre de jetons formaté (en utilisant la fonction displayInt et insertTextIcon)
+ * @param int $chips Nombre de jetons
+ * @return string Chaîne de caractères HTML
+ */
+function formatChips(int $chips): string{
+	return "<b>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "</b>";
+}
+
+/**
  * Affiche les notifications
  * @param mixed $notifications Notifications à afficher
  * @return string Tableau HTML des notifications
@@ -28,56 +37,74 @@ function displayNotifications($notifications): string{
 	foreach($notifications as $notification){
 		$sent = $notification["sent"];
 		$text = $notification["text"];
+
+		$notification_title = $text;
+		$notification_desc = "";
+
+		// Exemple : DELETED:152,REFUNDED:50 -> [["DELETED", "152"], ["REFUNDED", "50"]]
 		$text_parts = explode(",", $text);
-		$formatted_text = "";
-		$verb = explode(":", $text_parts[0])[0];
-		if($verb == "DAILY"){
-			$info = explode(":", $text_parts[0])[1];
-			if($info == "RESET"){
-				$formatted_text = "<b>" . getString("notifications_daily_title") . "</b><br>" . getString("notifications_daily_reset");
-			}else{
-				$chips = $info + 9; // Streak à 0 : donne 10 jetons, passage du streak à 1, la notification est alors "DAILY:1" et l'utilisateur a reçu 10 jetons (1+9)
-				$chips_formatted = displayInt($chips) . insertTextIcon("chips", "right", 1);
-				$formatted_text = "<b>" . getString("notifications_daily_title") . "</b><br>" . getString("notifications_daily_desc", ["<b>" . $chips_formatted . "</b>"]);
-			}
-		}
-		if($verb == "APPROVED"){
-			$prediction_id = explode(":", $text_parts[0])[1];
-			$prediction_title = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
-			$formatted_text = "<b>" . getString("notifications_approved") . "</b><br><a href=\"prediction/$prediction_id\">$prediction_title</a>";
-		}
-		if($verb == "REJECTED"){
-			$prediction_id = explode(":", $text_parts[0])[1];
-			$formatted_text = "<b>" . getString("notifications_rejected_title"). "</b><br>" . getString("notifications_rejected_desc", ["<b>" . $prediction_id . "</b>"]);  
-		}
-		if($verb == "RESOLVED"){
-			$prediction_id = explode(":", $text_parts[0])[1];
-			$prediction_title = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
-			$outcome_id = explode(":", $text_parts[1])[1];
-			$outcome_title = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$outcome_id], "string");
-			if(explode(":", $text_parts[2])[0] == "WON"){
-				$chips = explode(":", $text_parts[2])[1];
-				$chips_formatted = displayInt($chips) . insertTextIcon("chips", "right", 1);
-				$formatted_text = "<b><a href=\"prediction/$prediction_id\">$prediction_title</a></b><br>" . getString("notifications_resolved_won", ["<b>" . $outcome_title . "</b>", "<b>" . $chips_formatted . "</b>"]);
-			}else{
-				$outcome_selected = explode(":", $text_parts[2])[1];
-				$outcome_selected_title = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$outcome_selected], "string");
-				$chips = explode(":", $text_parts[3])[1];
-				$chips_formatted = displayInt($chips) . insertTextIcon("chips", "right", 1);
-				$formatted_text = "<b><a href=\"prediction/$prediction_id\">$prediction_title</a></b><br>" . getString("notifications_resolved_lost", ["<b>" . $outcome_selected_title . "</b>", "<b>" . $outcome_title . "</b>","<b>" . $chips_formatted . "</b>"]);
-			}
-		}
-		if($verb == "DELETED"){
-			$prediction_id = explode(":", $text_parts[0])[1];
-			$chips = explode(":", $text_parts[1])[1];
-			$chips_formatted = displayInt($chips) . insertTextIcon("chips", "right", 1);
-			$formatted_text = "<b>" . getString("notifications_deleted_title") . "</b><br>" . getString("notifications_deleted_desc", ["<b>" . $prediction_id . "</b>", "<b>" . $chips_formatted . "</b>"]);
+		for($j = 0; $j < count($text_parts); $j++) $notification[$j] = explode(":", $text_parts[$j]);
+
+		switch($notification[0][0]){
+			case "DAILY":
+				$notification_title = getString("notifications_daily");
+				if($notification[0][1] == "RESET"){
+					$notification_desc = getString("notifications_daily_reset");
+				}else{
+					$chips = $notification[0][1] + 9; // Streak à 0 : donne 10 jetons, passage du streak à 1, la notification est alors "DAILY:1" et l'utilisateur a reçu 10 jetons (1+9)
+					$notification_desc = getString("notifications_chips_won", [formatChips($chips)]);
+				}
+				break;
+
+			case "APPROVED":
+				$prediction_id = $notification[0][1];
+				$prediction_title = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+				$notification_title = getString("notifications_approved");
+				$notification_desc = "<a href=\"prediction/$prediction_id\">$prediction_title</a>";
+				break;
+
+			case "REJECTED":
+				$notification_title = getString("notifications_rejected");
+				$notification_desc = getString("notifications_rejected_desc", ["<b>" . $notification[0][1] . "</b>"]);
+				break;
+
+			case "RESOLVED":
+				$prediction_id = $notification[0][1];
+				$prediction_title = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+				$outcome_id = $notification[1][1];
+				$outcome_title = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$outcome_id], "string");
+				if($notification[2][0] == "WON"){
+					$selected_id = $outcome_id;
+					$selected_title = $outcome_title;
+					$chips = $notification[2][1];
+					$chips_sentence = getString("notifications_chips_won", [formatChips($chips)]);
+				}else{
+					$selected_id = $notification[2][1];
+					$selected_title = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$selected_id], "string");
+					$chips = $notification[3][1];
+					$chips_sentence = getString("notifications_chips_lost", [formatChips($chips)]);
+				}
+				$notification_title = $prediction_title;
+				$notification_desc = 
+					getString("notifications_resolved_selected") . " <b>$selected_title</b><br>" .
+					getString("notifications_resolved_outcome") . " <b>$outcome_title</b><br>" .
+					$chips_sentence;
+				break;
+
+			case "DELETED":
+				$prediction_id = $notification[0][1];
+				$chips = $notification[1][1];
+				$notification_title = getString("notifications_deleted");
+				$notification_desc = 
+					getString("notifications_deleted_desc", ["<b>" . $prediction_id . "</b>"]) . "<br>" .
+					getString("notifications_chips_refunded", [formatChips($chips)]);
+				break;
 		}
 		$i++;
 		$sent_td = "<span id=\"notification_$i\">" . $sent . "</span><script>display(\"$sent\",\"notification_$i\")</script>";
 		$html .= "<tr>
 			<td>$sent_td</td>
-			<td>$formatted_text</td>
+			<td><b>$notification_title</b><br>$notification_desc</td>
 		</tr>";
 	}
 	$html .= "</tbody>

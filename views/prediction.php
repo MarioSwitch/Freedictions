@@ -243,7 +243,6 @@ if($approved || isMod()){
 		$manage_html";
 	}
 	if(isMod() && (isCreator() || !isMod($created_user))){
-		echo "
-		<p><a href=\"$id/edit\">" . getString("title_edit") . "</a></p>";
+		echo "<p><button onclick=\"location.href='$id/edit'\">" . getString("title_edit") . "</button></p>";
 	}
 }
