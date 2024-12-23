@@ -9,22 +9,25 @@ include_once "time.js.php";
 function displayPredictionBox(string $info): string{
 	global $created_user, $created_time, $ended, $answer, $answer_name, $volume_chips, $volume_users;
 	$value = match($info){
-		"created" => $created_time,
-		"proposed" => "<a href=\"../user/$created_user\">" . displayUser($created_user) . "</a>",
-		"time_remaining" => $ended,
+		"created" => "
+			<a href=\"../user/$created_user\">" . displayUser($created_user) . "</a>
+			<br>
+			<span id=\"created\">$created_time</span>
+			<script>display(\"$created_time\", \"created\");</script>",
+		"time_remaining" => "
+			<span id=\"time_remaining\">$ended</span>
+			<script>display(\"$ended\", \"time_remaining\");</script>",
 		"outcome" => $answer ? $answer_name : getString("prediction_waiting_outcome"),
-		"volume" => displayInt($volume_chips) . insertTextIcon("chips", "right", 2) . ", " . displayInt($volume_users) . insertTextIcon("users", "right", 2),
+		"volume" => 
+			displayInt($volume_chips) . insertTextIcon("chips", "right", 1.5) . "<br>" .
+			displayInt($volume_users) . insertTextIcon("users", "right", 1.5),
 	};
 	$caption = $info == "time_remaining" ? getString("general_time_remaining") : getString("prediction_$info");
-	$id = ($info == "created" || $info == "time_remaining") ? " id=\"$info\"" : "";
 	$html = "
 	<div style=\"display:inline-block; border:1px solid var(--color-text); border-radius: 10px; width:15%; min-width:250px; max-width:400px;\">
-		<p style=\"font-size:calc(var(--font-size) * 2.0); margin:calc(var(--font-size) * 0.5);\"$id>$value</p>
+		<p style=\"font-size:calc(var(--font-size) * 1.5); margin:calc(var(--font-size) * 0.5);\">$value</p>
 		<p style=\"font-size:calc(var(--font-size) * 0.8); margin:calc(var(--font-size) * 0.5);\">$caption</p>
 	</div>";
-	if($info == "created" || $info == "time_remaining"){
-		$html .= "<script>display(\"$value\", \"$info\");</script>";
-	}
 	return $html;
 }
 
@@ -110,7 +113,7 @@ $choices_table = "
 		$choices_table .= "
 		<tr>
 			<td>$choice_name</td>
-			<td>" . displayFloat($choice_percentage, true) . "</td>
+			<td>" . ($choice_percentage ? displayFloat($choice_percentage, true) : "–") . "</td>
 			<td>
 				" . displayInt($choice_chips) . insertTextIcon("chips", "right", 1) . "<br>
 				" . displayInt($choice_users) . insertTextIcon("users", "right", 1) . "
@@ -224,7 +227,6 @@ if($approved || isMod()){
 	echo 
 	"<div>" .
 		displayPredictionBox("created") .
-		displayPredictionBox("proposed") .
 		displayPredictionBox(($now >= $ended) ? "outcome" : "time_remaining") .
 		displayPredictionBox("volume") .
 	"</div>";

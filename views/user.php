@@ -10,6 +10,11 @@ if($username != $username_capitalization) redirect("user/$username_capitalizatio
 $created = executeQuery("SELECT `created` FROM `users` WHERE `username` = ?", [$username], "string");
 $updated = executeQuery("SELECT `updated` FROM `users` WHERE `username` = ?", [$username], "string");
 $streak = executeQuery("SELECT `streak` FROM `users` WHERE `username` = ?", [$username], "int");
+
+$predictions_created_count = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$username], "int");
+$predictions_participated_count = executeQuery("SELECT COUNT(*) FROM `bets` WHERE `user` = ?;", [$username], "int");
+$predictions_participated_volume = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `user` = ?;", [$username], "int");
+
 $chips = executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?", [$username], "int");
 
 include_once "time.js.php";
@@ -20,23 +25,26 @@ include_once "time.js.php";
  * @return string Code HTML
  */
 function displayUserBox(string $info): string{
-	global $created, $updated, $streak, $chips;
+	global $created, $updated, $streak, $predictions_created_count, $predictions_participated_count, $predictions_participated_volume, $chips;
 	$value = match($info){
-		"created" => $created,
-		"updated" => $updated,
-		"streak" => displayInt($streak),
-		"chips" => displayInt($chips),
+		"created_updated_streak" => 
+			"<span id=\"created\">$created</span>
+			<script>display(\"$created\",\"created\")</script>
+			<br>
+			<span id=\"updated\">$updated</span>
+			<script>display(\"$updated\",\"updated\")</script>
+			<small>(" . displayInt($streak) . ")</small>",
+		"predictions" =>
+			displayInt($predictions_created_count) . "<br>" .
+			displayInt($predictions_participated_count) . "
+			<small>(" . displayInt($predictions_participated_volume) . insertTextIcon("chips", "right", 1.5) . ")</small>",
 	};
 	$caption = getString("user_$info");
-	$id = ($info == "created" || $info == "updated") ? "id=\"$info\"" : "";
 	$html = "
 	<div style=\"display:inline-block; border:1px solid var(--color-text); border-radius: 10px; width:15%; min-width:250px; max-width:400px;\">
-		<p style=\"font-size:calc(var(--font-size) * 2.0); margin:calc(var(--font-size) * 0.5);\" $id>$value</p>
+		<p style=\"font-size:calc(var(--font-size) * 1.5); margin:calc(var(--font-size) * 0.5);\">$value</p>
 		<p style=\"font-size:calc(var(--font-size) * 0.8); margin:calc(var(--font-size) * 0.5);\">$caption</p>
 	</div>";
-	if($info == "created" || $info == "updated"){
-		$html .= "<script>display(\"$value\", \"$info\");</script>";
-	}
 	return $html;
 }
 
@@ -99,11 +107,10 @@ function displayPredictionsList(string $type, array $predictions): string{
 }
 ?>
 <h1><?= displayUser($username) ?></h1>
+<h2><?= displayInt($chips) . insertTextIcon("chips", "right", 1.5) ?></h2>
 <div>
-	<?= displayUserBox("created") ?>
-	<?= displayUserBox("updated") ?>
-	<?= displayUserBox("streak") ?>
-	<?= displayUserBox("chips") ?>
+	<?= displayUserBox("created_updated_streak") ?>
+	<?= displayUserBox("predictions") ?>
 </div>
 <br>
 <?= displayPredictionsList("created", $predictions_created) ?>

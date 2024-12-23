@@ -96,9 +96,8 @@
 	"notifications_chips_lost":"Vous avez perdu les [TBR] misés.",
 	"notifications_chips_refunded":"Vous avez été remboursé des [TBR] misés.",
 
-	"user_created":"Utilisateur créé",
-	"user_updated":"Dernière connexion",
-	"user_streak":"Série de connexion",
+	"user_created_updated_streak":"Utilisateur créé<br>Dernière connexion (série)",
+	"user_predictions":"Prédictions créées<br>Prédictions participées",
 	"user_chips":"Jetons possédés",
 
 	"leaderboard_desc":"Vous êtes [TBR] sur [TBR] joueurs, soit dans le top [TBR].",
