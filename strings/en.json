@@ -138,7 +138,6 @@
 	"tooltip_translator": "Translator",
 	"tooltip_verified": "Verified",
 	"user_chips": "Chips owned",
-	"user_created": "User created",
-	"user_streak": "Login streak",
-	"user_updated": "Last online"
+	"user_created_updated_streak":"User created<br>Last online (streak)",
+	"user_predictions":"Predictions created<br>Predictions participated"
 }
