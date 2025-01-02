@@ -14,6 +14,9 @@ RewriteRule ^prediction/(.+)/edit$ index.php?view=edit&id=$1 [L,QSA]
 # Rewrite prediction/xxx to index.php?view=prediction&id=xxx
 RewriteRule ^prediction/(.+)$ index.php?view=prediction&id=$1 [L,QSA]
 
+# Rewrite user/xxx/password to index.php?view=password&user=xxx
+RewriteRule ^user/(.+)/password$ index.php?view=password&user=$1 [L,QSA]
+
 # Rewrite user/xxx to index.php?view=user&user=xxx
 RewriteRule ^user/(.+)$ index.php?view=user&user=$1 [L,QSA]
 

@@ -116,3 +116,9 @@ function displayPredictionsList(string $type, array $predictions): string{
 <?= displayPredictionsList("created", $predictions_created) ?>
 <br><br>
 <?= displayPredictionsList("participated", $predictions_participated) ?>
+<?php if(isMod() || $username == $_COOKIE["username"]){
+	echo "<br><br>
+	<h2>" . getString("user_manage") . "</h2>
+	<p><button onclick=\"location.href='$username/password'\">" . getString("title_password") . "</button></p>";
+}
+?>

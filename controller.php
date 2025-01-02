@@ -40,6 +40,29 @@ switch($_REQUEST["action"]){
 		setcookie("password", "", time() + CONFIG_COOKIES_EXPIRATION);
 		redirect("home");
 
+	case "change_password":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$username_connected = $_COOKIE["username"];
+
+		$username_concerned = $_REQUEST["user"];
+		$password_verification = $_REQUEST["pv"];
+		$new_password = $_REQUEST["np"];
+		$new_password_confirm = $_REQUEST["np_confirm"];
+		if(empty($username_concerned) || empty($password_verification) || empty($new_password) || empty($new_password_confirm)) redirect("user/$username/password", "fields");
+		if($new_password != $new_password_confirm) redirect("user/$username/password", "password_confirm");
+
+		$perms = isMod() || $username_connected == $username_concerned;
+		if(!$perms) redirect("user/$username/password", "perms");
+
+		$password_verification_hash = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username_connected], "string");
+		if(!password_verify($password_verification, $password_verification_hash)) redirect("user/$username/password", "password");
+
+		$hash = password_hash($new_password, PASSWORD_DEFAULT);
+		executeQuery("UPDATE `users` SET `password` = ? WHERE `username` = ?;", [$hash, $username_concerned]);
+
+		redirect("user/$username_concerned");
+
 	case "modqueue_approve":
 		if(!isMod()) redirect("home", "perms_mod");
 
