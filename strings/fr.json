@@ -11,6 +11,7 @@
 	"title_notifications":"Notifications",
 	"title_signup":"Inscription",
 	"title_signin":"Connexion",
+	"title_password":"Changer de mot de passe",
 
 	"general_user":"Utilisateur",
 	"general_user_none":"Aucun utilisateur",
@@ -99,6 +100,11 @@
 	"user_created_updated_streak":"Utilisateur créé<br>Dernière connexion (série)",
 	"user_predictions":"Prédictions créées<br>Prédictions participées",
 	"user_chips":"Jetons possédés",
+	"user_manage":"Options avancées",
+
+	"password_current":"Mot de passe actuel",
+	"password_new":"Nouveau mot de passe",
+	"password_new_confirm":"Confirmer le nouveau mot de passe",
 
 	"leaderboard_desc":"Vous êtes [TBR] sur [TBR] joueurs, soit dans le top [TBR].",
 	"leaderboard_page":"Aller à ma page ([TBR])",

@@ -69,6 +69,9 @@
 	"notifications_resolved_selected": "Your bet:",
 	"notifications_text": "Text",
 	"notifications_unread": "Unread",
+	"password_current": "Current password",
+	"password_new": "New password",
+	"password_new_confirm": "Confirm new password",
 	"percentage": "[TBR]%",
 	"prediction_bet_noun": "Bet",
 	"prediction_bet_verb": "Bet",
@@ -131,6 +134,7 @@
 	"title_settings": "Settings",
 	"title_signin": "Sign in",
 	"title_signup": "Sign up",
+	"title_password": "Change password",
 	"tooltip_alpha": "Alpha-tester",
 	"tooltip_beta": "Beta-tester",
 	"tooltip_developer": "Developer",
@@ -138,6 +142,7 @@
 	"tooltip_translator": "Translator",
 	"tooltip_verified": "Verified",
 	"user_chips": "Chips owned",
-	"user_created_updated_streak":"User created<br>Last online (streak)",
-	"user_predictions":"Predictions created<br>Predictions participated"
+	"user_created_updated_streak": "User created<br>Last online (streak)",
+	"user_manage":"Advanced options",
+	"user_predictions": "Predictions created<br>Predictions participated"
 }
