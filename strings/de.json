@@ -112,7 +112,7 @@
 	"signup_username_format": "Muss 4 bis 20 alphanumerische Zeichen enthalten",
 	"site_desc": "Wetten ist kostenlos!",
 	"site_name": "Freedictions",
-	"thousands_separator": " . ",
+	"thousands_separator": ".",
 	"time_day": " Tag(e)(n)",
 	"time_day_short": "T",
 	"time_hour": " Stunde(n)",

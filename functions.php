@@ -328,6 +328,8 @@ function displayRank(int $rank): string{
 			if($rank % 10 == 3 && !in_array($rank % 100, [11, 12, 13])) $suffix = "<sup>rd</sup>";
 			if(!in_array($rank % 10, [1, 2, 3]) || in_array($rank % 100, [11, 12, 13])) $suffix = "<sup>th</sup>";
 			break;
+		case "de":
+			$suffix = ".";
 		case "fr":
 			if($rank == 1) $suffix = "<sup>er</sup>";
 			if($rank >= 2) $suffix = "<sup>e</sup>";
