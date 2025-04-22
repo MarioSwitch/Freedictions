@@ -330,6 +330,7 @@ function displayRank(int $rank): string{
 			break;
 		case "de":
 			$suffix = ".";
+			break;
 		case "fr":
 			if($rank == 1) $suffix = "<sup>er</sup>";
 			if($rank >= 2) $suffix = "<sup>e</sup>";
