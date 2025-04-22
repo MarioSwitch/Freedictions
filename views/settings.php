@@ -7,10 +7,12 @@
 function displayLanguage(string $language_code): string{
 	$language_names = [
 		"en" => "English",
+		"de" => "Deutsch",
 		"fr" => "Français"
 	];
 	$language_flags = [
 		"en" => "🌐",
+		"de" => "🇩🇪",
 		"fr" => "🇫🇷"
 	];
 	if(!array_key_exists($language_code, $language_names) || !array_key_exists($language_code, $language_flags)) return strtoupper($language_code);
