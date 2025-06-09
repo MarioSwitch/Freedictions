@@ -11,7 +11,6 @@
 	"title_notifications":"Notifications",
 	"title_signup":"Inscription",
 	"title_signin":"Connexion",
-	"title_password":"Changer de mot de passe",
 
 	"general_user":"Utilisateur",
 	"general_user_none":"Aucun utilisateur",
@@ -101,6 +100,8 @@
 	"user_predictions":"Prédictions créées<br>Prédictions participées",
 	"user_chips":"Jetons possédés",
 	"user_manage":"Options avancées",
+	"user_manage_password":"Changer de mot de passe",
+	"user_manage_delete":"Supprimer le compte",
 
 	"password_current":"Mot de passe actuel",
 	"password_new":"Nouveau mot de passe",

@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /freedictions/
+RewriteBase /v3/
 
 # Rewrite exceptions (notice there is no "^" at the beginning of the pattern)
 RewriteRule style.css$ style.css [L,QSA]
@@ -9,13 +9,16 @@ RewriteRule controller.php$ controller.php [L,QSA]
 RewriteRule signout$ controller.php?action=signout [L,QSA]
 
 # Rewrite prediction/xxx/edit to index.php?view=prediction_edit&id=xxx
-RewriteRule ^prediction/(.+)/edit$ index.php?view=edit&id=$1 [L,QSA]
+RewriteRule ^prediction/(.+)/edit$ index.php?view=prediction_edit&id=$1 [L,QSA]
 
 # Rewrite prediction/xxx to index.php?view=prediction&id=xxx
 RewriteRule ^prediction/(.+)$ index.php?view=prediction&id=$1 [L,QSA]
 
-# Rewrite user/xxx/password to index.php?view=password&user=xxx
-RewriteRule ^user/(.+)/password$ index.php?view=password&user=$1 [L,QSA]
+# Rewrite user/xxx/password to index.php?view=user_password&user=xxx
+RewriteRule ^user/(.+)/password$ index.php?view=user_password&user=$1 [L,QSA]
+
+# Rewrite user/xxx/delete to index.php?view=user_delete&user=xxx
+RewriteRule ^user/(.+)/delete$ index.php?view=user_delete&user=$1 [L,QSA]
 
 # Rewrite user/xxx to index.php?view=user&user=xxx
 RewriteRule ^user/(.+)$ index.php?view=user&user=$1 [L,QSA]

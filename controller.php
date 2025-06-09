@@ -40,7 +40,32 @@ switch($_REQUEST["action"]){
 		setcookie("password", "", time() + CONFIG_COOKIES_EXPIRATION);
 		redirect("home");
 
-	case "change_password":
+	case "user_delete":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$username_connected = $_COOKIE["username"];
+
+		$username_concerned = $_REQUEST["user"];
+		$password = $_REQUEST["password"];
+		if(empty($username_concerned) || empty($password)) redirect("user/$username_concerned/delete", "fields");
+
+		$perms = isMod() || $username_connected == $username_concerned;
+		if(!$perms) redirect("user/$username_concerned/delete", "perms");
+
+		$password_hash = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username_connected], "string");
+		if(!password_verify($password, $password_hash)) redirect("user/$username_concerned/delete", "password");
+
+		executeQuery("DELETE FROM `notifications` WHERE `user` = ?;", [$username_concerned]); // Supprimer les notifications de l'utilisateur
+		executeQuery("DELETE FROM `bets` WHERE `user` = ?;", [$username_concerned]); // Supprimer les paris de l'utilisateur
+		executeQuery("DELETE FROM `bets` WHERE `prediction` IN (SELECT `id` FROM `predictions` WHERE `user` = ?);", [$username_concerned]); // Supprimer les paris sur les prédictions de l'utilisateur
+		executeQuery("UPDATE `predictions` SET `answer` = NULL WHERE `user` = ?;", [$username_concerned]); // Réinitialiser les réponses des prédictions de l'utilisateur
+		executeQuery("DELETE FROM `choices` WHERE `prediction` IN (SELECT `id` FROM `predictions` WHERE `user` = ?);", [$username_concerned]); // Supprimer les choix des prédictions de l'utilisateur
+		executeQuery("DELETE FROM `predictions` WHERE `user` = ?;", [$username_concerned]); // Supprimer les prédictions de l'utilisateur
+		executeQuery("DELETE FROM `users` WHERE `username` = ?;", [$username_concerned]); // Supprimer l'utilisateur
+
+		redirect("home");
+
+	case "user_password":
 		if(!isConnected()) redirect("home", "perms_connected");
 
 		$username_connected = $_COOKIE["username"];
@@ -49,14 +74,14 @@ switch($_REQUEST["action"]){
 		$password_verification = $_REQUEST["pv"];
 		$new_password = $_REQUEST["np"];
 		$new_password_confirm = $_REQUEST["np_confirm"];
-		if(empty($username_concerned) || empty($password_verification) || empty($new_password) || empty($new_password_confirm)) redirect("user/$username/password", "fields");
-		if($new_password != $new_password_confirm) redirect("user/$username/password", "password_confirm");
+		if(empty($username_concerned) || empty($password_verification) || empty($new_password) || empty($new_password_confirm)) redirect("user/$username_concerned/password", "fields");
+		if($new_password != $new_password_confirm) redirect("user/$username_concerned/password", "password_confirm");
 
 		$perms = isMod() || $username_connected == $username_concerned;
-		if(!$perms) redirect("user/$username/password", "perms");
+		if(!$perms) redirect("user/$username_concerned/password", "perms");
 
 		$password_verification_hash = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username_connected], "string");
-		if(!password_verify($password_verification, $password_verification_hash)) redirect("user/$username/password", "password");
+		if(!password_verify($password_verification, $password_verification_hash)) redirect("user/$username_concerned/password", "password");
 
 		$hash = password_hash($new_password, PASSWORD_DEFAULT);
 		executeQuery("UPDATE `users` SET `password` = ? WHERE `username` = ?;", [$hash, $username_concerned]);
