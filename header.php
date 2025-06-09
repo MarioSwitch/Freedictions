@@ -11,6 +11,7 @@ echo "
 				<p style=\"font-size:calc(var(--font-size) * 0.3); margin:0;\"><i>" . getString("site_desc") . "</i></p>
 			</div>
 		</a>
+		<a href=" . CONFIG_PATH . "/history><img src=\"svg/history.svg\"></a>
 		<a href=" . CONFIG_PATH . "/leaderboard><img src=\"svg/leaderboard.svg\"></a>
 		<a href=" . CONFIG_PATH . "/settings><img src=\"svg/settings.svg\"></a>
 	</div>
