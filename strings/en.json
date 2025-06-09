@@ -131,7 +131,6 @@
 	"title_leaderboard": "Leaderboard",
 	"title_modqueue": "Moderation Queue",
 	"title_notifications": "Notifications",
-	"user_manage_password": "Change password",
 	"title_settings": "Settings",
 	"title_signin": "Sign in",
 	"title_signup": "Sign up",
@@ -144,5 +143,6 @@
 	"user_chips": "Chips owned",
 	"user_created_updated_streak": "User created<br>Last online (streak)",
 	"user_manage": "Advanced options",
+	"user_manage_password": "Change password",
 	"user_predictions": "Predictions created<br>Predictions participated"
 }
