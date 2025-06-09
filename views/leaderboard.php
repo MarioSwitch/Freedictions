@@ -24,7 +24,7 @@ if(isConnected()){
 <table class="users_list">
 	<thead>
 		<tr>
-			<th><?= getString("general_rank") . "<br><small>" . displayInt($table_top, false) . " – " . displayInt($table_top + count($leaderboard) - 1) . "</small>" ?></th>
+			<th><?= getString("general_rank") . "<br><small>" . displayInt($table_top, false) . " – " . displayInt($table_top + count($leaderboard) - 1, false) . "</small>" ?></th>
 			<th><?= getString("general_user") ?></th>
 			<th><?= getString("general_chips") ?></th>
 		</tr>
@@ -64,3 +64,4 @@ if(isConnected()){
 		</tr>
 	</tbody>
 </table>
+<br><br>
