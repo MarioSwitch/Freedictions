@@ -131,7 +131,6 @@
 	"title_leaderboard": "Rangliste",
 	"title_modqueue": "Moderation Warteschlange",
 	"title_notifications": "Benachrichtigungen",
-	"user_manage_password": "Passwort ändern",
 	"title_settings": "Einstellungen",
 	"title_signin": "Anmeldung",
 	"title_signup": "Registrierung",
@@ -144,5 +143,6 @@
 	"user_chips": "Besessene Wertmarken",
 	"user_created_updated_streak": "Benutzer erstellt<br>Letzte Anmeldung (Serie)",
 	"user_manage": "Erweiterte Optionen",
+	"user_manage_password": "Passwort ändern",
 	"user_predictions": "Erstellte Vorhersagen<br>Teilgenommene Vorhersagen"
 }
