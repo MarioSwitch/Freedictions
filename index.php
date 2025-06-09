@@ -15,8 +15,17 @@ function getTitle(): string{
 
 			$title = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$_REQUEST["id"]], "string");
 			break;
+		case "prediction_edit":
+			$title = getString("prediction_manage_edit");
+			break;
 		case "user":
 			$title = $_REQUEST["user"];
+			break;
+		case "user_password":
+			$title = getString("user_manage_password");
+			break;
+		case "user_delete":
+			$title = getString("user_manage_delete");
 			break;
 		default:
 			$title = getString("title_" . $_REQUEST["view"]);

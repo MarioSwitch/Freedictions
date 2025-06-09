@@ -126,7 +126,7 @@
 	"time_year": " year(s)",
 	"time_year_short": "y",
 	"title_create": "New prediction",
-	"title_edit": "Edit prediction",
+	"prediction_manage_edit": "Edit prediction",
 	"title_home": "Home",
 	"title_leaderboard": "Leaderboard",
 	"title_modqueue": "Moderation Queue",
