@@ -222,25 +222,26 @@ function isExtra(string $type, string $user = NULL): bool{
  */
 function displayUser(string $username, bool $link = false): string{
 	$icons = [
-		"mod" => "👑",
+		"mod" => "🛡️",
 
-		"alpha" => "🥇",
-		"beta" => "🥈",
+		"verified" => "✔️",
+
+		"alpha" => "💛",
+		//"beta" => "🩶", PAS UTILE POUR LE MOMENT, TRADUCTION DÉJÀ PRÊTE
+		//"gamma" => "🤎", PAS UTILE POUR LE MOMENT + PAS DE TRADUCTION
 
 		"developer" => "💻",
 		"translator" => "🌍",
-
-		"verified" => "⭐",
 	];
 
 	$extras = "";
 	$extras_raw = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$username], "string");
 	$extras_array = $extras_raw ? explode(",", $extras_raw) : [];
 	if(isMod($username)) array_unshift($extras_array, "mod");
-	foreach($extras_array as $extra){
-		$icon = $icons[$extra];
-		$tooltip = getString("tooltip_" . $extra);
-		$extras .= "<span title=\"$tooltip\">$icon</span>";
+	foreach($icons as $icon_title => $icon_icon){
+		if(!in_array($icon_title, $extras_array)) continue;
+		$tooltip = getString("tooltip_" . $icon_title);
+		$extras .= "<span title=\"$tooltip\">$icon_icon</span>";
 	}
 
 	$full_username = $extras . $username;
