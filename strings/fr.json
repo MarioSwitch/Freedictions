@@ -56,7 +56,7 @@
 	"prediction_waiting_approval":"En attente d'approbation…",
 	"prediction_waiting_outcome":"En attente de résultat…",
 	"prediction_sentence_closed":"Les paris ont fermé il y a [TBR].",
-	"prediction_sentence_resolved":"Le résultat « [TBR] » a été confirmée il y a [TBR].",
+	"prediction_sentence_resolved":"Le résultat « [TBR] » a été confirmé il y a [TBR].",
 	"prediction_manage":"Gérer la prédiction",
 	"prediction_manage_close":"Fermer immédiatement les paris",
 	"prediction_manage_resolve":"Confirmer le résultat",
