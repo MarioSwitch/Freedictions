@@ -143,6 +143,7 @@
 	"user_chips": "Chips owned",
 	"user_created_updated_streak": "User created<br>Last online (streak)",
 	"user_manage": "Advanced options",
+	"user_manage_delete": "Delete account",
 	"user_manage_password": "Change password",
 	"user_predictions": "Predictions created<br>Predictions participated"
 }
