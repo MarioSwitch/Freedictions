@@ -245,6 +245,6 @@ if($approved || isMod()){
 		$manage_html";
 	}
 	if(isMod() && (isCreator() || !isMod($created_user))){
-		echo "<p><button onclick=\"location.href='$id/edit'\">" . getString("title_edit") . "</button></p>";
+		echo "<p><button onclick=\"location.href='$id/edit'\">" . getString("prediction_manage_edit") . "</button></p>";
 	}
 }

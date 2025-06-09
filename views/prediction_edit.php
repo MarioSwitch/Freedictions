@@ -14,7 +14,7 @@ $created_UTC = executeQuery("SELECT `created` FROM `predictions` WHERE `id` = ?;
 $end_UTC = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $choices = executeQuery("SELECT `id`, `name` FROM `choices` WHERE `prediction` = ?;", [$id]);
 ?>
-<h1><?= getString("title_edit") ?></h1>
+<h1><?= getString("prediction_manage_edit") ?></h1>
 <form role="form" action="controller.php">
 	<input type="hidden" name="prediction" value="<?= $id ?>">
 	<label for="question"><?= getString("prediction_question") ?></label>
