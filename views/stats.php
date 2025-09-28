@@ -1,11 +1,15 @@
 <?php
 function displayStat($array){
+    $percentage1d = $array["all"] ? ($array["1d"] / $array["all"] * 100) : PHP_INT_MAX;
+    $percentage1w = $array["all"] ? ($array["1w"] / $array["all"] * 100) : PHP_INT_MAX;
+    $percentage1mo = $array["all"] ? ($array["1mo"] / $array["all"] * 100) : PHP_INT_MAX;
+    $percentage1y = $array["all"] ? ($array["1y"] / $array["all"] * 100) : PHP_INT_MAX;
     return "<tr>
         <td>" . $array["name"] . "</td>
-        <td>" . displayInt($array["1d"]) . "<br><small>" . getString("percentage", [displayFloat($array["1d"] / $array["all"] * 100)]) . "</small></td>
-        <td>" . displayInt($array["1w"]) . "<br><small>" . getString("percentage", [displayFloat($array["1w"] / $array["all"] * 100)]) . "</small></td>
-        <td>" . displayInt($array["1mo"]) . "<br><small>" . getString("percentage", [displayFloat($array["1mo"] / $array["all"] * 100)]) . "</small></td>
-        <td>" . displayInt($array["1y"]) . "<br><small>" . getString("percentage", [displayFloat($array["1y"] / $array["all"] * 100)]) . "</small></td>
+        <td>" . displayInt($array["1d"]) . "<br><small>" . getString("percentage", [displayFloat($percentage1d)]) . "</small></td>
+        <td>" . displayInt($array["1w"]) . "<br><small>" . getString("percentage", [displayFloat($percentage1w)]) . "</small></td>
+        <td>" . displayInt($array["1mo"]) . "<br><small>" . getString("percentage", [displayFloat($percentage1mo)]) . "</small></td>
+        <td>" . displayInt($array["1y"]) . "<br><small>" . getString("percentage", [displayFloat($percentage1y)]) . "</small></td>
         <td>" . displayInt($array["all"]) . "</td>
     </tr>";
 }
@@ -35,6 +39,7 @@ function getMedian(string $key){
     }
     $array = arraySQL($request);
     $middle = ceil($count / 2) - 1; // -1 because arrays start at 0
+    if(!$array) return PHP_INT_MAX;
     if(count($array) < $count) return 0;
     if($count % 2 == 1){
         return $array[$middle][0];
@@ -71,23 +76,23 @@ $predictionsCreated = [
 ];
 
 $totalPoints = intSQL("SELECT SUM(`points`) FROM `users`;");
-$averagePoints = $totalPoints / $usersOnline["all"];
+$averagePoints = $usersOnline["all"] ? ($totalPoints / $usersOnline["all"]) : PHP_INT_MAX;
 $medianPoints = getMedian("points");
 
 $totalCreated = intSQL("SELECT COUNT(*) FROM `predictions`;");
-$averageCreated = $totalCreated / $usersOnline["all"];
+$averageCreated = $usersOnline["all"] ? ($totalCreated / $usersOnline["all"]) : PHP_INT_MAX;
 $medianCreated = getMedian("created");
 
 $totalBets = intSQL("SELECT COUNT(*) FROM `votes`;");
-$averageBets = $totalBets / $usersOnline["all"];
+$averageBets = $usersOnline["all"] ? ($totalBets / $usersOnline["all"]) : PHP_INT_MAX;
 $medianBets = getMedian("bets");
 
 $totalPointsSpent = intSQL("SELECT SUM(`points`) FROM `votes`;");
-$averagePointsSpent = $totalPointsSpent / $usersOnline["all"];
+$averagePointsSpent = $usersOnline["all"] ? ($totalPointsSpent / $usersOnline["all"]) : PHP_INT_MAX;
 $medianPointsSpent = getMedian("pointsSpent");
 
 $totalChoices = intSQL("SELECT COUNT(*) FROM `choices`;");
-$averageChoices = $totalChoices / $predictionsCreated["all"];
+$averageChoices = $usersOnline["all"] ? ($totalChoices / $usersOnline["all"]) : PHP_INT_MAX;
 $medianChoices = getMedian("choices");
 
 echo "

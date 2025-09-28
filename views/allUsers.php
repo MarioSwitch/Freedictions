@@ -228,7 +228,7 @@ echo "<table>
         <th><p><a href=\"" . $link_earned . "\">" . getString("points_earned") . isOrderedBy("earned") . "</a></th>
     </tr>";
 if(!$users){
-    echo "<tr><td colspan='9'>" . getString("users_none") . "</td></tr>";
+    echo "<tr><td colspan='12'>" . getString("users_none") . "</td></tr>";
 }else{
     for($i = 0; $i < $accounts; $i++){
         $link_user = "?view=profile&user=" . $users[$i]["username"];
