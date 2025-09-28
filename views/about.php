@@ -199,7 +199,7 @@
 </table>
 <br>
 <p>
-    <i>Version 2.1.62 du 28 septembre 2025</i>
+    <i>Version 2.1.63 du 28 septembre 2025</i>
 </p>
 <?php include_once "time.js.php"; ?>
 <script>document.getElementById("localTime").innerHTML = " (" + displayTime(0, 0) + " selon votre fuseau horaire)";</script>
