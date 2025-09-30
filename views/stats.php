@@ -92,7 +92,7 @@ $averagePointsSpent = $usersOnline["all"] ? ($totalPointsSpent / $usersOnline["a
 $medianPointsSpent = getMedian("pointsSpent");
 
 $totalChoices = intSQL("SELECT COUNT(*) FROM `choices`;");
-$averageChoices = $usersOnline["all"] ? ($totalChoices / $usersOnline["all"]) : PHP_INT_MAX;
+$averageChoices = $predictionsCreated["all"] ? ($totalChoices / $predictionsCreated["all"]) : PHP_INT_MAX;
 $medianChoices = getMedian("choices");
 
 echo "
@@ -105,31 +105,31 @@ echo "
         <th>" . getString("median") . "</th>
     </tr>
     <tr>
-        <td>" . getString("points") . "</td>
+        <td>" . getString("points") . "<br><small>" . getString("per_user") . "</small></td>
         <td>" . displayInt($totalPoints) . "</td>
         <td>" . displayFloat($averagePoints) . "</td>
         <td>" . displayInt($medianPoints) . "</td>
     </tr>
     <tr>
-        <td>" . getString("predictions_created") . "</td>
+        <td>" . getString("predictions_created") . "<br><small>" . getString("per_prediction") . "</small></td>
         <td>" . displayInt($totalCreated) . "</td>
         <td>" . displayFloat($averageCreated) . "</td>
         <td>" . displayInt($medianCreated) . "</td>
     </tr>
     <tr>
-        <td>" . getString("bets") . "</td>
+        <td>" . getString("bets") . "<br><small>" . getString("per_prediction") . "</small></td>
         <td>" . displayInt($totalBets) . "</td>
         <td>" . displayFloat($averageBets) . "</td>
         <td>" . displayInt($medianBets) . "</td>
     </tr>
     <tr>
-        <td>" . getString("points_spent") . "</td>
+        <td>" . getString("points_spent") . "<br><small>" . getString("per_user") . "</small></td>
         <td>" . displayInt($totalPointsSpent) . "</td>
         <td>" . displayFloat($averagePointsSpent) . "</td>
         <td>" . displayInt($medianPointsSpent) . "</td>
     </tr>
     <tr>
-        <td>" . getString("choices") . "</td>
+        <td>" . getString("choices") . "<br><small>" . getString("per_prediction") . "</small></td>
         <td>" . displayInt($totalChoices) . "</td>
         <td>" . displayFloat($averageChoices) . "</td>
         <td>" . displayInt($medianChoices) . "</td>

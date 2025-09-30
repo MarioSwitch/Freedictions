@@ -52,6 +52,8 @@
     "total": "Total",
     "average": "Average",
     "median": "Median",
+    "per_user": "per user",
+    "per_prediction": "per prediction",
     "last": "Last",
     "predictions_created": "Created predictions",
     "predictions_participated": "Participated predictions",

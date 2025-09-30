@@ -52,6 +52,8 @@
     "total": "Gesamt",
     "average": "Mittelwert",
     "median": "Median",
+    "per_user": "pro Benutzer",
+    "per_prediction": "pro Vorhersage",
     "last": "Letzte(n)",
     "predictions_created": "Erstellte Vorhersagen",
     "predictions_participated": "Teilgenommen Vorhersagen",
