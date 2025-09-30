@@ -111,13 +111,13 @@ echo "
         <td>" . displayInt($medianPoints) . "</td>
     </tr>
     <tr>
-        <td>" . getString("predictions_created") . "<br><small>" . getString("per_prediction") . "</small></td>
+        <td>" . getString("predictions_created") . "<br><small>" . getString("per_user") . "</small></td>
         <td>" . displayInt($totalCreated) . "</td>
         <td>" . displayFloat($averageCreated) . "</td>
         <td>" . displayInt($medianCreated) . "</td>
     </tr>
     <tr>
-        <td>" . getString("bets") . "<br><small>" . getString("per_prediction") . "</small></td>
+        <td>" . getString("bets") . "<br><small>" . getString("per_user") . "</small></td>
         <td>" . displayInt($totalBets) . "</td>
         <td>" . displayFloat($averageBets) . "</td>
         <td>" . displayInt($medianBets) . "</td>
