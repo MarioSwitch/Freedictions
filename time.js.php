@@ -47,6 +47,7 @@ function display(date, abbrID){
 	var date_t_time_z = date.substring(0, 10) + \"T\" + date.substring(11, 19) + \"Z\";
 
 	abbr = document.getElementById(abbrID);
+	abbr.style = \"font-variant-numeric: tabular-nums;\";
 	abbr.title = getLocalTime(date);
 	abbr.innerText = getTimeLeft(date_t_time_z);
 
