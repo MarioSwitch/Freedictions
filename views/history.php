@@ -9,7 +9,7 @@ $table_bottom = $table_top + $results_per_page - 1;
 
 if(!is_numeric($results_per_page) || !is_numeric($page_number) || $results_per_page < 1 || $page_number < 1) redirect("history");
 
-$history = executeQuery("SELECT * FROM `predictions` WHERE `answered` IS NOT NULL ORDER BY `answered` DESC LIMIT $results_per_page OFFSET " . ($page_number - 1) * $results_per_page . ";");
+$history = executeQuery("SELECT * FROM `predictions` WHERE `ended` <= NOW() ORDER BY (`answer` IS NULL) DESC, COALESCE(`answered`, `ended`) DESC LIMIT $results_per_page OFFSET " . ($page_number - 1) * $results_per_page . ";");
 $results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `answered` IS NOT NULL;", [], "int");
 ?>
 <h1><?= getString("title_history") ?></h1>
@@ -29,15 +29,23 @@ $results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `answered` IS 
 			foreach($history as $prediction){
 				$id = $prediction["id"];
 				$question = $prediction["title"];
-				$answer = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$prediction["answer"]], "string");
-				$answered = $prediction["answered"];
-				$rank = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `answered` IS NOT NULL AND `answered` > ?;", [$answered], "int") + 1;
-				$answered_td = "<td><abbr id=\"$id\">$answered</abbr></td><script>display(\"$answered\",\"$id\")</script>";
+
+				if($prediction["answer"]){
+					$answer = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$prediction["answer"]], "string");
+					$answered = $prediction["answered"];
+					$unanswered_count = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `ended` <= NOW() AND `answer` IS NULL;", [], "int");
+					$rank = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `ended` <= NOW() AND `answer` IS NOT NULL AND `answered` > ?;", [$answered], "int") + $unanswered_count + 1;
+				}else{
+					$answer = getString("prediction_waiting_outcome");
+					$answered = $prediction["ended"];
+					$rank = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `ended` <= NOW() AND `answer` IS NULL AND `ended` > ?;", [$answered], "int") + 1;
+				}
+
 				echo "<tr>
 					<td>" . displayRank($rank) . "</td>
 					<td><a href=\"prediction/$id\">$question</a></td>
 					<td>" . $answer . "</td>
-					" . $answered_td . "
+					<td><abbr id=\"$id\">$answered</abbr></td><script>display(\"$answered\",\"$id\")</script>
 				</tr>";
 			}
 		}
