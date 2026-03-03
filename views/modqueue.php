@@ -1,8 +1,6 @@
 <?php
 if(!isMod()) redirect("home", "perms_mod");
 
-include_once "time.js.php";
-
 $waiting_approval = executeQuery("SELECT * FROM `predictions` WHERE `approved` = 0 ORDER BY `created` ASC;");
 $waiting_approval_count = count($waiting_approval);
 

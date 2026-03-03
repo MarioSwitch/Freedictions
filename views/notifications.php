@@ -1,8 +1,6 @@
 <?php
 if(!isConnected()) redirect("home", "perms_connected");
 
-include_once "time.js.php";
-
 $notifications_unread = executeQuery("SELECT * FROM `notifications` WHERE `user` = ? AND `read` = 0 ORDER BY `sent` DESC;", [$_COOKIE["username"]]);
 $notifications_read = executeQuery("SELECT * FROM `notifications` WHERE `user` = ? AND `read` = 1 ORDER BY `sent` DESC;", [$_COOKIE["username"]]);
 

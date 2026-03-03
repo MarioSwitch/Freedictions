@@ -1,6 +1,4 @@
 <?php
-include_once "time.js.php";
-
 $results_per_page = array_key_exists("results", $_REQUEST) ? intval($_REQUEST["results"]) : 50;
 $page_number = array_key_exists("page", $_REQUEST) ? intval($_REQUEST["page"]) : 1;
 

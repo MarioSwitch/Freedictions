@@ -44,7 +44,6 @@ function displayPredictionsList(array $predictions): string{
 
 $opened = executeQuery("SELECT `id`, `title`, `ended` FROM `predictions` WHERE `approved` = 1 AND `ended` > NOW() ORDER BY `ended` ASC;");
 $count = count($opened);
-include_once "time.js.php";
 echo "<h1>" . getString("predictions_opened") . " (" . displayInt($count) . ")</h1>";
 if($count == 0) echo "<p>" . getString("predictions_none") . "</p>";
 if($count > 0){

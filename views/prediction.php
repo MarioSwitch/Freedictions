@@ -1,6 +1,4 @@
 <?php
-include_once "time.js.php";
-
 /**
  * Génère le code HTML pour afficher une boîte d'information prédiction
  * @param string $info Information à afficher (« created_time », « created_user », « ended » ou « participation »)

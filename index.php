@@ -1,5 +1,7 @@
 <?php
 include_once "functions.php";
+include_once "forms.js.php";
+include_once "time.js.php";
 
 /**
  * Génère le nom de la page à afficher dans l'onglet du navigateur

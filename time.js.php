@@ -1,5 +1,4 @@
 <?php
-include_once "functions.php";
 echo "
 <script>
 var year = 31556952000; //1 year = 365.2425 days = 31,556,952,000 ms
