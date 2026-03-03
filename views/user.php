@@ -28,10 +28,10 @@ function displayUserBox(string $info): string{
 	global $created, $updated, $streak, $predictions_created_count, $predictions_participated_count, $predictions_participated_volume, $chips;
 	$value = match($info){
 		"created_updated_streak" => 
-			"<span id=\"created\">$created</span>
+			"<abbr id=\"created\">$created</abbr>
 			<script>display(\"$created\",\"created\")</script>
 			<br>
-			<span id=\"updated\">$updated</span>
+			<abbr id=\"updated\">$updated</abbr>
 			<script>display(\"$updated\",\"updated\")</script>
 			<small>(" . displayInt($streak) . ")</small>",
 		"predictions" =>
@@ -84,7 +84,7 @@ function displayPredictionsList(string $type, array $predictions): string{
 			$question = $prediction["title"];
 			$ended = $prediction["ended"];
 			$ended_td = "<td>" . getString("prediction_waiting_outcome") . "</td>";
-			if($ended > $now) $ended_td = "<td id=\"$id_countdown\">$ended</td><script>display(\"$ended\",\"$id_countdown\")</script>";
+			if($ended > $now) $ended_td = "<td><abbr id=\"$id_countdown\">$ended</abbr></td><script>display(\"$ended\",\"$id_countdown\")</script>";
 			if(!$prediction["approved"]) $ended_td = "<td>" . getString("prediction_waiting_approval") . "</td>";
 			$bet_td = "";
 			if($type == "participated"){

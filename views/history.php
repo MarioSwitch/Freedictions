@@ -32,7 +32,7 @@ $results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `answered` IS 
 				$answer = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$prediction["answer"]], "string");
 				$answered = $prediction["answered"];
 				$rank = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `answered` IS NOT NULL AND `answered` > ?;", [$answered], "int") + 1;
-				$answered_td = "<td id=\"$id\">$answered</td><script>display(\"$answered\",\"$id\")</script>";
+				$answered_td = "<td><abbr id=\"$id\">$answered</abbr></td><script>display(\"$answered\",\"$id\")</script>";
 				echo "<tr>
 					<td>" . displayRank($rank) . "</td>
 					<td><a href=\"prediction/$id\">$question</a></td>

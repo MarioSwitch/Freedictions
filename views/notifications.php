@@ -101,7 +101,7 @@ function displayNotifications($notifications): string{
 				break;
 		}
 		$i++;
-		$sent_td = "<span id=\"notification_$i\">" . $sent . "</span><script>display(\"$sent\",\"notification_$i\")</script>";
+		$sent_td = "<abbr id=\"notification_$i\">" . $sent . "</abbr><script>display(\"$sent\",\"notification_$i\")</script>";
 		$html .= "<tr>
 			<td>$sent_td</td>
 			<td><b>$notification_title</b><br>$notification_desc</td>

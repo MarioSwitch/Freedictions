@@ -12,10 +12,10 @@ function displayPredictionBox(string $info): string{
 		"created" => "
 			<a href=\"../user/$created_user\">" . displayUser($created_user) . "</a>
 			<br>
-			<span id=\"created\">$created_time</span>
+			<abbr id=\"created\">$created_time</abbr>
 			<script>display(\"$created_time\", \"created\");</script>",
 		"time_remaining" => "
-			<span id=\"time_remaining\">$ended</span>
+			<abbr id=\"time_remaining\">$ended</abbr>
 			<script>display(\"$ended\", \"time_remaining\");</script>",
 		"outcome" => $answer ? $answer_name : getString("prediction_waiting_outcome"),
 		"volume" => 
@@ -185,8 +185,8 @@ if(!isConnected()){
 	";
 }
 if($now >= $ended){
-	$bet_html = "<p>" . getString("prediction_sentence_closed", ["<span id=\"ended\">$ended</span>"]) . "<script>display(\"$ended\", \"ended\");</script></p>";
-	if($answer) $bet_html .= "<p>" . getString("prediction_sentence_resolved", [$answer_name, "<span id=\"answered\">$answered</span>"]) . "<script>display(\"$answered\", \"answered\");</script></p>";
+	$bet_html = "<p>" . getString("prediction_sentence_closed", ["<abbr id=\"ended\">$ended</abbr>"]) . "<script>display(\"$ended\", \"ended\");</script></p>";
+	if($answer) $bet_html .= "<p>" . getString("prediction_sentence_resolved", [$answer_name, "<abbr id=\"answered\">$answered</abbr>"]) . "<script>display(\"$answered\", \"answered\");</script></p>";
 }
 
 $manage_close = "

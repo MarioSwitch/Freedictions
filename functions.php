@@ -58,9 +58,9 @@ function redirect(string $link, string $error = ""): void{
 
 /**
  * Insère une icône SVG dans le texte
- * @param mixed $icon Nom du fichier SVG (sans l'extension)
- * @param mixed $align Position de l'icône par rapport au texte (« left » ou « right »)
- * @param mixed $scale Échelle de taille (facteur multiplicatif de la taille de la police)
+ * @param string $icon Nom du fichier SVG (sans l'extension)
+ * @param string $align Position de l'icône par rapport au texte (« left » ou « right »)
+ * @param float $scale Échelle de taille (facteur multiplicatif de la taille de la police)
  * @return string Icône SVG
  */
 function insertTextIcon(string $icon, string $align, float $scale): string{
@@ -70,7 +70,7 @@ function insertTextIcon(string $icon, string $align, float $scale): string{
 		default => ""
 	};
 	$alt = getString("icon_" . $icon);
-	return "<img src=\"svg/$icon.svg\" title=\"$alt\" alt=\"$alt\" style=\"width:calc(var(--font-size) * $scale); height:calc(var(--font-size) * $scale); vertical-align:bottom; $align\">";
+	return "<img src=\"svg/$icon.svg\" title=\"$alt\" alt=\"$alt\" style=\"width:calc(var(--font-size) * $scale); height:calc(var(--font-size) * $scale); vertical-align:bottom; $align; cursor:help;\">";
 }
 
 /**
