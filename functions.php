@@ -222,8 +222,6 @@ function isExtra(string $type, string $user = NULL): bool{
  */
 function displayUser(string $username, bool $link = false): string{
 	$icons = [
-		"mod" => "🛡️",
-
 		"verified" => "✔️",
 
 		"alpha" => "💛",
@@ -237,14 +235,19 @@ function displayUser(string $username, bool $link = false): string{
 	$extras = "";
 	$extras_raw = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$username], "string");
 	$extras_array = $extras_raw ? explode(",", $extras_raw) : [];
-	if(isMod($username)) array_unshift($extras_array, "mod");
 	foreach($icons as $icon_title => $icon_icon){
 		if(!in_array($icon_title, $extras_array)) continue;
 		$tooltip = getString("tooltip_" . $icon_title);
 		$extras .= "<span title=\"$tooltip\">$icon_icon</span>";
 	}
 
-	$full_username = $extras . $username;
+	if(isMod($username)){
+		$tooltip = getString("tooltip_mod");
+		$full_username = $extras . "<span title=\"$tooltip\"class=\"moderator\">" . $username ."</span>";
+	}else{
+		$full_username = $extras . $username;
+	}
+
 	if($link){
 		return "<a href=\"user/$username\">$full_username</a>";
 	}else{

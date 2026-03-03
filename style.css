@@ -6,6 +6,8 @@
 	--color-text: black;
 	--color-background: white;
 	--color-background-header: var(--color-background);
+
+	--color-moderator: green;
 }
 
 /* ---------- General ---------- */
@@ -135,6 +137,11 @@ img.delete_choice, img.add_choice{
 
 img.delete_choice:hover, img.add_choice:hover{
 	cursor: pointer;
+}
+
+span.moderator{
+	font-weight: bold;
+	color: var(--color-moderator);
 }
 
 /* ---------- By ID ---------- */
