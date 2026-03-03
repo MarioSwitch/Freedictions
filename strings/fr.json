@@ -104,6 +104,8 @@
 	"user_manage":"Options avancées",
 	"user_manage_password":"Changer de mot de passe",
 	"user_manage_delete":"Supprimer le compte",
+	"user_manage_edit":"Modifier l'utilisateur",
+	"user_extra": "Badges supplémentaires",
 
 	"password_current":"Mot de passe actuel",
 	"password_new":"Nouveau mot de passe",

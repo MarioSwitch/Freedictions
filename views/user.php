@@ -115,9 +115,12 @@ function displayPredictionsList(string $type, array $predictions): string{
 <br><br>
 <?= displayPredictionsList("participated", $predictions_participated) ?>
 <br><br>
-<?php if(isMod() || $username == $_COOKIE["username"]){
+<?php if(isMod() || (!empty($_COOKIE["username"]) && $username == $_COOKIE["username"])){
 	echo "<h2>" . getString("user_manage") . "</h2>
 	<p><button onclick=\"location.href='$username/password'\">" . getString("user_manage_password") . "</button></p>
 	<p><button onclick=\"location.href='$username/delete'\">" . getString("user_manage_delete") . "</button></p>";
+}
+if(isMod() && ($username == $_COOKIE["username"] || !isMod($username))){
+	echo "<p><button onclick=\"location.href='$username/edit'\">" . getString("user_manage_edit") . "</button></p>";
 }
 ?>

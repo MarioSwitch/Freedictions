@@ -29,6 +29,9 @@ function getTitle(): string{
 		case "user_delete":
 			$title = getString("user_manage_delete");
 			break;
+		case "user_edit":
+			$title = getString("user_manage_edit");
+			break;
 		default:
 			$title = getString("title_" . $_REQUEST["view"]);
 			break;

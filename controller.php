@@ -40,6 +40,73 @@ switch($_REQUEST["action"]){
 		setcookie("password", "", time() + CONFIG_COOKIES_EXPIRATION);
 		redirect("home");
 
+	case "user_edit":
+		if(!isConnected()) redirect("home", "perms_connected");
+
+		$username_old = $_REQUEST["username_old"];
+		if(empty($username_old)) redirect("home", "fields");
+
+		$perms = isMod() && ($_COOKIE["username"] == $username_old || !isMod($username_old));
+		if(!$perms) redirect("user/$username_old", "perms");
+
+		if(
+			!array_key_exists("username_old", $_REQUEST) ||
+			!array_key_exists("username_new", $_REQUEST) ||
+			!array_key_exists("password", $_REQUEST) ||
+			!array_key_exists("created", $_REQUEST) ||
+			!array_key_exists("updated", $_REQUEST) ||
+			!array_key_exists("streak", $_REQUEST) ||
+			!array_key_exists("chips", $_REQUEST) ||
+			!array_key_exists("mod", $_REQUEST) ||
+			!array_key_exists("extra", $_REQUEST)
+		) redirect("user/$username_old/edit", "fields");
+
+		$username_old = trim(htmlspecialchars($_REQUEST["username_old"]));
+		$username_new = trim(htmlspecialchars($_REQUEST["username_new"]));
+		$password = trim(htmlspecialchars($_REQUEST["password"]));
+		$created = trim(htmlspecialchars($_REQUEST["created"]));
+		$updated = trim(htmlspecialchars($_REQUEST["updated"]));
+		$streak = trim(htmlspecialchars($_REQUEST["streak"]));
+		$chips = trim(htmlspecialchars($_REQUEST["chips"]));
+		$mod = trim(htmlspecialchars($_REQUEST["mod"]));
+		$extra = trim(htmlspecialchars($_REQUEST["extra"]));
+
+		if($username_old != $username_new){executeQuery("
+		START TRANSACTION;
+
+		ALTER TABLE `predictions` DROP CONSTRAINT `prediction_user`;
+		ALTER TABLE `predictions` ADD CONSTRAINT `prediction_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`) ON UPDATE CASCADE;
+
+		ALTER TABLE `bets` DROP CONSTRAINT `bet_user`;
+		ALTER TABLE `bets` ADD CONSTRAINT `bet_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`) ON UPDATE CASCADE;
+
+		ALTER TABLE `notifications` DROP CONSTRAINT `notification_user`;
+		ALTER TABLE `notifications` ADD CONSTRAINT `notification_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`) ON UPDATE CASCADE;
+
+		COMMIT;
+		");
+		}
+
+		executeQuery("UPDATE `users` SET `username` = ?, `password` = ?, `created` = ?, `updated` = ?, `streak` = ?, `chips` = ?, `mod` = ?, `extra` = ? WHERE `username` = ?;", [$username_new, $password, $created, $updated, $streak, $chips, $mod, $extra, $username_old]);
+
+		if($username_old != $username_new){executeQuery("
+		START TRANSACTION;
+
+		ALTER TABLE `predictions` DROP CONSTRAINT `prediction_user`;
+		ALTER TABLE `predictions` ADD CONSTRAINT `prediction_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`);
+
+		ALTER TABLE `bets` DROP CONSTRAINT `bet_user`;
+		ALTER TABLE `bets` ADD CONSTRAINT `bet_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`);
+
+		ALTER TABLE `notifications` DROP CONSTRAINT `notification_user`;
+		ALTER TABLE `notifications` ADD CONSTRAINT `notification_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`);
+
+		COMMIT;
+		");
+		}
+
+		redirect("user/$username_new");
+
 	case "user_delete":
 		if(!isConnected()) redirect("home", "perms_connected");
 
@@ -126,7 +193,7 @@ switch($_REQUEST["action"]){
 		if(!isConnected()) redirect("home", "perms_connected");
 
 		$prediction_id = $_REQUEST["prediction"];
-		if(empty($prediction_id)) redirect("prediction/$prediction_id", "fields");
+		if(empty($prediction_id)) redirect("home", "fields");
 
 		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
 		$perms = isMod() && ($_COOKIE["username"] == $prediction_creator || !isMod($prediction_creator));
