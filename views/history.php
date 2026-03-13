@@ -39,7 +39,7 @@ $results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `answered` IS 
 					$rank = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `ended` <= NOW() AND `answer` IS NULL AND `ended` > ?;", [$answered], "int") + 1;
 				}
 
-				echo "<tr>
+				echo "<tr" . ($prediction["answer"] ? "" : " class=\"unanswered\"") . ">
 					<td>" . displayRank($rank) . "</td>
 					<td><a href=\"prediction/$id\">$question</a></td>
 					<td>" . $answer . "</td>
