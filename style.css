@@ -127,6 +127,26 @@ table.hidden > tbody > tr > td:nth-child(2){
 	text-align: left;
 }
 
+a.external{
+	color: blue;
+}
+
+a.external:active{
+	color: deepskyblue;
+}
+
+a.external:visited{
+	color: darkviolet;
+}
+
+a.external:visited:active{
+	color: mediumpurple;
+}
+
+a.external:hover{
+	text-decoration: underline;
+}
+
 img.delete_choice, img.add_choice{
 	width: calc(var(--font-size) * 1.5);
 	height: calc(var(--font-size) * 1.5);
