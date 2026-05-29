@@ -52,7 +52,7 @@ $now = executeQuery("SELECT NOW();", [], "string");
 
 $details = executeQuery("SELECT `description` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $details = preg_replace("/\\\\n/", "<br>", $details);
-$details = preg_replace("/(http[s]?:\\/\\/[^\s\.,;]+)/", "<a href=\"$1\" class=\"external\" target=\"_blank\" rel=\"noopener noreferrer\">$1</a>", $details);
+$details = preg_replace("/(http[s]?:\\/\\/[^\s]+)/", "<a href=\"$1\" class=\"external\" target=\"_blank\" rel=\"noopener noreferrer\">$1</a>", $details);
 $details_text = $details ? "<h2>" . getString("prediction_details") . "</h2><p>$details</p><br>" : "";
 
 $choices = executeQuery("SELECT * FROM `choices` WHERE `prediction` = ?;", [$id]);
