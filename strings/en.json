@@ -153,5 +153,6 @@
 	"user_manage_delete": "Delete account",
 	"user_manage_edit":"Edit user",
 	"user_manage_password": "Change password",
-	"user_predictions": "Predictions created<br>Predictions participated"
+	"user_predictions": "Predictions created<br>Predictions participated",
+	"user_without_outcome": "[TBR] without outcome"
 }

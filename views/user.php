@@ -61,7 +61,7 @@ function displayPredictionsList(string $type, array $predictions): string{
 	global $username;
 	$now = executeQuery("SELECT NOW();", [], "string");
 	$count = count($predictions);
-	$html = "<h2>" . getString("predictions_$type") . " (" . displayInt($count) . ")</h2>";
+	$html = "<h2>" . getString("predictions_$type") . " (" . getString("user_without_outcome", [displayInt($count)]) . ")</h2>";
 	if($count == 0){
 		$html .= "<p>" . getString("predictions_none", [$username]) . "</p>";
 	}

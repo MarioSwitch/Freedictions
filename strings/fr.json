@@ -100,6 +100,7 @@
 
 	"user_created_updated_streak":"Utilisateur créé<br>Dernière connexion (série)",
 	"user_predictions":"Prédictions créées<br>Prédictions participées",
+	"user_without_outcome":"[TBR] sans résultat",
 	"user_chips":"Solde de jetons",
 	"user_manage":"Options avancées",
 	"user_manage_password":"Changer de mot de passe",

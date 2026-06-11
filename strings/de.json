@@ -153,5 +153,6 @@
 	"user_manage_delete": "Konto löschen",
 	"user_manage_edit":"Benutzer ändern",
 	"user_manage_password": "Passwort ändern",
-	"user_predictions": "Erstellte Vorhersagen<br>Teilgenommene Vorhersagen"
+	"user_predictions": "Erstellte Vorhersagen<br>Teilgenommene Vorhersagen",
+	"user_without_outcome": "[TBR] ohne Ergebnis"
 }
