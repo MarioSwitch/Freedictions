@@ -43,6 +43,13 @@ function getTitle(): string{
 <html>
 	<head>
 		<title><?= getTitle() ?></title>
+		<?php
+		switch(getSetting("theme")){
+			case "light": echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style_light.css\">"; break;
+			case "dark": echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style_dark.css\">"; break;
+			case "black": echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style_black.css\">"; break;
+		}
+		?>
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>

@@ -1,0 +1,22 @@
+:root{
+	--color-text: rgb(128, 128, 128);
+	--color-secondary: rgb(64, 64, 64);
+	--color-tertiary: rgb(32, 32, 32);
+	--color-background: black;
+	--color-background-header: var(--color-background);
+
+	--color-external-link: deepskyblue;
+	--color-external-link-active: blue;
+	--color-external-link-visited: mediumpurple;
+	--color-external-link-visited-active: darkviolet;
+
+	--color-moderator: green;
+}
+
+img{
+	filter: invert(0.5);
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator{
+	filter: invert(0.5);
+}

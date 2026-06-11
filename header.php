@@ -5,7 +5,7 @@ echo "
 <div id=\"header\">
 	<div style=\"width:calc((100% - 10px) / 2); float:left; text-align:left; margin-left:calc(var(--font-size) * 0.2);\">
 		<a href=\"" . CONFIG_PATH . "/home\" style=\"float:left; margin-right:calc(var(--font-size) * 0.5);\">
-			<img src=\"svg/favicon.svg\" style=\"float:left;\">
+			<!-- <img src=\"svg/favicon.svg\" style=\"float:left;\"> -->
 			<div style=\"display:inline-block; margin-left:calc(var(--font-size) * 0.2); text-align:center;\">
 				<p style=\"font-size:calc(var(--font-size) * 0.5); margin:0;\">" . getString("site_name") . "</p>
 				<p style=\"font-size:calc(var(--font-size) * 0.3); margin:0;\"><i>" . getString("site_desc") . "</i></p>

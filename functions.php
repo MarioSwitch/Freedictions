@@ -136,6 +136,10 @@ function getSetting($name): string{
 			$default = getPreferredLanguage();
 			$supported = getSupportedLanguages();
 			break;
+		case "theme":
+			$default = "light";
+			$supported = ["light", "dark", "black"];
+			break;
 		case "shorten_large_numbers":
 			$default = "yes";
 			$supported = ["yes", "no"];

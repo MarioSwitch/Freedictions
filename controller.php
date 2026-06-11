@@ -399,10 +399,12 @@ switch($_REQUEST["action"]){
 
 	case "settings":
 		$language = $_REQUEST["language"];
+		$theme = $_REQUEST["theme"];
 		$shorten_large_numbers = $_REQUEST["shorten_large_numbers"];
-		if(empty($language) || empty($shorten_large_numbers)) redirect("settings", "fields");
+		if(empty($language) || empty($theme) || empty($shorten_large_numbers)) redirect("settings", "fields");
 
 		setcookie("language", $language, time() + CONFIG_COOKIES_EXPIRATION);
+		setcookie("theme", $theme, time() + CONFIG_COOKIES_EXPIRATION);
 		setcookie("shorten_large_numbers", $shorten_large_numbers, time() + CONFIG_COOKIES_EXPIRATION);
 
 		redirect("settings");

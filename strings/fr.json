@@ -100,7 +100,7 @@
 
 	"user_created_updated_streak":"Utilisateur créé<br>Dernière connexion (série)",
 	"user_predictions":"Prédictions créées<br>Prédictions participées",
-	"user_chips":"Jetons possédés",
+	"user_chips":"Solde de jetons",
 	"user_manage":"Options avancées",
 	"user_manage_password":"Changer de mot de passe",
 	"user_manage_delete":"Supprimer le compte",
@@ -115,6 +115,10 @@
 	"leaderboard_page":"Aller à ma page ([TBR])",
 
 	"settings_language":"Langue",
+	"settings_theme":"Thème",
+	"settings_theme_light":"Clair",
+	"settings_theme_dark":"Sombre",
+	"settings_theme_black":"Noir",
 	"settings_shorten_large_numbers":"Raccourcir les grands nombres",
 
 	"footer_1":"Initialement développé par [TBR] et [TBR]",

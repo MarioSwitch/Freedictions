@@ -2,10 +2,6 @@
 :root{
 	--font-name: FiraSans;
 	--font-size: 20px;
-
-	--color-text: black;
-	--color-background: white;
-	--color-background-header: var(--color-background);
 }
 
 /* ---------- General ---------- */
@@ -61,6 +57,7 @@ table{
 /* ---------- Forms ---------- */
 input, select, label, button{
 	font: calc(var(--font-size) * 1.2) var(--font-name);
+	color: var(--color-text);
 	background-color: var(--color-background);
 	border-radius: calc(var(--font-size) * 0.5);
 }
@@ -101,7 +98,7 @@ table.predictions_list > thead > tr > th, table.choices_list > thead > tr > th, 
 
 table.predictions_list > tbody > tr > td, table.choices_list > tbody > tr > td, table.users_list > tbody > tr > td, table.notifications_list > tbody > tr > td{
 	padding: calc(var(--font-size) * 0.5) calc(var(--font-size) * 1);
-	border-bottom: 1px solid lightgray;
+	border-bottom: 1px solid var(--color-tertiary);
 }
 
 table.choices_list > tbody > tr > td:nth-child(1), table.choices_list > tbody > tr > td:nth-child(2), table.choices_list > tbody > tr > td:nth-child(4){
@@ -128,19 +125,19 @@ table.hidden > tbody > tr > td:nth-child(2){
 }
 
 a.external{
-	color: blue;
+	color: var(--color-external-link);
 }
 
 a.external:active{
-	color: deepskyblue;
+	color: var(--color-external-link-active);
 }
 
 a.external:visited{
-	color: darkviolet;
+	color: var(--color-external-link-visited);
 }
 
 a.external:visited:active{
-	color: mediumpurple;
+	color: var(--color-external-link-visited-active);
 }
 
 a.external:hover{
@@ -159,12 +156,12 @@ img.delete_choice:hover, img.add_choice:hover{
 
 span.moderator{
 	font-weight: bold;
-	color: green;
+	color: var(--color-moderator);
 }
 
 tr.unanswered > td:nth-child(3), tr.unanswered > td:nth-child(4){
 	font-style: italic;
-	color: darkgray;
+	color: var(--color-secondary);
 }
 
 /* ---------- By ID ---------- */
@@ -175,7 +172,7 @@ tr.unanswered > td:nth-child(3), tr.unanswered > td:nth-child(4){
 
 	background: var(--color-background-header);
 	border-bottom: 1px solid var(--color-text);
-	box-shadow: 0 0 var(--font-size) lightgray;
+	box-shadow: 0 0 var(--font-size) var(--color-tertiary);
 }
 
 #header > *{
@@ -185,7 +182,7 @@ tr.unanswered > td:nth-child(3), tr.unanswered > td:nth-child(4){
 #footer{
 	border-top: 1px solid var(--color-text);
 	margin-top: var(--font-size);
-	box-shadow: 0 0 var(--font-size) calc(var(--font-size) * 0.2) lightgray;
+	box-shadow: 0 0 var(--font-size) calc(var(--font-size) * 0.2) var(--color-tertiary);
 	background: var(--color-background-header);
 
 	font-size: calc(var(--font-size) * 0.8);

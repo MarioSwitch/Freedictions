@@ -2,7 +2,7 @@ RewriteEngine On
 RewriteBase /freedictions/
 
 # Rewrite exceptions (notice there is no "^" at the beginning of the pattern)
-RewriteRule style.css$ style.css [L,QSA]
+RewriteRule style(.*).css$ style$1.css [L,QSA]
 RewriteRule FiraSans.ttf$ FiraSans.ttf [L,QSA]
 RewriteRule svg/(.+)$ svg/$1 [L,QSA]
 RewriteRule controller.php$ controller.php [L,QSA]

@@ -1,4 +1,10 @@
 <?php
+/* REMINDER
+	- When adding/editing settings, don't forget to update the getSetting() function in functions.php ($default and $supported)
+	- When adding/editing settings, don't forget to update the "settings" case in controller.php ($_REQUEST and setcookie())
+	- Whan adding a new language, don't forget to add the corresponding case in the displayRank() function in functions.php (switch(getSetting("language")))
+*/
+
 /**
  * Displays a language option
  * @param string $language_code Language code (e.g. "en" or "fr")
@@ -39,6 +45,13 @@ function displaySetting(string $setting){
 				}
 			}
 			break;
+		case "theme":
+			$options = [
+				"light" => getString("settings_theme_light"),
+				"dark" => getString("settings_theme_dark"),
+				"black" => getString("settings_theme_black")
+			];
+			break;
 		case "shorten_large_numbers":
 			$options = [
 				"yes" => getString("general_yes"),
@@ -59,7 +72,7 @@ function displaySetting(string $setting){
 <form role="form" action="controller.php">
 	<table class="hidden">
 		<?php
-		foreach(["language", "shorten_large_numbers"] as $setting){
+		foreach(["language", "theme", "shorten_large_numbers"] as $setting){
 			displaySetting($setting);
 		}
 		?>
