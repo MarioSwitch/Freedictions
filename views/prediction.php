@@ -16,9 +16,9 @@ function displayPredictionBox(string $info): string{
 			<abbr id=\"time_remaining\">$ended</abbr>
 			<script>display(\"$ended\", \"time_remaining\");</script>",
 		"outcome" => $answer ? $answer_name : getString("prediction_waiting_outcome"),
-		"volume" => 
-			displayInt($volume_chips) . insertTextIcon("chips", "right", 1.5) . "<br>" .
-			displayInt($volume_users) . insertTextIcon("users", "right", 1.5),
+		"volume" =>
+		displayInt($volume_chips) . insertTextIcon("chips", "right", 1.5) . "<br>" .
+		displayInt($volume_users) . insertTextIcon("users", "right", 1.5),
 	};
 	$caption = $info == "time_remaining" ? getString("general_time_remaining") : getString("prediction_$info");
 	$html = "
@@ -93,23 +93,23 @@ $choices_table = "
 	</thead>
 	<tbody>";
 	foreach($choices as $choice){
-		$choice_id = $choice["id"];
-		$choice_name = $choice["name"];
-		$choice_chips = $choices_bets[$choice_id]["chips"];
-		$choice_percentage = $choices_bets[$choice_id]["percentage"];
-		$choice_users = $choices_bets[$choice_id]["users"];
-		$choice_ratio = $choices_bets[$choice_id]["ratio"];
-		$choice_top_chips = $choices_bets[$choice_id]["top_chips"];
-		$choice_top_users = $choices_bets[$choice_id]["top_users"];
-		$choice_top = "–";
+	$choice_id = $choice["id"];
+	$choice_name = $choice["name"];
+	$choice_chips = $choices_bets[$choice_id]["chips"];
+	$choice_percentage = $choices_bets[$choice_id]["percentage"];
+	$choice_users = $choices_bets[$choice_id]["users"];
+	$choice_ratio = $choices_bets[$choice_id]["ratio"];
+	$choice_top_chips = $choices_bets[$choice_id]["top_chips"];
+	$choice_top_users = $choices_bets[$choice_id]["top_users"];
+	$choice_top = "–";
 		if($choice_top_chips){
-			$choice_top = displayInt($choice_top_chips) . insertTextIcon("chips", "right", 1);
+		$choice_top = displayInt($choice_top_chips) . insertTextIcon("chips", "right", 1);
 			foreach($choice_top_users as $choice_user){
-				$choice_user = $choice_user[0];
-				$choice_top .= "<br><a href=\"../user/$choice_user\">" . displayUser($choice_user) . "</a>";
-			}
+			$choice_user = $choice_user[0];
+			$choice_top .= "<br><a href=\"../user/$choice_user\">" . displayUser($choice_user) . "</a>";
 		}
-		$choices_table .= "
+	}
+	$choices_table .= "
 		<tr>
 			<td>$choice_name</td>
 			<td>" . ($choice_percentage ? displayFloat($choice_percentage, true) : "–") . "</td>
@@ -120,7 +120,7 @@ $choices_table = "
 			<td>" . ($choice_ratio ? displayRatio($choice_ratio) : "–") . "</td>
 			<td>$choice_top</td>
 		</tr>";
-	}
+}
 $choices_table .= "
 	</tbody>
 </table>";
@@ -204,7 +204,7 @@ $manage_resolve = "
 	<input type=\"hidden\" name=\"prediction\" value=\"$id\">
 	$choices_select_full
 	<button type=\"submit\" name=\"action\" value=\"prediction_resolve\">" . getString("prediction_manage_resolve") . "</button>
-	<p>" . getString("prediction_manage_resolve_desc") . "<br>" . getString("prediction_manage_cant_be_undone") . "</p>
+	<p>" . getString("prediction_manage_resolve_desc") . "<br>" . getString("general_cant_be_undone") . "</p>
 </form>";
 
 $manage_delete = "<p><button onclick=\"location.href='$id/delete'\">" . getString("prediction_manage_delete") . "</button></p>";
@@ -223,12 +223,12 @@ if(!$approved){
 	echo "<p>" . getString("prediction_waiting_approval") . "</p>";
 }
 if($approved || isMod()){
-	echo 
-	"<div>" .
+	echo
+		"<div>" .
 		displayPredictionBox("created") .
 		displayPredictionBox(($now >= $ended) ? "outcome" : "time_remaining") .
 		displayPredictionBox("volume") .
-	"</div>";
+		"</div>";
 	echo "
 	<br>
 	$details_text

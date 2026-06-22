@@ -17,4 +17,5 @@ if(!$perms) redirect("user/$username_concerned", "perms");
 	<input type="password" name="password" id="password" required="required">
 	<br>
 	<button type="submit" name="action" value="user_delete"><?= getString("user_manage_delete") ?></button>
+	<p><?= getString("general_cant_be_undone") ?></p>
 </form>

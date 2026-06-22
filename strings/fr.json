@@ -26,6 +26,7 @@
 	"general_no":"Non",
 	"general_time_remaining":"Temps restant",
 	"general_time_elapsed":"Temps écoulé",
+	"general_cant_be_undone":"Cette action est irréversible.",
 
 	"signup_username_format":"Doit contenir 4 à 20 caractères alphanumériques",
 	"signup_password_confirm":"Confirmer le mot de passe",
@@ -63,7 +64,6 @@
 	"prediction_manage_resolve_desc":"Confirmer le résultat redistribuera les jetons.",
 	"prediction_manage_delete":"Supprimer la prédiction",
 	"prediction_manage_delete_desc":"Supprimer la prédiction remboursera tous les paris effectués.",
-	"prediction_manage_cant_be_undone":"Cette action est irréversible.",
 	"prediction_manage_edit":"Modifier la prédiction",
 
 	"create_details_desc":"Détails supplémentaires concernant la prédiction (acronymes, cas spéciaux, etc.)<br>Vous pouvez utiliser « \\n » pour revenir à la ligne.<br>Ce champ est facultatif.",
