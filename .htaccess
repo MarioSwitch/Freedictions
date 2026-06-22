@@ -8,22 +8,15 @@ RewriteRule svg/(.+)$ svg/$1 [L,QSA]
 RewriteRule controller.php$ controller.php [L,QSA]
 RewriteRule signout$ controller.php?action=signout [L,QSA]
 
-# Rewrite prediction/xxx/edit to index.php?view=prediction_edit&id=xxx
+# Rewrite "prediction" paths
+RewriteRule ^prediction/(.+)/delete$ index.php?view=prediction_delete&id=$1 [L,QSA]
 RewriteRule ^prediction/(.+)/edit$ index.php?view=prediction_edit&id=$1 [L,QSA]
-
-# Rewrite prediction/xxx to index.php?view=prediction&id=xxx
 RewriteRule ^prediction/(.+)$ index.php?view=prediction&id=$1 [L,QSA]
 
-# Rewrite user/xxx/password to index.php?view=user_password&user=xxx
+# Rewrite "user" paths
 RewriteRule ^user/(.+)/password$ index.php?view=user_password&user=$1 [L,QSA]
-
-# Rewrite user/xxx/delete to index.php?view=user_delete&user=xxx
 RewriteRule ^user/(.+)/delete$ index.php?view=user_delete&user=$1 [L,QSA]
-
-# Rewrite user/xxx/edit to index.php?view=user_edit&user=xxx
 RewriteRule ^user/(.+)/edit$ index.php?view=user_edit&user=$1 [L,QSA]
-
-# Rewrite user/xxx to index.php?view=user&user=xxx
 RewriteRule ^user/(.+)$ index.php?view=user&user=$1 [L,QSA]
 
 # Rewrite root to index.php?view=home

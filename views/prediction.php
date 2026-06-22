@@ -207,17 +207,12 @@ $manage_resolve = "
 	<p>" . getString("prediction_manage_resolve_desc") . "<br>" . getString("prediction_manage_cant_be_undone") . "</p>
 </form>";
 
-$manage_delete = "
-<form role=\"form\" action=\"controller.php\">
-	<input type=\"hidden\" name=\"prediction\" value=\"$id\">
-	<button type=\"submit\" name=\"action\" value=\"prediction_delete\">" . getString("prediction_manage_delete") . "</button>
-	<p>" . ($answer ? "" : (getString("prediction_manage_delete_desc") . "<br>")) . getString("prediction_manage_cant_be_undone") . "</p>
-</form>";
+$manage_delete = "<p><button onclick=\"location.href='$id/delete'\">" . getString("prediction_manage_delete") . "</button></p>";
 
 if($now < $ended){
-	$manage_html = $manage_close . "<br>" . $manage_delete;
+	$manage_html = $manage_close . $manage_delete;
 }else if(!$answer){
-	$manage_html = $manage_resolve . "<br>" . $manage_delete;
+	$manage_html = $manage_resolve . $manage_delete;
 }else{
 	$manage_html = $manage_delete;
 }

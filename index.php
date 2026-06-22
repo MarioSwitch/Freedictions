@@ -17,6 +17,9 @@ function getTitle(): string{
 
 			$title = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$_REQUEST["id"]], "string");
 			break;
+		case "prediction_delete":
+			$title = getString("prediction_manage_delete");
+			break;
 		case "prediction_edit":
 			$title = getString("prediction_manage_edit");
 			break;

@@ -353,15 +353,21 @@ switch($_REQUEST["action"]){
 	case "prediction_delete":
 		if(!isConnected()) redirect("home", "perms_connected");
 
+		$username_connected = $_COOKIE["username"];
+		
 		$prediction_id = $_REQUEST["prediction"];
-		if(empty($prediction_id)) redirect("prediction/$prediction_id", "fields");
+		$password = $_REQUEST["password"];
+		if(empty($username_connected) || empty($password)) redirect("prediction/$prediction_id/delete", "fields");
 
 		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
 		$perms = ($_COOKIE["username"] == $prediction_creator) || (isMod() && !isMod($prediction_creator));
-		if(!$perms) redirect("prediction/$prediction_id", "perms");
+		if(!$perms) redirect("prediction/$prediction_id/delete", "perms");
 
 		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
-		if(!$approved && !isMod()) redirect("prediction/$prediction_id", "prediction_not_approved");
+		if(!$approved && !isMod()) redirect("prediction/$prediction_id/delete", "prediction_not_approved");
+
+		$password_hash = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username_connected], "string");
+		if(!password_verify($password, $password_hash)) redirect("prediction/$prediction_id/delete", "password");
 
 		$resolved = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
 		if(!$resolved){
