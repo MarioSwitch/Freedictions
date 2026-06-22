@@ -143,16 +143,16 @@ foreach($choices as $choice){
 $choices_select .= "</select>";
 $choices_select_full = $choices_select;
 if($already_bet) $choices_select = "
-	<select name=\"choice\" required=\"required\">
-		<option value=\"$already_bet_choice_id\" selected=\"selected\">$already_bet_choice_name</option>
-	</select>
+	<input type=\"hidden\" name=\"choice\" value=\"$already_bet_choice_id\">
+	<span style=\"zoom:1.2;\">" . $already_bet_choice_name . "</span>
 ";
 
 $chips_total_raw = isConnected() ? executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "int") : 0;
 $chips_total = "<span style=\"zoom:1.2;\">" . displayInt($chips_total_raw) . insertTextIcon("chips", "right", 1) . "</span>";
 
 $chips_input = "<input style=\"margin-bottom:0px;\" type=\"number\" name=\"chips\" min=\"1\" max=\"$chips_total_raw\" required=\"required\">" . insertTextIcon("chips", "right", 1.2);
-if($already_bet) $chips_input = "<span style=\"zoom:1.2;\">" . displayInt($already_bet_chips) . " + </span>" . $chips_input;
+if($already_bet && $now < $ended)  $chips_input = "<span style=\"zoom:1.2;\">" . displayInt($already_bet_chips) . " + </span>" . $chips_input;
+if($already_bet && $now >= $ended) $chips_input = "<span style=\"zoom:1.2;\">" . displayInt($already_bet_chips) . "</span>" . insertTextIcon("chips", "right", 1.2);
 
 $bet_html = "
 <form role=\"form\" action=\"controller.php\">
@@ -162,10 +162,14 @@ $bet_html = "
 				<td>" . getString("prediction_outcome") . "</td>
 				<td>$choices_select</td>
 			</tr>
+";
+if($now < $ended) $bet_html .= "
 			<tr>
 				<td>" . getString("user_chips") . "</td>
 				<td>$chips_total</td>
 			</tr>
+";
+$bet_html .= "
 			<tr>
 				<td>" . getString("prediction_bet_noun") . "</td>
 				<td>$chips_input</td>
@@ -174,19 +178,20 @@ $bet_html = "
 	</table>
 	<br>
 	<input type=\"hidden\" name=\"prediction\" value=\"$id\">
+";
+if($now < $ended) $bet_html .= "
 	<button type=\"submit\" name=\"action\" value=\"prediction_bet\">" . getString("prediction_bet_verb") . "</button>
+";
+$bet_html .= "
 </form>";
-if(!isConnected()){
-	$bet_html = "
+if(!isConnected() && $now < $ended) $bet_html = "
 	<p>" . getString("error_perms_connected") . "</p>
 	<button onclick=\"location.href='../signin'\">" . getString("signin_button") . "</button>
 	<button onclick=\"location.href='../signup'\">" . getString("signup_button") . "</button>
 	";
-}
-if($now >= $ended){
-	$bet_html = "<p>" . getString("prediction_sentence_closed", ["<abbr id=\"ended\">$ended</abbr>"]) . "<script>display(\"$ended\", \"ended\");</script></p>";
-	if($answer) $bet_html .= "<p>" . getString("prediction_sentence_resolved", [$answer_name, "<abbr id=\"answered\">$answered</abbr>"]) . "<script>display(\"$answered\", \"answered\");</script></p>";
-}
+if($now >= $ended && !$already_bet) $bet_html = "";
+if($now >= $ended) $bet_html .= "<p>" . getString("prediction_sentence_closed", ["<abbr id=\"ended\">$ended</abbr>"]) . "<script>display(\"$ended\", \"ended\");</script></p>";
+if($answer)        $bet_html .= "<p>" . getString("prediction_sentence_resolved", [$answer_name, "<abbr id=\"answered\">$answered</abbr>"]) . "<script>display(\"$answered\", \"answered\");</script></p>";
 
 $manage_close = "
 <form role=\"form\" action=\"controller.php\">
