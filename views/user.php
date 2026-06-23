@@ -17,35 +17,6 @@ $predictions_participated_volume = executeQuery("SELECT SUM(`chips`) FROM `bets`
 
 $chips = executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?", [$username], "int");
 
-/**
- * Génère le code HTML pour afficher une boîte d'information utilisateur
- * @param string $info Information à afficher (« created », « updated », « streak » ou « chips »)
- * @return string Code HTML
- */
-function displayUserBox(string $info): string{
-	global $created, $updated, $streak, $predictions_created_count, $predictions_participated_count, $predictions_participated_volume, $chips;
-	$value = match($info){
-		"created_updated_streak" => 
-			"<abbr id=\"created\">$created</abbr>
-			<script>display(\"$created\",\"created\")</script>
-			<br>
-			<abbr id=\"updated\">$updated</abbr>
-			<script>display(\"$updated\",\"updated\")</script>
-			<small>(" . displayInt($streak) . ")</small>",
-		"predictions" =>
-			displayInt($predictions_created_count) . "<br>" .
-			displayInt($predictions_participated_count) . "
-			<small>(" . displayInt($predictions_participated_volume) . insertTextIcon("chips", "right", 1.5) . ")</small>",
-	};
-	$caption = getString("user_$info");
-	$html = "
-	<div style=\"display:inline-block; border:1px solid var(--color-text); border-radius: 10px; width:15%; min-width:250px; max-width:400px;\">
-		<p style=\"font-size:calc(var(--font-size) * 1.5); margin:calc(var(--font-size) * 0.5);\">$value</p>
-		<p style=\"font-size:calc(var(--font-size) * 0.8); margin:calc(var(--font-size) * 0.5);\">$caption</p>
-	</div>";
-	return $html;
-}
-
 $predictions_created_approved = executeQuery("SELECT * FROM `predictions` WHERE `approved` = 1 AND `user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
 $predictions_created_waiting_approval = executeQuery("SELECT * FROM `predictions` WHERE `approved` = 0 AND `user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
 $predictions_created = array_merge($predictions_created_approved, $predictions_created_waiting_approval);
@@ -103,14 +74,35 @@ function displayPredictionsList(string $type, array $predictions): string{
 	}
 	return $html;
 }
+
+$summary_table = "
+<table class=\"summary\">
+	<tr>
+		<td>
+			<abbr id=\"created\">$created</abbr>
+			<script>display(\"$created\",\"created\")</script>
+			<br>
+			<abbr id=\"updated\">$updated</abbr>
+			<script>display(\"$updated\",\"updated\")</script>
+			<small>(" . displayInt($streak) . ")</small>
+		</td>
+		<td>" .
+			displayInt($predictions_created_count) . "<br>" .
+			displayInt($predictions_participated_count) . "
+			<small>(" . displayInt($predictions_participated_volume) . insertTextIcon("chips", "right", 1.5) . ")</small>
+		</td>
+	</tr>
+	<tr>
+		<td>" . getString("user_created_updated_streak") . "</td>
+		<td>" . getString("user_predictions") . "</td>
+	</tr>
+</table>
+";
 ?>
 <h1><?= displayUser($username) ?></h1>
-<h2><?= displayInt($chips) . insertTextIcon("chips", "right", 1.5) ?></h2>
-<div>
-	<?= displayUserBox("created_updated_streak") ?>
-	<?= displayUserBox("predictions") ?>
-</div>
-<br>
+<h2><?= displayInt($chips, false) . insertTextIcon("chips", "right", 1.5) ?></h2>
+<?= $summary_table ?>
+<br><br>
 <?= displayPredictionsList("created", $predictions_created) ?>
 <br><br>
 <?= displayPredictionsList("participated", $predictions_participated) ?>

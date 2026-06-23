@@ -89,6 +89,8 @@ form > p{
 table.predictions_list, table.choices_list, table.users_list, table.notifications_list{
 	display: inline-block;
 	text-align: center;
+	
+	border-spacing: 0 5px;
 }
 
 table.predictions_list > thead > tr > th, table.choices_list > thead > tr > th, table.users_list > thead > tr > th, table.notifications_list > thead > tr > th{
@@ -122,6 +124,38 @@ table.hidden > tbody > tr > td:nth-child(1){
 table.hidden > tbody > tr > td:nth-child(2){
 	padding: calc(var(--font-size) * 0.3) calc(var(--font-size) * 0.5);
 	text-align: left;
+}
+
+table.summary{
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+
+	border-spacing: 5px 0;
+}
+
+table.summary > tbody > tr > td{
+	border-style: solid;
+	border-color: var(--color-text);
+
+	padding: 5px;
+	
+	min-width: 300px;
+	max-width: 400px;
+}
+
+table.summary > tbody > tr:nth-child(1) > td{
+	border-width:   2px  2px 0px 2px;
+	border-radius: 10px 10px 0px 0px;
+	
+	font-size: calc(var(--font-size) * 1.5);
+}
+
+table.summary > tbody > tr:nth-child(2) > td{
+	border-width:  0px 2px  2px  2px;
+	border-radius: 0px 0px 10px 10px;
+
+	font-size: calc(var(--font-size) * 0.8);
 }
 
 a.external{

@@ -1,35 +1,5 @@
 <?php
 /**
- * Génère le code HTML pour afficher une boîte d'information prédiction
- * @param string $info Information à afficher (« created_time », « created_user », « ended » ou « participation »)
- * @return string Code HTML
- */
-function displayPredictionBox(string $info): string{
-	global $created_user, $created_time, $ended, $answer, $answer_name, $volume_chips, $volume_users;
-	$value = match($info){
-		"created" => "
-			<a href=\"../user/$created_user\">" . displayUser($created_user) . "</a>
-			<br>
-			<abbr id=\"created\">$created_time</abbr>
-			<script>display(\"$created_time\", \"created\");</script>",
-		"time_remaining" => "
-			<abbr id=\"time_remaining\">$ended</abbr>
-			<script>display(\"$ended\", \"time_remaining\");</script>",
-		"outcome" => $answer ? $answer_name : getString("prediction_waiting_outcome"),
-		"volume" => 
-			displayInt($volume_chips) . insertTextIcon("chips", "right", 1.5) . "<br>" .
-			displayInt($volume_users) . insertTextIcon("users", "right", 1.5),
-	};
-	$caption = $info == "time_remaining" ? getString("general_time_remaining") : getString("prediction_$info");
-	$html = "
-	<div style=\"display:inline-block; border:1px solid var(--color-text); border-radius: 10px; width:15%; min-width:250px; max-width:400px;\">
-		<p style=\"font-size:calc(var(--font-size) * 1.5); margin:calc(var(--font-size) * 0.5);\">$value</p>
-		<p style=\"font-size:calc(var(--font-size) * 0.8); margin:calc(var(--font-size) * 0.5);\">$caption</p>
-	</div>";
-	return $html;
-}
-
-/**
  * Détermine si l'utilisateur actuel est le créateur de la prédiction
  * @return bool Vrai si l'utilisateur actuel est le créateur de la prédiction
  */
@@ -218,19 +188,45 @@ if($now < $ended){
 }
 
 // Affichage
+$summary_table = "
+<table class=\"summary\">
+	<tr>
+		<td>
+			<a href=\"../user/$created_user\">" . displayUser($created_user) . "</a>
+			<br>
+			<abbr id=\"created\">$created_time</abbr>
+			<script>display(\"$created_time\", \"created\");</script>
+		</td>
+		<td>";
+		if($now < $ended){ $summary_table .= "
+			<abbr id=\"time_remaining\">$ended</abbr>
+			<script>display(\"$ended\", \"time_remaining\");</script>";
+		}else{
+			$summary_table .= $answer ? $answer_name : getString("prediction_waiting_outcome");
+		}
+		$summary_table .= "
+		</td>
+		<td>" . 
+			displayInt($volume_chips) . insertTextIcon("chips", "right", 1.5) . "<br>" .
+			displayInt($volume_users) . insertTextIcon("users", "right", 1.5) . "
+		</td>
+	</tr>
+	<tr>
+		<td>" . getString("prediction_created") . "</td>
+		<td>" . ($now < $ended ? getString("general_time_remaining") : getString("prediction_outcome")) . "</td>
+		<td>" . getString("prediction_volume") . "</td>
+	</tr>
+</table>
+";
+
 echo "<h1>$question</h1>";
 if(!$approved){
 	echo "<p>" . getString("prediction_waiting_approval") . "</p>";
 }
 if($approved || isMod()){
 	echo 
-	"<div>" .
-		displayPredictionBox("created") .
-		displayPredictionBox(($now >= $ended) ? "outcome" : "time_remaining") .
-		displayPredictionBox("volume") .
-	"</div>";
-	echo "
-	<br>
+	"$summary_table
+	<br><br>
 	$details_text
 	<h2>" . getString("prediction_outcomes") . " ($choices_count)" . "</h2>
 	$choices_table
