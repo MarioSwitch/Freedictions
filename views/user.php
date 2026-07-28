@@ -75,6 +75,15 @@ function displayPredictionsList(string $type, array $predictions): string{
 	return $html;
 }
 
+$manage_password = "<p><button onclick=\"location.href='$username/password'\">" . getString("user_manage_password") . "</button></p>";
+$manage_delete = "<p><button onclick=\"location.href='$username/delete'\">" . getString("user_manage_delete") . "</button></p>";
+$manage_edit = "<p><button onclick=\"location.href='$username/edit'\">" . getString("user_manage_edit") . "</button></p>";
+
+$manage_html = "";
+$manage_html .= isAuthorized(NULL, "user_password", $username) ? $manage_password : "";
+$manage_html .= isAuthorized(NULL, "user_delete", $username) ? $manage_delete : "";
+$manage_html .= isAuthorized(NULL, "user_edit", $username) ? $manage_edit : "";
+
 $summary_table = "
 <table class=\"summary\">
 	<tr>
@@ -107,12 +116,8 @@ $summary_table = "
 <br><br>
 <?= displayPredictionsList("participated", $predictions_participated) ?>
 <br><br>
-<?php if(isMod() || (!empty($_COOKIE["username"]) && $username == $_COOKIE["username"])){
+<?php if($manage_html){
 	echo "<h2>" . getString("user_manage") . "</h2>
-	<p><button onclick=\"location.href='$username/password'\">" . getString("user_manage_password") . "</button></p>
-	<p><button onclick=\"location.href='$username/delete'\">" . getString("user_manage_delete") . "</button></p>";
-}
-if(isMod() && ($username == $_COOKIE["username"] || !isMod($username))){
-	echo "<p><button onclick=\"location.href='$username/edit'\">" . getString("user_manage_edit") . "</button></p>";
+	$manage_html";
 }
 ?>

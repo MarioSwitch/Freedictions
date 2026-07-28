@@ -1,15 +1,10 @@
 <?php
-$username_connected = $_COOKIE["username"];
 $prediction_concerned = $_REQUEST["id"];
-
 $prediction_exists = count(executeQuery("SELECT * FROM `predictions` WHERE `id` = ?", [$prediction_concerned]));
 if(!$prediction_exists) redirect("home");
+if(!isAuthorized(NULL, "prediction_delete", $prediction_concerned)) redirect("prediction/$prediction_concerned", "perms");
 
 $prediction_question = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?", [$prediction_concerned], "string");
-$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?", [$prediction_concerned], "string");
-
-$perms = $username_connected == $prediction_creator || (isMod() && !isMod($prediction_creator)); // isCreator() || (isMod() && !isMod($created_user))
-if(!$perms) redirect("prediction/$prediction_concerned", "perms");
 ?>
 
 <h1><?= getString("prediction_manage_delete") ?></h1>

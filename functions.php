@@ -185,28 +185,12 @@ function isConnected(): bool{
 }
 
 /**
- * Vérifie si un utilisateur est un modérateur
- * @param string $user Utilisateur à vérifier. Si omis, vérifie l'utilisateur actuellement connecté
- * @return bool Vrai si l'utilisateur est un modérateur, faux sinon
- */
-function isMod($user = NULL): bool{
-	if($user == NULL){ // Utilisateur actuellement connecté
-		if(!isConnected()) return false;
-		$user = $_COOKIE["username"];
-	}else{ // Utilisateur spécifié
-		$userExists = executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$user], "int");
-		if(!$userExists) return false;
-	}
-	return executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$user], "int") == 1;
-}
-
-/**
  * Vérifie si un utilisateur possède un rôle supplémentaire
  * @param string $type Rôle supplémentaire à vérifier
- * @param string $user Utilisateur à vérifier. Si omis, vérifie l'utilisateur actuellement connecté
+ * @param string|null $user Utilisateur à vérifier. Si omis ou NULL, vérifie l'utilisateur actuellement connecté
  * @return bool Vrai si l'utilisateur possède le rôle supplémentaire, faux sinon
  */
-function isExtra(string $type, string $user = NULL): bool{
+function isExtra(string $type, string|null $user = NULL): bool{
 	if($user == NULL){ // Utilisateur actuellement connecté
 		if(!isConnected()) return false;
 		$user = $_COOKIE["username"];
@@ -216,6 +200,74 @@ function isExtra(string $type, string $user = NULL): bool{
 	}
 	$extra = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$user], "string");
 	return preg_match("/$type/", $extra) == 1;
+}
+
+/**
+ * Vérifie si un utilisateur est autorisé à effectuer une action
+ * @param string|null $user Utilisateur à vérifier. Si NULL, vérifie l'utilisateur actuellement connecté
+ * @param string $action Action à effectuer (voir controller.php)
+ * @param string|int|null $id Identifiant cible de l'action (nom d'utilisateur ou numéro de prédiction). Peut être NULL pour certaines actions génériques.
+ * @return bool Vrai si l'utilisateur est autorisé à effectuer l'action, faux sinon
+ */
+function isAuthorized(string|null $user, string $action, string|int|null $id): bool{
+	if(!isConnected()) return false;
+	if($user == NULL) $user = $_COOKIE["username"];
+
+	$perms = executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$user], "int");
+	$isAdministrator = $perms >= 3;
+	$isModerator = $perms >= 2;
+	$isVerifier = $perms >= 1;
+
+	switch($action){
+		case "user_password":
+		case "user_delete":
+			if($isModerator) return true;
+			return $user == $id;
+
+		case "user_edit":
+			if($isAdministrator) return true;
+			return false;
+
+		case "modqueue_access":
+			if($isVerifier) return true;
+			return false;
+
+		case "modqueue_access_full":
+			if($isModerator) return true;
+			return false;
+
+		case "modqueue_approve":
+		case "modqueue_reject":
+		case "prediction_close":
+		case "prediction_resolve":
+			if($isModerator) return true;
+			if($isVerifier){
+				$creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$id], "string");
+				$creatorPerms = executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$creator], "int");
+				return $creatorPerms == 0;
+			}
+			return false;
+
+		case "modqueue_edit":
+		case "prediction_edit":
+		case "prediction_delete":
+			if($isModerator) return true;
+			if($isVerifier){
+				$data = executeQuery("SELECT `user`, `approved` FROM `predictions` WHERE `id` = ?;", [$id], "array");
+				$creator = $data[0]["user"];
+				$creatorPerms = executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$creator], "int");
+				$approved = $data[0]["approved"];
+				return $creatorPerms == 0 && $approved == 0;
+			}
+			return false;
+
+		case "prediction_create_approved":
+			if($isModerator) return true;
+			return false;
+
+		default:
+			return false;
+	}
 }
 
 /**
@@ -245,9 +297,20 @@ function displayUser(string $username, bool $link = false): string{
 		$extras .= "<span title=\"$tooltip\">$icon_icon</span>";
 	}
 
-	if(isMod($username)){
-		$tooltip = getString("tooltip_mod");
+	$perms = executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username], "int");
+	$isAdministrator = $perms >= 3;
+	$isModerator = $perms >= 2;
+	$isVerifier = $perms >= 1;
+
+	if($isAdministrator){
+		$tooltip = getString("tooltip_administrator");
+		$full_username = $extras . "<span title=\"$tooltip\"class=\"administrator\">" . $username ."</span>";
+	}else if($isModerator){
+		$tooltip = getString("tooltip_moderator");
 		$full_username = $extras . "<span title=\"$tooltip\"class=\"moderator\">" . $username ."</span>";
+	}else if($isVerifier){
+		$tooltip = getString("tooltip_verifier");
+		$full_username = $extras . "<span title=\"$tooltip\"class=\"verifier\">" . $username ."</span>";
 	}else{
 		$full_username = $extras . $username;
 	}

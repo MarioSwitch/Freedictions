@@ -188,9 +188,20 @@ img.delete_choice:hover, img.add_choice:hover{
 	cursor: pointer;
 }
 
-span.moderator{
+span.administrator, span.moderator, span.verifier{
 	font-weight: bold;
+}
+
+span.administrator{
+	color: var(--color-administrator);
+}
+
+span.moderator{
 	color: var(--color-moderator);
+}
+
+span.verifier{
+	color: var(--color-verifier);
 }
 
 tr.unanswered > td:nth-child(3), tr.unanswered > td:nth-child(4){

@@ -46,8 +46,7 @@ switch($_REQUEST["action"]){
 		$username_old = $_REQUEST["username_old"];
 		if(empty($username_old)) redirect("home", "fields");
 
-		$perms = isMod() && ($_COOKIE["username"] == $username_old || !isMod($username_old));
-		if(!$perms) redirect("user/$username_old", "perms");
+		if(!isAuthorized(NULL, $_REQUEST["action"], $username_old)) redirect("user/$username_old", "perms");
 
 		if(
 			!array_key_exists("username_old", $_REQUEST) ||
@@ -116,8 +115,7 @@ switch($_REQUEST["action"]){
 		$password = $_REQUEST["password"];
 		if(empty($username_concerned) || empty($password)) redirect("user/$username_concerned/delete", "fields");
 
-		$perms = isMod() || $username_connected == $username_concerned;
-		if(!$perms) redirect("user/$username_concerned/delete", "perms");
+		if(!isAuthorized(NULL, $_REQUEST["action"], $username_concerned)) redirect("user/$username_concerned/delete", "perms");
 
 		$password_hash = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username_connected], "string");
 		if(!password_verify($password, $password_hash)) redirect("user/$username_concerned/delete", "password");
@@ -144,8 +142,7 @@ switch($_REQUEST["action"]){
 		if(empty($username_concerned) || empty($password_verification) || empty($new_password) || empty($new_password_confirm)) redirect("user/$username_concerned/password", "fields");
 		if($new_password != $new_password_confirm) redirect("user/$username_concerned/password", "password_confirm");
 
-		$perms = isMod() || $username_connected == $username_concerned;
-		if(!$perms) redirect("user/$username_concerned/password", "perms");
+		if(!isAuthorized(NULL, $_REQUEST["action"], $username_concerned)) redirect("user/$username_concerned/password", "perms");
 
 		$password_verification_hash = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username_connected], "string");
 		if(!password_verify($password_verification, $password_verification_hash)) redirect("user/$username_concerned/password", "password");
@@ -156,10 +153,10 @@ switch($_REQUEST["action"]){
 		redirect("user/$username_concerned");
 
 	case "modqueue_approve":
-		if(!isMod()) redirect("home", "perms_mod");
-
 		$prediction_id = $_REQUEST["prediction"];
 		if(empty($prediction_id)) redirect("modqueue", "fields");
+
+		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("home", "perms");
 
 		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
 
@@ -170,10 +167,10 @@ switch($_REQUEST["action"]){
 		redirect("prediction/$prediction_id");
 
 	case "modqueue_reject":
-		if(!isMod()) redirect("home", "perms_mod");
-
 		$prediction_id = $_REQUEST["prediction"];
 		if(empty($prediction_id)) redirect("modqueue", "fields");
+
+		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("home", "perms");
 
 		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
 
@@ -182,10 +179,10 @@ switch($_REQUEST["action"]){
 		redirect("controller.php?action=prediction_delete&prediction=$prediction_id");
 
 	case "modqueue_edit":
-		if(!isMod()) redirect("home", "perms_mod");
-
 		$prediction_id = $_REQUEST["prediction"];
 		if(empty($prediction_id)) redirect("modqueue", "fields");
+
+		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("home", "perms");
 
 		redirect("prediction/$prediction_id/edit");
 
@@ -195,9 +192,7 @@ switch($_REQUEST["action"]){
 		$prediction_id = $_REQUEST["prediction"];
 		if(empty($prediction_id)) redirect("home", "fields");
 
-		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
-		$perms = isMod() && ($_COOKIE["username"] == $prediction_creator || !isMod($prediction_creator));
-		if(!$perms) redirect("prediction/$prediction_id", "perms");
+		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("prediction/$prediction_id", "perms");
 
 		if(
 			!array_key_exists("question", $_REQUEST) ||
@@ -243,7 +238,7 @@ switch($_REQUEST["action"]){
 
 		if(count($choices) < 2) redirect("create", "fields");
 
-		$approved = isMod() ? 1 : 0;
+		$approved = isAuthorized(NULL, "prediction_create_approved", NULL);
 
 		date_default_timezone_set("UTC");
 		$endUTC = date("Y-m-d\TH:i", strtotime($end) - $offset*60);
@@ -292,9 +287,7 @@ switch($_REQUEST["action"]){
 		$prediction_id = $_REQUEST["prediction"];
 		if(empty($prediction_id)) redirect("prediction/$prediction_id", "fields");
 
-		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
-		$perms = ($_COOKIE["username"] == $prediction_creator) || (isMod() && !isMod($prediction_creator));
-		if(!$perms) redirect("prediction/$prediction_id", "perms");
+		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("prediction/$prediction_id", "perms");
 
 		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
 		if(!$approved) redirect("prediction/$prediction_id", "prediction_not_approved");
@@ -310,9 +303,7 @@ switch($_REQUEST["action"]){
 		$choice_id = $_REQUEST["choice"];
 		if(empty($prediction_id) || empty($choice_id)) redirect("prediction/$prediction_id", "fields");
 
-		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
-		$perms = ($_COOKIE["username"] == $prediction_creator) || (isMod() && !isMod($prediction_creator));
-		if(!$perms) redirect("prediction/$prediction_id", "perms");
+		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("prediction/$prediction_id", "perms");
 
 		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
 		if(!$approved) redirect("prediction/$prediction_id", "prediction_not_approved");
@@ -359,12 +350,7 @@ switch($_REQUEST["action"]){
 		$password = $_REQUEST["password"];
 		if(empty($username_connected) || empty($password)) redirect("prediction/$prediction_id/delete", "fields");
 
-		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
-		$perms = ($_COOKIE["username"] == $prediction_creator) || (isMod() && !isMod($prediction_creator));
-		if(!$perms) redirect("prediction/$prediction_id/delete", "perms");
-
-		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
-		if(!$approved && !isMod()) redirect("prediction/$prediction_id/delete", "prediction_not_approved");
+		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("prediction/$prediction_id/delete", "perms");
 
 		$password_hash = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username_connected], "string");
 		if(!password_verify($password, $password_hash)) redirect("prediction/$prediction_id/delete", "password");

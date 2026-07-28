@@ -2,9 +2,7 @@
 $username = $_REQUEST["user"];
 $exists = executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$username], "int");
 if(!$exists) redirect("home", "username_unknown");
-
-$perms = isMod() && ($_COOKIE["username"] == $username || !isMod($username));
-if(!$perms) redirect("user/$username", "perms");
+if(!isAuthorized(NULL, "user_edit", $username)) redirect("user/$username", "perms");
 
 $data = executeQuery("SELECT * FROM `users` WHERE `username` = ?;", [$username]);
 
@@ -34,7 +32,7 @@ $extra = $data[0]["extra"];
 	<label for="chips"><?= getString("general_chips") ?></label>
 	<input type="text" id="chips" name="chips" value="<?= $chips ?>" required="required">
 	<br>
-	<label for="mod"><?= getString("tooltip_mod") ?></label>
+	<label for="mod"><?= getString("tooltip_moderator") ?></label>
 	<input type="text" id="mod" name="mod" value="<?= $mod ?>" required="required">
 	<br>
 	<label for="extra"><?= getString("user_extra") ?></label>

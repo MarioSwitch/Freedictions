@@ -2,10 +2,7 @@
 $id = $_REQUEST["id"];
 $exists = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `id` = ?;", [$id], "int");
 if(!$exists) redirect("home", "prediction_unknown");
-
-$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$id], "string");
-$perms = isMod() && ($_COOKIE["username"] == $prediction_creator || !isMod($prediction_creator));
-if(!$perms) redirect("prediction/$id", "perms");
+if(!isAuthorized(NULL, "prediction_edit", $id)) redirect("prediction/$id", "perms");
 
 $question = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$id], "string");
 $details = executeQuery("SELECT `description` FROM `predictions` WHERE `id` = ?;", [$id], "string");

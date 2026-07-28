@@ -17,9 +17,9 @@
 	<span id="choices"></span>
 	<span id="choices_add"></span>
 	<br><hr class="mini"><br>
-	<?= "<b>" . getString("general_note") . "</b> " . (isMod() ? getString("create_note_mod") : getString("create_note_user")) ?>
+	<?= "<b>" . getString("general_note") . "</b> " . (isAuthorized(NULL, "prediction_create_approved", NULL) ? getString("create_note_mod") : getString("create_note_user")) ?>
 	<br><br>
-	<button type="submit" name="action" value="prediction_create"><?= isMod() ? getString("create_create") : getString("create_submit") ?></button>
+	<button type="submit" name="action" value="prediction_create"><?= isAuthorized(NULL, "prediction_create_approved", NULL) ? getString("create_create") : getString("create_submit") ?></button>
 </form>
 <script>
 	// Gère la date de fin de la prédiction

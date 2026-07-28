@@ -1,12 +1,8 @@
 <?php
-$username_connected = $_COOKIE["username"];
 $username_concerned = $_REQUEST["user"];
-
 $user_exists = count(executeQuery("SELECT * FROM `users` WHERE `username` = ?", [$username_concerned]));
 if(!$user_exists) redirect("home");
-
-$perms = isMod() || $username_connected == $username_concerned;
-if(!$perms) redirect("user/$username_concerned", "perms");
+if(!isAuthorized(NULL, "user_delete", $username_concerned)) redirect("user/$username_concerned", "perms");
 ?>
 <h1><?= getString("user_manage_delete") ?></h1>
 <form role="form" action="controller.php">

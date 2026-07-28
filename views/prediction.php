@@ -1,14 +1,4 @@
 <?php
-/**
- * Détermine si l'utilisateur actuel est le créateur de la prédiction
- * @return bool Vrai si l'utilisateur actuel est le créateur de la prédiction
- */
-function isCreator(): bool{
-	global $created_user;
-	if(!isConnected()) return false;
-	return $_COOKIE["username"] == $created_user;
-}
-
 $id = $_REQUEST["id"];
 $approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$id], "int");
 $question = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$id], "string");
@@ -178,14 +168,13 @@ $manage_resolve = "
 </form>";
 
 $manage_delete = "<p><button onclick=\"location.href='$id/delete'\">" . getString("prediction_manage_delete") . "</button></p>";
+$manage_edit = "<p><button onclick=\"location.href='$id/edit'\">" . getString("prediction_manage_edit") . "</button></p>";
 
-if($now < $ended){
-	$manage_html = $manage_close . $manage_delete;
-}else if(!$answer){
-	$manage_html = $manage_resolve . $manage_delete;
-}else{
-	$manage_html = $manage_delete;
-}
+$manage_html = "";
+if($now < $ended) $manage_html .= isAuthorized(NULL, "prediction_close", $id) ? $manage_close : "";
+if($now >= $ended && !$answer) $manage_html .= isAuthorized(NULL, "prediction_resolve", $id) ? $manage_resolve : "";
+$manage_html .= isAuthorized(NULL, "prediction_delete", $id) ? $manage_delete : "";
+$manage_html .= isAuthorized(NULL, "prediction_edit", $id) ? $manage_edit : "";
 
 // Affichage
 $summary_table = "
@@ -223,7 +212,7 @@ echo "<h1>$question</h1>";
 if(!$approved){
 	echo "<p>" . getString("prediction_waiting_approval") . "</p>";
 }
-if($approved || isMod()){
+if($approved || isAuthorized(NULL, "modqueue_approve", $id)){
 	echo 
 	"$summary_table
 	<br><br>
@@ -233,13 +222,10 @@ if($approved || isMod()){
 	<br><br>
 	<h2>" . getString("prediction_bet_verb") . "</h2>
 	$bet_html";
-	if(isCreator() || (isMod() && !isMod($created_user))){
+	if($manage_html){
 		echo "
 		<br>
 		<h2>" . getString("prediction_manage") . "</h2>
 		$manage_html";
-	}
-	if(isMod() && (isCreator() || !isMod($created_user))){
-		echo "<p><button onclick=\"location.href='$id/edit'\">" . getString("prediction_manage_edit") . "</button></p>";
 	}
 }

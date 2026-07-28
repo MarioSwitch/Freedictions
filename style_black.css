@@ -10,7 +10,9 @@
 	--color-external-link-visited: mediumpurple;
 	--color-external-link-visited-active: darkviolet;
 
+	--color-administrator: crimson;
 	--color-moderator: green;
+	--color-verifier: sienna;
 }
 
 img{

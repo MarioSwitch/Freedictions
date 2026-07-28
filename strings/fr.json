@@ -131,7 +131,10 @@
 	"icon_outcome_add":"Ajouter un résultat",
 	"icon_outcome_delete":"Supprimer ce résultat",
 
-	"tooltip_mod":"Modérateur",
+	"tooltip_administrator":"Administrateur",
+	"tooltip_moderator":"Modérateur",
+	"tooltip_verifier":"Vérificateur",
+
 	"tooltip_alpha":"Alpha-testeur",
 	"tooltip_beta":"Bêta-testeur",
 	"tooltip_developer":"Développeur",
@@ -145,7 +148,6 @@
 	"error_password_confirm":"Les mots de passe ne correspondent pas.",
 	"error_perms":"Vous n'avez pas les permissions nécessaires pour effectuer cette action.",
 	"error_perms_connected":"Vous devez être connecté pour effectuer cette action.",
-	"error_perms_mod":"Vous devez être modérateur pour effectuer cette action.",
 	"error_prediction_unknown":"Cette prédiction n'existe pas.",
 	"error_prediction_not_approved":"Cette prédiction n'a pas encore été approuvée.",
 	"error_prediction_opened":"Cette prédiction est encore ouverte aux paris.",

@@ -1,10 +1,14 @@
 <?php
-if(!isMod()) redirect("home", "perms_mod");
+if(!isAuthorized(NULL, "modqueue_access", NULL)) redirect("home", "perms");
 
-$waiting_approval = executeQuery("SELECT * FROM `predictions` WHERE `approved` = 0 ORDER BY `created` ASC;");
+$waiting_approval = isAuthorized(NULL, "modqueue_access_full", NULL) ?
+	executeQuery("SELECT * FROM `predictions` WHERE `approved` = 0 ORDER BY `created` ASC;") :
+	executeQuery("SELECT * FROM `predictions` WHERE `approved` = 0 AND `user` IN (SELECT `username` FROM `users` WHERE `mod` = ?) ORDER BY `created` ASC;", [0]);
 $waiting_approval_count = count($waiting_approval);
 
-$waiting_answer = executeQuery("SELECT * FROM `predictions` WHERE `approved` = 1 AND NOW() >= `ended` AND `answer` IS NULL ORDER BY `ended` ASC;");
+$waiting_answer = isAuthorized(NULL, "modqueue_access_full", NULL) ?
+	executeQuery("SELECT * FROM `predictions` WHERE `approved` = 1 AND NOW() >= `ended` AND `answer` IS NULL ORDER BY `ended` ASC;") :
+	executeQuery("SELECT * FROM `predictions` WHERE `approved` = 1 AND NOW() >= `ended` AND `answer` IS NULL AND `user` IN (SELECT `username` FROM `users` WHERE `mod` = ?) ORDER BY `ended` ASC;", [0]);
 $waiting_answer_count = count($waiting_answer);
 
 /**
