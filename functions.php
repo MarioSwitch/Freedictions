@@ -80,13 +80,16 @@ function insertTextIcon(string $icon, string $align, float $scale): string{
  * @return string Chaîne de caractères extraite du fichier de langue, ou la clé si la chaîne n'existe pas
  */
 function getString(string $key, array $args = []): string{
-	$english_strings = json_decode(file_get_contents("strings/en.json"), true);
+	// file_get_contents très lent -> mise en cache du contenu des fichiers
+	static $english_strings = NULL;
+	if($english_strings == NULL) $english_strings = json_decode(file_get_contents("strings/en.json"), true);
 	$english_string = array_key_exists($key, $english_strings) ? $english_strings[$key] : $key;
 
 	$language = getSetting("language");
 	if(!file_exists("strings/$language.json")) return $english_string; // Fichier de langue inexistant
 
-	$language_strings = json_decode(file_get_contents("strings/$language.json"), true);
+	static $language_strings = NULL;
+	if($language_strings == NULL) $language_strings = json_decode(file_get_contents("strings/$language.json"), true);
 	if(!array_key_exists($key, $language_strings)) return $english_string; // Clé inexistante dans le fichier de langue
 
 	$string = $language_strings[$key];
@@ -168,6 +171,10 @@ function resetCookiesExpiration(): void{
  * @return bool Vrai si l'utilisateur est connecté, faux sinon
  */
 function isConnected(): bool{
+	// password_verify très lent -> mise en cache du statut de connexion
+	static $isConnected = false;
+	if($isConnected) return true;
+
 	if(!(array_key_exists("username", $_COOKIE) && array_key_exists("password", $_COOKIE))){
 		unset($_COOKIE["username"], $_COOKIE["password"]);
 		return false;
@@ -181,6 +188,7 @@ function isConnected(): bool{
 		unset($_COOKIE["username"], $_COOKIE["password"]);
 		return false;
 	}
+	$isConnected = true;
 	return true;
 }
 
