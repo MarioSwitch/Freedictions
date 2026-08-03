@@ -5,7 +5,7 @@ include_once "config.php"; // Vous devez inclure VOTRE fichier de configuration.
  * Exécute une requête sur la base de données
  * @param string $query Requête SQL (remplacer les arguments par des « ? »)
  * @param array $args Tableau des arguments
- * @param string $result_type Type de résultat (« array » (par défaut), « string », « int » ou « float »)
+ * @param string $result_type Type de résultat (« array » (par défaut), « row », « string », « int » ou « float »)
  * @return array|string|int|float Résultat de la requête
  */
 function executeQuery(string $query, array $args = [], string $result_type = "array"): array|string|int|float{
@@ -38,10 +38,11 @@ function executeQuery(string $query, array $args = [], string $result_type = "ar
 
 	// Retourne le résultat
 	return match($result_type){
-		"string" => strval($result[0][0]),
-		"int" => intval($result[0][0]),
-		"float" => floatval($result[0][0]),
-		default => $result
+		"row"    => $result ? $result[0]              : [],
+		"string" => $result ? strval($result[0][0])   : "",
+		"int"    => $result ? intval($result[0][0])   : 0,
+		"float"  => $result ? floatval($result[0][0]) : 0.0,
+		default  => $result ? $result                 : []
 	};
 }
 
