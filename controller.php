@@ -240,39 +240,15 @@ switch($_REQUEST["action"]){
 
 		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("prediction/$prediction_id", "perms");
 
-		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
-		if(!$approved) redirect("prediction/$prediction_id", "prediction_not_approved");
-
-		$resolved = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
-		if($resolved) redirect("prediction/$prediction_id", "prediction_resolved");
+		$prediction = executeQuery("SELECT `approved`, `answer`, `ended` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "row");
+		if(!$prediction["approved"]) redirect("prediction/$prediction_id", "prediction_not_approved");
+		if($prediction["answer"]) redirect("prediction/$prediction_id", "prediction_resolved");
+		if(NOW < $prediction["ended"]) redirect("prediction/$prediction_id", "prediction_opened");
 
 		$choice_prediction = executeQuery("SELECT `prediction` FROM `choices` WHERE `id` = ?;", [$choice_id], "int");
 		if($choice_prediction != $prediction_id) redirect("prediction/$prediction_id", "fields");
 
-		$prediction_ended = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
-		if(NOW < $prediction_ended) redirect("prediction/$prediction_id", "prediction_opened");
-
-		executeQuery("UPDATE `predictions` SET `answer` = ? WHERE `id` = ?;", [$choice_id, $prediction_id]);
-		executeQuery("UPDATE `predictions` SET `answered` = NOW() WHERE `id` = ?;", [$prediction_id]);
-
-		$chips_total = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `prediction` = ?;", [$prediction_id], "int");
-		$chips_win = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int");
-		if($chips_win){
-			$ratio = $chips_total / $chips_win;
-			$winners = executeQuery("SELECT `user`, `chips` FROM `bets` WHERE `prediction` = ? AND `choice` = ?;", [$prediction_id, $choice_id]);
-			foreach($winners as $winner){
-				$chips_won = floor($winner["chips"] * $ratio);
-				executeQuery("UPDATE `users` SET `chips` = `chips` + ? WHERE `username` = ?;", [$chips_won, $winner["user"]]);
-				executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$winner["user"], "RESOLVED:$prediction_id,ANSWER:$choice_id,WON:$chips_won"]);
-			}
-		}
-
-		$losers = executeQuery("SELECT `user`, `chips`, `choice` FROM `bets` WHERE `prediction` = ? AND `choice` != ?;", [$prediction_id, $choice_id]);
-		foreach($losers as $loser){
-			$wrong_choice_id = $loser["choice"];
-			$chips_lost = $loser["chips"];
-			executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$loser["user"], "RESOLVED:$prediction_id,ANSWER:$choice_id,YOUR_ANSWER:$wrong_choice_id,LOST:$chips_lost"]);
-		}
+		executeQuery("CALL `PredictionResolve`(?, ?);", [$prediction_id, $choice_id]);
 
 		redirect("prediction/$prediction_id");
 
@@ -290,21 +266,7 @@ switch($_REQUEST["action"]){
 		$password_hash = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username_connected], "string");
 		if(!password_verify($password, $password_hash)) redirect("prediction/$prediction_id/delete", "password");
 
-		$resolved = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
-		if(!$resolved){
-			$bets = executeQuery("SELECT * FROM `bets` WHERE `prediction` = ?;", [$prediction_id]);
-			foreach($bets as $bet){
-				$user = $bet["user"];
-				$chips = $bet["chips"];
-				executeQuery("UPDATE `users` SET `chips` = `chips` + ? WHERE `username` = ?;", [$chips, $user]);
-				executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$user, "DELETED:$prediction_id,REFUNDED:$chips"]);
-			}
-		}else{
-			executeQuery("UPDATE `predictions` SET `answer` = NULL WHERE `id` = ?;", [$prediction_id]);
-		}
-		executeQuery("DELETE FROM `bets` WHERE `prediction` = ?;", [$prediction_id]);
-		executeQuery("DELETE FROM `choices` WHERE `prediction` = ?;", [$prediction_id]);
-		executeQuery("DELETE FROM `predictions` WHERE `id` = ?;", [$prediction_id]);
+		executeQuery("CALL `PredictionDelete`(?);", [$prediction_id]);
 
 		redirect("home");
 
@@ -312,7 +274,7 @@ switch($_REQUEST["action"]){
 		if(!isConnected()) redirect("home", "perms_connected");
 
 		$user = $_COOKIE["username"];
-		executeQuery("UPDATE `notifications` SET `read` = 1 WHERE `user` = ?;", [$user]);
+		executeQuery("CALL `NotificationsRead`(?);", [$user]);
 
 		redirect("notifications");
 
@@ -320,7 +282,7 @@ switch($_REQUEST["action"]){
 		if(!isConnected()) redirect("home", "perms_connected");
 
 		$user = $_COOKIE["username"];
-		executeQuery("DELETE FROM `notifications` WHERE `user` = ? AND `read` = 1;", [$user]);
+		executeQuery("CALL `NotificationsDelete`(?);", [$user]);
 
 		redirect("notifications");
 

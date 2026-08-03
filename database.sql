@@ -29,7 +29,7 @@ CREATE TABLE `choices` (
 	`prediction` int NOT NULL,
 	`name` varchar(100) NOT NULL,
 	PRIMARY KEY (`id`),
-	CONSTRAINT `choice_prediction` FOREIGN KEY (`prediction`) REFERENCES `predictions` (`id`)
+	CONSTRAINT `choice_prediction` FOREIGN KEY (`prediction`) REFERENCES `predictions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE `bets` (
@@ -39,8 +39,8 @@ CREATE TABLE `bets` (
 	`chips` bigint NOT NULL,
 	PRIMARY KEY (`user`, `prediction`),
 	CONSTRAINT `bet_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `bet_prediction` FOREIGN KEY (`prediction`) REFERENCES `predictions` (`id`),
-	CONSTRAINT `bet_choice` FOREIGN KEY (`choice`) REFERENCES `choices` (`id`)
+	CONSTRAINT `bet_prediction` FOREIGN KEY (`prediction`) REFERENCES `predictions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `bet_choice` FOREIGN KEY (`choice`) REFERENCES `choices` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE `notifications` (
@@ -241,6 +241,126 @@ CREATE PROCEDURE `PredictionClose`
 	)
 	BEGIN
 		UPDATE `predictions` SET `ended` = NOW() WHERE `id` = p_id;
+	END $$
+
+CREATE PROCEDURE `PredictionResolve`
+	(
+		p_id int,
+		p_answer int
+	)
+	BEGIN
+		DECLARE v_chips_total bigint;
+		DECLARE v_chips_winning bigint;
+		DECLARE v_winning_rate float;
+		DECLARE v_winner_user varchar(20);
+		DECLARE v_winner_chips_bet bigint;
+		DECLARE v_winner_chips_won bigint;
+		DECLARE v_loser_user varchar(20);
+		DECLARE v_loser_chips_bet bigint;
+		DECLARE v_loser_choice int;
+
+		DECLARE done tinyint(1);
+		DECLARE winners_cursor CURSOR FOR SELECT `user`, `chips` FROM `bets` WHERE `prediction` = p_id AND `choice` = p_answer;
+		DECLARE losers_cursor CURSOR FOR SELECT `user`, `chips`, `choice` FROM `bets` WHERE `prediction` = p_id AND `choice` != p_answer;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+		DECLARE EXIT HANDLER FOR SQLEXCEPTION
+		BEGIN
+			ROLLBACK;
+			RESIGNAL;
+		END;
+
+		START TRANSACTION;
+			UPDATE `predictions` SET `answer` = p_answer, `answered` = NOW() WHERE `id` = p_id;
+			
+			SET v_chips_total = (SELECT SUM(`chips`) FROM `bets` WHERE `prediction` = p_id);
+			SET v_chips_winning = (SELECT SUM(`chips`) FROM `bets` WHERE `choice` = p_answer);
+			
+			IF v_chips_winning > 0 THEN
+				SET v_winning_rate = v_chips_total / v_chips_winning;
+				
+				SET done = 0;
+				OPEN winners_cursor;
+				winners_loop: LOOP
+					FETCH winners_cursor INTO v_winner_user, v_winner_chips_bet;
+					IF done THEN
+						LEAVE winners_loop;
+					END IF;
+					
+					SET v_winner_chips_won = v_winner_chips_bet * v_winning_rate;
+					UPDATE `users` SET `chips` = (chips + v_winner_chips_won) WHERE `username` = v_winner_user;
+					INSERT INTO `notifications` (`user`, `text`) VALUES (v_winner_user, CONCAT('RESOLVED:', p_id, ',ANSWER:', p_answer, ',WON:', v_winner_chips_won));
+				END LOOP;
+				CLOSE winners_cursor;
+			END IF;
+
+			SET done = 0;
+			OPEN losers_cursor;
+			losers_loop: LOOP
+				FETCH losers_cursor INTO v_loser_user, v_loser_chips_bet, v_loser_choice;
+				IF done THEN
+					LEAVE losers_loop;
+				END IF;
+
+				INSERT INTO `notifications` (`user`, `text`) VALUES (v_loser_user, CONCAT('RESOLVED:', p_id, ',ANSWER:', p_answer, ',YOUR_ANSWER:', v_loser_choice, ',LOST:', v_loser_chips_bet));
+			END LOOP;
+			CLOSE losers_cursor;
+		COMMIT;
+	END $$
+
+CREATE PROCEDURE `PredictionDelete`
+	(
+		p_id int
+	)
+	BEGIN
+		DECLARE v_resolved tinyint(1);
+		DECLARE v_user varchar(20);
+		DECLARE v_chips bigint;
+
+		DECLARE done tinyint(1);
+		DECLARE bets_cursor CURSOR FOR SELECT `user`, `chips` FROM `bets` WHERE `prediction` = p_id;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+		DECLARE EXIT HANDLER FOR SQLEXCEPTION
+		BEGIN
+			ROLLBACK;
+			RESIGNAL;
+		END;
+
+		START TRANSACTION;
+			SET v_resolved = (SELECT `answer` FROM `predictions` WHERE `id` = p_id);
+			IF v_resolved IS NULL THEN
+				SET done = 0;
+				OPEN bets_cursor;
+				bets_loop: LOOP
+					FETCH bets_cursor INTO v_user, v_chips;
+					IF done THEN
+						LEAVE bets_loop;
+					END IF;
+
+					UPDATE `users` SET `chips` = (chips + v_chips) WHERE `username` = v_user;
+					INSERT INTO `notifications` (`user`, `text`) VALUES (v_user, CONCAT('DELETED:', p_id, ',REFUNDED:', v_chips));
+				END LOOP;
+				CLOSE bets_cursor;
+			END IF;
+			DELETE FROM `predictions` WHERE `id` = p_id;
+		COMMIT;
+	END $$
+
+CREATE PROCEDURE `NotificationsRead`
+	(
+		p_user varchar(20)
+	)
+	BEGIN
+		UPDATE `notifications` SET `read` = 1 WHERE `user` = p_user;
+	END $$
+
+CREATE PROCEDURE `NotificationsDelete`
+	(
+		p_user varchar(20)
+	)
+	BEGIN
+		DELETE FROM `notifications` WHERE `user` = p_user AND `read` = 1;
 	END $$
 
 CREATE PROCEDURE `DailyUpdate` ()
