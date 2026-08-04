@@ -180,11 +180,11 @@ function isConnected(): bool{
 		unset($_COOKIE["username"], $_COOKIE["password"]);
 		return false;
 	}
-	if(executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "int") == 0){
+	$hash_saved = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "string");
+	if(!$hash_saved){
 		unset($_COOKIE["username"], $_COOKIE["password"]);
 		return false;
 	}
-	$hash_saved = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "string");
 	if(!password_verify($_COOKIE["password"],$hash_saved)){
 		unset($_COOKIE["username"], $_COOKIE["password"]);
 		return false;
@@ -203,9 +203,6 @@ function isExtra(string $type, string|null $user = NULL): bool{
 	if($user == NULL){ // Utilisateur actuellement connecté
 		if(!isConnected()) return false;
 		$user = $_COOKIE["username"];
-	}else{ // Utilisateur spécifié
-		$userExists = executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$user], "int");
-		if(!$userExists) return false;
 	}
 	$extra = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$user], "string");
 	return preg_match("/$type/", $extra) == 1;
@@ -297,16 +294,17 @@ function displayUser(string $username, bool $link = false): string{
 		"translator" => "🌍",
 	];
 
+	$user = executeQuery("SELECT `mod`, `extra` FROM `users` WHERE `username` = ?;", [$username], "row");
+
 	$extras = "";
-	$extras_raw = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$username], "string");
-	$extras_array = $extras_raw ? explode(",", $extras_raw) : [];
+	$extras_array = $user["extra"] ? explode(",", $user["extra"]) : [];
 	foreach($icons as $icon_title => $icon_icon){
 		if(!in_array($icon_title, $extras_array)) continue;
 		$tooltip = getString("tooltip_" . $icon_title);
 		$extras .= "<span title=\"$tooltip\">$icon_icon</span>";
 	}
 
-	$perms = executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$username], "int");
+	$perms = $user["mod"];
 	$isAdministrator = $perms >= 3;
 	$isModerator = $perms >= 2;
 	$isVerifier = $perms >= 1;

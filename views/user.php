@@ -1,21 +1,22 @@
 <?php
 $username = $_REQUEST["user"];
 
-$user_exists = count(executeQuery("SELECT * FROM `users` WHERE `username` = ?", [$username]));
-if(!$user_exists) redirect("home");
+$user = executeQuery("SELECT * FROM `users` WHERE `username` = ?", [$username], "row");
+if(!$user) redirect("home");
 
-$username_capitalization = executeQuery("SELECT `username` FROM `users` WHERE `username` = ?", [$username], "string");
+$username_capitalization = $user["username"];
 if($username != $username_capitalization) redirect("user/$username_capitalization");
 
-$created = executeQuery("SELECT `created` FROM `users` WHERE `username` = ?", [$username], "string");
-$updated = executeQuery("SELECT `updated` FROM `users` WHERE `username` = ?", [$username], "string");
-$streak = executeQuery("SELECT `streak` FROM `users` WHERE `username` = ?", [$username], "int");
+$created = $user["created"];
+$updated = $user["updated"];
+$streak = $user["streak"];
 
 $predictions_created_count = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `user` = ?;", [$username], "int");
-$predictions_participated_count = executeQuery("SELECT COUNT(*) FROM `bets` WHERE `user` = ?;", [$username], "int");
-$predictions_participated_volume = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `user` = ?;", [$username], "int");
+$predictions_participated_volume = executeQuery("SELECT COALESCE(COUNT(*), 0) as `count`, COALESCE(SUM(`chips`), 0) as `chips` FROM `bets` WHERE `user` = ?;", [$username], "row");
+$predictions_participated_count = $predictions_participated_volume["count"];
+$predictions_participated_chips = $predictions_participated_volume["chips"];
 
-$chips = executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?", [$username], "int");
+$chips = $user["chips"];
 
 $predictions_created_approved = executeQuery("SELECT * FROM `predictions` WHERE `approved` = 1 AND `user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
 $predictions_created_waiting_approval = executeQuery("SELECT * FROM `predictions` WHERE `approved` = 0 AND `user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
@@ -98,7 +99,7 @@ $summary_table = "
 		<td>" .
 			displayInt($predictions_created_count) . "<br>" .
 			displayInt($predictions_participated_count) . "
-			<small>(" . displayInt($predictions_participated_volume) . insertTextIcon("chips", "right", 1.5) . ")</small>
+			<small>(" . displayInt($predictions_participated_chips) . insertTextIcon("chips", "right", 1.5) . ")</small>
 		</td>
 	</tr>
 	<tr>

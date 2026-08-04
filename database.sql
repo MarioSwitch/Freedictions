@@ -52,7 +52,7 @@ CREATE TABLE `notifications` (
 );
 
 ALTER TABLE `predictions` 
-	ADD CONSTRAINT `answer` FOREIGN KEY (`answer`) REFERENCES `choices` (`id`);
+	ADD CONSTRAINT `answer` FOREIGN KEY (`answer`) REFERENCES `choices` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 DELIMITER $$

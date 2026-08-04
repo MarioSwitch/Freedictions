@@ -1,8 +1,6 @@
 <?php
 include_once "functions.php";
 
-define("NOW", executeQuery("SELECT NOW();", [], "string")); // Utilisation de define(), car « const NOW = … » nécessite une valeur brute (pas de fonction, ni de variable)
-
 switch($_REQUEST["action"]){
 	case "signup":
 		$username = $_REQUEST["username"];
@@ -208,9 +206,9 @@ switch($_REQUEST["action"]){
 		$choice_prediction = executeQuery("SELECT `prediction` FROM `choices` WHERE `id` = ?;", [$choice_id], "int");
 		if($choice_prediction != $prediction_id) redirect("prediction/$prediction_id", "fields");
 
-		$prediction = executeQuery("SELECT `ended`, `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "row");
+		$prediction = executeQuery("SELECT NOW(), `ended`, `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "row");
 		if(!$prediction["approved"]) redirect("prediction/$prediction_id", "prediction_not_approved");
-		if(NOW >= $prediction["ended"]) redirect("prediction/$prediction_id", "prediction_closed");
+		if($prediction["NOW()"] >= $prediction["ended"]) redirect("prediction/$prediction_id", "prediction_closed");
 
 		executeQuery("CALL `PredictionBet`(?, ?, ?, ?);", [$_COOKIE["username"], $prediction_id, $choice_id, $chips]);
 
@@ -240,10 +238,10 @@ switch($_REQUEST["action"]){
 
 		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("prediction/$prediction_id", "perms");
 
-		$prediction = executeQuery("SELECT `approved`, `answer`, `ended` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "row");
+		$prediction = executeQuery("SELECT NOW(), `ended`, `approved`, `answer` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "row");
 		if(!$prediction["approved"]) redirect("prediction/$prediction_id", "prediction_not_approved");
 		if($prediction["answer"]) redirect("prediction/$prediction_id", "prediction_resolved");
-		if(NOW < $prediction["ended"]) redirect("prediction/$prediction_id", "prediction_opened");
+		if($prediction["NOW()"] < $prediction["ended"]) redirect("prediction/$prediction_id", "prediction_opened");
 
 		$choice_prediction = executeQuery("SELECT `prediction` FROM `choices` WHERE `id` = ?;", [$choice_id], "int");
 		if($choice_prediction != $prediction_id) redirect("prediction/$prediction_id", "fields");

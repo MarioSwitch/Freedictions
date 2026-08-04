@@ -1,19 +1,17 @@
 <?php
 $username = $_REQUEST["user"];
-$exists = executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$username], "int");
-if(!$exists) redirect("home", "username_unknown");
+$user = executeQuery("SELECT * FROM `users` WHERE `username` = ?;", [$username], "row");
+if(!$user) redirect("home", "username_unknown");
 if(!isAuthorized(NULL, "user_edit", $username)) redirect("user/$username", "perms");
 
-$data = executeQuery("SELECT * FROM `users` WHERE `username` = ?;", [$username]);
-
-$username = $data[0]["username"];
-$password = $data[0]["password"];
-$created = $data[0]["created"];
-$updated = $data[0]["updated"];
-$streak = $data[0]["streak"];
-$chips = $data[0]["chips"];
-$mod = $data[0]["mod"];
-$extra = $data[0]["extra"];
+$username = $user["username"];
+$password = $user["password"];
+$created = $user["created"];
+$updated = $user["updated"];
+$streak = $user["streak"];
+$chips = $user["chips"];
+$mod = $user["mod"];
+$extra = $user["extra"];
 ?>
 <h1><?= getString("user_manage_edit") ?></h1>
 <form role="form" action="controller.php">

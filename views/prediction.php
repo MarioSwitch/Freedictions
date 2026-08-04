@@ -1,16 +1,18 @@
 <?php
 $id = $_REQUEST["id"];
-$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$id], "int");
-$question = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$id], "string");
-$created_user = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$id], "string");
-$created_time = executeQuery("SELECT `created` FROM `predictions` WHERE `id` = ?;", [$id], "string");
-$ended = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$id], "string");
-$answer = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$id], "string");
+$prediction = executeQuery("SELECT * FROM `predictions` WHERE `id` = ?;", [$id], "row");
+
+$approved = $prediction["approved"];
+$question = $prediction["title"];
+$created_user = $prediction["user"];
+$created_time = $prediction["created"];
+$ended = $prediction["ended"];
+$answer = $prediction["answer"];
 $answer_name = $answer ? executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$answer], "string") : "";
-$answered = executeQuery("SELECT `answered` FROM `predictions` WHERE `id` = ?;", [$id], "string");
+$answered = $prediction["answered"];
 $now = executeQuery("SELECT NOW();", [], "string");
 
-$details = executeQuery("SELECT `description` FROM `predictions` WHERE `id` = ?;", [$id], "string");
+$details = $prediction["description"];
 $details = preg_replace("/\\\\n/", "<br>", $details);
 $details = preg_replace("/(http[s]?:\\/\\/[^\s<>]+)/", "<a href=\"$1\" class=\"external\" target=\"_blank\" rel=\"noopener noreferrer\">$1</a>", $details);
 $details_text = $details ? "<h2>" . getString("prediction_details") . "</h2><p>$details</p><br>" : "";
@@ -21,14 +23,16 @@ $choices_contains_numbers = false;
 foreach($choices as $choice){
 	if(preg_match("/[0-9]/", $choice["name"])) $choices_contains_numbers = true;
 }
-$volume_chips = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `prediction` = ?;", [$id], "int");
-$volume_users = executeQuery("SELECT COUNT(`user`) FROM `bets` WHERE `prediction` = ?;", [$id], "int");
+$volume = executeQuery("SELECT COALESCE(SUM(`chips`), 0) as `chips`, COALESCE(COUNT(`user`), 0) as `users` FROM `bets` WHERE `prediction` = ?;", [$id], "row");
+$volume_chips = $volume["chips"];
+$volume_users = $volume["users"];
 $choices_bets = [];
 foreach($choices as $choice){
 	$choice_id = $choice["id"];
+	$choice_volume = executeQuery("SELECT COALESCE(SUM(`chips`), 0) as `chips`, COALESCE(COUNT(`user`), 0) as `users` FROM `bets` WHERE `choice` = ?;", [$choice_id], "row");
 	$choices_bets[$choice_id] = array(
-		"chips" => executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int"),
-		"users" => executeQuery("SELECT COUNT(`user`) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int")
+		"chips" => $choice_volume["chips"],
+		"users" => $choice_volume["users"]
 	);
 	$choices_bets[$choice_id]["percentage"] = $volume_chips ? $choices_bets[$choice_id]["chips"] / $volume_chips * 100 : 0;
 	$choices_bets[$choice_id]["ratio"] = $choices_bets[$choice_id]["chips"] ? $volume_chips / $choices_bets[$choice_id]["chips"] : 0;
