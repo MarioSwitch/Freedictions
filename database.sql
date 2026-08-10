@@ -6,7 +6,7 @@ CREATE TABLE `users` (
 	`streak` int NOT NULL DEFAULT 0,
 	`chips` bigint NOT NULL DEFAULT 100,
 	`mod` tinyint(1) NOT NULL DEFAULT 0,
-	`extra` varchar(1000) DEFAULT NULL,
+	`extra` varchar(1000) NOT NULL DEFAULT '',
 	PRIMARY KEY (`username`)
 );
 
@@ -287,7 +287,7 @@ CREATE PROCEDURE `PredictionResolve`
 						LEAVE winners_loop;
 					END IF;
 					
-					SET v_winner_chips_won = v_winner_chips_bet * v_winning_rate;
+					SET v_winner_chips_won = FLOOR(v_winner_chips_bet * v_winning_rate);
 					UPDATE `users` SET `chips` = (chips + v_winner_chips_won) WHERE `username` = v_winner_user;
 					INSERT INTO `notifications` (`user`, `text`) VALUES (v_winner_user, CONCAT('RESOLVED:', p_id, ',ANSWER:', p_answer, ',WON:', v_winner_chips_won));
 				END LOOP;
@@ -378,8 +378,8 @@ CREATE PROCEDURE `DailyUpdate` ()
 			INSERT INTO `notifications` (`user`, `text`) SELECT `username`, 'DAILY:RESET' FROM `users` WHERE `updated` >= NOW() - INTERVAL 2 DAY AND `updated` < NOW() - INTERVAL 1 DAY;
 		COMMIT;
 	END $$
+DELIMITER ;
+
 
 CREATE EVENT `DailyUpdateEvent` ON SCHEDULE EVERY 1 DAY STARTS '2024-11-14 00:00:00' ON COMPLETION PRESERVE ENABLE DO
 	CALL `DailyUpdate`;
-
-DELIMITER ;

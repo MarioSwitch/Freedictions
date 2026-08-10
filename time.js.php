@@ -24,7 +24,7 @@ function getTimeLeft(date){
 	}else if(gap>=minute){
 		var countString = Math.floor(gap/minute)+\":\"+(\"0\"+Math.floor((gap%minute)/second)).slice(-2);
 	}else{
-		var countString = \":\"+(\"0\"+Math.floor(gap/second)).slice(-2);
+		var countString = \":\"+Math.floor(gap/second);
 	}
 	return countString;
 }

@@ -34,7 +34,7 @@ $extra = $user["extra"];
 	<input type="text" id="mod" name="mod" value="<?= $mod ?>" required="required">
 	<br>
 	<label for="extra"><?= getString("user_extra") ?></label>
-	<input type="text" id="extra" name="extra" value="<?= $extra ?>" required="required" style="width:calc(var(--font-size) * 30);">
+	<input type="text" id="extra" name="extra" value="<?= $extra ?>" style="width:calc(var(--font-size) * 30);">
 	<br>
 	<button type="submit" name="action" value="user_edit"><?= getString("general_save") ?></button>
 </form>
