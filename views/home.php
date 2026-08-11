@@ -21,15 +21,16 @@ function displayPredictionsList(array $predictions): string{
 			$id = $prediction["id"];
 			$title = $prediction["title"];
 			$ended = $prediction["ended"];
-			$users = executeQuery("SELECT COUNT(*) FROM `bets` WHERE `prediction` = ?;", [$prediction["id"]], "int");
-			$volume = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `prediction` = ?;", [$prediction["id"]], "int");
+			$volume = executeQuery("SELECT COALESCE(COUNT(*), 0) as `users`, COALESCE(SUM(`chips`), 0) as `chips` FROM `bets` WHERE `prediction` = ?;", [$id], "row");
+			$users = $volume["users"];
+			$chips = $volume["chips"];
 			$bet_name = $already_bet ? $prediction["name"] : "";
 			$bet_chips = $already_bet ? $prediction["chips"] : "";
 
 			$html .= "
 			<tr>
 				<td><a href=\"prediction/$id\">$title</a></td>
-				<td>" . displayInt($volume) . insertTextIcon("chips", "right", 1) . "<br>" . displayInt($users) . insertTextIcon("users", "right", 1) . "</td>";
+				<td>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "<br>" . displayInt($users) . insertTextIcon("users", "right", 1) . "</td>";
 				$html .= $already_bet ? "<td>" . displayInt($bet_chips) . insertTextIcon("chips", "right", 1) . "<br>$bet_name</td>" : "";
 				$html .= "<td><abbr id=\"ended_$id\">$ended</abbr></td>
 				<script>display(\"$ended\",\"ended_$id\")</script>

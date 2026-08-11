@@ -1,8 +1,6 @@
 <?php
 include_once "functions.php";
 
-define("NOW", executeQuery("SELECT NOW();", [], "string")); // Utilisation de define(), car « const NOW = … » nécessite une valeur brute (pas de fonction, ni de variable)
-
 switch($_REQUEST["action"]){
 	case "signup":
 		$username = $_REQUEST["username"];
@@ -15,7 +13,7 @@ switch($_REQUEST["action"]){
 		if($user_exists) redirect("signup", "username_taken");
 
 		$hash = password_hash($password, PASSWORD_DEFAULT);
-		executeQuery("INSERT INTO users (`username`, `password`, `created`, `updated`, `streak`, `chips`, `mod`, `extra`) VALUES (?, ?, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT);", [$username, $hash]);
+		executeQuery("CALL `UserCreate`(?, ?);", [$username, $hash]);
 		redirect("controller.php?action=signin&username=$username&password=$password");
 
 	case "signin":
@@ -23,15 +21,11 @@ switch($_REQUEST["action"]){
 		$password = $_REQUEST["password"];
 		if(empty($username) || empty($password)) redirect("signin", "fields");
 
-		$user_exists = executeQuery("SELECT COUNT(*) FROM `users` WHERE `username` = ?;", [$username], "int");
-		if(!$user_exists) redirect("signin", "username_unknown");
+		$user = executeQuery("SELECT `username`, `password` FROM `users` WHERE `username` = ?;", [$username], "row");
+		if(!$user) redirect("signin", "username_unknown");
+		if(!password_verify($password, $user["password"])) redirect("signin", "password");
 
-		$hash_saved = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username], "string");
-		if(!password_verify($password, $hash_saved)) redirect("signin", "password");
-
-		$username_capitalization = executeQuery("SELECT `username` FROM `users` WHERE `username` = ?;", [$username], "string");
-
-		setcookie("username", $username_capitalization, time() + CONFIG_COOKIES_EXPIRATION);
+		setcookie("username", $user["username"], time() + CONFIG_COOKIES_EXPIRATION);
 		setcookie("password", $password, time() + CONFIG_COOKIES_EXPIRATION);
 		redirect("home");
 
@@ -70,39 +64,7 @@ switch($_REQUEST["action"]){
 		$mod = trim(htmlspecialchars($_REQUEST["mod"]));
 		$extra = trim(htmlspecialchars($_REQUEST["extra"]));
 
-		if($username_old != $username_new){executeQuery("
-		START TRANSACTION;
-
-		ALTER TABLE `predictions` DROP CONSTRAINT `prediction_user`;
-		ALTER TABLE `predictions` ADD CONSTRAINT `prediction_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`) ON UPDATE CASCADE;
-
-		ALTER TABLE `bets` DROP CONSTRAINT `bet_user`;
-		ALTER TABLE `bets` ADD CONSTRAINT `bet_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`) ON UPDATE CASCADE;
-
-		ALTER TABLE `notifications` DROP CONSTRAINT `notification_user`;
-		ALTER TABLE `notifications` ADD CONSTRAINT `notification_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`) ON UPDATE CASCADE;
-
-		COMMIT;
-		");
-		}
-
-		executeQuery("UPDATE `users` SET `username` = ?, `password` = ?, `created` = ?, `updated` = ?, `streak` = ?, `chips` = ?, `mod` = ?, `extra` = ? WHERE `username` = ?;", [$username_new, $password, $created, $updated, $streak, $chips, $mod, $extra, $username_old]);
-
-		if($username_old != $username_new){executeQuery("
-		START TRANSACTION;
-
-		ALTER TABLE `predictions` DROP CONSTRAINT `prediction_user`;
-		ALTER TABLE `predictions` ADD CONSTRAINT `prediction_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`);
-
-		ALTER TABLE `bets` DROP CONSTRAINT `bet_user`;
-		ALTER TABLE `bets` ADD CONSTRAINT `bet_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`);
-
-		ALTER TABLE `notifications` DROP CONSTRAINT `notification_user`;
-		ALTER TABLE `notifications` ADD CONSTRAINT `notification_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`);
-
-		COMMIT;
-		");
-		}
+		executeQuery("CALL `UserEdit`(?, ?, ?, ?, ?, ?, ?, ?, ?);", [$username_new, $password, $created, $updated, $streak, $chips, $mod, $extra, $username_old]);
 
 		redirect("user/$username_new");
 
@@ -120,13 +82,7 @@ switch($_REQUEST["action"]){
 		$password_hash = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username_connected], "string");
 		if(!password_verify($password, $password_hash)) redirect("user/$username_concerned/delete", "password");
 
-		executeQuery("DELETE FROM `notifications` WHERE `user` = ?;", [$username_concerned]); // Supprimer les notifications de l'utilisateur
-		executeQuery("DELETE FROM `bets` WHERE `user` = ?;", [$username_concerned]); // Supprimer les paris de l'utilisateur
-		executeQuery("DELETE FROM `bets` WHERE `prediction` IN (SELECT `id` FROM `predictions` WHERE `user` = ?);", [$username_concerned]); // Supprimer les paris sur les prédictions de l'utilisateur
-		executeQuery("UPDATE `predictions` SET `answer` = NULL WHERE `user` = ?;", [$username_concerned]); // Réinitialiser les réponses des prédictions de l'utilisateur
-		executeQuery("DELETE FROM `choices` WHERE `prediction` IN (SELECT `id` FROM `predictions` WHERE `user` = ?);", [$username_concerned]); // Supprimer les choix des prédictions de l'utilisateur
-		executeQuery("DELETE FROM `predictions` WHERE `user` = ?;", [$username_concerned]); // Supprimer les prédictions de l'utilisateur
-		executeQuery("DELETE FROM `users` WHERE `username` = ?;", [$username_concerned]); // Supprimer l'utilisateur
+		executeQuery("CALL `UserDelete`(?);", [$username_concerned]);
 
 		redirect("home");
 
@@ -148,7 +104,7 @@ switch($_REQUEST["action"]){
 		if(!password_verify($password_verification, $password_verification_hash)) redirect("user/$username_concerned/password", "password");
 
 		$hash = password_hash($new_password, PASSWORD_DEFAULT);
-		executeQuery("UPDATE `users` SET `password` = ? WHERE `username` = ?;", [$hash, $username_concerned]);
+		executeQuery("CALL `UserPassword`(?, ?);", [$username_concerned, $hash]);
 
 		redirect("user/$username_concerned");
 
@@ -158,11 +114,7 @@ switch($_REQUEST["action"]){
 
 		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("home", "perms");
 
-		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
-
-		executeQuery("UPDATE `predictions` SET `approved` = 1 WHERE `id` = ?;", [$prediction_id]);
-		executeQuery("UPDATE `predictions` SET `created` = NOW() WHERE `id` = ?;", [$prediction_id]);
-		executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$prediction_creator, "APPROVED:$prediction_id"]);
+		executeQuery("CALL `ModqueueApprove`(?);", [$prediction_id]);
 
 		redirect("prediction/$prediction_id");
 
@@ -172,11 +124,9 @@ switch($_REQUEST["action"]){
 
 		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("home", "perms");
 
-		$prediction_creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+		executeQuery("CALL `ModqueueReject`(?);", [$prediction_id]);
 
-		executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$prediction_creator, "REJECTED:$prediction_id"]);
-
-		redirect("controller.php?action=prediction_delete&prediction=$prediction_id");
+		redirect("modqueue");
 
 	case "modqueue_edit":
 		$prediction_id = $_REQUEST["prediction"];
@@ -214,13 +164,7 @@ switch($_REQUEST["action"]){
 		$choices_id = $_REQUEST["choices_id"];
 		if(count($choices) != count($choices_id)) redirect("prediction/$prediction_id/edit", "fields");
 
-		executeQuery("UPDATE `predictions` SET `title` = ?, `description` = ?, `user` = ?, `created` = ?, `ended` = ? WHERE `id` = ?;", [$question, $details, $user, $created, $end, $prediction_id]);
-
-		for($i = 0; $i < count($choices); $i++){
-			$choice = trim(htmlspecialchars($choices[$i]));
-			$choice_id = $choices_id[$i];
-			executeQuery("UPDATE `choices` SET `name` = ? WHERE `id` = ?;", [$choice, $choice_id]);
-		}
+		executeQuery("CALL `PredictionEdit`(?, ?, ?, ?, ?, ?, ?, ?);", [$prediction_id, $question, $details, $user, $created, $end, json_encode($choices, JSON_UNESCAPED_UNICODE), json_encode($choices_id, JSON_UNESCAPED_UNICODE)]);
 
 		redirect("prediction/$prediction_id");
 
@@ -243,9 +187,7 @@ switch($_REQUEST["action"]){
 		date_default_timezone_set("UTC");
 		$endUTC = date("Y-m-d\TH:i", strtotime($end) - $offset*60);
 
-		executeQuery("INSERT INTO `predictions` VALUES (DEFAULT, ?, ?, ?, DEFAULT, ?, ?, DEFAULT, DEFAULT);", [$question, $details, $_COOKIE["username"], $endUTC, $approved]);
-		$id = executeQuery("SELECT `id` FROM `predictions` ORDER BY `created` DESC LIMIT 1;", [], "int");
-		foreach($choices as $choice) executeQuery("INSERT INTO `choices` VALUES (DEFAULT, ?, ?);", [$id, $choice]);
+		$id = executeQuery("CALL `PredictionCreate`(?, ?, ?, ?, ?, ?);", [$question, $details, $_COOKIE["username"], $endUTC, $approved, json_encode($choices, JSON_UNESCAPED_UNICODE)], "int");
 
 		redirect("prediction/$id");
 
@@ -264,20 +206,11 @@ switch($_REQUEST["action"]){
 		$choice_prediction = executeQuery("SELECT `prediction` FROM `choices` WHERE `id` = ?;", [$choice_id], "int");
 		if($choice_prediction != $prediction_id) redirect("prediction/$prediction_id", "fields");
 
-		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
-		if(!$approved) redirect("prediction/$prediction_id", "prediction_not_approved");
+		$prediction = executeQuery("SELECT NOW(), `ended`, `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "row");
+		if(!$prediction["approved"]) redirect("prediction/$prediction_id", "prediction_not_approved");
+		if($prediction["NOW()"] >= $prediction["ended"]) redirect("prediction/$prediction_id", "prediction_closed");
 
-		$prediction_ended = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
-		if(NOW >= $prediction_ended) redirect("prediction/$prediction_id", "prediction_closed");
-
-		$already_bet = executeQuery("SELECT COUNT(*) FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $prediction_id], "int");
-		if($already_bet){
-			$already_bet_choice_id = executeQuery("SELECT `choice` FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $prediction_id], "int");
-			executeQuery("UPDATE `bets` SET `chips` = `chips` + ? WHERE `user` = ? AND `prediction` = ?;", [$chips, $_COOKIE["username"], $prediction_id]);
-		}else{
-			executeQuery("INSERT INTO `bets` VALUES (?, ?, ?, ?);", [$_COOKIE["username"], $prediction_id, $choice_id, $chips]);
-		}
-		executeQuery("UPDATE `users` SET `chips` = `chips` - ? WHERE `username` = ?;", [$chips, $_COOKIE["username"]]);
+		executeQuery("CALL `PredictionBet`(?, ?, ?, ?);", [$_COOKIE["username"], $prediction_id, $choice_id, $chips]);
 
 		redirect("prediction/$prediction_id");
 
@@ -292,7 +225,7 @@ switch($_REQUEST["action"]){
 		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
 		if(!$approved) redirect("prediction/$prediction_id", "prediction_not_approved");
 
-		executeQuery("UPDATE `predictions` SET `ended` = NOW() WHERE `id` = ?;", [$prediction_id]);
+		executeQuery("CALL `PredictionClose`(?);", [$prediction_id]);
 
 		redirect("prediction/$prediction_id");
 
@@ -305,39 +238,15 @@ switch($_REQUEST["action"]){
 
 		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("prediction/$prediction_id", "perms");
 
-		$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
-		if(!$approved) redirect("prediction/$prediction_id", "prediction_not_approved");
-
-		$resolved = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
-		if($resolved) redirect("prediction/$prediction_id", "prediction_resolved");
+		$prediction = executeQuery("SELECT NOW(), `ended`, `approved`, `answer` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "row");
+		if(!$prediction["approved"]) redirect("prediction/$prediction_id", "prediction_not_approved");
+		if($prediction["answer"]) redirect("prediction/$prediction_id", "prediction_resolved");
+		if($prediction["NOW()"] < $prediction["ended"]) redirect("prediction/$prediction_id", "prediction_opened");
 
 		$choice_prediction = executeQuery("SELECT `prediction` FROM `choices` WHERE `id` = ?;", [$choice_id], "int");
 		if($choice_prediction != $prediction_id) redirect("prediction/$prediction_id", "fields");
 
-		$prediction_ended = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
-		if(NOW < $prediction_ended) redirect("prediction/$prediction_id", "prediction_opened");
-
-		executeQuery("UPDATE `predictions` SET `answer` = ? WHERE `id` = ?;", [$choice_id, $prediction_id]);
-		executeQuery("UPDATE `predictions` SET `answered` = NOW() WHERE `id` = ?;", [$prediction_id]);
-
-		$chips_total = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `prediction` = ?;", [$prediction_id], "int");
-		$chips_win = executeQuery("SELECT SUM(`chips`) FROM `bets` WHERE `choice` = ?;", [$choice_id], "int");
-		if($chips_win){
-			$ratio = $chips_total / $chips_win;
-			$winners = executeQuery("SELECT `user`, `chips` FROM `bets` WHERE `prediction` = ? AND `choice` = ?;", [$prediction_id, $choice_id]);
-			foreach($winners as $winner){
-				$chips_won = floor($winner["chips"] * $ratio);
-				executeQuery("UPDATE `users` SET `chips` = `chips` + ? WHERE `username` = ?;", [$chips_won, $winner["user"]]);
-				executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$winner["user"], "RESOLVED:$prediction_id,ANSWER:$choice_id,WON:$chips_won"]);
-			}
-		}
-
-		$losers = executeQuery("SELECT `user`, `chips`, `choice` FROM `bets` WHERE `prediction` = ? AND `choice` != ?;", [$prediction_id, $choice_id]);
-		foreach($losers as $loser){
-			$wrong_choice_id = $loser["choice"];
-			$chips_lost = $loser["chips"];
-			executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$loser["user"], "RESOLVED:$prediction_id,ANSWER:$choice_id,YOUR_ANSWER:$wrong_choice_id,LOST:$chips_lost"]);
-		}
+		executeQuery("CALL `PredictionResolve`(?, ?);", [$prediction_id, $choice_id]);
 
 		redirect("prediction/$prediction_id");
 
@@ -355,21 +264,7 @@ switch($_REQUEST["action"]){
 		$password_hash = executeQuery("SELECT `password` FROM `users` WHERE `username` = ?;", [$username_connected], "string");
 		if(!password_verify($password, $password_hash)) redirect("prediction/$prediction_id/delete", "password");
 
-		$resolved = executeQuery("SELECT `answer` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "int");
-		if(!$resolved){
-			$bets = executeQuery("SELECT * FROM `bets` WHERE `prediction` = ?;", [$prediction_id]);
-			foreach($bets as $bet){
-				$user = $bet["user"];
-				$chips = $bet["chips"];
-				executeQuery("UPDATE `users` SET `chips` = `chips` + ? WHERE `username` = ?;", [$chips, $user]);
-				executeQuery("INSERT INTO `notifications` VALUES (?, ?, DEFAULT, DEFAULT);", [$user, "DELETED:$prediction_id,REFUNDED:$chips"]);
-			}
-		}else{
-			executeQuery("UPDATE `predictions` SET `answer` = NULL WHERE `id` = ?;", [$prediction_id]);
-		}
-		executeQuery("DELETE FROM `bets` WHERE `prediction` = ?;", [$prediction_id]);
-		executeQuery("DELETE FROM `choices` WHERE `prediction` = ?;", [$prediction_id]);
-		executeQuery("DELETE FROM `predictions` WHERE `id` = ?;", [$prediction_id]);
+		executeQuery("CALL `PredictionDelete`(?);", [$prediction_id]);
 
 		redirect("home");
 
@@ -377,7 +272,7 @@ switch($_REQUEST["action"]){
 		if(!isConnected()) redirect("home", "perms_connected");
 
 		$user = $_COOKIE["username"];
-		executeQuery("UPDATE `notifications` SET `read` = 1 WHERE `user` = ?;", [$user]);
+		executeQuery("CALL `NotificationsRead`(?);", [$user]);
 
 		redirect("notifications");
 
@@ -385,7 +280,7 @@ switch($_REQUEST["action"]){
 		if(!isConnected()) redirect("home", "perms_connected");
 
 		$user = $_COOKIE["username"];
-		executeQuery("DELETE FROM `notifications` WHERE `user` = ? AND `read` = 1;", [$user]);
+		executeQuery("CALL `NotificationsDelete`(?);", [$user]);
 
 		redirect("notifications");
 

@@ -12,10 +12,8 @@ function getTitle(): string{
 		case "prediction":
 			if(empty($_REQUEST["id"])) redirect("home", "fields");
 
-			$exists = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `id` = ?;", [$_REQUEST["id"]], "int");
-			if(!$exists) redirect("home", "prediction_unknown");
-
 			$title = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$_REQUEST["id"]], "string");
+			if(!$title) redirect("home", "prediction_unknown");
 			break;
 		case "prediction_delete":
 			$title = getString("prediction_manage_delete");

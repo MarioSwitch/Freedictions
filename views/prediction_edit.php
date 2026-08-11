@@ -1,14 +1,14 @@
 <?php
 $id = $_REQUEST["id"];
-$exists = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `id` = ?;", [$id], "int");
-if(!$exists) redirect("home", "prediction_unknown");
+$prediction = executeQuery("SELECT * FROM `predictions` WHERE `id` = ?;", [$id], "row");
+if(!$prediction) redirect("home", "prediction_unknown");
 if(!isAuthorized(NULL, "prediction_edit", $id)) redirect("prediction/$id", "perms");
 
-$question = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$id], "string");
-$details = executeQuery("SELECT `description` FROM `predictions` WHERE `id` = ?;", [$id], "string");
-$creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$id], "string");
-$created_UTC = executeQuery("SELECT `created` FROM `predictions` WHERE `id` = ?;", [$id], "string");
-$end_UTC = executeQuery("SELECT `ended` FROM `predictions` WHERE `id` = ?;", [$id], "string");
+$question = $prediction["title"];
+$details = $prediction["description"];
+$creator = $prediction["user"];
+$created_UTC = $prediction["created"];
+$end_UTC = $prediction["ended"];
 $choices = executeQuery("SELECT `id`, `name` FROM `choices` WHERE `prediction` = ?;", [$id]);
 ?>
 <h1><?= getString("prediction_manage_edit") ?></h1>
