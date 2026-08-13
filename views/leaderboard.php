@@ -5,8 +5,6 @@ $page_number = array_key_exists("page", $_REQUEST) ? intval($_REQUEST["page"]) :
 $table_top = ($page_number - 1) * $results_per_page + 1;
 $table_bottom = $table_top + $results_per_page - 1;
 
-if(!is_numeric($results_per_page) || !is_numeric($page_number) || $results_per_page < 1 || $page_number < 1) redirect("leaderboard");
-
 $leaderboard = executeQuery("SELECT `username`, `chips` FROM `users` ORDER BY `chips` DESC LIMIT $results_per_page OFFSET " . ($page_number - 1) * $results_per_page . ";");
 $users = executeQuery("SELECT COUNT(*) FROM `users`;", [], "int");
 

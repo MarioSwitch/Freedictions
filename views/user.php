@@ -1,12 +1,7 @@
 <?php
-$username = $_REQUEST["user"];
+$user = executeQuery("SELECT * FROM `users` WHERE `username` = ?;", [$_REQUEST["user"]], "row");
 
-$user = executeQuery("SELECT * FROM `users` WHERE `username` = ?", [$username], "row");
-if(!$user) redirect("home");
-
-$username_capitalization = $user["username"];
-if($username != $username_capitalization) redirect("user/$username_capitalization");
-
+$username = $user["username"];
 $created = $user["created"];
 $updated = $user["updated"];
 $streak = $user["streak"];

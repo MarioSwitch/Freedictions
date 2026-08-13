@@ -1,8 +1,6 @@
 <?php
 $id = $_REQUEST["id"];
 $prediction = executeQuery("SELECT * FROM `predictions` WHERE `id` = ?;", [$id], "row");
-if(!$prediction) redirect("home", "prediction_unknown");
-if(!isAuthorized(NULL, "prediction_edit", $id)) redirect("prediction/$id", "perms");
 
 $question = $prediction["title"];
 $details = $prediction["description"];

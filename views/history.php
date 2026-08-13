@@ -5,8 +5,6 @@ $page_number = array_key_exists("page", $_REQUEST) ? intval($_REQUEST["page"]) :
 $table_top = ($page_number - 1) * $results_per_page + 1;
 $table_bottom = $table_top + $results_per_page - 1;
 
-if(!is_numeric($results_per_page) || !is_numeric($page_number) || $results_per_page < 1 || $page_number < 1) redirect("history");
-
 $history = executeQuery("SELECT * FROM `predictions` WHERE `ended` <= NOW() ORDER BY (`answer` IS NULL) DESC, COALESCE(`answered`, `ended`) DESC LIMIT $results_per_page OFFSET " . ($page_number - 1) * $results_per_page . ";");
 $results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `answered` IS NOT NULL;", [], "int");
 ?>

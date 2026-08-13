@@ -24,6 +24,7 @@
 	"error_retry": "Bitte versuchen Sie es erneut.",
 	"error_username_taken": "Dieser Benutzername ist bereits vergeben.",
 	"error_username_unknown": "Dieser Benutzername existiert nicht.",
+	"error_view_unknown": "Diese Seite existiert nicht.",
 	"footer_1": "Ursprünglich von [TBR] und [TBR] entwickelt",
 	"footer_2": "Code auf [TBR] verfügbar",
 	"footer_3": "Dem [TBR]Discord-Server[TBR] beitreten",

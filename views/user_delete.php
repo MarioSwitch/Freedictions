@@ -1,13 +1,11 @@
 <?php
-$username_concerned = $_REQUEST["user"];
-$user_exists = count(executeQuery("SELECT * FROM `users` WHERE `username` = ?", [$username_concerned]));
-if(!$user_exists) redirect("home");
-if(!isAuthorized(NULL, "user_delete", $username_concerned)) redirect("user/$username_concerned", "perms");
+$username = executeQuery("SELECT `username` FROM `users` WHERE `username` = ?;", [$_REQUEST["user"]], "string");
 ?>
 <h1><?= getString("user_manage_delete") ?></h1>
 <form role="form" action="controller.php">
+	<input type="hidden" name="user" value="<?= $username ?>">
 	<label for="user"><?= getString("general_user") ?></label>
-	<input type="text" name="user" id="user" value="<?= $username_concerned ?>" required="required" readonly="readonly">
+	<p id="user" class="input_disabled"><?= $username ?></p>
 	<br>
 	<label for="password"><?= getString("general_password") ?></label>
 	<input type="password" name="password" id="password" required="required">

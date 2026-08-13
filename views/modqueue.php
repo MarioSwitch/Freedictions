@@ -1,6 +1,4 @@
 <?php
-if(!isAuthorized(NULL, "modqueue_access", NULL)) redirect("home", "perms");
-
 $waiting_approval = isAuthorized(NULL, "modqueue_access_full", NULL) ?
 	executeQuery("SELECT * FROM `predictions` WHERE `approved` = 0 ORDER BY `created` ASC;") :
 	executeQuery("SELECT * FROM `predictions` WHERE `approved` = 0 AND `user` IN (SELECT `username` FROM `users` WHERE `mod` = ?) ORDER BY `created` ASC;", [0]);

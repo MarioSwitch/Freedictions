@@ -1,8 +1,5 @@
 <?php
-$username = $_REQUEST["user"];
-$user = executeQuery("SELECT * FROM `users` WHERE `username` = ?;", [$username], "row");
-if(!$user) redirect("home", "username_unknown");
-if(!isAuthorized(NULL, "user_edit", $username)) redirect("user/$username", "perms");
+$user = executeQuery("SELECT * FROM `users` WHERE `username` = ?;", [$_REQUEST["user"]], "row");
 
 $username = $user["username"];
 $password = $user["password"];

@@ -85,6 +85,11 @@ form > p{
 	font-size: calc(var(--font-size) * 0.8);
 }
 
+form > p.input_disabled{
+	font-size: calc(var(--font-size) * 1.2);
+	font-weight: bold;
+}
+
 /* ---------- By class ---------- */
 table.predictions_list, table.choices_list, table.users_list, table.notifications_list{
 	display: inline-block;

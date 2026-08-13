@@ -24,6 +24,7 @@
 	"error_retry": "Please try again.",
 	"error_username_taken": "This username is already taken.",
 	"error_username_unknown": "This username does not exist.",
+	"error_view_unknown": "This page does not exist.",
 	"footer_1": "Initially developed by [TBR] and [TBR]",
 	"footer_2": "Code available on [TBR]",
 	"footer_3": "Join the [TBR]Discord server[TBR]",

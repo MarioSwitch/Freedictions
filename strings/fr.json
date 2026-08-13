@@ -141,6 +141,7 @@
 	"tooltip_translator":"Traducteur",
 	"tooltip_verified":"Vérifié",
 
+	"error_view_unknown":"Cette page n'existe pas.",
 	"error_fields":"Tous les champs ne sont pas correctement renseignés.",
 	"error_username_unknown":"Ce nom d'utilisateur n'existe pas.",
 	"error_username_taken":"Ce nom d'utilisateur est déjà pris.",
