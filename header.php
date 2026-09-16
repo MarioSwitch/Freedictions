@@ -2,7 +2,7 @@
 if(isConnected()) executeQuery("UPDATE `users` SET `updated` = NOW() WHERE `username` = ?;", [$_COOKIE["username"]]);
 
 echo "
-<div id=\"header\">
+<header>
 	<div style=\"width:calc((100% - 10px) / 2); float:left; text-align:left; margin-left:calc(var(--font-size) * 0.2);\">
 		<a href=\"" . CONFIG_PATH . "/home\" style=\"float:left; margin-right:calc(var(--font-size) * 0.5);\">
 			<!-- <img src=\"svg/favicon.svg\" style=\"float:left;\"> -->
@@ -57,7 +57,9 @@ echo "
 		echo "</a>";
 		echo "<a href=" . CONFIG_PATH . "/signout><img src=\"svg/signout.svg\"></a>";
 	}
-echo "</div></div>";
+	echo "
+	</div>
+</header>";
 
 if(!empty($_REQUEST["error"])){
 	echo "<h1 style=\"color:darkred;\">" . getString("error_" . $_REQUEST["error"]) . "<br>" . getString("error_retry") . "</h1>";

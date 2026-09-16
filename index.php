@@ -93,8 +93,9 @@ function getTitle(): string{
 	<body>
 		<?php
 		include "header.php";
+		echo "<main>";
 		include $view_path;
-		echo "<br>";
+		echo "</main>";
 		include "footer.php";
 		?>
 	</body>

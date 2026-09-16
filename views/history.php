@@ -6,7 +6,7 @@ $table_top = ($page_number - 1) * $results_per_page + 1;
 $table_bottom = $table_top + $results_per_page - 1;
 
 $history = executeQuery("SELECT * FROM `predictions` WHERE `ended` <= NOW() ORDER BY (`answer` IS NULL) DESC, COALESCE(`answered`, `ended`) DESC LIMIT $results_per_page OFFSET " . ($page_number - 1) * $results_per_page . ";");
-$results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `answered` IS NOT NULL;", [], "int");
+$results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `ended` <= NOW();", [], "int");
 ?>
 <h1><?= getString("title_history") ?></h1>
 <table class="predictions_list">
@@ -62,4 +62,3 @@ $results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `answered` IS 
 		</tr>
 	</tbody>
 </table>
-<br><br>

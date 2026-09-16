@@ -214,8 +214,8 @@ tr.unanswered > td:nth-child(3), tr.unanswered > td:nth-child(4){
 	color: var(--color-secondary);
 }
 
-/* ---------- By ID ---------- */
-#header{
+/* ---------- Header, Main, Footer ---------- */
+header{
 	position: sticky;
 	top: 0;
 	height: calc(var(--font-size) * 2.5);
@@ -225,13 +225,16 @@ tr.unanswered > td:nth-child(3), tr.unanswered > td:nth-child(4){
 	box-shadow: 0 0 var(--font-size) var(--color-tertiary);
 }
 
-#header > *{
+header > *{
 	zoom: 2.5;
 }
 
-#footer{
+main{
+	margin-bottom: calc(var(--font-size) * 3);
+}
+
+footer{
 	border-top: 1px solid var(--color-text);
-	margin-top: var(--font-size);
 	box-shadow: 0 0 var(--font-size) calc(var(--font-size) * 0.2) var(--color-tertiary);
 	background: var(--color-background-header);
 
@@ -242,7 +245,7 @@ tr.unanswered > td:nth-child(3), tr.unanswered > td:nth-child(4){
 	position: fixed;
 }
 
-#footer > p{
+footer > p{
 	width: calc(100% / 4);
 	float: left;
 	margin: 0;

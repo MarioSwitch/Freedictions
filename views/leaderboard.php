@@ -62,4 +62,3 @@ if(isConnected()){
 		</tr>
 	</tbody>
 </table>
-<br><br>
