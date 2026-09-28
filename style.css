@@ -163,6 +163,18 @@ table.summary > tbody > tr:nth-child(2) > td{
 	font-size: calc(var(--font-size) * 0.8);
 }
 
+tr.mine, tr.mine > td > a{
+	font-weight: bold;
+}
+
+tr.mine_incorrect, tr.mine_incorrect > td > a{
+	color: var(--color-outcome-incorrect);
+}
+
+tr.correct, tr.correct > td > a{
+	color: var(--color-outcome-correct);
+}
+
 a.external{
 	color: var(--color-external-link);
 }

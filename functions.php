@@ -71,7 +71,18 @@ function insertTextIcon(string $icon, string $align, float $scale): string{
 		default => ""
 	};
 	$alt = getString("icon_" . $icon);
-	return "<img src=\"svg/$icon.svg\" title=\"$alt\" alt=\"$alt\" style=\"width:calc(var(--font-size) * $scale); height:calc(var(--font-size) * $scale); vertical-align:bottom; $align; cursor:help;\">";
+	$style = "
+		width: calc(var(--font-size) * $scale);
+		height: calc(var(--font-size) * $scale);
+		vertical-align: bottom;
+		$align;
+		cursor: help;
+
+		display: inline-block;
+		background: currentColor;
+		mask: url(svg/$icon.svg) no-repeat center / contain;
+	";
+	return "<span title=\"$alt\" alt=\"$alt\" style=\"$style\"></span>"; // Using <span> instead of <img> to allow recoloring
 }
 
 /**

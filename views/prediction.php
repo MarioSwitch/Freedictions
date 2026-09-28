@@ -17,6 +17,13 @@ $details = preg_replace("/\\\\n/", "<br>", $details);
 $details = preg_replace("/(http[s]?:\\/\\/[^\s<>]+)/", "<a href=\"$1\" class=\"external\" target=\"_blank\" rel=\"noopener noreferrer\">$1</a>", $details);
 $details_text = $details ? "<h2>" . getString("prediction_details") . "</h2><p>$details</p><br>" : "";
 
+$already_bet = isConnected() ? executeQuery("SELECT COUNT(*) FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $id], "int") : false;
+if($already_bet){
+	$already_bet_choice_id = executeQuery("SELECT `choice` FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $id], "int");
+	$already_bet_choice_name = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$already_bet_choice_id], "string");
+	$already_bet_chips = executeQuery("SELECT `chips` FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $id], "int");
+}
+
 $choices = executeQuery("SELECT * FROM `choices` WHERE `prediction` = ?;", [$id]);
 $choices_count = count($choices);
 $choices_contains_numbers = false;
@@ -73,8 +80,11 @@ $choices_table = "
 				$choice_top .= "<br><a href=\"../user/$choice_user\">" . displayUser($choice_user) . "</a>";
 			}
 		}
+		$my_row = ($already_bet && $choice_id == $already_bet_choice_id) ? "mine" : "";
+		$my_row_incorrect = ($my_row && $answer && $already_bet_choice_id != $answer) ? "mine_incorrect" : "";
+		$correct = ($answer && $choice_id == $answer) ? "correct" : "";
 		$choices_table .= "
-		<tr>
+		<tr class=\"$my_row $my_row_incorrect $correct\">
 			<td>$choice_name</td>
 			<td>" . ($choice_percentage ? displayFloat($choice_percentage, true) : "–") . "</td>
 			<td>
@@ -88,13 +98,6 @@ $choices_table = "
 $choices_table .= "
 	</tbody>
 </table>";
-
-$already_bet = isConnected() ? executeQuery("SELECT COUNT(*) FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $id], "int") : false;
-if($already_bet){
-	$already_bet_choice_id = executeQuery("SELECT `choice` FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $id], "int");
-	$already_bet_choice_name = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$already_bet_choice_id], "string");
-	$already_bet_chips = executeQuery("SELECT `chips` FROM `bets` WHERE `user` = ? AND `prediction` = ?;", [$_COOKIE["username"], $id], "int");
-}
 
 $choices_select = "
 <select name=\"choice\" required=\"required\">

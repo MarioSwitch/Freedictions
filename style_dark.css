@@ -1,5 +1,5 @@
 :root{
-	--color-text: white;
+	--color-text: rgb(224, 224, 224);
 	--color-secondary: rgb(128, 128, 128);
 	--color-tertiary: rgb(64, 64, 64);
 	--color-background: rgb(32, 32, 32);
@@ -10,15 +10,14 @@
 	--color-external-link-visited: mediumpurple;
 	--color-external-link-visited-active: darkviolet;
 
+	--color-outcome-correct: lightgreen;
+	--color-outcome-incorrect: lightcoral;
+
 	--color-administrator: crimson;
 	--color-moderator: green;
 	--color-verifier: sienna;
 }
 
-img{
-	filter: invert(1);
-}
-
-input[type="datetime-local"]::-webkit-calendar-picker-indicator{
-	filter: invert(1);
+img, input[type="datetime-local"]::-webkit-calendar-picker-indicator{
+	filter: invert(calc(224/255));
 }

@@ -10,6 +10,9 @@
 	--color-external-link-visited: darkviolet;
 	--color-external-link-visited-active: mediumpurple;
 
+	--color-outcome-correct: green;
+	--color-outcome-incorrect: darkred;
+
 	--color-administrator: crimson;
 	--color-moderator: green;
 	--color-verifier: sienna;

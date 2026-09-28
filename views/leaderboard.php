@@ -35,7 +35,8 @@ if(isConnected()){
 				$username = $user["username"];
 				$chips = $user["chips"];
 				$rank = executeQuery("SELECT COUNT(*) FROM `users` WHERE `chips` > ?;", [$chips], "int") + 1;
-				echo "<tr>
+				$my_row = (isConnected() && $username == $my_username) ? "mine" : "";
+				echo "<tr class=\"$my_row\">
 					<td>" . displayRank($rank) . "</td>
 					<td>" . displayUser($username, true) . "</td>
 					<td>" . displayInt($chips) . "</td>

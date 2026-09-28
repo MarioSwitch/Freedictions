@@ -10,15 +10,14 @@
 	--color-external-link-visited: mediumpurple;
 	--color-external-link-visited-active: darkviolet;
 
+	--color-outcome-correct: green;
+	--color-outcome-incorrect: darkred;
+
 	--color-administrator: crimson;
 	--color-moderator: green;
 	--color-verifier: sienna;
 }
 
-img{
-	filter: invert(0.5);
-}
-
-input[type="datetime-local"]::-webkit-calendar-picker-indicator{
-	filter: invert(0.5);
+img, input[type="datetime-local"]::-webkit-calendar-picker-indicator{
+	filter: invert(calc(128/255));
 }
