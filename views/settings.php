@@ -2,7 +2,7 @@
 /* REMINDER
 	- When adding/editing settings, don't forget to update the getSetting() function in functions.php ($default and $supported)
 	- When adding/editing settings, don't forget to update the "settings" case in controller.php ($_REQUEST and setcookie())
-	- Whan adding a new language, don't forget to add the corresponding case in the displayRank() function in functions.php (switch(getSetting("language")))
+	- When adding a new language, don't forget to add the corresponding case in the displayRank() function in functions.php (switch(getSetting("language")))
 */
 
 /**
@@ -58,6 +58,14 @@ function displaySetting(string $setting){
 				"no" => getString("general_no")
 			];
 			break;
+		case "results_per_page":
+			$options = [
+				"10" => "10",
+				"25" => "25",
+				"50" => "50",
+				"100" => "100"
+			];
+			break;
 		default:
 			$options = ["" => ""];
 			break;
@@ -72,7 +80,7 @@ function displaySetting(string $setting){
 <form role="form" action="controller.php">
 	<table class="hidden">
 		<?php
-		foreach(["language", "theme", "shorten_large_numbers"] as $setting){
+		foreach(["language", "theme", "shorten_large_numbers", "results_per_page"] as $setting){
 			displaySetting($setting);
 		}
 		?>

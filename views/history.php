@@ -1,12 +1,21 @@
 <?php
-$results_per_page = array_key_exists("results", $_REQUEST) ? intval($_REQUEST["results"]) : 50;
+$results_per_page = intval(getSetting("results_per_page"));
 $page_number = array_key_exists("page", $_REQUEST) ? intval($_REQUEST["page"]) : 1;
+$offset = ($page_number - 1) * $results_per_page;
+
+$history = executeQuery("SELECT * FROM `predictions` WHERE `ended` <= NOW() ORDER BY (`answer` IS NULL) DESC, COALESCE(`answered`, `ended`) DESC LIMIT $results_per_page OFFSET $offset;");
+$results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `ended` <= NOW();", [], "int");
 
 $table_top = ($page_number - 1) * $results_per_page + 1;
 $table_bottom = $table_top + $results_per_page - 1;
 
-$history = executeQuery("SELECT * FROM `predictions` WHERE `ended` <= NOW() ORDER BY (`answer` IS NULL) DESC, COALESCE(`answered`, `ended`) DESC LIMIT $results_per_page OFFSET " . ($page_number - 1) * $results_per_page . ";");
-$results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `ended` <= NOW();", [], "int");
+$previous_page = $page_number - 1;
+$previous_start = $table_top - $results_per_page;
+$previous_end = $table_top - 1;
+
+$next_page = $page_number + 1;
+$next_start = $table_bottom + 1;
+$next_end = min($table_bottom + $results_per_page, $results);
 ?>
 <h1><?= getString("title_history") ?></h1>
 <table class="predictions_list">
@@ -49,14 +58,14 @@ $results = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `ended` <= NOW
 		<tr>
 			<td>
 				<?php
-				if($page_number >= 2) echo "<a href=\"history?results=$results_per_page&page=" . ($page_number - 1) . "\">◄<br><small>" . $table_top - $results_per_page . " – " . $table_top - 1 . "</small>	</a>";
+				if($page_number >= 2) echo "<a href=\"history?page=$previous_page\">◄<br><small>" . displayInt($previous_start, false) . " – " . displayInt($previous_end, false) . "</small></a>";
 				?>
 			</td>
 			<td></td>
 			<td></td>
 			<td>
 				<?php
-				if($table_bottom < $results) echo "<a href=\"history?results=$results_per_page&page=" . ($page_number + 1) . "\">►<br><small>" . $table_bottom + 1 . " – " . $table_bottom + $results_per_page . "</small></a>";
+				if($table_bottom < $results) echo "<a href=\"history?page=$next_page\">►<br><small>" . displayInt($next_start, false) . " – " . displayInt($next_end, false) . "</small></a>";
 				?>
 			</td>
 		</tr>

@@ -61,9 +61,8 @@ function getTitle(): string{
 		// Generic cases: no $title overwrite needed
 		case "history":
 		case "leaderboard":
-			$results_per_page = array_key_exists("results", $_REQUEST) ? intval($_REQUEST["results"]) : 50;
 			$page_number = array_key_exists("page", $_REQUEST) ? intval($_REQUEST["page"]) : 1;
-			if($results_per_page < 1 || $page_number < 1) redirect($view_name);
+			if($page_number < 1) redirect($view_name);
 			break;
 
 		case "modqueue":

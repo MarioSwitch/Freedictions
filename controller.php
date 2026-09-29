@@ -288,11 +288,19 @@ switch($_REQUEST["action"]){
 		$language = $_REQUEST["language"];
 		$theme = $_REQUEST["theme"];
 		$shorten_large_numbers = $_REQUEST["shorten_large_numbers"];
-		if(empty($language) || empty($theme) || empty($shorten_large_numbers)) redirect("settings", "fields");
+		$results_per_page = $_REQUEST["results_per_page"];
+		
+		if(
+			empty($language) ||
+			empty($theme) ||
+			empty($shorten_large_numbers) ||
+			empty($results_per_page)
+		) redirect("settings", "fields");
 
 		setcookie("language", $language, time() + CONFIG_COOKIES_EXPIRATION);
 		setcookie("theme", $theme, time() + CONFIG_COOKIES_EXPIRATION);
 		setcookie("shorten_large_numbers", $shorten_large_numbers, time() + CONFIG_COOKIES_EXPIRATION);
+		setcookie("results_per_page", $results_per_page, time() + CONFIG_COOKIES_EXPIRATION);
 
 		redirect("settings");
 }

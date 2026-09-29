@@ -159,6 +159,10 @@ function getSetting($name): string{
 			$default = "yes";
 			$supported = ["yes", "no"];
 			break;
+		case "results_per_page":
+			$default = "50";
+			$supported = ["10", "25", "50", "100"];
+			break;
 	}
 	if(array_key_exists($name, $_COOKIE)){
 		return in_array($_COOKIE[$name], $supported) ? $_COOKIE[$name] : $default;
