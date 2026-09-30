@@ -3,6 +3,7 @@
 	"site_desc":"Pariez, c'est gratuit !",
 
 	"title_home":"Accueil",
+	"title_search":"Recherche",
 	"title_history":"Historique des prédictions",
 	"title_leaderboard":"Classement",
 	"title_settings":"Paramètres",
@@ -13,6 +14,7 @@
 	"title_signin":"Connexion",
 
 	"general_user":"Utilisateur",
+	"general_users":"Utilisateurs",
 	"general_user_none":"Aucun utilisateur",
 	"general_username":"Nom d'utilisateur",
 	"general_password":"Mot de passe",
@@ -39,6 +41,7 @@
 	"predictions_opened":"Prédictions ouvertes",
 	"predictions_opened_bet_none":"Pas encore parié",
 	"predictions_opened_bet_already":"Déjà parié",
+	"predictions_closed":"Prédictions fermées",
 	"predictions_waiting_approval":"Prédictions en attente d'approbation",
 	"predictions_waiting_outcome":"Prédictions en attente de résultat",
 
@@ -114,6 +117,8 @@
 
 	"leaderboard_desc":"Vous êtes [TBR] sur [TBR] joueurs, soit dans le top [TBR].",
 	"leaderboard_page":"Aller à ma page ([TBR])",
+
+	"search_search":"Rechercher",
 
 	"settings_language":"Langue",
 	"settings_theme":"Thème",

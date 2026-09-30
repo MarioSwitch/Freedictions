@@ -459,3 +459,177 @@ function displayRatio(float $ratio): string{
 	if($ratio < 2) return "+" . displayFloat(($ratio - 1) * 100, true);
 	return "×" . displayFloat($ratio);
 }
+
+/**
+ * Displays a paginated table
+ * @param array $data Data to display (use "SELECT * FROM ...")
+ * @param string $type Type of data ("opened", "closed" or "users")
+ * @return string HTML table
+ */
+function displayPaginatedTable(array $data, string $type): string{
+	$url = $_SERVER["REQUEST_URI"];
+	$url_parts = parse_url($url);
+	parse_str($url_parts["query"] ?? "", $url_params);
+
+	$page_number = array_key_exists("page", $_REQUEST) ? intval($_REQUEST["page"]) : 1;
+	$results_per_page = intval(getSetting("results_per_page"));
+	$offset = ($page_number - 1) * $results_per_page;
+	$count = count($data);
+
+	$table_top = ($page_number - 1) * $results_per_page + 1;
+	$table_bottom = min($table_top + $results_per_page - 1, $count);
+
+	$previous_page = $page_number - 1;
+	$previous_page_params = array_merge($url_params, ["page" => $previous_page]);
+	$previous_page_url = $url_parts["path"] . "?" . http_build_query($previous_page_params);
+	$previous_start = $table_top - $results_per_page;
+	$previous_end = $table_top - 1;
+
+	$next_page = $page_number + 1;
+	$next_page_params = array_merge($url_params, ["page" => $next_page]);
+	$next_page_url = $url_parts["path"] . "?" . http_build_query($next_page_params);
+	$next_start = $table_bottom + 1;
+	$next_end = min($table_bottom + $results_per_page, $count);
+
+	if($type == "opened" || $type == "closed"){
+		$predictions = array_slice($data, $offset, $results_per_page, true);
+		$html = "
+		<table class=\"predictions_list\">
+			<thead>
+				<tr>
+					<th>" . getString("prediction_question") . "<br><small>" . displayInt($table_top, false) . " – " . displayInt($table_bottom, false) . " / " . displayInt($count, false) . "</small></th>
+					<th>" . ($type == "opened" ? getString("prediction_created") : getString("prediction_outcome")) . "</th>
+					<th>" . ($type == "opened" ? getString("general_time_remaining") : getString("general_time_elapsed")) . "</th>
+				</tr>
+			</thead>
+			<tbody>";
+				if(!$predictions) $html .= "<tr><td colspan=\"3\">" . getString("predictions_none") . "</td></tr>";
+				else{
+					foreach($predictions as $prediction){
+						$id = $prediction["id"];
+						$question = $prediction["title"];
+						$created_user = $prediction["user"];
+						$created_time = $prediction["created"];
+						$ended = $prediction["ended"];
+
+						if($prediction["answer"]){
+							$answer = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$prediction["answer"]], "string");
+							$answered = $prediction["answered"];
+						}else{
+							$answer = getString("prediction_waiting_outcome");
+							$answered = $prediction["ended"];
+						}
+
+						$tr_attributes = ($type == "closed" && !$prediction["answer"]) ? "class=\"unanswered\"" : "";
+
+						$column_1 = "<td><a href=\"prediction/$id\">$question</a></td>";
+
+						$column_2 = "<td>" . (
+							$type == "opened" ?
+							displayUser($created_user, true) . "<br><abbr id=\"created_$id\">$created_time</abbr><script>display(\"$created_time\",\"created_$id\")</script>" :
+							$answer
+						) . "</td>";
+
+						$column_3 = (
+							$type == "opened" ?
+							"<td><abbr id=\"ended_$id\">$ended</abbr></td><script>display(\"$ended\",\"ended_$id\")</script>" :
+							"<td><abbr id=\"answered_$id\">$answered</abbr></td><script>display(\"$answered\",\"answered_$id\")</script>"
+						);
+
+						$html .= "
+						<tr $tr_attributes>
+							$column_1
+							$column_2
+							$column_3
+						</tr>";
+					}
+				}
+				if($page_number >= 2 || $next_start <= $count){
+					$html .= "
+					<tr>
+						<td style=\"text-align:left\">";
+							if($page_number >= 2) $html .= "<a href=\"$previous_page_url\">◄<br><small>" . displayInt($previous_start, false) . " – " . displayInt($previous_end, false) . "</small></a>";
+						$html .= "
+						</td>
+						<td></td>
+						<td style=\"text-align:right\">";
+							if($next_start <= $count) $html .= "<a href=\"$next_page_url\">►<br><small>" . displayInt($next_start, false) . " – " . displayInt($next_end, false) . "</small></a>";
+						$html .= "
+						</td>
+					</tr>";
+				}
+				$html .= "
+			</tbody>
+		</table>";
+
+		return $html;
+	}
+
+	if($type == "users"){
+		$users = array_slice($data, $offset, $results_per_page, true);
+		if(isConnected()){
+			$my_username = $_COOKIE["username"];
+			$my_position = NULL;
+			foreach($data as $i => $row){
+				if($row["username"] == $my_username){
+					$my_position = $i + 1;
+					break;
+				}
+			}
+
+			$my_page = ceil($my_position / $results_per_page);
+			$my_page_params = array_merge($url_params, ["page" => $my_page]);
+			$my_page_url = $url_parts["path"] . "?" . http_build_query($my_page_params);
+		}
+		$html = "
+		<table class=\"users_list\">
+			<thead>
+				<tr>
+					<th>" . getString("general_rank") . "</th>
+					<th>" . getString("general_user") . "<br><small>" . displayInt($table_top, false) . " – " . displayInt($table_bottom, false) . " / " . displayInt($count, false) . "</small></th>
+					<th>" . getString("general_chips") . "</th>
+				</tr>
+			</thead>
+			<tbody>";
+				if(!$users) $html .= "<tr><td colspan=\"3\">" . getString("general_user_none") . "</td></tr>";
+				else{
+					foreach($users as $user){
+						$username = $user["username"];
+						$chips = $user["chips"];
+						$rank = executeQuery("SELECT COUNT(*) FROM `users` WHERE `chips` > ?;", [$chips], "int") + 1;
+						$my_row = (isConnected() && $username == $my_username) ? "mine" : "";
+
+						$html .= "
+						<tr class=\"$my_row\">
+							<td>" . displayRank($rank) . "</td>
+							<td>" . displayUser($username, true) . "</td>
+							<td>" . displayInt($chips) . "</td>
+						</tr>";
+					}
+				}
+				if($page_number >= 2 || isConnected() && $my_position || $next_start <= $count){
+					$html .= "
+					<tr>
+						<td style=\"text-align:left\">";
+							if($page_number >= 2) $html .= "<a href=\"$previous_page_url\">◄<br><small>" . displayInt($previous_start, false) . " – " . displayInt($previous_end, false) . "</small></a>";
+						$html .= "
+						</td>
+						<td>";
+							if(isConnected() && $my_position) $html .= "<a href=\"$my_page_url\">" . getString("leaderboard_page", [displayInt($my_page, false)]) . "</a>";
+						$html .= "
+						</td>
+						<td style=\"text-align:right\">";
+							if($next_start <= $count) $html .= "<a href=\"$next_page_url\">►<br><small>" . displayInt($next_start, false) . " – " . displayInt($next_end, false) . "</small></a>";
+						$html .= "
+						</td>
+					</tr>";
+				}
+				$html .= "
+			</tbody>
+		</table>";
+
+		return $html;
+	}
+
+	return "";
+}
