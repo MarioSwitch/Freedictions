@@ -9,7 +9,7 @@ $waiting_answer = isAuthorized(NULL, "modqueue_access_full", NULL) ?
 
 echo "<h1>" . getString("title_modqueue") . "</h1>";
 echo "<h2>" . getString("predictions_waiting_approval") . "</h2>";
-echo displayPaginatedTable($waiting_approval, "opened", ["title", "outcomes", "proposed", "time", "actions"]);
+echo displayPaginatedTable($waiting_approval, "opened", ["title", "outcomes", "proposed", "time_modqueue", "actions"]);
 echo "<br><br>";
 echo "<h2>" . getString("predictions_waiting_outcome") . "</h2>";
-echo displayPaginatedTable($waiting_answer, "opened", ["title", "created", "time"]); // Using "opened" instead of "closed" to avoid styling time column
+echo displayPaginatedTable($waiting_answer, "closed", ["title", "created", "time_modqueue"]); // Using "opened" instead of "closed" to avoid styling time column

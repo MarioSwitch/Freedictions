@@ -464,7 +464,7 @@ function displayRatio(float $ratio): string{
  * Displays a paginated table
  * @param array $data Data to display (use "SELECT * FROM ...")
  * @param string $type Type of data ("opened", "closed", "users" or "notifications")
- * @param array $columns Columns to display for types "opened" or "closed" (e.g. ["title", "created", "volume"]). Supported: "title", "outcomes", "proposed", "created", "volume", "bet", "answer", "time" (ended/answered), "actions" (modqueue)
+ * @param array $columns Columns to display for types "opened" or "closed" (e.g. ["title", "created", "volume"]). Supported: "title", "outcomes", "proposed", "created", "volume", "bet", "answer", "time" (ended/answered with checks), "time_modqueue" (ended/answered without checks, for modqueue), "actions" (approve/reject/edit, for modqueue)
  * @return string HTML table
  */
 function displayPaginatedTable(array $data, string $type, array $columns = ["title"]): string{
@@ -508,7 +508,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 							"volume" => getString("prediction_volume"),
 							"bet" => getString("prediction_bet_noun"),
 							"answer" => getString("prediction_outcome"),
-							"time" => $type == "opened" ? getString("general_time_remaining") : getString("general_time_elapsed"),
+							"time", "time_modqueue" => $type == "opened" ? getString("general_time_remaining") : getString("general_time_elapsed"),
 							"actions" => getString("modqueue_actions"),
 							default => $column
 						};
@@ -565,8 +565,14 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 								$td = "<td $unanswered>$answer_name</td>";
 								break;
 							case "time":
+								$now = executeQuery("SELECT NOW();", [], "string");
+								$closed = $now >= $prediction["ended"];
+								if(!$prediction["approved"]){$td = "<td>" . getString("prediction_waiting_approval") . "</td>"; break;}
+								if($type == "opened" && $closed){$td = "<td>" . getString("prediction_waiting_outcome") . "</td>"; break;}
+								// No break here on purpose: once checks are done, "time_modqueue" is the same as "time", excepted formatting ($unanswered) that we want ONLY for "time" (not for modqueue)
+							case "time_modqueue":
 								$time = $type == "opened" ? $prediction["ended"] : ($answer ? $prediction["answered"] : $prediction["ended"]);
-								$unanswered = ($type == "closed" && !$answer) ? "class=\"unanswered\"" : "";
+								$unanswered = ($column == "time" && $type == "closed" && !$answer) ? "class=\"unanswered\"" : "";
 								$abbr_id = bin2hex(random_bytes(8));
 								$td = "<td $unanswered><abbr id=\"$abbr_id\">$time</abbr></td><script>display(\"$time\",\"$abbr_id\")</script>";
 								break;
