@@ -463,7 +463,7 @@ function displayRatio(float $ratio): string{
 /**
  * Displays a paginated table
  * @param array $data Data to display (use "SELECT * FROM ...")
- * @param string $type Type of data ("opened", "closed" or "users")
+ * @param string $type Type of data ("opened", "closed", "users" or "notifications")
  * @param array $columns Columns to display for types "opened" or "closed" (e.g. ["title", "created", "volume"]). Supported: "title", "outcomes", "proposed", "created", "volume", "bet", "answer", "time" (ended/answered), "actions" (modqueue)
  * @return string HTML table
  */
@@ -662,6 +662,113 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 							if(isConnected() && $my_position) $html .= "<a href=\"$my_page_url\">" . getString("leaderboard_page", [displayInt($my_page, false)]) . "</a>";
 						$html .= "
 						</td>
+						<td style=\"text-align:right\">";
+							if($next_start <= $count) $html .= "<a href=\"$next_page_url\">►<br><small>" . displayInt($next_start, false) . " – " . displayInt($next_end, false) . "</small></a>";
+						$html .= "
+						</td>
+					</tr>";
+				}
+				$html .= "
+			</tbody>
+		</table>";
+
+		return $html;
+	}
+
+	if($type == "notifications"){
+		$notifications = array_slice($data, $offset, $results_per_page, true);
+		if(!$notifications) return getString("notifications_none");
+		$html = "
+		<table class=\"notifications_list\">
+			<thead>
+				<tr>
+					<th>" . getString("general_time_elapsed") . "</th>
+					<th>" . getString("notifications_text") . "<br><small>" . displayInt($table_top, false) . " – " . displayInt($table_bottom, false) . " / " . displayInt($count, false) . "</small></th>
+				</tr>
+			</thead>
+			<tbody>";
+				foreach($notifications as $notification){
+					$sent = $notification["sent"];
+					$text = $notification["text"];
+
+					// Example: DELETED:152,REFUNDED:50 -> [["DELETED", "152"], ["REFUNDED", "50"]]
+					$text_parts = explode(",", $text);
+					for($i = 0; $i < count($text_parts); $i++) $notification[$i] = explode(":", $text_parts[$i]);
+
+					switch($notification[0][0]){
+						case "DAILY": // "DAILY:123" or "DAILY:RESET"
+							$notification_title = getString("notifications_daily");
+							if($notification[0][1] == "RESET"){
+								$notification_desc = getString("notifications_daily_reset");
+							}else{
+								$chips = $notification[0][1] + 9; // User receives 10 chips only when streak increments from 0 to 1. As the increment is done before the notification is sent, the difference is 9 and not 10.
+								$notification_desc = getString("notifications_chips_won", ["<b>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "</b>"]);
+							}
+							break;
+						case "APPROVED": // "APPROVED:123"
+							$prediction_id = $notification[0][1];
+							$prediction_title = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+							$notification_title = getString("notifications_approved");
+							$notification_desc = "<a href=\"prediction/$prediction_id\">$prediction_title</a>";
+							break;
+						case "REJECTED": // "REJECTED:123"
+							$notification_title = getString("notifications_rejected");
+							$notification_desc = getString("notifications_rejected_desc", ["<b>" . $notification[0][1] . "</b>"]);
+							break;
+						case "RESOLVED": // "RESOLVED:123,ANSWER:456,WON:789" or "RESOLVED:123,ANSWER:45,YOUR_ANSWER:67,LOST:89"
+							$prediction_id = $notification[0][1];
+							$prediction_title = executeQuery("SELECT `title` FROM `predictions` WHERE `id` = ?;", [$prediction_id], "string");
+							$outcome_id = $notification[1][1];
+							$outcome_title = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$outcome_id], "string");
+							if($notification[2][0] == "WON"){
+								$selected_id = $outcome_id;
+								$selected_title = $outcome_title;
+								$chips = $notification[2][1];
+								$chips_sentence = getString("notifications_chips_won", ["<b>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "</b>"]);
+							}else{
+								$selected_id = $notification[2][1];
+								$selected_title = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$selected_id], "string");
+								$chips = $notification[3][1];
+								$chips_sentence = getString("notifications_chips_lost", ["<b>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "</b>"]);
+							}
+							$notification_title = "<a href=\"prediction/$prediction_id\">$prediction_title</a>";
+							$notification_desc = 
+								getString("notifications_resolved_selected") . " <b>$selected_title</b><br>" .
+								getString("notifications_resolved_outcome") . " <b>$outcome_title</b><br>" .
+								$chips_sentence;
+							break;
+						case "DELETED": // "DELETED:123,REFUNDED:456"
+							$prediction_id = $notification[0][1];
+							$chips = $notification[1][1];
+							$notification_title = getString("notifications_deleted");
+							$notification_desc = 
+								getString("notifications_deleted_desc", ["<b>" . $prediction_id . "</b>"]) . "<br>" .
+								getString("notifications_chips_refunded", ["<b>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "</b>"]);
+							break;
+						default:
+							$notification_title = $text;
+							$notification_desc = "";
+							break;
+					}
+					$abbr_id = bin2hex(random_bytes(8));
+					$sent_td = "<td><abbr id=\"$abbr_id\">" . $sent . "</abbr></td><script>display(\"$sent\",\"$abbr_id\")</script>";
+					$html .= "
+					<tr>
+						$sent_td
+						<td><b>$notification_title</b><br>$notification_desc</td>
+					</tr>";
+				}
+				if($page_number >= 2 || $next_start <= $count){
+					$html .= "
+					<tr>
+						<td style=\"text-align:left\">";
+							if($page_number >= 2) $html .= "<a href=\"$previous_page_url\">◄<br><small>" . displayInt($previous_start, false) . " – " . displayInt($previous_end, false) . "</small></a>";
+						$html .= "
+						</td>";
+						for($i = 0; $i < count($columns) - 2; $i++){
+							$html .= "<td></td>";
+						}
+						$html .= "
 						<td style=\"text-align:right\">";
 							if($next_start <= $count) $html .= "<a href=\"$next_page_url\">►<br><small>" . displayInt($next_start, false) . " – " . displayInt($next_end, false) . "</small></a>";
 						$html .= "
