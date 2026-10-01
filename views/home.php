@@ -1,67 +1,15 @@
 <?php
-/**
- * Génère le code HTML pour afficher une liste de prédictions
- * @param array $predictions Prédictions à afficher
- * @return string Code HTML
- */
-function displayPredictionsList(array $predictions): string{
-	$already_bet = array_key_exists("name", $predictions[0]) && array_key_exists("chips", $predictions[0]);
-	$html = "
-	<table class=\"predictions_list\">
-		<thead>
-			<tr>
-				<th>" . getString("prediction_question") . "</th>
-				<th>" . getString("prediction_volume") . "</th>";
-				$html .= $already_bet ? "<th>" . getString("prediction_bet_noun") . "</th>" : "";
-				$html .= "<th>" . getString("general_time_remaining") . "</th>
-			</tr>
-		</thead>
-		<tbody>";
-		foreach($predictions as $prediction){
-			$id = $prediction["id"];
-			$title = $prediction["title"];
-			$ended = $prediction["ended"];
-			$volume = executeQuery("SELECT COALESCE(COUNT(*), 0) as `users`, COALESCE(SUM(`chips`), 0) as `chips` FROM `bets` WHERE `prediction` = ?;", [$id], "row");
-			$users = $volume["users"];
-			$chips = $volume["chips"];
-			$bet_name = $already_bet ? $prediction["name"] : "";
-			$bet_chips = $already_bet ? $prediction["chips"] : "";
+$opened = executeQuery("SELECT * FROM `predictions` WHERE `approved` = 1 AND `ended` > NOW() ORDER BY `ended` ASC;");
+echo "<h1>" . getString("predictions_opened") . "</h1>";
+if(!isConnected()) echo displayPaginatedTable($opened, "opened", ["title", "volume", "time"]);
+if(isConnected()){
+	$not_bet = executeQuery("SELECT `predictions`.* FROM `predictions` WHERE `predictions`.`approved` = 1 AND `predictions`.`ended` > NOW() AND `predictions`.`id` NOT IN (SELECT `predictions`.`id` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `bets`.`user` = ? AND `answer` IS NULL) ORDER BY `predictions`.`ended` ASC;", [$_COOKIE["username"]]);
+	echo "<h2>" . getString("predictions_opened_bet_none") . "</h2>";
+	echo displayPaginatedTable($not_bet, "opened", ["title", "volume", "time"]);
 
-			$html .= "
-			<tr>
-				<td><a href=\"prediction/$id\">$title</a></td>
-				<td>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "<br>" . displayInt($users) . insertTextIcon("users", "right", 1) . "</td>";
-				$html .= $already_bet ? "<td>" . displayInt($bet_chips) . insertTextIcon("chips", "right", 1) . "<br>$bet_name</td>" : "";
-				$html .= "<td><abbr id=\"ended_$id\">$ended</abbr></td>
-				<script>display(\"$ended\",\"ended_$id\")</script>
-			</tr>
-			";
-		}
-		$html .= "
-		</tbody>
-	</table>";
-	return $html;
-}
+	echo "<br><br>";
 
-$opened = executeQuery("SELECT `id`, `title`, `ended` FROM `predictions` WHERE `approved` = 1 AND `ended` > NOW() ORDER BY `ended` ASC;");
-$count = count($opened);
-echo "<h1>" . getString("predictions_opened") . " (" . displayInt($count) . ")</h1>";
-if($count == 0) echo "<p>" . getString("predictions_none") . "</p>";
-if($count > 0){
-	if(!isConnected()) echo displayPredictionsList($opened);
-	if(isConnected()){
-		$not_bet = executeQuery("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`ended` FROM `predictions` WHERE `predictions`.`approved` = 1 AND `predictions`.`ended` > NOW() AND `predictions`.`id` NOT IN (SELECT `predictions`.`id` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `bets`.`user` = ? AND `answer` IS NULL) ORDER BY `predictions`.`ended` ASC;", [$_COOKIE["username"]]);
-		$not_bet_count = count($not_bet);
-		echo "<h2>" . getString("predictions_opened_bet_none") . " (" . displayInt($not_bet_count) . ")</h2>";
-		if($not_bet_count == 0) echo "<p>" . getString("predictions_none") . "</p>";
-		if($not_bet_count > 0) echo displayPredictionsList($not_bet);
-
-		echo "<br><br>";
-
-		$already_bet = executeQuery("SELECT `predictions`.`id`, `predictions`.`title`, `predictions`.`ended`, `choices`.`name`, `bets`.`chips` FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `predictions`.`approved` = 1 AND `bets`.`user` = ? AND NOW() < `ended` AND `answer` IS NULL ORDER BY `predictions`.`ended` ASC;", [$_COOKIE["username"]]);
-		$already_bet_count = count($already_bet);
-		echo "<h2>" . getString("predictions_opened_bet_already") . " (" . displayInt($already_bet_count) . ")</h2>";
-		if($already_bet_count == 0) echo "<p>" . getString("predictions_none") . "</p>";
-		if($already_bet_count > 0) echo displayPredictionsList($already_bet);
-	}
+	$already_bet = executeQuery("SELECT `predictions`.* FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `predictions`.`approved` = 1 AND `bets`.`user` = ? AND NOW() < `ended` AND `answer` IS NULL ORDER BY `predictions`.`ended` ASC;", [$_COOKIE["username"]]);
+	echo "<h2>" . getString("predictions_opened_bet_already") . "</h2>";
+	echo displayPaginatedTable($already_bet, "opened", ["title", "volume", "bet", "time"]);
 }

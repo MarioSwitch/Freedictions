@@ -90,6 +90,10 @@ form > p.input_disabled{
 	font-weight: bold;
 }
 
+form.actions{
+	margin: 0;
+}
+
 /* ---------- By class ---------- */
 table.predictions_list, table.choices_list, table.users_list, table.notifications_list{
 	display: inline-block;
@@ -221,7 +225,7 @@ span.verifier{
 	color: var(--color-verifier);
 }
 
-tr.unanswered > td:nth-child(2), tr.unanswered > td:nth-child(3){
+td.unanswered{
 	font-style: italic;
 	color: var(--color-secondary);
 }

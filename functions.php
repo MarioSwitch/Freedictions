@@ -464,9 +464,10 @@ function displayRatio(float $ratio): string{
  * Displays a paginated table
  * @param array $data Data to display (use "SELECT * FROM ...")
  * @param string $type Type of data ("opened", "closed" or "users")
+ * @param array $columns Columns to display for types "opened" or "closed" (e.g. ["title", "created", "volume"]). Supported: "title", "outcomes", "proposed", "created", "volume", "bet", "answer", "time" (ended/answered), "actions" (modqueue)
  * @return string HTML table
  */
-function displayPaginatedTable(array $data, string $type): string{
+function displayPaginatedTable(array $data, string $type, array $columns = ["title"]): string{
 	$url = $_SERVER["REQUEST_URI"];
 	$url_parts = parse_url($url);
 	parse_str($url_parts["query"] ?? "", $url_params);
@@ -493,56 +494,98 @@ function displayPaginatedTable(array $data, string $type): string{
 
 	if($type == "opened" || $type == "closed"){
 		$predictions = array_slice($data, $offset, $results_per_page, true);
+		if(!$predictions) return getString("predictions_none");
 		$html = "
 		<table class=\"predictions_list\">
 			<thead>
-				<tr>
-					<th>" . getString("prediction_question") . "<br><small>" . displayInt($table_top, false) . " – " . displayInt($table_bottom, false) . " / " . displayInt($count, false) . "</small></th>
-					<th>" . ($type == "opened" ? getString("prediction_created") : getString("prediction_outcome")) . "</th>
-					<th>" . ($type == "opened" ? getString("general_time_remaining") : getString("general_time_elapsed")) . "</th>
+				<tr>";
+					foreach($columns as $column){
+						$th = match($column){
+							"title" => getString("prediction_question") . "<br><small>" . displayInt($table_top, false) . " – " . displayInt($table_bottom, false) . " / " . displayInt($count, false) . "</small>",
+							"outcomes" => getString("prediction_outcomes"),
+							"proposed" => getString("prediction_proposed"),
+							"created" => getString("prediction_created"),
+							"volume" => getString("prediction_volume"),
+							"bet" => getString("prediction_bet_noun"),
+							"answer" => getString("prediction_outcome"),
+							"time" => $type == "opened" ? getString("general_time_remaining") : getString("general_time_elapsed"),
+							"actions" => getString("modqueue_actions"),
+							default => $column
+						};
+						$th = "<th>" . $th . "</th>";
+						$html .= $th;
+					}
+					$html .= "
 				</tr>
 			</thead>
 			<tbody>";
-				if(!$predictions) $html .= "<tr><td colspan=\"3\">" . getString("predictions_none") . "</td></tr>";
-				else{
-					foreach($predictions as $prediction){
-						$id = $prediction["id"];
-						$question = $prediction["title"];
-						$created_user = $prediction["user"];
-						$created_time = $prediction["created"];
-						$ended = $prediction["ended"];
-
-						if($prediction["answer"]){
-							$answer = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$prediction["answer"]], "string");
-							$answered = $prediction["answered"];
-						}else{
-							$answer = getString("prediction_waiting_outcome");
-							$answered = $prediction["ended"];
+				foreach($predictions as $prediction){
+					$html .= "<tr>";
+					$id = $prediction["id"];
+					$answer = $prediction["answer"];
+					foreach($columns as $column){
+						switch($column){
+							case "title":
+								$title = $prediction["title"];
+								$td = "<td><a href=\"" . CONFIG_PATH . "/prediction/$id\">$title</a></td>";
+								break;
+							case "outcomes":
+								$choices_array = executeQuery("SELECT * FROM `choices` WHERE `prediction` = ?;", [$id]);
+								$choices = "";
+								foreach($choices_array as $choice){
+									$choices .= $choice["name"];
+									if($choice != end($choices_array)) $choices .= "<br>";
+								}
+								$td = "<td>$choices</td>";
+								break;
+							case "proposed":
+							case "created":
+								$created_user = $prediction["user"];
+								$created_time = $prediction["created"];
+								$abbr_id = bin2hex(random_bytes(8));
+								$td = "<td>" . displayUser($created_user, true) . "<br><abbr id=\"$abbr_id\">$created_time</abbr></td><script>display(\"$created_time\",\"$abbr_id\")</script>";
+								break;
+							case "volume":
+								$volume = executeQuery("SELECT COALESCE(COUNT(*), 0) as `users`, COALESCE(SUM(`chips`), 0) as `chips` FROM `bets` WHERE `prediction` = ?;", [$id], "row");
+								$users = $volume["users"];
+								$chips = $volume["chips"];
+								$td = "<td>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "<br>" . displayInt($users) . insertTextIcon("users", "right", 1) . "</td>";
+								break;
+							case "bet":
+								if(!isConnected()){$td = "<td></td>"; break;}
+								$bet = executeQuery("SELECT `choices`.`name`, `bets`.`chips` FROM `choices` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `choices`.`prediction` = ? AND `bets`.`user` = ?;", [$id, $_COOKIE["username"]], "row");
+								if(!$bet){$td = "<td></td>"; break;}
+								$bet_name = $bet["name"];
+								$bet_chips = $bet["chips"];
+								$td = "<td>" . displayInt($bet_chips) . insertTextIcon("chips", "right", 1) . "<br>$bet_name</td>";
+								break;
+							case "answer":
+								$answer_name = $answer ? executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$answer], "string") : getString("prediction_waiting_outcome");
+								$unanswered = ($type == "closed" && !$answer) ? "class=\"unanswered\"" : "";
+								$td = "<td $unanswered>$answer_name</td>";
+								break;
+							case "time":
+								$time = $type == "opened" ? $prediction["ended"] : ($answer ? $prediction["answered"] : $prediction["ended"]);
+								$unanswered = ($type == "closed" && !$answer) ? "class=\"unanswered\"" : "";
+								$abbr_id = bin2hex(random_bytes(8));
+								$td = "<td $unanswered><abbr id=\"$abbr_id\">$time</abbr></td><script>display(\"$time\",\"$abbr_id\")</script>";
+								break;
+							case "actions":
+								$actions = "
+									<form class=\"actions\" role=\"form\" action=\"controller.php\">
+										<input type=\"hidden\" name=\"prediction\" value=\"$id\">
+										<button type=\"submit\" name=\"action\" value=\"modqueue_approve\">" . getString("modqueue_actions_approve") . "</button>
+										<button type=\"submit\" name=\"action\" value=\"modqueue_reject\">" . getString("modqueue_actions_reject") . "</button>
+										<button type=\"submit\" name=\"action\" value=\"modqueue_edit\">" . getString("modqueue_actions_edit") . "</button>
+									</form>";
+								$td = "<td>$actions</td>";
+								break;
+							default:
+								$td = "<td></td>";
 						}
-
-						$tr_attributes = ($type == "closed" && !$prediction["answer"]) ? "class=\"unanswered\"" : "";
-
-						$column_1 = "<td><a href=\"prediction/$id\">$question</a></td>";
-
-						$column_2 = "<td>" . (
-							$type == "opened" ?
-							displayUser($created_user, true) . "<br><abbr id=\"created_$id\">$created_time</abbr><script>display(\"$created_time\",\"created_$id\")</script>" :
-							$answer
-						) . "</td>";
-
-						$column_3 = (
-							$type == "opened" ?
-							"<td><abbr id=\"ended_$id\">$ended</abbr></td><script>display(\"$ended\",\"ended_$id\")</script>" :
-							"<td><abbr id=\"answered_$id\">$answered</abbr></td><script>display(\"$answered\",\"answered_$id\")</script>"
-						);
-
-						$html .= "
-						<tr $tr_attributes>
-							$column_1
-							$column_2
-							$column_3
-						</tr>";
+						$html .= $td;
 					}
+					$html .= "</tr>";
 				}
 				if($page_number >= 2 || $next_start <= $count){
 					$html .= "
@@ -550,8 +593,11 @@ function displayPaginatedTable(array $data, string $type): string{
 						<td style=\"text-align:left\">";
 							if($page_number >= 2) $html .= "<a href=\"$previous_page_url\">◄<br><small>" . displayInt($previous_start, false) . " – " . displayInt($previous_end, false) . "</small></a>";
 						$html .= "
-						</td>
-						<td></td>
+						</td>";
+						for($i = 0; $i < count($columns) - 2; $i++){
+							$html .= "<td></td>";
+						}
+						$html .= "
 						<td style=\"text-align:right\">";
 							if($next_start <= $count) $html .= "<a href=\"$next_page_url\">►<br><small>" . displayInt($next_start, false) . " – " . displayInt($next_end, false) . "</small></a>";
 						$html .= "
@@ -567,6 +613,7 @@ function displayPaginatedTable(array $data, string $type): string{
 
 	if($type == "users"){
 		$users = array_slice($data, $offset, $results_per_page, true);
+		if(!$users) return getString("general_user_none");
 		if(isConnected()){
 			$my_username = $_COOKIE["username"];
 			$my_position = NULL;
@@ -591,21 +638,18 @@ function displayPaginatedTable(array $data, string $type): string{
 				</tr>
 			</thead>
 			<tbody>";
-				if(!$users) $html .= "<tr><td colspan=\"3\">" . getString("general_user_none") . "</td></tr>";
-				else{
-					foreach($users as $user){
-						$username = $user["username"];
-						$chips = $user["chips"];
-						$rank = executeQuery("SELECT COUNT(*) FROM `users` WHERE `chips` > ?;", [$chips], "int") + 1;
-						$my_row = (isConnected() && $username == $my_username) ? "mine" : "";
+				foreach($users as $user){
+					$username = $user["username"];
+					$chips = $user["chips"];
+					$rank = executeQuery("SELECT COUNT(*) FROM `users` WHERE `chips` > ?;", [$chips], "int") + 1;
+					$my_row = (isConnected() && $username == $my_username) ? "mine" : "";
 
-						$html .= "
-						<tr class=\"$my_row\">
-							<td>" . displayRank($rank) . "</td>
-							<td>" . displayUser($username, true) . "</td>
-							<td>" . displayInt($chips) . "</td>
-						</tr>";
-					}
+					$html .= "
+					<tr class=\"$my_row\">
+						<td>" . displayRank($rank) . "</td>
+						<td>" . displayUser($username, true) . "</td>
+						<td>" . displayInt($chips) . "</td>
+					</tr>";
 				}
 				if($page_number >= 2 || isConnected() && $my_position || $next_start <= $count){
 					$html .= "

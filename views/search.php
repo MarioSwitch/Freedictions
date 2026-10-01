@@ -25,5 +25,11 @@ $results = match($scope){
 	default => []
 };
 
-echo displayPaginatedTable($results, $scope);
+$columns = match($scope){
+	"opened" => ["title", "volume", "time"],
+	"closed" => ["title", "answer", "time"],
+	default => []
+};
+
+echo displayPaginatedTable($results, $scope, $columns);
 } ?>
