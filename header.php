@@ -24,12 +24,15 @@ echo "
 	}else{
 		echo "<a href=\"" . CONFIG_PATH . "/create\" style=\"margin-right:calc(var(--font-size) * 0.5);\"><img src=\"svg/create.svg\"></a>";
 		if(isAuthorized(NULL, "modqueue_access", NULL)){
-			$waiting_approval = isAuthorized(NULL, "modqueue_access_full", NULL) ?
-				executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `approved` = 0;", [], "int") :
-				executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `approved` = 0 AND `user` IN (SELECT `username` FROM `users` WHERE `mod` = ?);", [0], "int");
-			$waiting_answer = isAuthorized(NULL, "modqueue_access_full", NULL) ?
-				executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `approved` = 1 AND NOW() >= `ended` AND `answer` IS NULL;", [], "int") :
-				executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `approved` = 1 AND NOW() >= `ended` AND `answer` IS NULL AND `user` IN (SELECT `username` FROM `users` WHERE `mod` = ?);", [0], "int");
+			$waiting_approval = executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `approved` = 0;", [], "int");
+
+			$waiting_answer = match(executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "int")){
+				3 => executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `approved` = 1 AND NOW() >= `ended` AND `answer` IS NULL;", [], "int"),
+				2 => executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `approved` = 1 AND NOW() >= `ended` AND `answer` IS NULL AND `user` IN (SELECT `username` FROM `users` WHERE `mod` <= ?);", [2], "int"),
+				1 => executeQuery("SELECT COUNT(*) FROM `predictions` WHERE `approved` = 1 AND NOW() >= `ended` AND `answer` IS NULL AND `user` IN (SELECT `username` FROM `users` WHERE `mod` <= ?);", [1], "int"),
+				default => []
+			};
+
 			echo "<a href=\"" . CONFIG_PATH . "/modqueue\" style=\"margin-right:calc(var(--font-size) * 0.5);\">";
 				echo "<img src=\"svg/modqueue.svg\">";
 				echo "<div style=\"display:inline-block; margin-left:calc(var(--font-size) * 0.2); text-align:center;\">";

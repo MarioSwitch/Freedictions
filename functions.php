@@ -239,51 +239,42 @@ function isAuthorized(string|null $user, string $action, string|int|null $id): b
 	$isModerator = $perms >= 2;
 	$isVerifier = $perms >= 1;
 
+	$targetPerms = match($action){
+		"user_password", "user_delete", "user_edit" => executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$id], "int"),
+		"prediction_close", "prediction_resolve", "prediction_edit", "prediction_delete" => executeQuery("SELECT `mod` FROM `users` WHERE `username` = (SELECT `user` FROM `predictions` WHERE `id` = ?);", [$id], "int"),
+		default => 0
+	};
+
 	switch($action){
 		case "user_password":
 		case "user_delete":
-			if($isModerator) return true;
+			if($isAdministrator) return true;
+			if($isModerator) return $user == $id || $targetPerms < 2; // Only yourself, default and verifiers
 			return $user == $id;
 
 		case "user_edit":
-			if($isAdministrator) return true;
-			return false;
+			return $isAdministrator;
 
 		case "modqueue_access":
-			if($isVerifier) return true;
-			return false;
-
-		case "modqueue_access_full":
-			if($isModerator) return true;
-			return false;
-
 		case "modqueue_approve":
 		case "modqueue_reject":
+		case "prediction_create_approved":
+			return $isVerifier;
+
 		case "prediction_close":
 		case "prediction_resolve":
-			if($isModerator) return true;
-			if($isVerifier){
-				$creator = executeQuery("SELECT `user` FROM `predictions` WHERE `id` = ?;", [$id], "string");
-				$creatorPerms = executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$creator], "int");
-				return $creatorPerms == 0;
-			}
+			if($isAdministrator) return true;
+			if($isModerator) return $targetPerms <= 2; // Only default, verifiers and moderators
+			if($isVerifier) return $targetPerms <= 1; // Only default and verifiers
 			return false;
 
 		case "modqueue_edit":
 		case "prediction_edit":
 		case "prediction_delete":
-			if($isModerator) return true;
-			if($isVerifier){
-				$data = executeQuery("SELECT `user`, `approved` FROM `predictions` WHERE `id` = ?;", [$id], "array");
-				$creator = $data[0]["user"];
-				$creatorPerms = executeQuery("SELECT `mod` FROM `users` WHERE `username` = ?;", [$creator], "int");
-				$approved = $data[0]["approved"];
-				return $creatorPerms == 0 && $approved == 0;
-			}
-			return false;
-
-		case "prediction_create_approved":
-			if($isModerator) return true;
+			if($isAdministrator) return true;
+			$approved = executeQuery("SELECT `approved` FROM `predictions` WHERE `id` = ?;", [$id], "int");
+			if($isModerator) return !$approved || $targetPerms < 2; // All non-approved, and approved from default and verifiers
+			if($isVerifier) return !$approved; // Only non-approved
 			return false;
 
 		default:

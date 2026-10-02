@@ -10,8 +10,6 @@
 	<br><br>
 	<label for="end"><?= getString("create_end") ?></label>
 	<span id="end"></span>
-	<br>
-	<p><?= getString("create_end_desc") ?></p>
 	<br><br>
 	<label><?= getString("prediction_outcomes") ?></label>
 	<span id="choices"></span>

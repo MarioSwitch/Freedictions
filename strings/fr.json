@@ -70,10 +70,9 @@
 	"prediction_manage_edit":"Modifier la prédiction",
 
 	"create_details_desc":"Détails supplémentaires concernant la prédiction (acronymes, cas spéciaux, etc.)<br>Vous pouvez utiliser « \\n » pour revenir à la ligne.<br>Ce champ est facultatif.",
-	"create_end":"Fermeture des paris",
-	"create_end_desc":"Date et heure à laquelle les paris seront automatiquement fermés (heure locale)<br>Vous pouvez toujours fermer manuellement les paris avant cette date.",
-	"create_note_user":"Votre prédiction devra être approuvée par un modérateur avant d'être ouverte aux paris.<br>Vous recevrez une notification une fois la prédiction ouverte au public.",
-	"create_note_mod":"Étant modérateur, votre prédiction sera immédiatement ouverte aux paris.",
+	"create_end":"Fermeture des paris (heure locale)",
+	"create_note_user":"Votre prédiction devra être approuvée par un vérificateur avant d'être ouverte aux paris.<br>Vous recevrez une notification une fois la prédiction ouverte au public.",
+	"create_note_mod":"Votre prédiction sera immédiatement ouverte aux paris.",
 	"create_submit":"Soumettre",
 	"create_create":"Créer",
 
