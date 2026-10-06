@@ -1,0 +1,46 @@
+@media (max-width: 600px) and (orientation: portrait){
+	/* ---------- Variables ---------- */
+	:root{
+		--font-size: 15px;
+	}
+
+	/* ---------- Forms ---------- */
+	input.large, input.extra_large{
+		width: 100%;
+	}
+
+	/* ---------- By class ---------- */
+	table.summary > tbody > tr > td{
+		min-width: 0;
+	}
+
+	table.prediction_summary > tbody > tr > td:nth-child(1),
+	table.choices_list > thead > tr > th:nth-child(4),
+	table.choices_list > thead > tr > th:nth-child(5),
+	table.choices_list > tbody > tr > td:nth-child(4),
+	table.choices_list > tbody > tr > td:nth-child(5){
+		display: none;
+	}
+
+	/* ---------- Header, Main, Footer ---------- */
+	header{
+		height: calc(var(--font-size) * 5.5);
+	}
+
+	header > div{
+		width: 100%;
+		float: left;
+	}
+
+	header > div:nth-child(1){
+		margin-left: 0;
+	}
+
+	header > div:nth-child(2){
+		margin-right: 0;
+	}
+
+	footer{
+		font-size: calc(var(--font-size) * 0.6);
+	}
+}

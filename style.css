@@ -50,8 +50,17 @@ hr.mini{
 	width: calc(var(--font-size) * 20);
 }
 
+img{
+	height: calc(var(--font-size) * 2 / 2.5);
+	width: calc(var(--font-size) * 2 / 2.5);
+}
+
 table{
 	font-size: var(--font-size);
+}
+
+.error{
+	color: darkred;
 }
 
 /* ---------- Forms ---------- */
@@ -64,6 +73,22 @@ input, select, label, button{
 
 input{
 	margin-bottom: var(--font-size);
+}
+
+input.large{
+	width: calc(var(--font-size) * 30);
+}
+
+input.extra_large{
+	width: calc(var(--font-size) * 40);
+}
+
+input.bet{
+	margin-bottom: 0;
+}
+
+span.bet{
+	zoom: 1.2;
 }
 
 label{
@@ -95,24 +120,26 @@ form.actions{
 }
 
 /* ---------- By class ---------- */
-table.predictions_list, table.choices_list, table.users_list, table.notifications_list{
+table.list{
 	display: inline-block;
 	text-align: center;
 	
 	border-spacing: 0 5px;
 }
 
-table.predictions_list > thead > tr > th, table.choices_list > thead > tr > th, table.users_list > thead > tr > th, table.notifications_list > thead > tr > th{
+table.list > thead > tr > th{
 	padding: calc(var(--font-size) * 0.5) calc(var(--font-size) * 1);
 	border-bottom: 1px solid var(--color-text);
 }
 
-table.predictions_list > tbody > tr > td, table.choices_list > tbody > tr > td, table.users_list > tbody > tr > td, table.notifications_list > tbody > tr > td{
+table.list > tbody > tr > td{
 	padding: calc(var(--font-size) * 0.5) calc(var(--font-size) * 1);
 	border-bottom: 1px solid var(--color-tertiary);
 }
 
-table.choices_list > tbody > tr > td:nth-child(1), table.choices_list > tbody > tr > td:nth-child(2), table.choices_list > tbody > tr > td:nth-child(4){
+table.choices_list > tbody > tr > td:nth-child(1),
+table.choices_list > tbody > tr > td:nth-child(2),
+table.choices_list > tbody > tr > td:nth-child(4){
 	font-size: calc(var(--font-size) * 1.5);
 }
 
@@ -230,6 +257,14 @@ td.unanswered{
 	color: var(--color-secondary);
 }
 
+td.previous{
+	text-align: left;
+}
+
+td.next{
+	text-align: right;
+}
+
 /* ---------- Header, Main, Footer ---------- */
 header{
 	position: sticky;
@@ -244,6 +279,60 @@ header{
 
 header > *{
 	zoom: 2.5;
+}
+
+header > div{
+	width: calc((100% - var(--font-size) / 2) / 2);
+	float: left;
+}
+
+header > div:nth-child(1){
+	text-align: left;
+	margin-left: calc(var(--font-size) * 0.2);
+}
+
+header > div:nth-child(1) > a:nth-child(1){
+	float: left;
+	margin-right: calc(var(--font-size) * 0.5);
+}
+
+header > div:nth-child(1) > a:nth-child(1) > img{
+	float: left;
+}
+
+header > div:nth-child(1) > a:nth-child(1) > div{
+	display: inline-block;
+	margin-left: calc(var(--font-size) * 0.2);
+	text-align: center;
+}
+
+header > div:nth-child(2){
+	text-align: right;
+	margin-right: calc(var(--font-size) * 0.2);
+}
+
+header > div:nth-child(2) a:has(> div){
+	margin-right: calc(var(--font-size) * 0.5);
+}
+
+header > div:nth-child(2) div:has(> p){
+	display: inline-block;
+	margin-left: calc(var(--font-size) * 0.2);
+	text-align: center;
+}
+
+header p:nth-child(1){
+	font-size: calc(var(--font-size) * 0.475);
+	margin: 0;
+}
+
+header p:nth-child(2){
+	font-size: calc(var(--font-size) * 0.325);
+	margin: 0;
+}
+
+header p.red{
+	color: red;
 }
 
 main{

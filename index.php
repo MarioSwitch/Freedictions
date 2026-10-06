@@ -88,11 +88,16 @@ function getTitle(): string{
 		}
 		?>
 		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="style_mobile.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">  
 	</head>
 	<body>
 		<?php
 		include "header.php";
 		echo "<main>";
+		if(!empty($_REQUEST["error"])){
+			echo "<h1 class=\"error\">" . getString("error_" . $_REQUEST["error"]) . "<br>" . getString("error_retry") . "</h1>";
+		}
 		include $view_path;
 		echo "</main>";
 		include "footer.php";

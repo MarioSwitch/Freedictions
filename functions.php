@@ -15,7 +15,7 @@ function executeQuery(string $query, array $args = [], string $result_type = "ar
 	try{
 		$database_handler = new PDO("mysql:host=" . CONFIG_DATABASE_HOST . ";dbname=" . CONFIG_DATABASE_NAME, CONFIG_DATABASE_USER, CONFIG_DATABASE_PASSWORD);
 	}catch(PDOException $exception){
-		die("<span style=\"color:red\">" . $exception->getMessage() . "</span>");
+		die("<span class=\"error\">" . $exception->getMessage() . "</span>");
 	}
 
 	// Exécute la requête
@@ -26,11 +26,11 @@ function executeQuery(string $query, array $args = [], string $result_type = "ar
 		}
 		$result = $statement_handler->execute();
 		if($result === false){
-			die("<span style=\"color:red\">" . $database_handler->errorInfo()[2] . "</span>");
+			die("<span class=\"error\">" . $database_handler->errorInfo()[2] . "</span>");
 		}
 		$result = $statement_handler->fetchAll();
 	}catch(PDOException $exception){
-		die("<span style=\"color:red\">" . $query . "<br>" . print_r($args, true) . "<br>" . $exception->getMessage() . "</span>");
+		die("<span class=\"error\">" . $query . "<br>" . print_r($args, true) . "<br>" . $exception->getMessage() . "</span>");
 	}
 
 	// Ferme la connexion à la base de données
@@ -487,7 +487,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 		$predictions = array_slice($data, $offset, $results_per_page, true);
 		if(!$predictions) return getString("predictions_none");
 		$html = "
-		<table class=\"predictions_list\">
+		<table class=\"list predictions_list\">
 			<thead>
 				<tr>";
 					foreach($columns as $column){
@@ -587,7 +587,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 				if($page_number >= 2 || $next_start <= $count){
 					$html .= "
 					<tr>
-						<td style=\"text-align:left\">";
+						<td class=\"previous\">";
 							if($page_number >= 2) $html .= "<a href=\"$previous_page_url\">◄<br><small>" . displayInt($previous_start, false) . " – " . displayInt($previous_end, false) . "</small></a>";
 						$html .= "
 						</td>";
@@ -595,7 +595,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 							$html .= "<td></td>";
 						}
 						$html .= "
-						<td style=\"text-align:right\">";
+						<td class=\"next\">";
 							if($next_start <= $count) $html .= "<a href=\"$next_page_url\">►<br><small>" . displayInt($next_start, false) . " – " . displayInt($next_end, false) . "</small></a>";
 						$html .= "
 						</td>
@@ -626,7 +626,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 			$my_page_url = $url_parts["path"] . "?" . http_build_query($my_page_params);
 		}
 		$html = "
-		<table class=\"users_list\">
+		<table class=\"list users_list\">
 			<thead>
 				<tr>
 					<th>" . getString("general_rank") . "</th>
@@ -651,7 +651,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 				if($page_number >= 2 || isConnected() && $my_position || $next_start <= $count){
 					$html .= "
 					<tr>
-						<td style=\"text-align:left\">";
+						<td class=\"previous\">";
 							if($page_number >= 2) $html .= "<a href=\"$previous_page_url\">◄<br><small>" . displayInt($previous_start, false) . " – " . displayInt($previous_end, false) . "</small></a>";
 						$html .= "
 						</td>
@@ -659,7 +659,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 							if(isConnected() && $my_position) $html .= "<a href=\"$my_page_url\">" . getString("leaderboard_page", [displayInt($my_page, false)]) . "</a>";
 						$html .= "
 						</td>
-						<td style=\"text-align:right\">";
+						<td class=\"next\">";
 							if($next_start <= $count) $html .= "<a href=\"$next_page_url\">►<br><small>" . displayInt($next_start, false) . " – " . displayInt($next_end, false) . "</small></a>";
 						$html .= "
 						</td>
@@ -676,7 +676,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 		$notifications = array_slice($data, $offset, $results_per_page, true);
 		if(!$notifications) return getString("notifications_none");
 		$html = "
-		<table class=\"notifications_list\">
+		<table class=\"list notifications_list\">
 			<thead>
 				<tr>
 					<th>" . getString("general_time_elapsed") . "</th>
@@ -758,7 +758,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 				if($page_number >= 2 || $next_start <= $count){
 					$html .= "
 					<tr>
-						<td style=\"text-align:left\">";
+						<td class=\"previous\">";
 							if($page_number >= 2) $html .= "<a href=\"$previous_page_url\">◄<br><small>" . displayInt($previous_start, false) . " – " . displayInt($previous_end, false) . "</small></a>";
 						$html .= "
 						</td>";
@@ -766,7 +766,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 							$html .= "<td></td>";
 						}
 						$html .= "
-						<td style=\"text-align:right\">";
+						<td class=\"next\">";
 							if($next_start <= $count) $html .= "<a href=\"$next_page_url\">►<br><small>" . displayInt($next_start, false) . " – " . displayInt($next_end, false) . "</small></a>";
 						$html .= "
 						</td>

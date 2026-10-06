@@ -52,7 +52,7 @@ usort($choices, function($a, $b){
 	return $choices_bets[$b["id"]]["chips"] - $choices_bets[$a["id"]]["chips"]; // Sinon, on trie par nombre de jetons misés décroissant
 });
 $choices_table = "
-<table class=\"choices_list\">
+<table class=\"list choices_list\">
 	<thead>
 		<tr>
 			<th>" . getString("prediction_outcome") . "</th>
@@ -111,15 +111,15 @@ $choices_select .= "</select>";
 $choices_select_full = $choices_select;
 if($already_bet) $choices_select = "
 	<input type=\"hidden\" name=\"choice\" value=\"$already_bet_choice_id\">
-	<span style=\"zoom:1.2;\">" . $already_bet_choice_name . "</span>
+	<span class=\"bet\">" . $already_bet_choice_name . "</span>
 ";
 
 $chips_total_raw = isConnected() ? executeQuery("SELECT `chips` FROM `users` WHERE `username` = ?;", [$_COOKIE["username"]], "int") : 0;
-$chips_total = "<span style=\"zoom:1.2;\">" . displayInt($chips_total_raw) . insertTextIcon("chips", "right", 1) . "</span>";
+$chips_total = "<span class=\"bet\">" . displayInt($chips_total_raw) . insertTextIcon("chips", "right", 1) . "</span>";
 
-$chips_input = "<input style=\"margin-bottom:0px;\" type=\"number\" name=\"chips\" min=\"1\" max=\"$chips_total_raw\" required=\"required\">" . insertTextIcon("chips", "right", 1.2);
-if($already_bet && $now < $ended)  $chips_input = "<span style=\"zoom:1.2;\">" . displayInt($already_bet_chips) . " + </span>" . $chips_input;
-if($already_bet && $now >= $ended) $chips_input = "<span style=\"zoom:1.2;\">" . displayInt($already_bet_chips) . "</span>" . insertTextIcon("chips", "right", 1.2);
+$chips_input = "<input class=\"bet\" type=\"number\" name=\"chips\" min=\"1\" max=\"$chips_total_raw\" required=\"required\">" . insertTextIcon("chips", "right", 1.2);
+if($already_bet && $now < $ended)  $chips_input = "<span class=\"bet\">" . displayInt($already_bet_chips) . " + </span>" . $chips_input;
+if($already_bet && $now >= $ended) $chips_input = "<span class=\"bet\">" . displayInt($already_bet_chips) . "</span>" . insertTextIcon("chips", "right", 1.2);
 
 $bet_html = "
 <form role=\"form\" action=\"controller.php\">
@@ -185,7 +185,7 @@ $manage_html .= isAuthorized(NULL, "prediction_edit", $id) ? $manage_edit : "";
 
 // Affichage
 $summary_table = "
-<table class=\"summary\">
+<table class=\"summary prediction_summary\">
 	<tr>
 		<td>
 			<a href=\"../user/$created_user\">" . displayUser($created_user) . "</a>

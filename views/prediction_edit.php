@@ -13,10 +13,10 @@ $choices = executeQuery("SELECT `id`, `name` FROM `choices` WHERE `prediction` =
 <form role="form" action="controller.php">
 	<input type="hidden" name="prediction" value="<?= $id ?>">
 	<label for="question"><?= getString("prediction_question") ?></label>
-	<input type="text" id="question" name="question" value="<?= $question ?>" required="required" style="width:calc(var(--font-size) * 30);">
+	<input type="text" id="question" name="question" value="<?= $question ?>" required="required" class="large">
 	<br>
 	<label for="details"><?= getString("prediction_details") ?></label>
-	<input type="text" id="details" name="details" value="<?= $details ?>" style="width:calc(var(--font-size) * 40);">
+	<input type="text" id="details" name="details" value="<?= $details ?>" class="extra_large">
 	<br>
 	<label for="user"><?= getString("prediction_created") ?></label>
 	<input type="text" id="user" name="user" value="<?= $creator ?>">

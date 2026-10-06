@@ -1,10 +1,10 @@
 <h1><?= getString("title_create") ?></h1>
 <form role="form" action="controller.php">
 	<label for="question"><?= getString("prediction_question") ?></label>
-	<input type="text" id="question" name="question" required="required" style="width:calc(var(--font-size) * 30);">
+	<input type="text" id="question" name="question" required="required" class="large">
 	<br>
 	<label for="details"><?= getString("prediction_details") ?></label>
-	<input type="text" id="details" name="details" style="width:calc(var(--font-size) * 40);">
+	<input type="text" id="details" name="details" class="extra_large">
 	<br>
 	<p><?= getString("create_details_desc") ?></p>
 	<br><br>

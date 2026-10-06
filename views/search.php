@@ -9,7 +9,7 @@ $scope = array_key_exists("scope", $_REQUEST) ? $_REQUEST["scope"] : "opened";
 		<option value="closed" <?= $scope == "closed" ? "selected=\"selected\"" : "" ?>><?= getString("predictions_closed") ?></option>
 		<option value="users" <?= $scope == "users" ? "selected=\"selected\"" : "" ?>><?= getString("general_users") ?></option>
 	</select>
-	<input type="text" name="query" id="query" required="required" value="<?= $query ?>" style="width:calc(var(--font-size) * 30);">
+	<input type="text" name="query" id="query" required="required" value="<?= $query ?>" class="large">
 	<br>
 	<button type="submit"><?= getString("search_search") ?></button>
 </form>

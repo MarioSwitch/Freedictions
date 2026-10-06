@@ -28,7 +28,7 @@ $manage_html .= isAuthorized(NULL, "user_delete", $username) ? $manage_delete : 
 $manage_html .= isAuthorized(NULL, "user_edit", $username) ? $manage_edit : "";
 
 $summary_table = "
-<table class=\"summary\">
+<table class=\"summary user_summary\">
 	<tr>
 		<td>
 			<abbr id=\"created\">$created</abbr>
