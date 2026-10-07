@@ -70,7 +70,7 @@
 	"prediction_manage_edit":"Modifier la prédiction",
 
 	"create_details_desc":"Détails supplémentaires concernant la prédiction (acronymes, cas spéciaux, etc.)<br>Vous pouvez utiliser « \\n » pour revenir à la ligne.<br>Ce champ est facultatif.",
-	"create_end":"Fermeture des paris (heure locale)",
+	"create_end":"Fermeture des paris",
 	"create_note_user":"Votre prédiction devra être approuvée par un vérificateur avant d'être ouverte aux paris.<br>Vous recevrez une notification une fois la prédiction ouverte au public.",
 	"create_note_mod":"Votre prédiction sera immédiatement ouverte aux paris.",
 	"create_submit":"Soumettre",

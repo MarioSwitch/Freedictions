@@ -5,7 +5,7 @@
 	"abbr_trillion": " Bio.",
 	"create_create": "Erstellen",
 	"create_details_desc": "Zusätzliche Details zur Vorhersage (Akronyme, Sonderfälle usw.)<br>Sie können „\\n“ verwenden, um zur Zeile zurückzukehren.<br>Dieses Feld ist optional.",
-	"create_end": "Schließzeit für Wetten (Ortszeit)",
+	"create_end": "Schließzeit für Wetten",
 	"create_note_mod": "Ihre Vorhersage wird sofort für Wetten geöffnet.",
 	"create_note_user": "Ihre Vorhersage muss von einem Prüfer genehmigt werden, bevor sie zum Wetten freigegeben wird.<br>Sie erhalten eine Benachrichtigung, sobald die Vorhersage für die Öffentlichkeit freigegeben wurde.",
 	"create_submit": "Einreichen",

@@ -543,8 +543,10 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 								$td = "<td>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "<br>" . displayInt($users) . insertTextIcon("users", "right", 1) . "</td>";
 								break;
 							case "bet":
-								if(!isConnected()){$td = "<td></td>"; break;}
-								$bet = executeQuery("SELECT `choices`.`name`, `bets`.`chips` FROM `choices` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `choices`.`prediction` = ? AND `bets`.`user` = ?;", [$id, $_COOKIE["username"]], "row");
+								if(array_key_exists("user", $_REQUEST)){$user = $_REQUEST["user"];}
+								else if(isConnected())                 {$user = $_COOKIE["username"];}
+								else                                   {$td = "<td></td>"; break;}
+								$bet = executeQuery("SELECT `choices`.`name`, `bets`.`chips` FROM `choices` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `choices`.`prediction` = ? AND `bets`.`user` = ?;", [$id, $user], "row");
 								if(!$bet){$td = "<td></td>"; break;}
 								$bet_name = $bet["name"];
 								$bet_chips = $bet["chips"];

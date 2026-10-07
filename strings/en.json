@@ -5,7 +5,7 @@
 	"abbr_trillion": " T",
 	"create_create": "Create",
 	"create_details_desc": "Additional prediction details (acronyms, special cases, etc.)<br>You can use “\\n” for line feed.<br>This field is optional.",
-	"create_end": "Closing time for betting (local time)",
+	"create_end": "Closing time for betting",
 	"create_note_mod": "Your prediction will be open to betting immediately.",
 	"create_note_user": "Your prediction will be reviewed by a verifier prior to being opened to bets.<br>You will receive a notification once the prediction has been opened to the public.",
 	"create_submit": "Submit",
