@@ -1,7 +1,7 @@
 <?php
 include_once "functions.php";
-include_once "forms.js.php";
-include_once "time.js.php";
+include_once "scripts/forms.js.php";
+include_once "scripts/time.js.php";
 
 $view_name = $_REQUEST["view"];
 $view_path = "views/" . $view_name . ".php";
@@ -80,15 +80,9 @@ function getTitle(): string{
 <html>
 	<head>
 		<title><?= getTitle() ?></title>
-		<?php
-		switch(getSetting("theme")){
-			case "light": echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style_light.css\">"; break;
-			case "dark": echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style_dark.css\">"; break;
-			case "black": echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style_black.css\">"; break;
-		}
-		?>
-		<link rel="stylesheet" type="text/css" href="style.css">
-		<link rel="stylesheet" type="text/css" href="style_mobile.css">
+		<link rel="stylesheet" type="text/css" href="styles/main.css">
+		<link rel="stylesheet" type="text/css" href="styles/mobile.css">
+		<link rel="stylesheet" type="text/css" href="styles/theme_<?= getSetting("theme") ?>.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">  
 	</head>
 	<body>
