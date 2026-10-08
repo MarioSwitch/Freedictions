@@ -378,6 +378,33 @@ CREATE PROCEDURE `DailyUpdate` ()
 			INSERT INTO `notifications` (`user`, `text`) SELECT `username`, 'DAILY:RESET' FROM `users` WHERE `updated` >= NOW() - INTERVAL 2 DAY AND `updated` < NOW() - INTERVAL 1 DAY;
 		COMMIT;
 	END $$
+
+CREATE FUNCTION `UserPnL`
+	(
+		p_username varchar(20)
+	)
+	RETURNS bigint DETERMINISTIC READS SQL DATA
+	BEGIN
+		DECLARE v_pnl bigint;
+
+		SELECT COALESCE(SUM(
+			CASE
+				WHEN `bets`.`choice` <> `predictions`.`answer` THEN (- `bets`.`chips`)
+				WHEN `bets`.`choice` = `predictions`.`answer` THEN
+					FLOOR(
+						`bets`.`chips` *
+							(SELECT SUM(`bets2`.`chips`) FROM `bets` `bets2` WHERE `bets2`.`prediction` = `bets`.`prediction`)
+							/
+							(SELECT SUM(`bets3`.`chips`) FROM `bets` `bets3` WHERE `bets3`.`prediction` = `bets`.`prediction` AND `bets3`.`choice` = `predictions`.`answer`)
+					) - `bets`.`chips`
+			END
+		), 0) INTO v_pnl
+		FROM `bets`
+		JOIN `predictions` ON `predictions`.`id` = `bets`.`prediction`
+		WHERE `bets`.`user` = p_username AND `predictions`.`answer` IS NOT NULL;
+
+		RETURN v_pnl;
+	END $$
 DELIMITER ;
 
 

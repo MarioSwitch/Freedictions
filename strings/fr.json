@@ -102,6 +102,7 @@
 
 	"user_created_updated_streak":"Utilisateur créé<br>Dernière connexion (série)",
 	"user_predictions":"Prédictions créées<br>Prédictions participées",
+	"user_resolved_won_total_profit":"Paris remportés<br>Profit",
 	"user_without_outcome":"[TBR] sans résultat",
 	"user_chips":"Solde de jetons",
 	"user_manage":"Options avancées",

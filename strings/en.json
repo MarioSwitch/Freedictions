@@ -160,5 +160,6 @@
 	"user_manage_edit": "Edit user",
 	"user_manage_password": "Change password",
 	"user_predictions": "Predictions created<br>Predictions participated",
+	"user_resolved_won_total_profit": "Bets won<br>Profit",
 	"user_without_outcome": "[TBR] without outcome"
 }

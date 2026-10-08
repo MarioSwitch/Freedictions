@@ -431,8 +431,8 @@ function displayRank(int $rank): string{
  */
 function displayFloat(float $float, bool $percentage = false): string{
 	// Si le nombre est en dehors de la plage des pourcentages (0-100), affichage de la partie entière avec displayInt()
-	if($float > 100) return displayInt(floor($float));
-	if($float < 0) return displayInt(ceil($float));
+	if($float > 100) return displayInt(intval(floor($float)));
+	if($float < 0) return displayInt(intval(ceil($float)));
 	
 	// Formatage avec 2 décimales
 	$number = number_format($float, 2, getString("decimal_separator"), getString("thousands_separator"));

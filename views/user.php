@@ -18,6 +18,11 @@ $predictions_created_waiting_approval = executeQuery("SELECT * FROM `predictions
 $predictions_created = array_merge($predictions_created_approved, $predictions_created_waiting_approval);
 $predictions_participated = executeQuery("SELECT `predictions`.* FROM `predictions` JOIN `choices` ON `choices`.`prediction` = `predictions`.`id` JOIN `bets` ON `bets`.`choice` = `choices`.`id` WHERE `predictions`.`approved` = 1 AND `bets`.`user` = ? AND `answer` IS NULL ORDER BY `ended` ASC;", [$username]);
 
+$predictions_resolved_won = executeQuery("SELECT COUNT(*) FROM `bets` JOIN `predictions` ON `predictions`.`answer` = `bets`.`choice` WHERE `bets`.`user` = ?;", [$username], "int");
+$predictions_resolved_total = executeQuery("SELECT COUNT(*) FROM `bets` JOIN `predictions` ON `predictions`.`id` = `bets`.`prediction` WHERE `bets`.`user` = ? AND `predictions`.`answer` IS NOT NULL;", [$username], "int");
+$predictions_resolved_ratio = $predictions_resolved_total ? $predictions_resolved_won / $predictions_resolved_total * 100 : PHP_INT_MAX;
+$predictions_resolved_profit = executeQuery("SELECT `UserPnL`(?);", [$username], "int");
+
 $manage_password = "<p><button onclick=\"location.href='$username/password'\">" . getString("user_manage_password") . "</button></p>";
 $manage_delete = "<p><button onclick=\"location.href='$username/delete'\">" . getString("user_manage_delete") . "</button></p>";
 $manage_edit = "<p><button onclick=\"location.href='$username/edit'\">" . getString("user_manage_edit") . "</button></p>";
@@ -43,10 +48,15 @@ $summary_table = "
 			displayInt($predictions_participated_count) . "
 			<small>(" . displayInt($predictions_participated_chips) . insertTextIcon("chips", "right", 1.5) . ")</small>
 		</td>
+		<td>" .
+			displayInt($predictions_resolved_won) . " / " . displayInt($predictions_resolved_total) . " <small>(" . displayFloat($predictions_resolved_ratio, true) . ")</small><br>" .
+			displayInt($predictions_resolved_profit, true, true) . insertTextIcon("chips", "right", 1.5) . "
+		</td>
 	</tr>
 	<tr>
 		<td>" . getString("user_created_updated_streak") . "</td>
 		<td>" . getString("user_predictions") . "</td>
+		<td>" . getString("user_resolved_won_total_profit") . "</td>
 	</tr>
 </table>
 ";
