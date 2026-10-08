@@ -723,7 +723,9 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 								$selected_id = $outcome_id;
 								$selected_title = $outcome_title;
 								$chips = $notification[2][1];
-								$chips_sentence = getString("notifications_chips_won", ["<b>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "</b>"]);
+								$chips_bet = executeQuery("SELECT `chips` FROM `bets` WHERE `user` = ? AND `choice` = ?;", [$_COOKIE["username"], $selected_id], "int");
+								$chips_profit = $chips - $chips_bet;
+								$chips_sentence = getString("notifications_chips_won", ["<b>" . displayInt($chips) . " (" . displayInt($chips_profit, true, true) . ")" . insertTextIcon("chips", "right", 1) . "</b>"]);
 							}else{
 								$selected_id = $notification[2][1];
 								$selected_title = executeQuery("SELECT `name` FROM `choices` WHERE `id` = ?;", [$selected_id], "string");

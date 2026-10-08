@@ -158,7 +158,19 @@ if(!isConnected() && $now < $ended) $bet_html = "
 	";
 if($now >= $ended && !$already_bet) $bet_html = "";
 if($now >= $ended) $bet_html .= "<p>" . getString("prediction_sentence_closed", ["<abbr id=\"ended\">$ended</abbr>"]) . "<script>display(\"$ended\", \"ended\");</script></p>";
-if($answer)        $bet_html .= "<p>" . getString("prediction_sentence_resolved", [$answer_name, "<abbr id=\"answered\">$answered</abbr>"]) . "<script>display(\"$answered\", \"answered\");</script></p>";
+if($answer){
+	$bet_html .= "<p>" . getString("prediction_sentence_resolved", [$answer_name, "<abbr id=\"answered\">$answered</abbr>"]) . "<script>display(\"$answered\", \"answered\");</script><br>";
+	if($already_bet){
+		if($answer == $already_bet_choice_id){
+			$chips = intval(floor($choices_bets[$answer]["ratio"] * $already_bet_chips));
+			$chips_profit = $chips - $already_bet_chips;
+			$bet_html .= getString("notifications_chips_won", ["<b>" . displayInt($chips) . " (" . displayInt($chips_profit, true, true) . ")" . insertTextIcon("chips", "right", 1) . "</b>"]);
+		}else{
+			$bet_html .= getString("notifications_chips_lost", ["<b>" . displayInt($already_bet_chips) . insertTextIcon("chips", "right", 1) . "</b>"]);
+		}
+	}
+	$bet_html .= "</p>";
+}
 
 $manage_close = "
 <form role=\"form\" action=\"controller.php\">
