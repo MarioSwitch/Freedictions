@@ -187,7 +187,7 @@ switch($_REQUEST["action"]){
 		date_default_timezone_set("UTC");
 		$endUTC = date("Y-m-d\TH:i", strtotime($end) - $offset*60);
 
-		$id = executeQuery("CALL `PredictionCreate`(?, ?, ?, ?, ?, ?);", [$question, $details, $_COOKIE["username"], $endUTC, $approved, json_encode($choices, JSON_UNESCAPED_UNICODE)], "int");
+		$id = executeQuery("CALL `PredictionCreate`(?, ?, ?, ?, ?, ?);", [$question, $details, $_COOKIE["username"], $endUTC, intval($approved), json_encode($choices, JSON_UNESCAPED_UNICODE)], "int");
 
 		redirect("prediction/$id");
 
