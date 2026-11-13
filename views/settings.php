@@ -1,5 +1,5 @@
 <?php
-/* REMINDER
+/* REMINDERS
 	- When adding/editing settings, don't forget to update the getSetting() function in functions.php ($default and $supported)
 	- When adding/editing settings, don't forget to update the "settings" case in controller.php ($_REQUEST and setcookie())
 	- When adding a new language, don't forget to add the corresponding case in the displayRank() function in functions.php (switch(getSetting("language")))

@@ -51,8 +51,7 @@ CREATE TABLE `notifications` (
 	CONSTRAINT `notification_user` FOREIGN KEY (`user`) REFERENCES `users` (`username`) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-ALTER TABLE `predictions` 
-	ADD CONSTRAINT `answer` FOREIGN KEY (`answer`) REFERENCES `choices` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `predictions` ADD CONSTRAINT `answer` FOREIGN KEY (`answer`) REFERENCES `choices` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 DELIMITER $$
@@ -272,13 +271,13 @@ CREATE PROCEDURE `PredictionResolve`
 
 		START TRANSACTION;
 			UPDATE `predictions` SET `answer` = p_answer, `answered` = NOW() WHERE `id` = p_id;
-			
+
 			SET v_chips_total = (SELECT SUM(`chips`) FROM `bets` WHERE `prediction` = p_id);
 			SET v_chips_winning = (SELECT SUM(`chips`) FROM `bets` WHERE `choice` = p_answer);
-			
+
 			IF v_chips_winning > 0 THEN
 				SET v_winning_rate = v_chips_total / v_chips_winning;
-				
+
 				SET done = 0;
 				OPEN winners_cursor;
 				winners_loop: LOOP
@@ -286,7 +285,7 @@ CREATE PROCEDURE `PredictionResolve`
 					IF done THEN
 						LEAVE winners_loop;
 					END IF;
-					
+
 					SET v_winner_chips_won = FLOOR(v_winner_chips_bet * v_winning_rate);
 					UPDATE `users` SET `chips` = (chips + v_winner_chips_won) WHERE `username` = v_winner_user;
 					INSERT INTO `notifications` (`user`, `text`) VALUES (v_winner_user, CONCAT('RESOLVED:', p_id, ',ANSWER:', p_answer, ',WON:', v_winner_chips_won));
@@ -408,5 +407,4 @@ CREATE FUNCTION `UserPnL`
 DELIMITER ;
 
 
-CREATE EVENT `DailyUpdateEvent` ON SCHEDULE EVERY 1 DAY STARTS '2024-11-14 00:00:00' ON COMPLETION PRESERVE ENABLE DO
-	CALL `DailyUpdate`;
+CREATE EVENT `DailyUpdateEvent` ON SCHEDULE EVERY 1 DAY STARTS '2024-11-14 00:00:00' ON COMPLETION PRESERVE ENABLE DO CALL `DailyUpdate`;

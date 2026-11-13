@@ -1,28 +1,28 @@
 <?php
-include_once "config.php"; // Vous devez inclure VOTRE fichier de configuration. Lisez le fichier README.md pour connaître les constantes à définir.
+include_once "config.php";
 
 /**
- * Exécute une requête sur la base de données
- * @param string $query Requête SQL (remplacer les arguments par des « ? »)
- * @param array $args Tableau des arguments
- * @param string $result_type Type de résultat (« array » (par défaut), « row », « string », « int » ou « float »)
- * @return array|string|int|float Résultat de la requête
+ * Executes a SQL query on the database
+ * @param string $query SQL query (replace custom arguments with "?")
+ * @param array $args Arguments array to replace "?" placeholders (if any)
+ * @param string $result_type Result type ("array" (by default), "row", "string", "int" or "float")
+ * @return array|string|int|float Query result
  */
 function executeQuery(string $query, array $args = [], string $result_type = "array"): array|string|int|float{
 	$database_handler = null;
 
-	// Démarre la connexion à la base de données
+	// Initiates database connection
 	try{
 		$database_handler = new PDO("mysql:host=" . CONFIG_DATABASE_HOST . ";dbname=" . CONFIG_DATABASE_NAME, CONFIG_DATABASE_USER, CONFIG_DATABASE_PASSWORD);
 	}catch(PDOException $exception){
 		die("<span class=\"error\">" . $exception->getMessage() . "</span>");
 	}
 
-	// Exécute la requête
+	// Executes the query
 	try{
 		$statement_handler = $database_handler->prepare($query);
 		for($i=0; $i<count($args); $i++){
-			$statement_handler->bindParam($i+1, $args[$i]); // $i+1 car les paramètres sont indexés à partir de 1
+			$statement_handler->bindParam($i+1, $args[$i]); // $i+1 as parameters are indexed from 1
 		}
 		$result = $statement_handler->execute();
 		if($result === false){
@@ -33,10 +33,10 @@ function executeQuery(string $query, array $args = [], string $result_type = "ar
 		die("<span class=\"error\">" . $query . "<br>" . print_r($args, true) . "<br>" . $exception->getMessage() . "</span>");
 	}
 
-	// Ferme la connexion à la base de données
+	// Closes database connection
 	$database_handler = null;
 
-	// Retourne le résultat
+	// Returns result
 	return match($result_type){
 		"row"    => $result ? $result[0]              : [],
 		"string" => $result ? strval($result[0][0])   : "",
@@ -47,9 +47,9 @@ function executeQuery(string $query, array $args = [], string $result_type = "ar
 }
 
 /**
- * Redirige vers une autre page du site
- * @param string $link Page de destination (ex. « home » ou « user/MarioSwitch »)
- * @param string $error Code d'erreur à afficher
+ * Redirects to another site page
+ * @param string $link Target page (e.g. "home" or "user/MarioSwitch")
+ * @param string $error Error code (if any)
  * @return void
  */
 function redirect(string $link, string $error = ""): void{
@@ -58,11 +58,11 @@ function redirect(string $link, string $error = ""): void{
 }
 
 /**
- * Insère une icône SVG dans le texte
- * @param string $icon Nom du fichier SVG (sans l'extension)
- * @param string $align Position de l'icône par rapport au texte (« left » ou « right »)
- * @param float $scale Échelle de taille (facteur multiplicatif de la taille de la police)
- * @return string Icône SVG
+ * Inserts a SVG icon in a text
+ * @param string $icon SVG filename (without ".svg")
+ * @param string $align Icon position relative to the text ("left" or "right")
+ * @param float $scale Icon scale (factor of font size)
+ * @return string <span> containing the SVG icon
  */
 function insertTextIcon(string $icon, string $align, float $scale): string{
 	$align = match($align){
@@ -86,23 +86,23 @@ function insertTextIcon(string $icon, string $align, float $scale): string{
 }
 
 /**
- * Récupère une chaîne de caractères dans le fichier de langue
- * @param string $key Clé (identifiant) de la chaîne
- * @param array $args Tableau d'arguments à remplacer dans la chaîne
- * @return string Chaîne de caractères extraite du fichier de langue, ou la clé si la chaîne n'existe pas
+ * Gets a string from a language file
+ * @param string $key String key
+ * @param array $args Arguments array to replace "[TBR]" placeholders (if any)
+ * @return string Translated string (or English string/key if not found)
  */
 function getString(string $key, array $args = []): string{
-	// file_get_contents très lent -> mise en cache du contenu des fichiers
+	// file_get_contents very slow -> caching file contents
 	static $english_strings = NULL;
 	if($english_strings == NULL) $english_strings = json_decode(file_get_contents("strings/en.json"), true);
 	$english_string = array_key_exists($key, $english_strings) ? $english_strings[$key] : $key;
 
 	$language = getSetting("language");
-	if(!file_exists("strings/$language.json")) return $english_string; // Fichier de langue inexistant
+	if(!file_exists("strings/$language.json")) return $english_string; // Unknown language file
 
 	static $language_strings = NULL;
 	if($language_strings == NULL) $language_strings = json_decode(file_get_contents("strings/$language.json"), true);
-	if(!array_key_exists($key, $language_strings)) return $english_string; // Clé inexistante dans le fichier de langue
+	if(!array_key_exists($key, $language_strings)) return $english_string; // Unknown key in language file
 
 	$string = $language_strings[$key];
 	foreach($args as $arg){
@@ -112,8 +112,8 @@ function getString(string $key, array $args = []): string{
 }
 
 /**
- * Retourne la liste des langues supportées
- * @return array Liste des langues supportées
+ * Gets the list of supported languages
+ * @return array List of supported languages
  */
 function getSupportedLanguages(): array{
 	$languages = [];
@@ -125,8 +125,8 @@ function getSupportedLanguages(): array{
 }
 
 /**
- * Retourne la langue préférée de l'utilisateur
- * @return string Langue préférée de l'utilisateur
+ * Gets the user's preferred language
+ * @return string User's preferred language
  */
 function getPreferredLanguage(): string{
 	$raw = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
@@ -139,11 +139,11 @@ function getPreferredLanguage(): string{
 }
 
 /**
- * Retourne la valeur d'un paramètre utilisateur.
- * Le crée et l'assigne à sa valeur par défaut s'il n'existe pas.
- * Le réinitialise à sa valeur par défaut s'il n'est pas valide.
- * @param string $name Nom (identifiant) du paramètre
- * @return string Valeur du paramètre
+ * Gets the value of a user setting.
+ * Creates it and assigns it to its default value if it doesn't exist.
+ * Resets it to its default value if it's not valid.
+ * @param string $name Setting name
+ * @return string Setting value
  */
 function getSetting($name): string{
 	switch($name){
@@ -173,7 +173,7 @@ function getSetting($name): string{
 }
 
 /**
- * Réinitialise la date d'expiration des cookies
+ * Resets cookies expiration
  * @return void
  */
 function resetCookiesExpiration(): void{
@@ -183,11 +183,11 @@ function resetCookiesExpiration(): void{
 }
 
 /**
- * Vérifie que les cookies de connexion sont valides et retourne le statut de connexion
- * @return bool Vrai si l'utilisateur est connecté, faux sinon
+ * Checks if session cookies are correct and returns connection status
+ * @return bool True if the user is connected, false otherwise
  */
 function isConnected(): bool{
-	// password_verify très lent -> mise en cache du statut de connexion
+	// password_verify very slow -> caching connection status
 	static $isConnected = false;
 	if($isConnected) return true;
 
@@ -209,13 +209,13 @@ function isConnected(): bool{
 }
 
 /**
- * Vérifie si un utilisateur possède un rôle supplémentaire
- * @param string $type Rôle supplémentaire à vérifier
- * @param string|null $user Utilisateur à vérifier. Si omis ou NULL, vérifie l'utilisateur actuellement connecté
- * @return bool Vrai si l'utilisateur possède le rôle supplémentaire, faux sinon
+ * Checks if a user has an extra role
+ * @param string $type Extra role to check
+ * @param string|null $user User to check. If omitted or NULL, checks the current user
+ * @return bool True if the user has the requested extra role, false otherwise
  */
 function isExtra(string $type, string|null $user = NULL): bool{
-	if($user == NULL){ // Utilisateur actuellement connecté
+	if($user == NULL){ // Current user
 		if(!isConnected()) return false;
 		$user = $_COOKIE["username"];
 	}
@@ -224,11 +224,11 @@ function isExtra(string $type, string|null $user = NULL): bool{
 }
 
 /**
- * Vérifie si un utilisateur est autorisé à effectuer une action
- * @param string|null $user Utilisateur à vérifier. Si NULL, vérifie l'utilisateur actuellement connecté
- * @param string $action Action à effectuer (voir controller.php)
- * @param string|int|null $id Identifiant cible de l'action (nom d'utilisateur ou numéro de prédiction). Peut être NULL pour certaines actions génériques.
- * @return bool Vrai si l'utilisateur est autorisé à effectuer l'action, faux sinon
+ * Checks if a user is authorized to perform an action
+ * @param string|null $user User to check. If NULL, checks the current user
+ * @param string $action Action to perform (see controller.php)
+ * @param string|int|null $id Target ID for the action (username or prediction number). Can be NULL for some generic actions.
+ * @return bool True if the user is authorized to perform the action, false otherwise
  */
 function isAuthorized(string|null $user, string $action, string|int|null $id): bool{
 	if(!isConnected()) return false;
@@ -283,18 +283,18 @@ function isAuthorized(string|null $user, string $action, string|int|null $id): b
 }
 
 /**
- * Affiche un utilisateur (nom d'utilisateur et rôles supplémentaires)
- * @param string $username Nom de l'utilisateur à afficher
- * @param bool $link Vrai pour inclure un lien vers la page de l'utilisateur, faux sinon
- * @return string Nom d'utilisateur et rôles supplémentaires
+ * Displays a user (username and extra roles)
+ * @param string $username Username to display
+ * @param bool $link True to include a link to the user's page, false otherwise
+ * @return string Username and extra roles
  */
 function displayUser(string $username, bool $link = false): string{
 	$icons = [
 		"verified" => "✔️",
 
 		"alpha" => "💛",
-		//"beta" => "🩶", PAS UTILE POUR LE MOMENT, TRADUCTION DÉJÀ PRÊTE
-		//"gamma" => "🤎", PAS UTILE POUR LE MOMENT + PAS DE TRADUCTION
+		//"beta" => "🩶", NOT USED FOR NOW, TRANSLATION DONE
+		//"gamma" => "🤎", NOT USED FOR NOW, NO TRANSLATION
 
 		"developer" => "💻",
 		"translator" => "🌍",
@@ -336,40 +336,40 @@ function displayUser(string $username, bool $link = false): string{
 }
 
 /**
- * Affiche un nombre entier
- * @param int $int Entier à afficher
- * @param bool $shorten Vrai pour tronquer les grands nombres (ex. 3 456 789 -> 3,45 M et non 3,46 M; -3 456 789 -> -3,45 M et non -3,46 M)
- * @param bool $force_sign Vrai pour afficher le signe « + » devant les nombres positifs, et « ± » devant 0
- * @return string Nombre entier formaté
+ * Displays an integer
+ * @param int $int Integer to display
+ * @param bool $shorten True to shorten large numbers (e.g. 3,456,789 -> 3.45M and not 3.46M; -3,456,789 -> -3.45M and not -3.46M)
+ * @param bool $force_sign True to display "+" before positive numbers, and "±" before 0
+ * @return string Formatted integer
  */
 function displayInt(int $int, bool $shorten = true, bool $force_sign = false): string{
-	// Détermination du signe
+	// Manages the sign
 	$sign = "";
 	if($int < 0) $sign = "-";
 	if($force_sign && $int > 0) $sign = "+";
 	if($force_sign && $int == 0) $sign = "±";
 
-	// Retrait du signe pour le traitement
-	// À partir d'ici, « nombre » signifie la valeur absolue.
+	// Discards the sign for processing
+	// From now on, "number" means the absolute value
 	$int = abs($int);
 
-	// PHP_INT_MAX vaut 9 223 372 036 854 775 807, soit environ 9,22e18.
-	// Les nombres supérieurs à 1 000 000 000 000 000 000 (1e18) sont masqués.
+	// PHP_INT_MAX equals 9,223,372,036,854,775,807; i.e. 9.22e18
+	// Numbers greater than 1,000,000,000,000,000,000 (1e18) are hidden
 	if($int >= 1e18) return "–";
 
-	// Insertion des séparateurs de milliers
+	// Inserts thousands separators
 	$full_int = number_format($int, 0, getString("decimal_separator"), getString("thousands_separator"));
 
-	// Le nombre est TOUJOURS affiché en entier si :
-	// - L'option $shorten est désactivée (on force l'affichage complet pour un cas précis, comme l'affichage des rangs)
-	// - Le nombre est inférieur à 1 million (pas besoin de raccourcir)
-	// - L'utilisateur a désactivé le raccourcissement des grands nombres dans les paramètres
+	// Number is ALWAYS fully displayed if:
+	// - $shorten is false: we need the full number in specific cases like displaying ranks
+	// - Number is lower than 1 million: no need to shorten
+	// - "Shorten large numbers" setting is set to "No": user preference
 	if(!$shorten || $int < 1e6 || getSetting("shorten_large_numbers") == "no") return $sign . $full_int;
 
-	// Calcul du nombre de chiffres
+	// Computes the number of digits
 	$digits = strlen($int);
 
-	// Sélection du préfixe adapté
+	// Selects the suffix
 	$suffix = match($digits){
 		7, 8, 9 => getString("abbr_million"),
 		10, 11, 12 => getString("abbr_billion"),
@@ -378,32 +378,32 @@ function displayInt(int $int, bool $shorten = true, bool $force_sign = false): s
 		default => ""
 	};
 
-	// Extraction des 3 premiers chiffres (d'où le fait que le résultat est tronqué et non arrondi)
+	// Extracts the first 3 digits (that's why the result is truncated and not rounded)
 	$formatted_int = intval(substr($int, 0, 3));
 
-	// Calcul du nombre de décimales à afficher
-	//   1 234 567 -> 1,23 M -> 2 décimales (7 chiffres, 7%3 = 1, 3-1 = 2, 2%3 = 2)
-	//  12 345 678 -> 12,3 M -> 1 décimale (8 chiffres, 8%3 = 2, 3-2 = 1, 1%3 = 1)
-	// 123 456 789 -> 123 M -> 0 décimales (9 chiffres, 9%3 = 0, 3-0 = 3, 3%3 = 0)
+	// Computes the number of decimals to display
+	//   1,234,567 -> 1.23M -> 2 decimals (7 digits, 7%3 = 1, 3-1 = 2, 2%3 = 2)
+	//  12,345,678 -> 12.3M -> 1 decimal (8 digits, 8%3 = 2, 3-2 = 1, 1%3 = 1)
+	// 123,456,789 -> 123M -> 0 decimals (9 digits, 9%3 = 0, 3-0 = 3, 3%3 = 0)
 	$digits_decimals = (3 - $digits%3) % 3;
 
-	// Division du nombre pour placer le séparateur de décimales au bon endroit
+	// Divides the number to correctly place the decimal separator
 	$formatted_int = $formatted_int / pow(10, $digits_decimals);
 
-	// Application du bon nombre de décimales et du séparateur de décimales
+	// Applies the correct number of decimals and the decimal separator
 	$formatted_int = number_format($formatted_int, $digits_decimals, getString("decimal_separator"), getString("thousands_separator"));
 
-	// Retourne le nombre raccourci avec le nombre complet en infobulle
+	// Returns the shortened number with the full number in a tooltip
 	return "<abbr title=\"" . $sign . $full_int . "\">" . $sign . $formatted_int . $suffix . "</abbr>";
 }
 
 /**
- * Affiche un rang (nombre ordinal)
- * @param int $rank Rang à afficher
- * @return string Rang formaté
+ * Displays a rank
+ * @param int $rank Rank to display
+ * @return string Formatted rank
  */
 function displayRank(int $rank): string{
-	if($rank <= 0) return "–"; // Rangs impossibles
+	if($rank <= 0) return "–"; // Impossible ranks
 	$suffix = "";
 	switch(getSetting("language")){
 		case "en":
@@ -424,27 +424,27 @@ function displayRank(int $rank): string{
 }
 
 /**
- * Affiche un nombre décimal (flottant)
- * @param float $float Nombre décimal à afficher
- * @param bool $percentage Vrai pour afficher le nombre comme un pourcentage
- * @return string Nombre décimal formaté
+ * Displays a float
+ * @param float $float Float to display
+ * @param bool $percentage True to display a percentage
+ * @return string Formatted float
  */
 function displayFloat(float $float, bool $percentage = false): string{
-	// Si le nombre est en dehors de la plage des pourcentages (0-100), affichage de la partie entière avec displayInt()
+	// If the float is outside the percentage range (0-100), uses displayInt() instead
 	if($float > 100) return displayInt(intval(floor($float)));
 	if($float < 0) return displayInt(intval(ceil($float)));
-	
-	// Formatage avec 2 décimales
+
+	// Formats with 2 decimals
 	$number = number_format($float, 2, getString("decimal_separator"), getString("thousands_separator"));
-	
-	// Si le nombre est un pourcentage, ajout du symbole
+
+	// If the float is a percentage, formats accordingly
 	return $percentage ? getString("percentage", [$number]) : $number;
 }
 
 /**
- * Affiche un ratio (changement en cas de victoire)
- * @param float $ratio Ratio à afficher
- * @return string Ratio formaté
+ * Displays a ratio (e.g. 1.23 -> "+23.00%", 4.56 -> "×4.56")
+ * @param float $ratio Ratio to display
+ * @return string Formatted ratio
  */
 function displayRatio(float $ratio): string{
 	if($ratio < 2) return "+" . displayFloat(($ratio - 1) * 100, true);
@@ -733,7 +733,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 								$chips_sentence = getString("notifications_chips_lost", ["<b>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "</b>"]);
 							}
 							$notification_title = "<a href=\"prediction/$prediction_id\">$prediction_title</a>";
-							$notification_desc = 
+							$notification_desc =
 								getString("notifications_resolved_selected") . " <b>$selected_title</b><br>" .
 								getString("notifications_resolved_outcome") . " <b>$outcome_title</b><br>" .
 								$chips_sentence;
@@ -742,7 +742,7 @@ function displayPaginatedTable(array $data, string $type, array $columns = ["tit
 							$prediction_id = $notification[0][1];
 							$chips = $notification[1][1];
 							$notification_title = getString("notifications_deleted");
-							$notification_desc = 
+							$notification_desc =
 								getString("notifications_deleted_desc", ["<b>" . $prediction_id . "</b>"]) . "<br>" .
 								getString("notifications_chips_refunded", ["<b>" . displayInt($chips) . insertTextIcon("chips", "right", 1) . "</b>"]);
 							break;

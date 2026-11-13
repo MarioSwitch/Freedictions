@@ -8,8 +8,8 @@ $view_path = "views/" . $view_name . ".php";
 $view_exploded = explode("_", $view_name);
 
 /**
- * Génère le nom de la page à afficher dans l'onglet du navigateur ou redirige le cas échéant
- * @return string Nom de la page
+ * Gets the title to display in the browser tab or redirects if needed
+ * @return string Title to display
  */
 function getTitle(): string{
 	global $view_name, $view_path, $view_exploded;
@@ -83,7 +83,7 @@ function getTitle(): string{
 		<link rel="stylesheet" type="text/css" href="styles/main.css">
 		<link rel="stylesheet" type="text/css" href="styles/mobile.css">
 		<link rel="stylesheet" type="text/css" href="styles/theme_<?= getSetting("theme") ?>.css">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
 		<?php

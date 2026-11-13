@@ -48,8 +48,8 @@ foreach($choices as $choice){
 }
 usort($choices, function($a, $b){
 	global $choices_contains_numbers, $choices_bets;
-	if($choices_contains_numbers || $choices_bets[$a["id"]]["chips"] == $choices_bets[$b["id"]]["chips"]) return $a["id"] - $b["id"]; // Si les choix contiennent des chiffres (ou si le nombre de jetons misés est égal), on trie par ID
-	return $choices_bets[$b["id"]]["chips"] - $choices_bets[$a["id"]]["chips"]; // Sinon, on trie par nombre de jetons misés décroissant
+	if($choices_contains_numbers || $choices_bets[$a["id"]]["chips"] == $choices_bets[$b["id"]]["chips"]) return $a["id"] - $b["id"]; // If choices contains numbers (or if quantity of chips bet is equal), we sort by ID (creation order)
+	return $choices_bets[$b["id"]]["chips"] - $choices_bets[$a["id"]]["chips"]; // Else, we sort by quantity of chips bet descending (higher percentage first)
 });
 $choices_table = "
 <table class=\"list choices_list\">
@@ -195,7 +195,7 @@ if($now >= $ended && !$answer) $manage_html .= isAuthorized(NULL, "prediction_re
 $manage_html .= isAuthorized(NULL, "prediction_delete", $id) ? $manage_delete : "";
 $manage_html .= isAuthorized(NULL, "prediction_edit", $id) ? $manage_edit : "";
 
-// Affichage
+// Page display
 $summary_table = "
 <table class=\"summary prediction_summary\">
 	<tr>
@@ -214,7 +214,7 @@ $summary_table = "
 		}
 		$summary_table .= "
 		</td>
-		<td>" . 
+		<td>" .
 			displayInt($volume_chips) . insertTextIcon("chips", "right", 1.5) . "<br>" .
 			displayInt($volume_users) . insertTextIcon("users", "right", 1.5) . "
 		</td>
@@ -232,7 +232,7 @@ if(!$approved){
 	echo "<p>" . getString("prediction_waiting_approval") . "</p>";
 }
 if($approved || isAuthorized(NULL, "modqueue_approve", $id)){
-	echo 
+	echo
 	"$summary_table
 	<br><br>
 	$details_text

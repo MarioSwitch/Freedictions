@@ -177,8 +177,8 @@ switch($_REQUEST["action"]){
 		foreach($choices as $choice) $choice = trim(htmlspecialchars($choice));
 		if(empty($question) || empty($end) || empty($choices) || !array_key_exists("details", $_REQUEST) || !array_key_exists("offset", $_REQUEST)) redirect("create", "fields");
 
-		$details = trim(htmlspecialchars($_REQUEST["details"])); // details peut valoir "" (évalué comme false), utilisation de array_key_exists() au lieu de empty() pour vérifier
-		$offset = $_REQUEST["offset"]; // offset peut valoir 0 (évalué comme false), utilisation de array_key_exists() au lieu de empty() pour vérifier
+		$details = trim(htmlspecialchars($_REQUEST["details"])); // details can be "" (considered false), usage of array_key_exists() instead of empty() to check
+		$offset = $_REQUEST["offset"];                           // offset can be 0 (considered false), usage of array_key_exists() instead of empty() to check
 
 		if(count($choices) < 2) redirect("create", "fields");
 
@@ -254,7 +254,7 @@ switch($_REQUEST["action"]){
 		if(!isConnected()) redirect("home", "perms_connected");
 
 		$username_connected = $_COOKIE["username"];
-		
+
 		$prediction_id = $_REQUEST["prediction"];
 		$password = $_REQUEST["password"];
 		if(empty($username_connected) || empty($password)) redirect("prediction/$prediction_id/delete", "fields");
@@ -289,7 +289,7 @@ switch($_REQUEST["action"]){
 		$theme = $_REQUEST["theme"];
 		$shorten_large_numbers = $_REQUEST["shorten_large_numbers"];
 		$results_per_page = $_REQUEST["results_per_page"];
-		
+
 		if(
 			empty($language) ||
 			empty($theme) ||

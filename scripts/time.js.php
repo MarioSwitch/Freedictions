@@ -1,18 +1,18 @@
 <?php
 echo "
 <script>
-var year = 31556952000; //1 year = 365.2425 days = 31,556,952,000 ms
-var month = year/12; //1 month = 30.436875 days = 2,629,746,000 ms
-var day = 86400000; //1 day = 86,400,000 ms
-var hour = day/24; //1 hour = 3,600,000 ms
-var minute = hour/60; //1 minute = 60,000 ms
-var second = minute/60; //1 second = 1,000 ms
+var year = 31556952000; // 1 year = 365.2425 days = 31,556,952,000 ms
+var month = year/12;    // 1 month = 30.436875 days = 2,629,746,000 ms
+var day = 86400000;     // 1 day = 86,400,000 ms
+var hour = day/24;      // 1 hour = 3,600,000 ms
+var minute = hour/60;   // 1 minute = 60,000 ms
+var second = minute/60; // 1 second = 1,000 ms
 
 function getTimeLeft(date){
 	var nowDate = new Date();
 	var goalDate = new Date(date);
 	var gap = Math.abs(goalDate - nowDate);
-	//Formatting count
+
 	if(gap>=year){
 		var countString = Math.floor(gap/year)+\"" . getString("time_year_short") . "\"+\" \"+Math.floor((gap%year)/month)+\"" . getString("time_month_short") . "\";
 	}else if(gap>=month){
