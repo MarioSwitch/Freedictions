@@ -8,13 +8,13 @@ $username = executeQuery("SELECT `username` FROM `users` WHERE `username` = ?;",
 	<p id="user" class="input_disabled"><?= $username ?></p>
 	<br>
 	<label for="pv"><?= getString("password_current") ?></label>
-	<input type="password" name="pv" id="pv" required="required">
+	<input type="password" name="pv" id="pv" required="required" autocomplete="current-password">
 	<br>
 	<label for="np"><?= getString("password_new") ?></label>
-	<input type="password" name="np" id="np" required="required">
+	<input type="password" name="np" id="np" required="required" autocomplete="new-password">
 	<br>
 	<label for="np_confirm"><?= getString("password_new_confirm") ?></label>
-	<input type="password" name="np_confirm" id="np_confirm" required="required">
+	<input type="password" name="np_confirm" id="np_confirm" required="required" autocomplete="new-password">
 	<br>
 	<button type="submit" name="action" value="user_password"><?= getString("general_save") ?></button>
 </form>

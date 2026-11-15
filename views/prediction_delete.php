@@ -10,7 +10,7 @@ $prediction = executeQuery("SELECT * FROM `predictions` WHERE `id` = ?;", [$id],
 	<p id="question" class="input_disabled"><?= $prediction["title"] ?></p>
 	<br>
 	<label for="password"><?= getString("general_password") ?></label>
-	<input type="password" name="password" id="password" required="required">
+	<input type="password" name="password" id="password" required="required" autocomplete="current-password">
 	<br>
 	<button type="submit" name="action" value="prediction_delete"><?= getString("prediction_manage_delete") ?></button>
 	<p><?= getString("general_cant_be_undone") ?></p>

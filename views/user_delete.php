@@ -8,7 +8,7 @@ $username = executeQuery("SELECT `username` FROM `users` WHERE `username` = ?;",
 	<p id="user" class="input_disabled"><?= $username ?></p>
 	<br>
 	<label for="password"><?= getString("general_password") ?></label>
-	<input type="password" name="password" id="password" required="required">
+	<input type="password" name="password" id="password" required="required" autocomplete="current-password">
 	<br>
 	<button type="submit" name="action" value="user_delete"><?= getString("user_manage_delete") ?></button>
 	<p><?= getString("general_cant_be_undone") ?></p>
