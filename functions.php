@@ -145,7 +145,7 @@ function getPreferredLanguage(): string{
  * @param string $name Setting name
  * @return string Setting value
  */
-function getSetting($name): string{
+function getSetting(string $name): string{
 	switch($name){
 		case "language":
 			$default = getPreferredLanguage();
@@ -167,7 +167,7 @@ function getSetting($name): string{
 	if(array_key_exists($name, $_COOKIE)){
 		return in_array($_COOKIE[$name], $supported) ? $_COOKIE[$name] : $default;
 	}else{
-		setcookie($name, $default, time()+CONFIG_COOKIES_EXPIRATION);
+		setcookie($name, $default, time()+CONFIG_COOKIES_EXPIRATION, "/");
 		return $default;
 	}
 }
@@ -178,7 +178,7 @@ function getSetting($name): string{
  */
 function resetCookiesExpiration(): void{
 	foreach($_COOKIE as $key => $value){
-		setcookie($key, $value, time()+CONFIG_COOKIES_EXPIRATION);
+		setcookie($key, $value, time()+CONFIG_COOKIES_EXPIRATION, "/");
 	}
 }
 
@@ -206,21 +206,6 @@ function isConnected(): bool{
 	}
 	$isConnected = true;
 	return true;
-}
-
-/**
- * Checks if a user has an extra role
- * @param string $type Extra role to check
- * @param string|null $user User to check. If omitted or NULL, checks the current user
- * @return bool True if the user has the requested extra role, false otherwise
- */
-function isExtra(string $type, string|null $user = NULL): bool{
-	if($user == NULL){ // Current user
-		if(!isConnected()) return false;
-		$user = $_COOKIE["username"];
-	}
-	$extra = executeQuery("SELECT `extra` FROM `users` WHERE `username` = ?;", [$user], "string");
-	return preg_match("/$type/", $extra) == 1;
 }
 
 /**
@@ -293,8 +278,7 @@ function displayUser(string $username, bool $link = false): string{
 		"verified" => "✔️",
 
 		"alpha" => "💛",
-		//"beta" => "🩶", NOT USED FOR NOW, TRANSLATION DONE
-		//"gamma" => "🤎", NOT USED FOR NOW, NO TRANSLATION
+		"beta" => "🩶",
 
 		"developer" => "💻",
 		"translator" => "🌍",

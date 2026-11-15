@@ -30,7 +30,7 @@ function displayLanguage(string $language_code): string{
  * @param string $setting Setting to display
  * @return void
  */
-function displaySetting(string $setting){
+function displaySetting(string $setting): void{
 	echo "<tr>
 		<td>" . getString("settings_$setting") . "</td>
 		<td><select name=\"$setting\">

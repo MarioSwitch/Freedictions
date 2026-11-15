@@ -25,13 +25,13 @@ switch($_REQUEST["action"]){
 		if(!$user) redirect("signin", "username_unknown");
 		if(!password_verify($password, $user["password"])) redirect("signin", "password");
 
-		setcookie("username", $user["username"], time() + CONFIG_COOKIES_EXPIRATION);
-		setcookie("password", $password, time() + CONFIG_COOKIES_EXPIRATION);
+		setcookie("username", $user["username"], time() + CONFIG_COOKIES_EXPIRATION, "/");
+		setcookie("password", $password, time() + CONFIG_COOKIES_EXPIRATION, "/");
 		redirect("home");
 
 	case "signout":
-		setcookie("username", "", time() + CONFIG_COOKIES_EXPIRATION);
-		setcookie("password", "", time() + CONFIG_COOKIES_EXPIRATION);
+		setcookie("username", "", time() + CONFIG_COOKIES_EXPIRATION, "/");
+		setcookie("password", "", time() + CONFIG_COOKIES_EXPIRATION, "/");
 		redirect("home");
 
 	case "user_edit":
@@ -300,10 +300,10 @@ switch($_REQUEST["action"]){
 			empty($results_per_page)
 		) redirect("settings", "fields");
 
-		setcookie("language", $language, time() + CONFIG_COOKIES_EXPIRATION);
-		setcookie("theme", $theme, time() + CONFIG_COOKIES_EXPIRATION);
-		setcookie("shorten_large_numbers", $shorten_large_numbers, time() + CONFIG_COOKIES_EXPIRATION);
-		setcookie("results_per_page", $results_per_page, time() + CONFIG_COOKIES_EXPIRATION);
+		setcookie("language", $language, time() + CONFIG_COOKIES_EXPIRATION, "/");
+		setcookie("theme", $theme, time() + CONFIG_COOKIES_EXPIRATION, "/");
+		setcookie("shorten_large_numbers", $shorten_large_numbers, time() + CONFIG_COOKIES_EXPIRATION, "/");
+		setcookie("results_per_page", $results_per_page, time() + CONFIG_COOKIES_EXPIRATION, "/");
 
 		redirect("settings");
 }

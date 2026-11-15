@@ -75,6 +75,9 @@ function getTitle(): string{
 	}
 	return $title . " – " . getString("site_name");
 }
+
+if(isConnected()) executeQuery("UPDATE `users` SET `updated` = NOW() WHERE `username` = ?;", [$_COOKIE["username"]]);
+resetCookiesExpiration();
 ?>
 
 <html>
