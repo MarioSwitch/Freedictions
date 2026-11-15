@@ -144,16 +144,6 @@ switch($_REQUEST["action"]){
 
 		if(!isAuthorized(NULL, $_REQUEST["action"], $prediction_id)) redirect("prediction/$prediction_id", "perms");
 
-		if(
-			!array_key_exists("question", $_REQUEST) ||
-			!array_key_exists("details", $_REQUEST) ||
-			!array_key_exists("user", $_REQUEST) ||
-			!array_key_exists("created", $_REQUEST) ||
-			!array_key_exists("end", $_REQUEST) ||
-			!array_key_exists("choices", $_REQUEST) ||
-			!array_key_exists("choices_id", $_REQUEST)
-		) redirect("prediction/$prediction_id/edit", "fields");
-
 		$question = trim(htmlspecialchars($_REQUEST["question"]));
 		$details = trim(htmlspecialchars($_REQUEST["details"]));
 		$user = trim(htmlspecialchars($_REQUEST["user"]));
@@ -163,8 +153,20 @@ switch($_REQUEST["action"]){
 		$choices = $_REQUEST["choices"];
 		$choices_id = $_REQUEST["choices_id"];
 		if(count($choices) != count($choices_id)) redirect("prediction/$prediction_id/edit", "fields");
+		$choices_parsed = [];
+		foreach($choices as $choice) $choices_parsed[] = trim(htmlspecialchars($choice));
 
-		executeQuery("CALL `PredictionEdit`(?, ?, ?, ?, ?, ?, ?, ?);", [$prediction_id, $question, $details, $user, $created, $end, json_encode($choices, JSON_UNESCAPED_UNICODE), json_encode($choices_id, JSON_UNESCAPED_UNICODE)]);
+		if(
+			empty($question) ||
+			empty($user) ||
+			empty($created) ||
+			empty($end) ||
+			empty($choices_parsed) ||
+			empty($choices_id) ||
+			!array_key_exists("details", $_REQUEST) // details can be "" (considered false), usage of array_key_exists() instead of empty() to check
+		) redirect("prediction/$prediction_id/edit", "fields");
+
+		executeQuery("CALL `PredictionEdit`(?, ?, ?, ?, ?, ?, ?, ?);", [$prediction_id, $question, $details, $user, $created, $end, json_encode($choices_parsed, JSON_UNESCAPED_UNICODE), json_encode($choices_id, JSON_UNESCAPED_UNICODE)]);
 
 		redirect("prediction/$prediction_id");
 
@@ -174,8 +176,9 @@ switch($_REQUEST["action"]){
 		$question = trim(htmlspecialchars($_REQUEST["question"]));
 		$end = $_REQUEST["end"];
 		$choices = $_REQUEST["choices"];
-		foreach($choices as $choice) $choice = trim(htmlspecialchars($choice));
-		if(empty($question) || empty($end) || empty($choices) || !array_key_exists("details", $_REQUEST) || !array_key_exists("offset", $_REQUEST)) redirect("create", "fields");
+		$choices_parsed = [];
+		foreach($choices as $choice) $choices_parsed[] = trim(htmlspecialchars($choice));
+		if(empty($question) || empty($end) || empty($choices_parsed) || !array_key_exists("details", $_REQUEST) || !array_key_exists("offset", $_REQUEST)) redirect("create", "fields");
 
 		$details = trim(htmlspecialchars($_REQUEST["details"])); // details can be "" (considered false), usage of array_key_exists() instead of empty() to check
 		$offset = $_REQUEST["offset"];                           // offset can be 0 (considered false), usage of array_key_exists() instead of empty() to check
@@ -187,7 +190,7 @@ switch($_REQUEST["action"]){
 		date_default_timezone_set("UTC");
 		$endUTC = date("Y-m-d\TH:i", strtotime($end) - $offset*60);
 
-		$id = executeQuery("CALL `PredictionCreate`(?, ?, ?, ?, ?, ?);", [$question, $details, $_COOKIE["username"], $endUTC, intval($approved), json_encode($choices, JSON_UNESCAPED_UNICODE)], "int");
+		$id = executeQuery("CALL `PredictionCreate`(?, ?, ?, ?, ?, ?);", [$question, $details, $_COOKIE["username"], $endUTC, intval($approved), json_encode($choices_parsed, JSON_UNESCAPED_UNICODE)], "int");
 
 		redirect("prediction/$id");
 

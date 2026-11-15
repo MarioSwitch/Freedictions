@@ -19,11 +19,11 @@ $choices = executeQuery("SELECT `id`, `name` FROM `choices` WHERE `prediction` =
 	<input type="text" id="details" name="details" value="<?= $details ?>" class="extra_large">
 	<br>
 	<label for="user"><?= getString("prediction_created") ?></label>
-	<input type="text" id="user" name="user" value="<?= $creator ?>">
-	<input type="text" id="created" name="created" value="<?= $created_UTC ?>">
+	<input type="text" id="user" name="user" value="<?= $creator ?>" required="required">
+	<input type="text" id="created" name="created" value="<?= $created_UTC ?>" required="required">
 	<br>
 	<label for="end"><?= getString("create_end") ?></label>
-	<input type="text" id="end" name="end" value="<?= $end_UTC ?>">
+	<input type="text" id="end" name="end" value="<?= $end_UTC ?>" required="required">
 	<br>
 	<label><?= getString("prediction_outcomes") ?></label>
 	<?php

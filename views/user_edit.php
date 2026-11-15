@@ -12,7 +12,7 @@ $extra = $user["extra"];
 ?>
 <h1><?= getString("user_manage_edit") ?></h1>
 <form role="form" action="controller.php">
-	<input type="hidden" id="username_old" name="username_old" value="<?= $username ?>" required="required">
+	<input type="hidden" id="username_old" name="username_old" value="<?= $username ?>">
 	<label for="username_new"><?= getString("general_username") ?></label>
 	<input type="text" id="username_new" name="username_new" value="<?= $username ?>" required="required">
 	<br>
