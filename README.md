@@ -1,30 +1,40 @@
 # Freedictions
-*Freedictions* est un moteur web sur lequel les utilisateurs peuvent proposer des prédictions (écrire une question, les différentes réponses possibles, ainsi qu'une date de fin) et parier sur elles avec des jetons virtuels.
+**Freedictions** is a web engine where users can propose predictions (a question, some optional details, the list of possible outcomes and the end time) and bet on them with virtual chips.
 
-Lorsqu'une prédiction atteint sa date et son heure de fin, le créateur (ou un modérateur) peut définir quel résultat est correct. Les utilisateurs ayant parié sur cette réponse se partagent alors les jetons misés des perdants (en plus de récupérer leur mise initiale).
+When a prediction reaches its end time, a verifier can resolve it by selecting the correct outcome. Users that have bet on that outcome earn chips from all losers (and get back their own chips bet).
 
 > [!NOTE]
-> Ce système ne propose AUCUN moyen de dépenser de l'argent réel.
+> This engine does NOT propose any way to spend real money.
 
-## Licence
-*Freedictions* est publié sous licence libre [Creative Commons Attribution ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+## License and attributions
+**Freedictions** is free and open-source software (FOSS) and licensed under [*Creative Commons Attribution ShareAlike 4.0 (CC BY-SA 4.0)*](https://creativecommons.org/licenses/by-sa/4.0/).
 
-## Traduction
-*Freedictions* utilise [Weblate](https://weblate.org/) comme gestionnaire de traductions.
+Icons are from [**MingCute**](https://www.mingcute.com/), unchanged, and licensed under [*Apache License 2.0*](https://github.com/mingcute-design/mingcute-icons/blob/main/LICENSE).
 
-Vous pouvez librement contribuer à la traduction. Si cela vous intéresse, rendez-vous sur la [page Weblate du projet](https://hosted.weblate.org/projects/freedictions/) pour commencer. Des informations supplémentaires réservées aux traducteurs sont fournies là-bas.
+[**Fira Sans**](https://fonts.google.com/specimen/Fira+Sans) font is from Carrois Apostrophe (available on Google Fonts), unchanged, and licensed under [*Open Font License (OFL)*](https://fonts.google.com/specimen/Fira+Sans/license).
 
-Progression actuelle de la traduction (toutes langues confondues) :
+## Localisation
+**Freedictions** uses [**Weblate**](https://weblate.org/) as localisation software.
+
+You can freely contribute to the localisation. If you are interested, please go to the [project's Weblate page](https://hosted.weblate.org/projects/freedictions/) to have additional information.
+
+Current localisation progress (all languages):
 <a href="https://hosted.weblate.org/engage/freedictions/">
-	<img src="https://hosted.weblate.org/widget/freedictions/website/svg-badge.svg" alt="État de la traduction" />
+	<img src="https://hosted.weblate.org/widget/freedictions/website/svg-badge.svg" alt="Current localisation progress (all languages)" />
 </a>
 
-### Progression par langue
-Les langues listées ci-dessous sont ouvertes à la traduction. Si vous souhaitez ajouter une nouvelle langue à la liste, et donc commencer la traduction du site dans celle-ci, ouvrez un ticket [ici](https://github.com/MarioSwitch/Freedictions/issues/new).
+### Available languages
+Languages below are open for translation. If you want to translate **Freedictions** to a new language, please open an issue [here](https://github.com/MarioSwitch/Freedictions/issues/new).
 
 <a href="https://hosted.weblate.org/engage/freedictions/">
-	<img src="https://hosted.weblate.org/widget/freedictions/multi-auto.svg" alt="État de la traduction" />
+	<img src="https://hosted.weblate.org/widget/freedictions/multi-auto.svg" alt="Current localisation progress (by language)" />
 </a>
 
-## En savoir plus
-Accédez au Wiki pour plus d'informations sur le projet, comme la procédure d'installation sur votre serveur, ou encore l'historique des versions.
+## Learn more
+Please go to ``docs/`` for more information about the project.
+
+## Gallery
+![Home](docs/attachments/home.png)
+![Leaderboard](docs/attachments/leaderboard.png)
+![Prediction](docs/attachments/prediction.png)
+![User](docs/attachments/user.png)
